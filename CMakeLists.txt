@@ -23,4 +23,5 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-permissive -pedantic -Wa
 add_subdirectory("include")
 add_subdirectory("src")
 
+enable_testing()
 add_subdirectory(tests)
