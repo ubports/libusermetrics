@@ -1,7 +1,5 @@
 
-enable_testing()
-
 include_directories(${SOURCE_DIR})
 
-add_subdirectory("libusermetrics-input")
-add_subdirectory("libusermetrics-output")
+add_subdirectory("libusermetricsinput")
+add_subdirectory("libusermetricsoutput")

@@ -16,8 +16,8 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetrics-output/InfographicModelPrivate.h>
-#include <libusermetrics-output/InfographicModel.h>
+#include <libusermetricsoutput/InfographicModelPrivate.h>
+#include <libusermetricsoutput/InfographicModel.h>
 
 #include <QtCore/QDir>
 #include <QtCore/QString>
@@ -414,3 +414,5 @@ InfographicModel * InfographicModel::getInstance()
 {
     return new InfographicModel();
 }
+
+//#include "moc_InfographicModel.cpp"

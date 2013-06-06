@@ -21,14 +21,14 @@
 
 #include <QtCore/QSharedPointer>
 
-#include <libusermetrics-output/InfographicModel.h>
-#include <libusermetrics-output/qvariantlistmodel.h>
+#include <libusermetricsoutput/InfographicModel.h>
+#include <libusermetricsoutput/qvariantlistmodel.h>
 
 namespace QLightDM
 {
 class InfographicDataPrivate;
 
-class Q_DECL_EXPORT InfographicData: public QObject
+class InfographicData: public QObject
 {
 public:
     explicit InfographicData(QObject *parent);

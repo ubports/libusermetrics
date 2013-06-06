@@ -16,7 +16,7 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetrics-output/InfographicModelPrivate.h>
+#include <libusermetricsoutput/InfographicModelPrivate.h>
 
 namespace QLightDM
 {

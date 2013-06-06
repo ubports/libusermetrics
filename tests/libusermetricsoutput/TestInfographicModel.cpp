@@ -1,5 +1,5 @@
 
-//#include <libusermetrics-output/InfographicModel.h>
+#include <libusermetricsoutput/InfographicModel.h>
 #include <gtest/gtest.h>
 
 using namespace std;
@@ -38,10 +38,8 @@ class FooTest : public ::testing::Test {
 
 // Tests that the Foo::Bar() method does Abc.
 TEST_F(FooTest, MethodBarDoesAbc) {
-  const string input_filepath = "this/package/testdata/myinputfile.dat";
-  const string output_filepath = "this/package/testdata/myoutputfile.dat";
-//  Foo f;
-//  EXPECT_EQ(0, f.Bar(input_filepath, output_filepath));
+    QLightDM::InfographicModel model;
+    model.setUsername("guest");
 }
 
 // Tests that Foo does Xyz.

@@ -45,7 +45,7 @@
 #include <QAbstractListModel>
 #include <QVariantList>
 
-class Q_CORE_EXPORT QVariantListModel : public QAbstractListModel
+class QVariantListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
