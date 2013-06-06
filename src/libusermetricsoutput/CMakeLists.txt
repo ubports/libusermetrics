@@ -16,20 +16,14 @@ add_library(
 	${USERMETRICSOUTPUT_SOURCES}
 )
 
-set_target_properties(
-	usermetricsoutput
-	PROPERTIES
-	AUTOMOC_MOC_OPTIONS "-Ifoo"
+#set_target_properties(
+#	usermetricsoutput
 #  VERSION ${API_VERSION}.0.0
 #  SOVERSION ${ABI_VERSION}
-)
+#)
 
 qt5_use_modules(
 	usermetricsoutput
 	Core
 	Gui
 )
-
-#target_link_libraries(usermetricsoutput
-#
-#)
