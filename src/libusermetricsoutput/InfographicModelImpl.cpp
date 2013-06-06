@@ -16,7 +16,6 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/InfographicModelPrivate.h>
 #include <libusermetricsoutput/InfographicModelImpl.h>
 
 #include <QtCore/QDir>
