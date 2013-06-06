@@ -1,11 +1,16 @@
 
-set(USERMETRICSOUTPUT_HEADERS
-InfographicModelPrivate.h
-qvariantlistmodel.h
-)
+#set(USERMETRICSOUTPUT_HEADERS
+#InfographicModelPrivate.h
+#InfographicModelImpl.h
+#qvariantlistmodel.h
+#)
 
 set(USERMETRICSOUTPUT_SOURCES
+InfographicColorTheme.cpp
+InfographicColorThemeImpl.cpp
+InfographicData.cpp
 InfographicModel.cpp
+InfographicModelImpl.cpp
 InfographicModelPrivate.cpp
 qvariantlistmodel.cpp
 )

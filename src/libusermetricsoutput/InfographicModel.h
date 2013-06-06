@@ -16,135 +16,92 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef LIGHTDM_INFOGRAPHICMODEL_H
-#define LIGHTDM_INFOGRAPHICMODEL_H
+#ifndef USERMETRICSOUTPUT_INFOGRAPHICMODEL_H
+#define USERMETRICSOUTPUT_INFOGRAPHICMODEL_H
 
 #include <QtCore/QString>
-#include <QtGui/qcolor.h>
-#include <QAbstractListModel>
+#include <QtGui/QColor>
+#include <QtCore/QAbstractItemModel>
 
-namespace QLightDM
-{
-class InfographicColorThemePrivate;
+#include <libusermetricsoutput/InfographicColorTheme.h>
 
-class Q_DECL_EXPORT InfographicColorTheme: public QObject
-{
-Q_OBJECT
+namespace UserMetricsOutput {
 
-Q_PROPERTY(QColor start READ start NOTIFY startChanged FINAL)
-Q_PROPERTY(QColor main READ main NOTIFY mainChanged FINAL)
-Q_PROPERTY(QColor end READ end NOTIFY endChanged FINAL)
-
-public:
-    explicit InfographicColorTheme(QObject *parent = 0);
-
-    explicit InfographicColorTheme(QColor &first, QColor &main, QColor &end,
-            QObject *parent = 0);
-
-    InfographicColorTheme & operator=(const InfographicColorTheme & other);
-
-    ~InfographicColorTheme();
-
-    QColor start() const;
-
-    QColor main() const;
-
-    QColor end() const;
-
-Q_SIGNALS:
-    void startChanged(const QColor &color);
-
-    void mainChanged(const QColor &color);
-
-    void endChanged(const QColor &color);
-
-protected:
-    InfographicColorThemePrivate * const d_ptr;
-
-    Q_DECLARE_PRIVATE(InfographicColorTheme)
-
-};
-
-class InfographicModelPrivate;
-
-class Q_DECL_EXPORT InfographicModel: public QObject
-{
+class Q_DECL_EXPORT InfographicModel: public QObject {
 Q_OBJECT
 
 Q_PROPERTY(QString label READ label NOTIFY labelChanged FINAL)
 Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged FINAL)
-Q_PROPERTY(QLightDM::InfographicColorTheme* firstColor READ firstColor NOTIFY firstColorChanged FINAL)
-Q_PROPERTY(QLightDM::InfographicColorTheme* secondColor READ secondColor NOTIFY secondColorChanged FINAL)
+Q_PROPERTY(UserMetricsOutput::InfographicColorTheme* firstColor READ firstColor NOTIFY firstColorChanged FINAL)
+Q_PROPERTY(UserMetricsOutput::InfographicColorTheme* secondColor READ secondColor NOTIFY secondColorChanged FINAL)
 Q_PROPERTY(QAbstractItemModel *firstMonth READ firstMonth NOTIFY firstMonthChanged FINAL)
 Q_PROPERTY(QAbstractItemModel *secondMonth READ secondMonth NOTIFY secondMonthChanged FINAL)
 Q_PROPERTY(int currentDay READ currentDay NOTIFY currentDayChanged FINAL)
 
 public:
-    static InfographicModel *getInstance();
+	static InfographicModel *getInstance();
 
-    explicit InfographicModel(QObject *parent = 0);
-    ~InfographicModel();
+	explicit InfographicModel(QObject *parent = 0);
 
-    QString label() const;
+	virtual ~InfographicModel();
 
-    QString username() const;
+	virtual QString label() const = 0;
 
-    void setUsername(const QString &username);
+	virtual QString username() const = 0;
 
-    InfographicColorTheme * firstColor() const;
+	virtual void setUsername(const QString &username) = 0;
 
-    QAbstractItemModel *firstMonth() const;
+	virtual InfographicColorTheme * firstColor() const = 0;
 
-    int currentDay() const;
+	virtual QAbstractItemModel *firstMonth() const = 0;
 
-    InfographicColorTheme * secondColor() const;
+	virtual int currentDay() const = 0;
 
-    QAbstractItemModel *secondMonth() const;
+	virtual InfographicColorTheme * secondColor() const = 0;
+
+	virtual QAbstractItemModel *secondMonth() const = 0;
 
 Q_SIGNALS:
-    void labelChanged(const QString &label);
+	void labelChanged(const QString &label);
 
-    void usernameChanged(const QString &username);
+	void usernameChanged(const QString &username);
 
-    void firstColorChanged(InfographicColorTheme *color);
+	void firstColorChanged(InfographicColorTheme *color);
 
-    void firstMonthChanged(QAbstractItemModel *firstMonth);
+	void firstMonthChanged(QAbstractItemModel *firstMonth);
 
-    void currentDayChanged(int length);
+	void currentDayChanged(int length);
 
-    void secondColorChanged(InfographicColorTheme *color);
+	void secondColorChanged(InfographicColorTheme *color);
 
-    void secondMonthChanged(QAbstractItemModel *secondMonth);
+	void secondMonthChanged(QAbstractItemModel *secondMonth);
 
-    void nextDataSource();
+	void nextDataSource();
 
-    void readyForDataChange();
+	void readyForDataChange();
 
-    void dataAboutToAppear();
+	void dataAboutToAppear();
 
-    void dataAppeared();
+	void dataAppeared();
 
-    void dataAboutToChange();
+	void dataAboutToChange();
 
-    void dataChanged();
+	void dataChanged();
 
-    void dataAboutToDisappear();
+	void dataAboutToDisappear();
 
-    void dataDisappeared();
+	void dataDisappeared();
 
 protected Q_SLOTS:
-    void nextDataSourceSlot();
+	virtual void nextDataSourceSlot() = 0;
 
-    void readyForDataChangeSlot();
+	virtual void readyForDataChangeSlot() = 0;
 
 protected:
-    InfographicModelPrivate * const d_ptr;
-
-    Q_DISABLE_COPY(InfographicModel)
-    Q_DECLARE_PRIVATE(InfographicModel)
+	Q_DISABLE_COPY(InfographicModel)
 
 };
 
 }
 
-#endif // LIGHTDM_INFOGRAPHICMODEL_H
+#endif // USERMETRICSOUTPUT_INFOGRAPHICMODEL_H
