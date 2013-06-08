@@ -16,7 +16,7 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/InfographicModelImpl.h>
+#include <libusermetricsoutput/UserMetricsImpl.h>
 
 #include <QtCore/QDir>
 #include <QtCore/QString>
@@ -25,13 +25,12 @@
 
 using namespace UserMetricsOutput;
 
-InfographicModelImpl::InfographicModelImpl(QObject *parent) :
-		InfographicModel(parent), m_firstColor(
-				new InfographicColorThemeImpl(this)), m_firstMonth(
+UserMetricsImpl::UserMetricsImpl(QObject *parent) :
+		UserMetrics(parent), m_firstColor(new ColorThemeImpl(this)), m_firstMonth(
 				new QVariantListModel(this)), m_secondColor(
-				new InfographicColorThemeImpl(this)), m_secondMonth(
+				new ColorThemeImpl(this)), m_secondMonth(
 				new QVariantListModel(this)), m_currentDay(0) {
-	m_fakeData.insert("", InfographicDataPtr(new InfographicData(this)));
+	m_fakeData.insert("", InfographicDataPtr(new DataSet(this)));
 	generateFakeData();
 	setUsername("");
 
@@ -41,10 +40,10 @@ InfographicModelImpl::InfographicModelImpl(QObject *parent) :
 			readyForDataChangeSlot()), Qt::QueuedConnection);
 }
 
-InfographicModelImpl::~InfographicModelImpl() {
+UserMetricsImpl::~UserMetricsImpl() {
 }
 
-void InfographicModelImpl::setUsername(const QString &username) {
+void UserMetricsImpl::setUsername(const QString &username) {
 	if (m_username == username) {
 		return;
 	}
@@ -61,7 +60,7 @@ void InfographicModelImpl::setUsername(const QString &username) {
 	usernameChanged(m_username);
 }
 
-void InfographicModelImpl::loadFakeData() {
+void UserMetricsImpl::loadFakeData() {
 	m_newData = *m_dataIndex;
 
 	bool oldLabelEmpty = m_label.isEmpty();
@@ -78,7 +77,7 @@ void InfographicModelImpl::loadFakeData() {
 // we emit no signal if the data has stayed empty
 }
 
-void InfographicModelImpl::finishSetFakeData() {
+void UserMetricsImpl::finishSetFakeData() {
 	bool oldLabelEmpty = m_label.isEmpty();
 	bool newLabelEmpty = m_newData->label().isEmpty();
 
@@ -106,7 +105,7 @@ void InfographicModelImpl::finishSetFakeData() {
 // we emit no signal if the data has stayed empty
 }
 
-void InfographicModelImpl::nextFakeData() {
+void UserMetricsImpl::nextFakeData() {
 	++m_dataIndex;
 	if (m_dataIndex == m_fakeData.end() || m_dataIndex.key() != m_username) {
 		m_dataIndex = m_fakeData.constFind(m_username);
@@ -115,39 +114,39 @@ void InfographicModelImpl::nextFakeData() {
 	loadFakeData();
 }
 
-QString InfographicModelImpl::label() const {
+QString UserMetricsImpl::label() const {
 	return m_label;
 }
 
-QString InfographicModelImpl::username() const {
+QString UserMetricsImpl::username() const {
 	return m_username;
 }
 
-InfographicColorTheme * InfographicModelImpl::firstColor() const {
+ColorTheme * UserMetricsImpl::firstColor() const {
 	return m_firstColor.data();
 }
 
-InfographicColorTheme * InfographicModelImpl::secondColor() const {
+ColorTheme * UserMetricsImpl::secondColor() const {
 	return m_secondColor.data();
 }
 
-QAbstractItemModel * InfographicModelImpl::firstMonth() const {
+QAbstractItemModel * UserMetricsImpl::firstMonth() const {
 	return m_firstMonth.data();
 }
 
-QAbstractItemModel * InfographicModelImpl::secondMonth() const {
+QAbstractItemModel * UserMetricsImpl::secondMonth() const {
 	return m_secondMonth.data();
 }
 
-int InfographicModelImpl::currentDay() const {
+int UserMetricsImpl::currentDay() const {
 	return m_currentDay;
 }
 
-void InfographicModelImpl::nextDataSourceSlot() {
+void UserMetricsImpl::nextDataSourceSlot() {
 	nextFakeData();
 }
 
-void InfographicModelImpl::readyForDataChangeSlot() {
+void UserMetricsImpl::readyForDataChangeSlot() {
 	finishSetFakeData();
 }
 

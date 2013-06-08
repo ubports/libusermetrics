@@ -16,48 +16,49 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSOUTPUT_INFOGRAPHICDATA_H
-#define USERMETRICSOUTPUT_INFOGRAPHICDATA_H
+#ifndef USERMETRICSOUTPUT_DATASET_H_
+#define USERMETRICSOUTPUT_DATASET_H_
 
 #include <QtCore/QSharedPointer>
 
-#include <libusermetricsoutput/InfographicColorThemeImpl.h>
-#include <libusermetricsoutput/qvariantlistmodel.h>
+#include <libusermetricsoutput/ColorThemeImpl.h>
+#include <QtCore/QVariantList>
 
 namespace UserMetricsOutput {
 
-class InfographicData: public QObject {
+class DataSet: public QObject {
 public:
-	explicit InfographicData(QObject *parent);
+	explicit DataSet(QObject *parent);
 
-	InfographicData(const QString &label,
-			const InfographicColorTheme &firstColor,
-			const QVariantList &firstMonth,
-			const InfographicColorTheme &secondColor,
+	DataSet(const QString &label, const ColorTheme &firstColor,
+			const QVariantList &firstMonth, const ColorTheme &secondColor,
 			const QVariantList &secondMonth, QObject* parent);
 
-	~InfographicData();
+	~DataSet();
 
 	const QString & label() const;
-	const InfographicColorTheme & firstColor() const;
+
+	const ColorTheme & firstColor() const;
+
 	const QVariantList & firstMonth() const;
-	const InfographicColorTheme & secondColor() const;
+
+	const ColorTheme & secondColor() const;
+
 	const QVariantList & secondMonth() const;
+
 	int length() const;
 
 protected:
 	int calculateLength();
 
 	QString m_label;
-	InfographicColorThemeImpl m_firstColor;
+	ColorThemeImpl m_firstColor;
 	QVariantList m_firstMonth;
-	InfographicColorThemeImpl m_secondColor;
+	ColorThemeImpl m_secondColor;
 	QVariantList m_secondMonth;
 	int m_length;
-
-//	Q_DECLARE_PRIVATE(InfographicData)
 };
 
 }
 
-#endif // USERMETRICSOUTPUT_INFOGRAPHICDATA_H
+#endif // USERMETRICSOUTPUT_DATASET_H_

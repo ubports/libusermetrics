@@ -16,14 +16,14 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSOUTPUT_INFOGRAPHICCOLORTHEME_H
-#define USERMETRICSOUTPUT_INFOGRAPHICCOLORTHEME_H
+#ifndef USERMETRICSOUTPUT_COLORTHEME_H_
+#define USERMETRICSOUTPUT_COLORTHEME_H_
 
 #include <QtGui/QColor>
 
 namespace UserMetricsOutput {
 
-class Q_DECL_EXPORT InfographicColorTheme: public QObject {
+class Q_DECL_EXPORT ColorTheme: public QObject {
 Q_OBJECT
 
 Q_PROPERTY(QColor start READ start NOTIFY startChanged FINAL)
@@ -31,9 +31,9 @@ Q_PROPERTY(QColor main READ main NOTIFY mainChanged FINAL)
 Q_PROPERTY(QColor end READ end NOTIFY endChanged FINAL)
 
 public:
-	explicit InfographicColorTheme(QObject *parent = 0);
+	explicit ColorTheme(QObject *parent = 0);
 
-	virtual ~InfographicColorTheme();
+	virtual ~ColorTheme();
 
 	virtual QColor start() const = 0;
 
@@ -51,4 +51,4 @@ Q_SIGNALS:
 
 }
 
-#endif // USERMETRICSOUTPUT_INFOGRAPHICCOLORTHEME_H
+#endif // USERMETRICSOUTPUT_COLORTHEME_H_

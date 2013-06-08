@@ -16,34 +16,34 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSOUTPUT_INFOGRAPHICMODEL_H
-#define USERMETRICSOUTPUT_INFOGRAPHICMODEL_H
+#ifndef USERMETRICSOUTPUT_USERMETRICS_H_
+#define USERMETRICSOUTPUT_USERMETRICS_H_
 
 #include <QtCore/QString>
 #include <QtGui/QColor>
 #include <QtCore/QAbstractItemModel>
 
-#include <libusermetricsoutput/InfographicColorTheme.h>
+#include <libusermetricsoutput/ColorTheme.h>
 
 namespace UserMetricsOutput {
 
-class Q_DECL_EXPORT InfographicModel: public QObject {
+class Q_DECL_EXPORT UserMetrics: public QObject {
 Q_OBJECT
 
 Q_PROPERTY(QString label READ label NOTIFY labelChanged FINAL)
 Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged FINAL)
-Q_PROPERTY(UserMetricsOutput::InfographicColorTheme* firstColor READ firstColor NOTIFY firstColorChanged FINAL)
-Q_PROPERTY(UserMetricsOutput::InfographicColorTheme* secondColor READ secondColor NOTIFY secondColorChanged FINAL)
+Q_PROPERTY(UserMetricsOutput::ColorTheme* firstColor READ firstColor NOTIFY firstColorChanged FINAL)
+Q_PROPERTY(UserMetricsOutput::ColorTheme* secondColor READ secondColor NOTIFY secondColorChanged FINAL)
 Q_PROPERTY(QAbstractItemModel *firstMonth READ firstMonth NOTIFY firstMonthChanged FINAL)
 Q_PROPERTY(QAbstractItemModel *secondMonth READ secondMonth NOTIFY secondMonthChanged FINAL)
 Q_PROPERTY(int currentDay READ currentDay NOTIFY currentDayChanged FINAL)
 
 public:
-	static InfographicModel *getInstance();
+	static UserMetrics *getInstance();
 
-	explicit InfographicModel(QObject *parent = 0);
+	explicit UserMetrics(QObject *parent = 0);
 
-	virtual ~InfographicModel();
+	virtual ~UserMetrics();
 
 	virtual QString label() const = 0;
 
@@ -51,13 +51,13 @@ public:
 
 	virtual void setUsername(const QString &username) = 0;
 
-	virtual InfographicColorTheme * firstColor() const = 0;
+	virtual ColorTheme * firstColor() const = 0;
 
 	virtual QAbstractItemModel *firstMonth() const = 0;
 
 	virtual int currentDay() const = 0;
 
-	virtual InfographicColorTheme * secondColor() const = 0;
+	virtual ColorTheme * secondColor() const = 0;
 
 	virtual QAbstractItemModel *secondMonth() const = 0;
 
@@ -66,13 +66,13 @@ Q_SIGNALS:
 
 	void usernameChanged(const QString &username);
 
-	void firstColorChanged(InfographicColorTheme *color);
+	void firstColorChanged(ColorTheme *color);
 
 	void firstMonthChanged(QAbstractItemModel *firstMonth);
 
 	void currentDayChanged(int length);
 
-	void secondColorChanged(InfographicColorTheme *color);
+	void secondColorChanged(ColorTheme *color);
 
 	void secondMonthChanged(QAbstractItemModel *secondMonth);
 
@@ -98,10 +98,10 @@ protected Q_SLOTS:
 	virtual void readyForDataChangeSlot() = 0;
 
 protected:
-	Q_DISABLE_COPY(InfographicModel)
+	Q_DISABLE_COPY(UserMetrics)
 
 };
 
 }
 
-#endif // USERMETRICSOUTPUT_INFOGRAPHICMODEL_H
+#endif // USERMETRICSOUTPUT_USERMETRICS_H_

@@ -16,11 +16,11 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/InfographicModelImpl.h>
+#include <libusermetricsoutput/UserMetricsImpl.h>
 
 using namespace UserMetricsOutput;
 
-void InfographicModelImpl::generateFakeData()
+void UserMetricsImpl::generateFakeData()
 {
     std::default_random_engine generator;
     std::normal_distribution<qreal> distribution(0.5, 0.2);
@@ -43,10 +43,10 @@ void InfographicModelImpl::generateFakeData()
     colours.push_back(QColor::fromRgbF(0.63, 0.53, 0.3));
     colours.push_back(QColor::fromRgbF(0.89, 0.56, 0.31));
 
-    InfographicColorThemeImpl first(colours[0], colours[1], colours[2]);
-    InfographicColorThemeImpl second(colours[3], colours[4], colours[5]);
-    InfographicColorThemeImpl eighth(colours[6], colours[7], colours[8]);
-    InfographicColorThemeImpl ninth(colours[9], colours[10], colours[11]);
+    ColorThemeImpl first(colours[0], colours[1], colours[2]);
+    ColorThemeImpl second(colours[3], colours[4], colours[5]);
+    ColorThemeImpl eighth(colours[6], colours[7], colours[8]);
+    ColorThemeImpl ninth(colours[9], colours[10], colours[11]);
 
     {
         QVariantList firstMonth;
@@ -57,8 +57,8 @@ void InfographicModelImpl::generateFakeData()
         QVariantList secondMonth;
         while (secondMonth.size() < 31)
             secondMonth.push_back(QVariant(rand()));
-        QSharedPointer<InfographicData> data(
-                new InfographicData("<b>52km</b> travelled", first, firstMonth,
+        QSharedPointer<DataSet> data(
+                new DataSet("<b>52km</b> travelled", first, firstMonth,
                         ninth, secondMonth, this));
         m_fakeData.insert("guest", data);
     }
@@ -72,8 +72,8 @@ void InfographicModelImpl::generateFakeData()
         QVariantList secondMonth;
         while (secondMonth.size() < 31)
             secondMonth.push_back(QVariant(rand()));
-        QSharedPointer<InfographicData> data(
-                new InfographicData("<b>33</b> messages today", second,
+        QSharedPointer<DataSet> data(
+                new DataSet("<b>33</b> messages today", second,
                         firstMonth, eighth, secondMonth, this));
         m_fakeData.insert("guest", data);
     }
@@ -87,8 +87,8 @@ void InfographicModelImpl::generateFakeData()
         QVariantList secondMonth;
         while (secondMonth.size() < 31)
             secondMonth.push_back(QVariant(rand()));
-        QSharedPointer<InfographicData> data(
-                new InfographicData("<b>69</b> minutes talk time", eighth,
+        QSharedPointer<DataSet> data(
+				new DataSet("<b>69</b> minutes talk time", eighth,
                         firstMonth, second, secondMonth, this));
         m_fakeData.insert("guest", data);
     }

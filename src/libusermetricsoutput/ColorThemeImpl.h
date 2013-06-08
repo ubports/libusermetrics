@@ -16,21 +16,21 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSOUTPUT_INFOGRAPHICCOLORTHEMEIMPL_H
-#define USERMETRICSOUTPUT_INFOGRAPHICCOLORTHEMEIMPL_H
+#ifndef USERMETRICSOUTPUT_COLORTHEMEIMPL_H_
+#define USERMETRICSOUTPUT_COLORTHEMEIMPL_H_
 
-#include <libusermetricsoutput/InfographicColorTheme.h>
+#include <libusermetricsoutput/ColorTheme.h>
 
 namespace UserMetricsOutput {
 
-class InfographicColorThemeImpl: public InfographicColorTheme {
+class ColorThemeImpl: public ColorTheme {
 public:
-	explicit InfographicColorThemeImpl(QObject *parent = 0);
+	explicit ColorThemeImpl(QObject *parent = 0);
 
-	InfographicColorThemeImpl(const QColor &start, const QColor &main,
-			const QColor &end, QObject *parent = 0);
+	ColorThemeImpl(const QColor &start, const QColor &main, const QColor &end,
+			QObject *parent = 0);
 
-	virtual ~InfographicColorThemeImpl();
+	virtual ~ColorThemeImpl();
 
 	virtual QColor start() const;
 
@@ -44,7 +44,7 @@ public:
 
 	virtual void setEnd(const QColor &color);
 
-	virtual void setColors(const InfographicColorTheme &other);
+	virtual void setColors(const ColorTheme &other);
 
 protected:
 	QColor m_start;
@@ -58,4 +58,4 @@ protected:
 
 }
 
-#endif /* USERMETRICSOUTPUT_INFOGRAPHICCOLORTHEMEIMPL_H */
+#endif /* USERMETRICSOUTPUT_COLORTHEMEIMPL_H_ */

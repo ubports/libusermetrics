@@ -1,19 +1,50 @@
 
-#set(USERMETRICSOUTPUT_HEADERS
-#InfographicModelPrivate.h
-#InfographicModelImpl.h
-#qvariantlistmodel.h
-#)
+set(API_VERSION 1)
+set(ABI_VERSION 1)
+
+set(USERMETRICSOUTPUT_HEADERS
+	ColorTheme.h
+	ColorThemeImpl.h
+	DataSet.h
+	UserMetrics.h
+	UserMetricsImpl.h
+	FakeData.h
+	qvariantlistmodel.h
+)
 
 set(USERMETRICSOUTPUT_SOURCES
-InfographicColorTheme.cpp
-InfographicColorThemeImpl.cpp
-InfographicData.cpp
-InfographicModel.cpp
-InfographicModelImpl.cpp
-InfographicModelPrivate.cpp
-qvariantlistmodel.cpp
+	ColorTheme.cpp
+	ColorThemeImpl.cpp
+	DataSet.cpp
+	UserMetrics.cpp
+	UserMetricsImpl.cpp
+	FakeData.cpp
+	qvariantlistmodel.cpp
 )
+
+set(USERMETRICS_OUTPUT_DEPENDENCIES
+	Core
+	Gui
+)
+
+add_library(
+	usermetricsoutput-static
+	STATIC
+	${USERMETRICSOUTPUT_SOURCES}
+)
+
+qt5_use_modules(
+	usermetricsoutput-static
+	${USERMETRICS_OUTPUT_DEPENDENCIES}
+)
+
+set_target_properties(
+	usermetricsoutput-static
+	PROPERTIES
+	OUTPUT_NAME usermetricsoutput
+)
+
+add_compiler_export_flags()
 
 add_library(
 	usermetricsoutput
@@ -21,14 +52,14 @@ add_library(
 	${USERMETRICSOUTPUT_SOURCES}
 )
 
-#set_target_properties(
-#	usermetricsoutput
-#  VERSION ${API_VERSION}.0.0
-#  SOVERSION ${ABI_VERSION}
-#)
-
 qt5_use_modules(
 	usermetricsoutput
-	Core
-	Gui
+	${USERMETRICS_OUTPUT_DEPENDENCIES}
+)
+
+set_target_properties(
+	usermetricsoutput
+	PROPERTIES
+	VERSION ${API_VERSION}.0.0
+	SOVERSION ${ABI_VERSION}
 )
