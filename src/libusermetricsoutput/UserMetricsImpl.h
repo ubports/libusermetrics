@@ -30,8 +30,8 @@ namespace UserMetricsOutput {
 class UserMetricsImpl: public UserMetrics {
 
 public:
-	typedef QSharedPointer<DataSet> InfographicDataPtr;
-	typedef QMultiMap<QString, InfographicDataPtr> FakeDataMap;
+	typedef QSharedPointer<DataSet> DataSetPtr;
+	typedef QMultiMap<QString, DataSetPtr> DataSetMap;
 
 	UserMetricsImpl(QObject *parent = 0);
 
@@ -74,9 +74,9 @@ protected:
 	QScopedPointer<QVariantListModel> m_secondMonth;
 	int m_currentDay;
 	QString m_username;
-	FakeDataMap::const_iterator m_dataIndex;
-	InfographicDataPtr m_newData;
-	FakeDataMap m_fakeData;
+	DataSetMap::const_iterator m_dataIndex;
+	DataSetPtr m_newData;
+	DataSetMap m_dataSets;
 };
 
 }

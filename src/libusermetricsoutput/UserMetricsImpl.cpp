@@ -18,9 +18,8 @@
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
 
-#include <QtCore/QDir>
+#include <QtCore/QDate>
 #include <QtCore/QString>
-#include <QtGui/QIcon>
 #include <QMultiMap>
 
 using namespace UserMetricsOutput;
@@ -30,7 +29,7 @@ UserMetricsImpl::UserMetricsImpl(QObject *parent) :
 				new QVariantListModel(this)), m_secondColor(
 				new ColorThemeImpl(this)), m_secondMonth(
 				new QVariantListModel(this)), m_currentDay(0) {
-	m_fakeData.insert("", InfographicDataPtr(new DataSet(this)));
+	m_dataSets.insert("", DataSetPtr(new DataSet(this)));
 	generateFakeData();
 	setUsername("");
 
@@ -50,9 +49,9 @@ void UserMetricsImpl::setUsername(const QString &username) {
 
 	m_username = username;
 
-	m_dataIndex = m_fakeData.constFind(m_username);
-	if (m_dataIndex == m_fakeData.end()) {
-		m_dataIndex = m_fakeData.constFind("");
+	m_dataIndex = m_dataSets.constFind(m_username);
+	if (m_dataIndex == m_dataSets.end()) {
+		m_dataIndex = m_dataSets.constFind("");
 	}
 
 	loadFakeData();
@@ -64,7 +63,7 @@ void UserMetricsImpl::loadFakeData() {
 	m_newData = *m_dataIndex;
 
 	bool oldLabelEmpty = m_label.isEmpty();
-	bool newLabelEmpty = m_newData->label().isEmpty();
+	bool newLabelEmpty = m_newData->formatString().isEmpty();
 
 	if (oldLabelEmpty && !newLabelEmpty) {
 		dataAboutToAppear();
@@ -79,16 +78,18 @@ void UserMetricsImpl::loadFakeData() {
 
 void UserMetricsImpl::finishSetFakeData() {
 	bool oldLabelEmpty = m_label.isEmpty();
-	bool newLabelEmpty = m_newData->label().isEmpty();
+	bool newLabelEmpty = m_newData->formatString().isEmpty();
 
-	m_label = m_newData->label();
+	m_label = m_newData->formatString();
 	m_firstColor->setColors(m_newData->firstColor());
 	m_firstMonth->setVariantList(m_newData->firstMonth());
 	m_secondColor->setColors(m_newData->secondColor());
 	m_secondMonth->setVariantList(m_newData->secondMonth());
 
-	bool currentDayChanged = m_currentDay != m_newData->length();
-	m_currentDay = m_newData->length();
+	QDate currentDate(QDate::currentDate());
+	int currentDay(currentDate.day());
+	bool currentDayChanged = m_currentDay != currentDay;
+	m_currentDay = currentDay;
 
 	labelChanged(m_label);
 	if (currentDayChanged) {
@@ -107,8 +108,8 @@ void UserMetricsImpl::finishSetFakeData() {
 
 void UserMetricsImpl::nextFakeData() {
 	++m_dataIndex;
-	if (m_dataIndex == m_fakeData.end() || m_dataIndex.key() != m_username) {
-		m_dataIndex = m_fakeData.constFind(m_username);
+	if (m_dataIndex == m_dataSets.end() || m_dataIndex.key() != m_username) {
+		m_dataIndex = m_dataSets.constFind(m_username);
 	}
 
 	loadFakeData();

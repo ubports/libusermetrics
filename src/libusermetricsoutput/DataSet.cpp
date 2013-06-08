@@ -20,31 +20,15 @@
 
 using namespace UserMetricsOutput;
 
-int DataSet::calculateLength() {
-	int day(m_firstMonth.size());
-	auto it = m_firstMonth.end(), end = m_firstMonth.begin();
-	while (it != end) {
-		--it;
-		--day;
-		if (!it->isNull()) {
-			return day;
-		}
-	}
-
-	return -1;
-}
-
 DataSet::DataSet(QObject *parent) :
 		QObject(parent), m_firstColor(this), m_secondColor(this) {
-	m_length = calculateLength();
 }
 
-DataSet::DataSet(const QString &label, const ColorTheme &firstColor,
+DataSet::DataSet(const QString &formatString, const ColorTheme &firstColor,
 		const QVariantList &firstMonth, const ColorTheme &secondColor,
 		const QVariantList &secondMonth, QObject* parent) :
-		QObject(parent), m_label(label), m_firstColor(this), m_firstMonth(
+		QObject(parent), m_formatString(formatString), m_firstColor(this), m_firstMonth(
 				firstMonth), m_secondColor(this), m_secondMonth(secondMonth) {
-	m_length = calculateLength();
 	m_firstColor.setColors(firstColor);
 	m_secondColor.setColors(secondColor);
 }
@@ -52,8 +36,8 @@ DataSet::DataSet(const QString &label, const ColorTheme &firstColor,
 DataSet::~DataSet() {
 }
 
-const QString & DataSet::label() const {
-	return m_label;
+const QString & DataSet::formatString() const {
+	return m_formatString;
 }
 
 const ColorTheme & DataSet::firstColor() const {
@@ -70,8 +54,4 @@ const ColorTheme & DataSet::secondColor() const {
 
 const QVariantList & DataSet::secondMonth() const {
 	return m_secondMonth;
-}
-
-int DataSet::length() const {
-	return m_length;
 }

@@ -60,7 +60,7 @@ void UserMetricsImpl::generateFakeData()
         QSharedPointer<DataSet> data(
                 new DataSet("<b>52km</b> travelled", first, firstMonth,
                         ninth, secondMonth, this));
-        m_fakeData.insert("guest", data);
+        m_dataSets.insert("guest", data);
     }
 
     {
@@ -75,7 +75,7 @@ void UserMetricsImpl::generateFakeData()
         QSharedPointer<DataSet> data(
                 new DataSet("<b>33</b> messages today", second,
                         firstMonth, eighth, secondMonth, this));
-        m_fakeData.insert("guest", data);
+        m_dataSets.insert("guest", data);
     }
 
     {
@@ -90,6 +90,6 @@ void UserMetricsImpl::generateFakeData()
         QSharedPointer<DataSet> data(
 				new DataSet("<b>69</b> minutes talk time", eighth,
                         firstMonth, second, secondMonth, this));
-        m_fakeData.insert("guest", data);
+		m_dataSets.insert("guest", data);
     }
 }

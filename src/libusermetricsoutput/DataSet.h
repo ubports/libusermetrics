@@ -27,16 +27,19 @@
 namespace UserMetricsOutput {
 
 class DataSet: public QObject {
+
+Q_PROPERTY(QVariantList *firstMonth READ firstMonth NOTIFY firstMonthChanged FINAL)
+
 public:
 	explicit DataSet(QObject *parent);
 
-	DataSet(const QString &label, const ColorTheme &firstColor,
+	DataSet(const QString &formatString, const ColorTheme &firstColor,
 			const QVariantList &firstMonth, const ColorTheme &secondColor,
 			const QVariantList &secondMonth, QObject* parent);
 
 	~DataSet();
 
-	const QString & label() const;
+	const QString & formatString() const;
 
 	const ColorTheme & firstColor() const;
 
@@ -46,17 +49,21 @@ public:
 
 	const QVariantList & secondMonth() const;
 
-	int length() const;
+	void setFirstMonth(const QVariantList &firstMonth);
+
+	void setSecondMonth(const QVariantList &secondMonth);
+
+Q_SIGNALS:
+	void firstMonthChanged(const QVariantList *firstMonth);
+
+	void secondMonthChanged(const QVariantList *secondMonth);
 
 protected:
-	int calculateLength();
-
-	QString m_label;
+	QString m_formatString;
 	ColorThemeImpl m_firstColor;
 	QVariantList m_firstMonth;
 	ColorThemeImpl m_secondColor;
 	QVariantList m_secondMonth;
-	int m_length;
 };
 
 }
