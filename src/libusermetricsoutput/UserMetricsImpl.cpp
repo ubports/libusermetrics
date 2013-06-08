@@ -29,7 +29,10 @@ UserMetricsImpl::UserMetricsImpl(QObject *parent) :
 				new QVariantListModel(this)), m_secondColor(
 				new ColorThemeImpl(this)), m_secondMonth(
 				new QVariantListModel(this)), m_currentDay(0) {
-	m_dataSets.insert("", DataSetPtr(new DataSet(this)));
+	DataSetPtr emptyData(
+			new DataSet("No data", ColorThemeImpl(), ColorThemeImpl(), this));
+	m_dataSets.insert("", emptyData);
+
 	setUsername("");
 
 	connect(this, SIGNAL(nextDataSource()), this, SLOT(nextDataSourceSlot()),
@@ -81,14 +84,16 @@ void UserMetricsImpl::finishLoadingDataSource() {
 
 	m_label = m_newData->formatString();
 	m_firstColor->setColors(m_newData->firstColor());
-	m_firstMonth->setVariantList(m_newData->firstMonth());
 	m_secondColor->setColors(m_newData->secondColor());
-	m_secondMonth->setVariantList(m_newData->secondMonth());
 
 	QDate currentDate(QDate::currentDate());
 	int currentDay(currentDate.day());
 	bool currentDayChanged = m_currentDay != currentDay;
 	m_currentDay = currentDay;
+
+	// FIXME: Make this split out the data based upon the current date
+	m_firstMonth->setVariantList(m_newData->data());
+	m_secondMonth->setVariantList(m_newData->data());
 
 	labelChanged(m_label);
 	if (currentDayChanged) {

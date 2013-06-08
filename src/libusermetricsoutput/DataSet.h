@@ -19,23 +19,23 @@
 #ifndef USERMETRICSOUTPUT_DATASET_H_
 #define USERMETRICSOUTPUT_DATASET_H_
 
-#include <QtCore/QSharedPointer>
-
 #include <libusermetricsoutput/ColorThemeImpl.h>
+
+#include <QtCore/QSharedPointer>
 #include <QtCore/QVariantList>
+#include <QtCore/QDate>
 
 namespace UserMetricsOutput {
 
 class DataSet: public QObject {
+Q_OBJECT
 
-Q_PROPERTY(QVariantList *firstMonth READ firstMonth NOTIFY firstMonthChanged FINAL)
+Q_PROPERTY(QDate lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged FINAL)
+Q_PROPERTY(const QVariantList data READ data NOTIFY dataChanged FINAL)
 
 public:
-	explicit DataSet(QObject *parent);
-
 	DataSet(const QString &formatString, const ColorTheme &firstColor,
-			const QVariantList &firstMonth, const ColorTheme &secondColor,
-			const QVariantList &secondMonth, QObject* parent);
+			const ColorTheme &secondColor, QObject* parent);
 
 	~DataSet();
 
@@ -43,27 +43,29 @@ public:
 
 	const ColorTheme & firstColor() const;
 
-	const QVariantList & firstMonth() const;
-
 	const ColorTheme & secondColor() const;
 
-	const QVariantList & secondMonth() const;
+	const QVariantList & data() const;
 
-	void setFirstMonth(const QVariantList &firstMonth);
+	const QDate & lastUpdated() const;
 
-	void setSecondMonth(const QVariantList &secondMonth);
+	void setData(const QDate &lastUpdated, const QVariantList &data);
 
 Q_SIGNALS:
-	void firstMonthChanged(const QVariantList *firstMonth);
+	void lastUpdatedChanged(const QDate &lastUpdated);
 
-	void secondMonthChanged(const QVariantList *secondMonth);
+	void dataChanged(const QVariantList *data);
 
 protected:
 	QString m_formatString;
+
 	ColorThemeImpl m_firstColor;
-	QVariantList m_firstMonth;
+
 	ColorThemeImpl m_secondColor;
-	QVariantList m_secondMonth;
+
+	QDate m_lastUpdated;
+
+	QVariantList m_data;
 };
 
 }

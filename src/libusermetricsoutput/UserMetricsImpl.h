@@ -28,6 +28,7 @@
 namespace UserMetricsOutput {
 
 class UserMetricsImpl: public UserMetrics {
+Q_OBJECT
 
 public:
 	typedef QSharedPointer<DataSet> DataSetPtr;

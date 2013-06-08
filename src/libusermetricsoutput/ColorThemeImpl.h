@@ -24,6 +24,8 @@
 namespace UserMetricsOutput {
 
 class ColorThemeImpl: public ColorTheme {
+Q_OBJECT
+
 public:
 	explicit ColorThemeImpl(QObject *parent = 0);
 

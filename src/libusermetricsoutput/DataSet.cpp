@@ -20,15 +20,10 @@
 
 using namespace UserMetricsOutput;
 
-DataSet::DataSet(QObject *parent) :
-		QObject(parent), m_firstColor(this), m_secondColor(this) {
-}
-
 DataSet::DataSet(const QString &formatString, const ColorTheme &firstColor,
-		const QVariantList &firstMonth, const ColorTheme &secondColor,
-		const QVariantList &secondMonth, QObject* parent) :
-		QObject(parent), m_formatString(formatString), m_firstColor(this), m_firstMonth(
-				firstMonth), m_secondColor(this), m_secondMonth(secondMonth) {
+		const ColorTheme &secondColor, QObject* parent) :
+		QObject(parent), m_formatString(formatString), m_firstColor(this), m_secondColor(
+				this) {
 	m_firstColor.setColors(firstColor);
 	m_secondColor.setColors(secondColor);
 }
@@ -44,14 +39,21 @@ const ColorTheme & DataSet::firstColor() const {
 	return m_firstColor;
 }
 
-const QVariantList & DataSet::firstMonth() const {
-	return m_firstMonth;
-}
-
 const ColorTheme & DataSet::secondColor() const {
 	return m_secondColor;
 }
 
-const QVariantList & DataSet::secondMonth() const {
-	return m_secondMonth;
+const QVariantList & DataSet::data() const {
+	return m_data;
+}
+
+const QDate & DataSet::lastUpdated() const {
+	return lastUpdated();
+}
+
+void DataSet::setData(const QDate &lastUpdated, const QVariantList &data) {
+	m_lastUpdated = lastUpdated;
+	m_data = data;
+	lastUpdatedChanged(m_lastUpdated);
+	dataChanged(&m_data);
 }
