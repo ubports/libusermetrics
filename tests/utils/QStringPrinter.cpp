@@ -16,39 +16,16 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserMetricsImpl.h>
-
 #include <utils/QStringPrinter.h>
-#include <gtest/gtest.h>
 
 using namespace std;
-using namespace UserMetricsOutput;
 
-namespace {
-
-class UserMetricsImplTest: public ::testing::Test {
-protected:
-
-	UserMetricsImplTest() {
-	}
-
-	virtual ~UserMetricsImplTest() {
-	}
-
-	virtual void SetUp() {
-	}
-
-	virtual void TearDown() {
-	}
-};
-
-TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
-	QScopedPointer<UserMetricsImpl> model(new UserMetricsImpl());
-
-	model->setUsername("non-existing-user");
-	EXPECT_EQ("non-existing-user", model->username());
-
-	EXPECT_EQ(QString("No data"), model->label());
+void PrintTo(const QString& str, ostream* os)
+{
+    *os << "QString(" << str.toStdString() << ")";
 }
 
-}  // namespace
+void PrintTo(const QChar& chr, ostream* os)
+{
+    *os << "QChar(" << chr.toLatin1() << ")";
+}

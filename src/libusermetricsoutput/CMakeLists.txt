@@ -42,8 +42,6 @@ set_target_properties(
 	OUTPUT_NAME usermetricsoutput
 )
 
-add_compiler_export_flags()
-
 add_library(
 	usermetricsoutput
 	SHARED
