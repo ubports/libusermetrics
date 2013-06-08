@@ -30,7 +30,6 @@ UserMetricsImpl::UserMetricsImpl(QObject *parent) :
 				new ColorThemeImpl(this)), m_secondMonth(
 				new QVariantListModel(this)), m_currentDay(0) {
 	m_dataSets.insert("", DataSetPtr(new DataSet(this)));
-	generateFakeData();
 	setUsername("");
 
 	connect(this, SIGNAL(nextDataSource()), this, SLOT(nextDataSourceSlot()),
@@ -54,12 +53,12 @@ void UserMetricsImpl::setUsername(const QString &username) {
 		m_dataIndex = m_dataSets.constFind("");
 	}
 
-	loadFakeData();
+	prepareToLoadDataSource();
 
 	usernameChanged(m_username);
 }
 
-void UserMetricsImpl::loadFakeData() {
+void UserMetricsImpl::prepareToLoadDataSource() {
 	m_newData = *m_dataIndex;
 
 	bool oldLabelEmpty = m_label.isEmpty();
@@ -67,7 +66,7 @@ void UserMetricsImpl::loadFakeData() {
 
 	if (oldLabelEmpty && !newLabelEmpty) {
 		dataAboutToAppear();
-		finishSetFakeData();
+		finishLoadingDataSource();
 	} else if (!oldLabelEmpty && newLabelEmpty) {
 		dataAboutToDisappear();
 	} else if (!oldLabelEmpty && !newLabelEmpty) {
@@ -76,7 +75,7 @@ void UserMetricsImpl::loadFakeData() {
 // we emit no signal if the data has stayed empty
 }
 
-void UserMetricsImpl::finishSetFakeData() {
+void UserMetricsImpl::finishLoadingDataSource() {
 	bool oldLabelEmpty = m_label.isEmpty();
 	bool newLabelEmpty = m_newData->formatString().isEmpty();
 
@@ -104,15 +103,6 @@ void UserMetricsImpl::finishSetFakeData() {
 		dataChanged();
 	}
 // we emit no signal if the data has stayed empty
-}
-
-void UserMetricsImpl::nextFakeData() {
-	++m_dataIndex;
-	if (m_dataIndex == m_dataSets.end() || m_dataIndex.key() != m_username) {
-		m_dataIndex = m_dataSets.constFind(m_username);
-	}
-
-	loadFakeData();
 }
 
 QString UserMetricsImpl::label() const {
@@ -144,10 +134,15 @@ int UserMetricsImpl::currentDay() const {
 }
 
 void UserMetricsImpl::nextDataSourceSlot() {
-	nextFakeData();
+	++m_dataIndex;
+	if (m_dataIndex == m_dataSets.end() || m_dataIndex.key() != m_username) {
+		m_dataIndex = m_dataSets.constFind(m_username);
+	}
+
+	prepareToLoadDataSource();
 }
 
 void UserMetricsImpl::readyForDataChangeSlot() {
-	finishSetFakeData();
+	finishLoadingDataSource();
 }
 

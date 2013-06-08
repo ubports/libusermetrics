@@ -59,13 +59,9 @@ protected Q_SLOTS:
 	virtual void readyForDataChangeSlot();
 
 protected:
-	void nextFakeData();
+	void prepareToLoadDataSource();
 
-	void generateFakeData();
-
-	void loadFakeData();
-
-	void finishSetFakeData();
+	void finishLoadingDataSource();
 
 	QString m_label;
 	QScopedPointer<ColorThemeImpl> m_firstColor;

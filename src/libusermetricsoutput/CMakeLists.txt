@@ -8,7 +8,6 @@ set(USERMETRICSOUTPUT_HEADERS
 	DataSet.h
 	UserMetrics.h
 	UserMetricsImpl.h
-	FakeData.h
 	qvariantlistmodel.h
 )
 
@@ -18,7 +17,6 @@ set(USERMETRICSOUTPUT_SOURCES
 	DataSet.cpp
 	UserMetrics.cpp
 	UserMetricsImpl.cpp
-	FakeData.cpp
 	qvariantlistmodel.cpp
 )
 
