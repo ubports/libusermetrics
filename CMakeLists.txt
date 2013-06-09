@@ -27,4 +27,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-permissive -pedantic -Wa
 add_subdirectory("src")
 
 enable_testing()
+
+ADD_CUSTOM_TARGET(
+	test_verbose
+	${CMAKE_CTEST_COMMAND} --output-on-failure
+)
+
 add_subdirectory(tests)

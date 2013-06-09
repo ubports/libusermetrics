@@ -59,8 +59,6 @@ TEST_F(FooTest, MethodBarDoesAbc) {
 	QScopedPointer<UserMetrics> model(UserMetrics::getInstance());
 	model->setUsername("guest");
 	EXPECT_EQ("guest", model->username());
-	QAbstractItemModel *firstMonth(model->firstMonth());
-	EXPECT_EQ(31, firstMonth->rowCount());
 }
 
 // Tests that Foo does Xyz.
