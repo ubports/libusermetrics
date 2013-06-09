@@ -18,7 +18,6 @@
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
 
-#include <QtCore/QDebug>
 #include <QtCore/QDate>
 #include <QtCore/QString>
 #include <QtCore/QSharedPointer>
@@ -70,7 +69,6 @@ void UserMetricsImpl::setUsernameInternal(const QString &username) {
 }
 
 void UserMetricsImpl::prepareToLoadDataSource() {
-	qDebug() << "prepareToLoadDataSource";
 	m_newData = *m_dataIndex;
 
 	bool oldLabelEmpty = m_label.isEmpty();
@@ -98,9 +96,6 @@ void UserMetricsImpl::finishLoadingDataSource() {
 	int currentDay(m_dateFactory->currentDate().day());
 	bool currentDayChanged = m_currentDay != currentDay;
 	m_currentDay = currentDay;
-
-	qDebug() << "finishLoadingDataSource" << currentDay << currentDayChanged
-			<< m_currentDay;
 
 	// FIXME: Make this split out the data based upon the current date
 	m_firstMonth->setVariantList(m_newData->data());
@@ -146,7 +141,6 @@ QAbstractItemModel * UserMetricsImpl::secondMonth() const {
 }
 
 int UserMetricsImpl::currentDay() const {
-	qDebug() << "currentDay" << m_currentDay;
 	return m_currentDay;
 }
 

@@ -92,7 +92,7 @@ Q_SIGNALS:
 
 	void dataDisappeared();
 
-protected Q_SLOTS:
+public Q_SLOTS:
 	virtual void nextDataSourceSlot() = 0;
 
 	virtual void readyForDataChangeSlot() = 0;

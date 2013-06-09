@@ -57,12 +57,27 @@ TEST_F(UserMetricsImplTest, CurrentDate) {
 	EXPECT_EQ(7, model->currentDay());
 }
 
+TEST_F(UserMetricsImplTest, CurrentDateChangesWithDataSource) {
+	EXPECT_EQ(7, model->currentDay());
+
+	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
+			Return(QDate(2000, 01, 21))).WillOnce(Return(QDate(2000, 01, 27)));
+
+	model->nextDataSourceSlot();
+	model->readyForDataChangeSlot();
+	EXPECT_EQ(21, model->currentDay());
+
+	model->nextDataSourceSlot();
+	model->readyForDataChangeSlot();
+	EXPECT_EQ(27, model->currentDay());
+}
+
 TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
 	model->setUsername("non-existing-user");
-	model->readyForDataChange();
+	model->readyForDataChangeSlot();
 
 	EXPECT_EQ("non-existing-user", model->username());
 	EXPECT_EQ(QString("No data"), model->label());
 }
 
-}// namespace
+} // namespace

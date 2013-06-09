@@ -56,7 +56,7 @@ public:
 
 	virtual QAbstractItemModel *secondMonth() const;
 
-protected Q_SLOTS:
+public Q_SLOTS:
 	virtual void nextDataSourceSlot();
 
 	virtual void readyForDataChangeSlot();
