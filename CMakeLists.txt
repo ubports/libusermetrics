@@ -30,7 +30,7 @@ enable_testing()
 
 ADD_CUSTOM_TARGET(
 	test_verbose
-	${CMAKE_CTEST_COMMAND} --output-on-failure
+	${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure
 )
 
 add_subdirectory(tests)
