@@ -17,38 +17,52 @@
  */
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
-
 #include <utils/QStringPrinter.h>
+
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 using namespace std;
 using namespace UserMetricsOutput;
+using namespace testing;
 
 namespace {
 
-class UserMetricsImplTest: public ::testing::Test {
+class MockDateFactory: public DateFactory {
+public:
+	MOCK_CONST_METHOD0(currentDate, QDate());
+};
+
+class UserMetricsImplTest: public Test {
 protected:
 
 	UserMetricsImplTest() {
+		dateFactory.reset(new NiceMock<MockDateFactory>());
+		ON_CALL(*dateFactory, currentDate()).WillByDefault(
+				Return(QDate(2000, 01, 07)));
+
+		model.reset(new UserMetricsImpl(dateFactory));
 	}
 
 	virtual ~UserMetricsImplTest() {
 	}
 
-	virtual void SetUp() {
-	}
+	QSharedPointer<MockDateFactory> dateFactory;
 
-	virtual void TearDown() {
-	}
-};
+	QScopedPointer<UserMetricsImpl> model;
+}
+;
+
+TEST_F(UserMetricsImplTest, CurrentDate) {
+	EXPECT_EQ(7, model->currentDay());
+}
 
 TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
-	QScopedPointer<UserMetricsImpl> model(new UserMetricsImpl());
-
 	model->setUsername("non-existing-user");
-	EXPECT_EQ("non-existing-user", model->username());
+	model->readyForDataChange();
 
+	EXPECT_EQ("non-existing-user", model->username());
 	EXPECT_EQ(QString("No data"), model->label());
 }
 
-}  // namespace
+}// namespace

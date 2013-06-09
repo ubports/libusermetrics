@@ -16,14 +16,12 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <iostream>
-#include <QtCore/QString>
+#include <libusermetricsoutput/DateFactory.h>
 
-#ifndef USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_
-#define USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_
+using namespace UserMetricsOutput;
 
-void PrintTo(const QString& str, std::ostream* os);
+DateFactory::DateFactory() {
+}
 
-void PrintTo(const QChar& chr, std::ostream* os);
-
-#endif /* USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_ */
+DateFactory::~DateFactory() {
+}

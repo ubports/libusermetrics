@@ -16,14 +16,22 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <iostream>
-#include <QtCore/QString>
+#ifndef USERMETRICSOUTPUT_DATEFACTORY_H_
+#define USERMETRICSOUTPUT_DATEFACTORY_H_
 
-#ifndef USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_
-#define USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_
+#include <QtCore/QDate>
 
-void PrintTo(const QString& str, std::ostream* os);
+namespace UserMetricsOutput {
 
-void PrintTo(const QChar& chr, std::ostream* os);
+class DateFactory: public QObject {
+public:
+	DateFactory();
 
-#endif /* USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_ */
+	virtual ~DateFactory();
+
+	virtual QDate currentDate() const = 0;
+};
+
+}
+
+#endif // USERMETRICSOUTPUT_DATEFACTORY_H_

@@ -16,6 +16,7 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
+#include <libusermetricsoutput/DateFactoryImpl.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
 
 using namespace UserMetricsOutput;
@@ -32,5 +33,6 @@ UserMetrics::~UserMetrics() {
  */
 
 UserMetrics * UserMetrics::getInstance() {
-	return new UserMetricsImpl();
+	return new UserMetricsImpl(
+			QSharedPointer<DateFactory>(new DateFactoryImpl()));
 }

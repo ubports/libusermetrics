@@ -20,6 +20,7 @@
 #define USERMETRICSOUTPUT_USERMETRICSIMPL_H_
 
 #include <libusermetricsoutput/DataSet.h>
+#include <libusermetricsoutput/DateFactory.h>
 #include <libusermetricsoutput/UserMetrics.h>
 #include <libusermetricsoutput/qvariantlistmodel.h>
 
@@ -34,7 +35,8 @@ public:
 	typedef QSharedPointer<DataSet> DataSetPtr;
 	typedef QMultiMap<QString, DataSetPtr> DataSetMap;
 
-	UserMetricsImpl(QObject *parent = 0);
+	UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
+			QObject *parent = 0);
 
 	virtual ~UserMetricsImpl();
 
@@ -60,19 +62,32 @@ protected Q_SLOTS:
 	virtual void readyForDataChangeSlot();
 
 protected:
-	void prepareToLoadDataSource();
+	virtual void prepareToLoadDataSource();
 
-	void finishLoadingDataSource();
+	virtual void finishLoadingDataSource();
+
+	virtual void setUsernameInternal(const QString &username);
+
+	QSharedPointer<DateFactory> m_dateFactory;
 
 	QString m_label;
+
 	QScopedPointer<ColorThemeImpl> m_firstColor;
+
 	QScopedPointer<QVariantListModel> m_firstMonth;
+
 	QScopedPointer<ColorThemeImpl> m_secondColor;
+
 	QScopedPointer<QVariantListModel> m_secondMonth;
+
 	int m_currentDay;
+
 	QString m_username;
+
 	DataSetMap::const_iterator m_dataIndex;
+
 	DataSetPtr m_newData;
+
 	DataSetMap m_dataSets;
 };
 

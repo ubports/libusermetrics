@@ -16,14 +16,16 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <iostream>
-#include <QtCore/QString>
+#include <libusermetricsoutput/DateFactoryImpl.h>
 
-#ifndef USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_
-#define USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_
+using namespace UserMetricsOutput;
 
-void PrintTo(const QString& str, std::ostream* os);
+DateFactoryImpl::DateFactoryImpl() {
+}
 
-void PrintTo(const QChar& chr, std::ostream* os);
+DateFactoryImpl::~DateFactoryImpl() {
+}
 
-#endif /* USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_ */
+QDate DateFactoryImpl::currentDate() const {
+	return QDate::currentDate();
+}

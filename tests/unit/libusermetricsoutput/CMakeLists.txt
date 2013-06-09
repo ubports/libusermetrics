@@ -13,7 +13,8 @@ target_link_libraries(
 	usermetricsoutput-unit-tests
 	usermetricsoutput-static
 	usermetricsoutput-test-utils
-	${GTEST_BOTH_LIBRARIES}
+	${GTEST_LIBRARIES}
+	${GMOCK_BOTH_LIBRARIES}
 )
 
 add_test(

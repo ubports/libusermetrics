@@ -15,6 +15,8 @@ set(USERMETRICSOUTPUT_SOURCES
 	ColorTheme.cpp
 	ColorThemeImpl.cpp
 	DataSet.cpp
+	DateFactory.cpp
+	DateFactoryImpl.cpp
 	UserMetrics.cpp
 	UserMetricsImpl.cpp
 	qvariantlistmodel.cpp

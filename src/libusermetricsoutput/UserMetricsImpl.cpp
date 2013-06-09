@@ -18,27 +18,31 @@
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
 
+#include <QtCore/QDebug>
 #include <QtCore/QDate>
 #include <QtCore/QString>
-#include <QMultiMap>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QMultiMap>
 
 using namespace UserMetricsOutput;
 
-UserMetricsImpl::UserMetricsImpl(QObject *parent) :
-		UserMetrics(parent), m_firstColor(new ColorThemeImpl(this)), m_firstMonth(
+UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
+		QObject *parent) :
+		UserMetrics(parent), m_dateFactory(dateFactory), m_firstColor(
+				new ColorThemeImpl(this)), m_firstMonth(
 				new QVariantListModel(this)), m_secondColor(
 				new ColorThemeImpl(this)), m_secondMonth(
 				new QVariantListModel(this)), m_currentDay(0) {
-	DataSetPtr emptyData(
-			new DataSet("No data", ColorThemeImpl(), ColorThemeImpl(), this));
-	m_dataSets.insert("", emptyData);
-
-	setUsername("");
-
 	connect(this, SIGNAL(nextDataSource()), this, SLOT(nextDataSourceSlot()),
 			Qt::QueuedConnection);
 	connect(this, SIGNAL(readyForDataChange()), this, SLOT(
 			readyForDataChangeSlot()), Qt::QueuedConnection);
+
+	DataSetPtr emptyData(
+			new DataSet("No data", ColorThemeImpl(), ColorThemeImpl(), this));
+	m_dataSets.insert("", emptyData);
+
+	setUsernameInternal("");
 }
 
 UserMetricsImpl::~UserMetricsImpl() {
@@ -49,6 +53,10 @@ void UserMetricsImpl::setUsername(const QString &username) {
 		return;
 	}
 
+	setUsernameInternal(username);
+}
+
+void UserMetricsImpl::setUsernameInternal(const QString &username) {
 	m_username = username;
 
 	m_dataIndex = m_dataSets.constFind(m_username);
@@ -62,6 +70,7 @@ void UserMetricsImpl::setUsername(const QString &username) {
 }
 
 void UserMetricsImpl::prepareToLoadDataSource() {
+	qDebug() << "prepareToLoadDataSource";
 	m_newData = *m_dataIndex;
 
 	bool oldLabelEmpty = m_label.isEmpty();
@@ -86,10 +95,12 @@ void UserMetricsImpl::finishLoadingDataSource() {
 	m_firstColor->setColors(m_newData->firstColor());
 	m_secondColor->setColors(m_newData->secondColor());
 
-	QDate currentDate(QDate::currentDate());
-	int currentDay(currentDate.day());
+	int currentDay(m_dateFactory->currentDate().day());
 	bool currentDayChanged = m_currentDay != currentDay;
 	m_currentDay = currentDay;
+
+	qDebug() << "finishLoadingDataSource" << currentDay << currentDayChanged
+			<< m_currentDay;
 
 	// FIXME: Make this split out the data based upon the current date
 	m_firstMonth->setVariantList(m_newData->data());
@@ -135,6 +146,7 @@ QAbstractItemModel * UserMetricsImpl::secondMonth() const {
 }
 
 int UserMetricsImpl::currentDay() const {
+	qDebug() << "currentDay" << m_currentDay;
 	return m_currentDay;
 }
 
