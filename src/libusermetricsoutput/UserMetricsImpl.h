@@ -52,6 +52,8 @@ public:
 
 	virtual int currentDay() const;
 
+	virtual void setCurrentDay(int currentDay);
+
 	virtual ColorTheme * secondColor() const;
 
 	virtual QAbstractItemModel *secondMonth() const;

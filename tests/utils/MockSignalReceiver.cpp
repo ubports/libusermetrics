@@ -16,14 +16,6 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_
-#define USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_
+#include <utils/MockSignalReceiver.h>
 
-#include <iostream>
-#include <QtCore/QString>
-
-void PrintTo(const QString& str, std::ostream* os);
-
-void PrintTo(const QChar& chr, std::ostream* os);
-
-#endif /* USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_ */
+using namespace testutils;

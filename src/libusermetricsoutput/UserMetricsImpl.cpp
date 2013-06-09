@@ -47,6 +47,14 @@ UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
 UserMetricsImpl::~UserMetricsImpl() {
 }
 
+void UserMetricsImpl::setCurrentDay(int currentDay) {
+	bool currentDayChanged = m_currentDay != currentDay;
+	m_currentDay = currentDay;
+	if (currentDayChanged) {
+		this->currentDayChanged(m_currentDay);
+	}
+}
+
 void UserMetricsImpl::setUsername(const QString &username) {
 	if (m_username == username) {
 		return;
@@ -93,18 +101,13 @@ void UserMetricsImpl::finishLoadingDataSource() {
 	m_firstColor->setColors(m_newData->firstColor());
 	m_secondColor->setColors(m_newData->secondColor());
 
-	int currentDay(m_dateFactory->currentDate().day());
-	bool currentDayChanged = m_currentDay != currentDay;
-	m_currentDay = currentDay;
-
 	// FIXME: Make this split out the data based upon the current date
 	m_firstMonth->setVariantList(m_newData->data());
 	m_secondMonth->setVariantList(m_newData->data());
 
 	labelChanged(m_label);
-	if (currentDayChanged) {
-		this->currentDayChanged(m_currentDay);
-	}
+
+	setCurrentDay(m_dateFactory->currentDate().day());
 
 	if (oldLabelEmpty && !newLabelEmpty) {
 		dataAppeared();

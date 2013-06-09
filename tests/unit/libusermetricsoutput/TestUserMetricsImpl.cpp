@@ -18,13 +18,16 @@
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
 #include <utils/QStringPrinter.h>
+#include <utils/MockSignalReceiver.h>
 
+#include <QtCore/QObject>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 using namespace std;
 using namespace UserMetricsOutput;
 using namespace testing;
+using namespace testutils;
 
 namespace {
 
@@ -62,6 +65,13 @@ TEST_F(UserMetricsImplTest, CurrentDateChangesWithDataSource) {
 
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
 			Return(QDate(2000, 01, 21))).WillOnce(Return(QDate(2000, 01, 27)));
+
+	StrictMock<MockSignalReceiver> signalReceiver;
+	EXPECT_CALL(signalReceiver, receivedSignal(21)).Times(1);
+	EXPECT_CALL(signalReceiver, receivedSignal(27)).Times(1);
+
+	QObject::connect(model.data(), SIGNAL(currentDayChanged(int)),
+			&signalReceiver, SLOT(receivedSignal(int)));
 
 	model->nextDataSourceSlot();
 	model->readyForDataChangeSlot();

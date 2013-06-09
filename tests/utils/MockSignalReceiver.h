@@ -16,14 +16,27 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_
-#define USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_
+#ifndef USERMETRICS_TESTUTILS_MOCKSIGNALRECEIVER_H_
+#define USERMETRICS_TESTUTILS_MOCKSIGNALRECEIVER_H_
 
-#include <iostream>
-#include <QtCore/QString>
+#include <QtCore/QObject>
+#include <gmock/gmock.h>
 
-void PrintTo(const QString& str, std::ostream* os);
+namespace testutils {
 
-void PrintTo(const QChar& chr, std::ostream* os);
+class AbstractMockSignalReceiver: public QObject {
+Q_OBJECT
+public Q_SLOTS:
+	virtual void receivedSignal(int) = 0;
+};
+
+class MockSignalReceiver: public AbstractMockSignalReceiver {
+Q_OBJECT
+public:
+	MOCK_METHOD1(receivedSignal, void(int));
+};
+
+}
 
 #endif /* USERMETRICS_TESTUTILS_QSTRINGPRINTER_H_ */
+
