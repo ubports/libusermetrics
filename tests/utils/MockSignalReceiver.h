@@ -24,13 +24,13 @@
 
 namespace testutils {
 
-class AbstractMockSignalReceiver: public QObject {
+class AbstractMockSignalReceiverInt: public QObject {
 Q_OBJECT
 public Q_SLOTS:
 	virtual void receivedSignal(int) = 0;
 };
 
-class MockSignalReceiver: public AbstractMockSignalReceiver {
+class MockSignalReceiverInt: public AbstractMockSignalReceiverInt {
 Q_OBJECT
 public:
 	MOCK_METHOD1(receivedSignal, void(int));

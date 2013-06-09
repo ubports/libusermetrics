@@ -66,7 +66,7 @@ TEST_F(UserMetricsImplTest, CurrentDateChangesWithDataSource) {
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
 			Return(QDate(2000, 01, 21))).WillOnce(Return(QDate(2000, 01, 27)));
 
-	StrictMock<MockSignalReceiver> signalReceiver;
+	StrictMock<MockSignalReceiverInt> signalReceiver;
 	EXPECT_CALL(signalReceiver, receivedSignal(21)).Times(1);
 	EXPECT_CALL(signalReceiver, receivedSignal(27)).Times(1);
 
