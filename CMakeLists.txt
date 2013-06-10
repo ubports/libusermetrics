@@ -24,13 +24,14 @@ set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-permissive -pedantic -Wall -Wextra")
 
+include(Coverage)
+
 add_subdirectory("src")
 
 enable_testing()
+add_subdirectory(tests)
 
 ADD_CUSTOM_TARGET(
 	test_verbose
 	${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure
 )
-
-add_subdirectory(tests)
