@@ -27,6 +27,8 @@ set(USERMETRICS_OUTPUT_DEPENDENCIES
 	Gui
 )
 
+# Static library version of libusermetricsoutput
+
 add_library(
 	usermetricsoutput-static
 	STATIC
@@ -44,6 +46,8 @@ set_target_properties(
 	OUTPUT_NAME usermetricsoutput
 )
 
+# Shared library version of libusermetricsoutput
+
 add_library(
 	usermetricsoutput
 	SHARED
@@ -60,4 +64,19 @@ set_target_properties(
 	PROPERTIES
 	VERSION ${API_VERSION}.0.0
 	SOVERSION ${ABI_VERSION}
+)
+
+install(
+  TARGETS usermetricsoutput
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+# Package config
+
+set(LIBUSERMETRICSOUTPUT_PC "libusermetricsoutput-${API_VERSION}.pc")
+configure_file("libusermetricsoutput.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/${LIBUSERMETRICSOUTPUT_PC}" @ONLY)
+
+install(
+  FILES "${CMAKE_CURRENT_BINARY_DIR}/${LIBUSERMETRICSOUTPUT_PC}"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
 )
