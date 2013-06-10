@@ -70,6 +70,8 @@ protected:
 
 	virtual void setUsernameInternal(const QString &username);
 
+	virtual void fixMonthLength(QVariantListModel &month, int daysInMonth);
+
 	QSharedPointer<DateFactory> m_dateFactory;
 
 	QString m_label;

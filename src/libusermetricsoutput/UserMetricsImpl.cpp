@@ -20,7 +20,7 @@
 
 #include <QtCore/QDate>
 #include <QtCore/QString>
-#include <QtCore/QSharedPointer>
+#include <QtCore/QVariantList>
 #include <QtCore/QMultiMap>
 
 using namespace UserMetricsOutput;
@@ -93,21 +93,42 @@ void UserMetricsImpl::prepareToLoadDataSource() {
 // we emit no signal if the data has stayed empty
 }
 
+void UserMetricsImpl::fixMonthLength(QVariantListModel &month,
+		int daysInMonth) {
+	int monthLength(month.rowCount());
+	if (monthLength > daysInMonth) {
+		int daysToRemove(monthLength - daysInMonth);
+		month.removeRows(daysInMonth, daysToRemove);
+	} else if (monthLength < daysInMonth) {
+		int daysToAdd(daysInMonth - monthLength);
+		month.insertRows(monthLength, daysToAdd);
+	}
+}
+
 void UserMetricsImpl::finishLoadingDataSource() {
 	bool oldLabelEmpty = m_label.isEmpty();
 	bool newLabelEmpty = m_newData->formatString().isEmpty();
 
-	m_label = m_newData->formatString();
 	m_firstColor->setColors(m_newData->firstColor());
 	m_secondColor->setColors(m_newData->secondColor());
 
+	QDate firstMonthDate(m_dateFactory->currentDate());
+	QDate secondMonthDate(firstMonthDate.addMonths(-1));
+
+	setCurrentDay(firstMonthDate.day());
+
+	int daysInFirstMonth(firstMonthDate.daysInMonth());
+	int daysInSecondMonth(secondMonthDate.daysInMonth());
+
+	fixMonthLength(*m_firstMonth, daysInFirstMonth);
+	fixMonthLength(*m_secondMonth, daysInSecondMonth);
+
 	// FIXME: Make this split out the data based upon the current date
-	m_firstMonth->setVariantList(m_newData->data());
-	m_secondMonth->setVariantList(m_newData->data());
+//	m_firstMonth->setVariantList(m_newData->data());
+//	m_secondMonth->setVariantList(m_newData->data());
 
+	m_label = m_newData->formatString();
 	labelChanged(m_label);
-
-	setCurrentDay(m_dateFactory->currentDate().day());
 
 	if (oldLabelEmpty && !newLabelEmpty) {
 		dataAppeared();

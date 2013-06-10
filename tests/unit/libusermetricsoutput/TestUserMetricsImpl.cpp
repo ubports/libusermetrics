@@ -82,6 +82,34 @@ TEST_F(UserMetricsImplTest, CurrentDateChangesWithDataSource) {
 	EXPECT_EQ(27, model->currentDay());
 }
 
+TEST_F(UserMetricsImplTest, MonthLengthChangesWithDate) {
+	EXPECT_EQ(7, model->currentDay());
+
+	EXPECT_CALL(*dateFactory, currentDate()).Times(4).WillOnce(
+			Return(QDate(2001, 01, 1))).WillOnce(Return(QDate(2001, 02, 25))).WillOnce(
+			Return(QDate(2001, 03, 1))).WillOnce(Return(QDate(2001, 04, 10)));
+
+	model->nextDataSourceSlot();
+	model->readyForDataChangeSlot();
+	EXPECT_EQ(31, model->firstMonth()->rowCount());
+	EXPECT_EQ(31, model->secondMonth()->rowCount());
+
+	model->nextDataSourceSlot();
+	model->readyForDataChangeSlot();
+	EXPECT_EQ(28, model->firstMonth()->rowCount());
+	EXPECT_EQ(31, model->secondMonth()->rowCount());
+
+	model->nextDataSourceSlot();
+	model->readyForDataChangeSlot();
+	EXPECT_EQ(31, model->firstMonth()->rowCount());
+	EXPECT_EQ(28, model->secondMonth()->rowCount());
+
+	model->nextDataSourceSlot();
+	model->readyForDataChangeSlot();
+	EXPECT_EQ(30, model->firstMonth()->rowCount());
+	EXPECT_EQ(31, model->secondMonth()->rowCount());
+}
+
 TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
 	model->setUsername("non-existing-user");
 	model->readyForDataChangeSlot();
