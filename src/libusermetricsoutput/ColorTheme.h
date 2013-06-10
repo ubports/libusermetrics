@@ -21,8 +21,13 @@
 
 #include <QtGui/QColor>
 
+/*@{*/
+
 namespace UserMetricsOutput {
 
+/**
+ * @brief Color theme for a particular user metric
+ **/
 class Q_DECL_EXPORT ColorTheme: public QObject {
 Q_OBJECT
 
@@ -50,5 +55,7 @@ Q_SIGNALS:
 };
 
 }
+
+/*@}*/
 
 #endif // USERMETRICSOUTPUT_COLORTHEME_H_

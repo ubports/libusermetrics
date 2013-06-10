@@ -25,8 +25,13 @@
 
 #include <libusermetricsoutput/ColorTheme.h>
 
+/*@{*/
+
 namespace UserMetricsOutput {
 
+/**
+ * @brief Anonymous User Metrics
+ **/
 class Q_DECL_EXPORT UserMetrics: public QObject {
 Q_OBJECT
 
@@ -103,5 +108,7 @@ protected:
 };
 
 }
+
+/*@}*/
 
 #endif // USERMETRICSOUTPUT_USERMETRICS_H_
