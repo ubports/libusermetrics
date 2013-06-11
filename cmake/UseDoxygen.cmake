@@ -51,6 +51,12 @@
 #  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 
+option(
+  BUILD_DOXYGEN
+  "Build Doxygen documentation as part of the default build"
+  OFF
+)
+
 macro(usedoxygen_set_default name value type docstring)
 	if(NOT DEFINED "${name}")
 		set("${name}" "${value}" CACHE "${type}" "${docstring}")
@@ -135,9 +141,13 @@ if(DOXYGEN_FOUND AND DOXYFILE_IN_FOUND)
 
 	configure_file("${DOXYFILE_IN}" "${DOXYFILE}" @ONLY)
 
+	if (BUILD_DOXYGEN)
+		set(ALL "ALL")
+	endif()
+
 	get_target_property(DOC_TARGET doc TYPE)
 	if(NOT DOC_TARGET)
-		add_custom_target(doc)
+		add_custom_target(doc ${ALL})
 	endif()
 
 	add_dependencies(doc doxygen)

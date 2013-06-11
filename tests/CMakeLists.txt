@@ -1,6 +1,8 @@
 
+set(CMAKE_AUTOMOC OFF)
 find_package("LocalGTest" REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
+set(CMAKE_AUTOMOC ON)
 
 find_package("GMock" REQUIRED)
 include_directories(${GMOCK_INCLUDE_DIRS})

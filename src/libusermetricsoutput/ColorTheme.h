@@ -31,27 +31,69 @@ namespace UserMetricsOutput {
 class Q_DECL_EXPORT ColorTheme: public QObject {
 Q_OBJECT
 
+	/**
+	 * @brief Insert documentation here.
+	 */
 Q_PROPERTY(QColor start READ start NOTIFY startChanged FINAL)
+
+/**
+ * @brief Insert documentation here.
+ */
 Q_PROPERTY(QColor main READ main NOTIFY mainChanged FINAL)
+
+/**
+ * @brief Insert documentation here.
+ */
 Q_PROPERTY(QColor end READ end NOTIFY endChanged FINAL)
 
-public:
+protected:
+	/**
+	 * @brief Insert documentation here.
+	 *
+	 * @param parent Foo
+	 */
 	explicit ColorTheme(QObject *parent = 0);
 
+public:
 	virtual ~ColorTheme();
 
+	/**
+	 * @brief Insert documentation here.
+	 */
 	virtual QColor start() const = 0;
 
+	/**
+	 * @brief Insert documentation here.
+	 */
 	virtual QColor main() const = 0;
 
+	/**
+	 * @brief Insert documentation here.
+	 */
 	virtual QColor end() const = 0;
 
 Q_SIGNALS:
+	/**
+	 * @brief Insert documentation here.
+	 *
+	 * @param color Foo
+	 */
 	void startChanged(const QColor &color);
 
+	/**
+	 * @brief Insert documentation here.
+	 *
+	 * @param color Foo
+	 */
 	void mainChanged(const QColor &color);
 
+	/**
+	 * @brief Insert documentation here.
+	 *
+	 * @param color Foo
+	 */
 	void endChanged(const QColor &color);
+
 };
 
 }

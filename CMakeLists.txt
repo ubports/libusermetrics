@@ -27,11 +27,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-permissive -pedantic -Wa
 include(GNUInstallDirs)
 include(Coverage)
 
+set(DOXYFILE_SOURCE_DIR "include")
+include(UseDoxygen)
+
 add_subdirectory("include")
 add_subdirectory("src")
 
 enable_testing()
 add_subdirectory(tests)
+
 
 ADD_CUSTOM_TARGET(
 	test_verbose
