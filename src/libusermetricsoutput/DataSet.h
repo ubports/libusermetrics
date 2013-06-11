@@ -32,10 +32,11 @@ Q_OBJECT
 
 Q_PROPERTY(QDate lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged FINAL)
 Q_PROPERTY(const QVariantList data READ data NOTIFY dataChanged FINAL)
+Q_PROPERTY(QString formatString READ formatString WRITE setFormatString NOTIFY formatStringChanged FINAL)
 
 public:
-	DataSet(const QString &formatString, const ColorTheme &firstColor,
-			const ColorTheme &secondColor, QObject* parent);
+	DataSet(const ColorTheme &firstColor, const ColorTheme &secondColor,
+			QObject* parent);
 
 	~DataSet();
 
@@ -51,10 +52,15 @@ public:
 
 	void setData(const QDate &lastUpdated, const QVariantList &data);
 
+public Q_SLOTS:
+	void setFormatString(const QString &formatString);
+
 Q_SIGNALS:
 	void lastUpdatedChanged(const QDate &lastUpdated);
 
 	void dataChanged(const QVariantList *data);
+
+	void formatStringChanged(const QString &formatString);
 
 protected:
 	QString m_formatString;

@@ -20,10 +20,9 @@
 
 using namespace UserMetricsOutput;
 
-DataSet::DataSet(const QString &formatString, const ColorTheme &firstColor,
-		const ColorTheme &secondColor, QObject* parent) :
-		QObject(parent), m_formatString(formatString), m_firstColor(this), m_secondColor(
-				this) {
+DataSet::DataSet(const ColorTheme &firstColor, const ColorTheme &secondColor,
+		QObject* parent) :
+		QObject(parent), m_firstColor(this), m_secondColor(this) {
 	m_firstColor.setColors(firstColor);
 	m_secondColor.setColors(secondColor);
 }
@@ -49,6 +48,13 @@ const QVariantList & DataSet::data() const {
 
 const QDate & DataSet::lastUpdated() const {
 	return lastUpdated();
+}
+
+void DataSet::setFormatString(const QString &formatString) {
+	if (formatString != m_formatString) {
+		m_formatString = formatString;
+		formatStringChanged(m_formatString);
+	}
 }
 
 void DataSet::setData(const QDate &lastUpdated, const QVariantList &data) {

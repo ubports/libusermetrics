@@ -58,6 +58,8 @@ public:
 
 	virtual QAbstractItemModel *secondMonth() const;
 
+	virtual DataSetPtr & data(const QString &username, const QString &dataSourceId);
+
 public Q_SLOTS:
 	virtual void nextDataSourceSlot();
 

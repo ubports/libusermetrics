@@ -37,8 +37,8 @@ UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
 	connect(this, SIGNAL(readyForDataChange()), this, SLOT(
 			readyForDataChangeSlot()), Qt::QueuedConnection);
 
-	DataSetPtr emptyData(
-			new DataSet("No data", ColorThemeImpl(), ColorThemeImpl(), this));
+	DataSetPtr emptyData(new DataSet(ColorThemeImpl(), ColorThemeImpl(), this));
+	emptyData->setFormatString("No data");
 	m_dataSets.insert("", emptyData);
 
 	setUsernameInternal("");
@@ -138,6 +138,19 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		dataChanged();
 	}
 // we emit no signal if the data has stayed empty
+}
+
+UserMetricsImpl::DataSetPtr & UserMetricsImpl::data(const QString &username,
+		const QString &dataSourceId) {
+	DataSetMap::iterator data(m_dataSets.find(username));
+
+	if (data == m_dataSets.end()) {
+		DataSetPtr newData(
+				new DataSet(ColorThemeImpl(), ColorThemeImpl(), this));
+		data = m_dataSets.insert(username, newData);
+	}
+
+	return *data;
 }
 
 QString UserMetricsImpl::label() const {

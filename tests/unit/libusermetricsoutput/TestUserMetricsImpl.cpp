@@ -118,4 +118,18 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
 	EXPECT_EQ(QString("No data"), model->label());
 }
 
+TEST_F(UserMetricsImplTest, AddData) {
+	QVariantList data( { 100.0, 50.0, 100.0 });
+
+	UserMetricsImpl::DataSetPtr dataSet(
+			model->data("username", "data-source-id"));
+	dataSet->setFormatString("test format string %d");
+	dataSet->setData(QDate(2001, 01, 01), data);
+
+	model->setUsername("username");
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ(QString("test format string 100.0"), model->label());
+}
+
 } // namespace
