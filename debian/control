@@ -16,18 +16,24 @@ Multi-Arch: same
 Depends: ${shlibs:Depends},
          ${misc:Depends},
          libusermetrics1 (= ${binary:Version})
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Description: library for exporting and retreving anonymous metrics about the users of
+ the system.
+ .
+ This package contains files that are needed to build applications.
 
 Package: libusermetrics1
 Section: libs
 Architecture: any
 Multi-Arch: same
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Pre-Depends: ${misc:Pre-Depends}
+Description: library for exporting and retreving anonymous metrics about the users of
+ the system.
+ .
+ This package contains shared libraries to be used by applications.
 
 Package: libusermetrics-doc
+Section: doc
 Architecture: all
 Depends: ${misc:Depends}
 Description: API documentation for libusermetrics
