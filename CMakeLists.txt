@@ -29,6 +29,10 @@ include(Coverage)
 
 set(DOXYFILE_SOURCE_DIR "include")
 include(UseDoxygen)
+install(
+	DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/libusermetrics-doc/
+)
 
 add_subdirectory("include")
 add_subdirectory("src")

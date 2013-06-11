@@ -26,3 +26,9 @@ Multi-Arch: same
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: <insert up to 60 chars description>
  <insert long description, indented with spaces>
+
+Package: libusermetrics-doc
+Architecture: all
+Depends: ${misc:Depends}
+Description: API documentation for libusermetrics
+ This package installs the libusermetrics API documentation.
