@@ -1,6 +1,9 @@
 project(libusermetrics CXX)
 cmake_minimum_required(VERSION 2.8.9)
 
+set(API_VERSION 1)
+set(ABI_VERSION 1)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}")
 
 find_package(Qt5Core REQUIRED)
@@ -34,7 +37,6 @@ install(
 	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/libusermetrics-doc/
 )
 
-add_subdirectory("include")
 add_subdirectory("src")
 
 enable_testing()

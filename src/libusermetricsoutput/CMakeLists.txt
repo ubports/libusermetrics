@@ -1,14 +1,8 @@
 
-set(API_VERSION 1)
-set(ABI_VERSION 1)
-
-set(USERMETRICSOUTPUT_HEADERS
-	ColorTheme.h
-	ColorThemeImpl.h
-	DataSet.h
-	UserMetrics.h
-	UserMetricsImpl.h
-	qvariantlistmodel.h
+FILE(
+	GLOB USERMETRICSOUTPUT_PUBLIC_HEADERS
+	RELATIVE "${INCLUDE_DIR}/libusermetricsoutput"
+	"${INCLUDE_DIR}/libusermetricsoutput/*.h"
 )
 
 set(USERMETRICSOUTPUT_SOURCES
@@ -64,11 +58,13 @@ set_target_properties(
 	PROPERTIES
 	VERSION ${API_VERSION}.0.0
 	SOVERSION ${ABI_VERSION}
+	PUBLIC_HEADER "${USERMETRICSOUTPUT_PUBLIC_HEADERS}"
 )
 
 install(
   TARGETS usermetricsoutput
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libusermetricsoutput-${API_VERSION}"
 )
 
 # Package config
