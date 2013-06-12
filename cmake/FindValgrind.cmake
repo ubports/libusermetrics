@@ -11,7 +11,7 @@ find_program(
 )
 
 if(VALGRIND_PROGRAM)
-	set(VALGRIND_PROGRAM_OPTIONS "--error-exitcode=1" "--trace-children=yes" "--quiet")
+	set(VALGRIND_PROGRAM_OPTIONS "--error-exitcode=1" "--trace-children=yes" "--leak-check=full" "--quiet")
 endif()
 
 find_package_handle_standard_args(
