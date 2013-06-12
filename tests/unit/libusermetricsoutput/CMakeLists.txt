@@ -17,7 +17,7 @@ target_link_libraries(
 	${GMOCK_BOTH_LIBRARIES}
 )
 
-add_test(
+add_valgrind_test(
 	usermetricsoutput-unit-tests
 	usermetricsoutput-unit-tests
 )
