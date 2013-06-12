@@ -18,6 +18,7 @@
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
 #include <utils/QStringPrinter.h>
+#include <utils/QVariantPrinter.h>
 #include <utils/MockSignalReceiver.h>
 
 #include <QtCore/QObject>
@@ -42,7 +43,7 @@ protected:
 	UserMetricsImplTest() {
 		dateFactory.reset(new NiceMock<MockDateFactory>());
 		ON_CALL(*dateFactory, currentDate()).WillByDefault(
-				Return(QDate(2000, 01, 07)));
+				Return(QDate(2001, 01, 07)));
 
 		model.reset(new UserMetricsImpl(dateFactory));
 	}
@@ -64,7 +65,7 @@ TEST_F(UserMetricsImplTest, CurrentDateChangesWithDataSource) {
 	EXPECT_EQ(7, model->currentDay());
 
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
-			Return(QDate(2000, 01, 21))).WillOnce(Return(QDate(2000, 01, 27)));
+			Return(QDate(2001, 01, 21))).WillOnce(Return(QDate(2001, 01, 27)));
 
 	StrictMock<MockSignalReceiverInt> signalReceiver;
 	EXPECT_CALL(signalReceiver, receivedSignal(21)).Times(1);
@@ -118,19 +119,61 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
 	EXPECT_EQ(QString("No data"), model->label());
 }
 
-TEST_F(UserMetricsImplTest, AddData) {
-	QVariantList data( { 100.0, 50.0, 100.0 });
+TEST_F(UserMetricsImplTest, AddDataForToday) {
+	// the fake date provider says the date is 2001/01/07
+
+	QVariantList data;
+
+	// First month (January) data:
+	data << 100.0 << 95.0;
+	while (data.size() < 5) {
+		data << 50.0;
+	}
+	data << 90.0 << 85.0;
+
+	// Second month (December) data:
+	// December has 31 days
+	data << 80.0 << 75.0;
+	while (data.size() < 36) {
+		data << 50.0;
+	}
+	data << 70.0 << 65.0;
 
 	UserMetricsImpl::DataSetPtr dataSet(
 			model->data("username", "data-source-id"));
-	dataSet->setFormatString("test format string %d");
-	dataSet->setData(QDate(2001, 01, 01), data);
+	dataSet->setFormatString("test format string %1");
+	dataSet->setData(QDate(2001, 01, 07), data);
 
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
-	// FIXME Uncomment this
-//	EXPECT_EQ(QString("test format string 100.0"), model->label());
+	EXPECT_EQ(QString("test format string 100"), model->label());
+
+	// assertions about first month's data
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		EXPECT_EQ(31, month->rowCount());
+		EXPECT_EQ(QVariant(85.0), month->data(month->index(0, 0)));
+		EXPECT_EQ(QVariant(90.0), month->data(month->index(1, 0)));
+		for (int i(2); i < 4; ++i) {
+			EXPECT_EQ(QVariant(50.0), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(95.0), month->data(month->index(5, 0)));
+		EXPECT_EQ(QVariant(100.0), month->data(month->index(6, 0)));
+	}
+
+	// assertions about second month's data
+	{
+		const QAbstractItemModel* month(model->secondMonth());
+		EXPECT_EQ(31, month->rowCount());
+		EXPECT_EQ(QVariant(65.0), month->data(month->index(0, 0)));
+		EXPECT_EQ(QVariant(70.0), month->data(month->index(1, 0)));
+		for (int i(2); i < 29; ++i) {
+			EXPECT_EQ(QVariant(50.0), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(75.0), month->data(month->index(29, 0)));
+		EXPECT_EQ(QVariant(80.0), month->data(month->index(30, 0)));
+	}
 }
 
 } // namespace

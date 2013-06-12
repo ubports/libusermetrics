@@ -40,6 +40,8 @@ public:
 
 	virtual ~UserMetricsImpl();
 
+	virtual void setLabel(const QString &label);
+
 	virtual QString label() const;
 
 	virtual QString username() const;
@@ -58,7 +60,8 @@ public:
 
 	virtual QAbstractItemModel *secondMonth() const;
 
-	virtual DataSetPtr & data(const QString &username, const QString &dataSourceId);
+	virtual DataSetPtr & data(const QString &username,
+			const QString &dataSourceId);
 
 public Q_SLOTS:
 	virtual void nextDataSourceSlot();
@@ -71,8 +74,6 @@ protected:
 	virtual void finishLoadingDataSource();
 
 	virtual void setUsernameInternal(const QString &username);
-
-	virtual void fixMonthLength(QVariantListModel &month, int daysInMonth);
 
 	QSharedPointer<DateFactory> m_dateFactory;
 

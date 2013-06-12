@@ -2,6 +2,7 @@
 set(
 	USERMETRICS_TEST_UTILS_SRC
 	QStringPrinter.cpp
+	QVariantPrinter.cpp
 	MockSignalReceiver.cpp
 )
 

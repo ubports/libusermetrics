@@ -18,6 +18,7 @@
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
 
+#include <QtCore/QDebug>
 #include <QtCore/QDate>
 #include <QtCore/QString>
 #include <QtCore/QVariantList>
@@ -45,6 +46,14 @@ UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
 }
 
 UserMetricsImpl::~UserMetricsImpl() {
+}
+
+void UserMetricsImpl::setLabel(const QString &label) {
+	bool labelChanged = m_label != label;
+	m_label = label;
+	if (labelChanged) {
+		this->labelChanged(m_label);
+	}
 }
 
 void UserMetricsImpl::setCurrentDay(int currentDay) {
@@ -93,18 +102,6 @@ void UserMetricsImpl::prepareToLoadDataSource() {
 // we emit no signal if the data has stayed empty
 }
 
-void UserMetricsImpl::fixMonthLength(QVariantListModel &month,
-		int daysInMonth) {
-	int monthLength(month.rowCount());
-	if (monthLength > daysInMonth) {
-		int daysToRemove(monthLength - daysInMonth);
-		month.removeRows(daysInMonth, daysToRemove);
-	} else if (monthLength < daysInMonth) {
-		int daysToAdd(daysInMonth - monthLength);
-		month.insertRows(monthLength, daysToAdd);
-	}
-}
-
 void UserMetricsImpl::finishLoadingDataSource() {
 	bool oldLabelEmpty = m_label.isEmpty();
 	bool newLabelEmpty = m_newData->formatString().isEmpty();
@@ -120,15 +117,41 @@ void UserMetricsImpl::finishLoadingDataSource() {
 	int daysInFirstMonth(firstMonthDate.daysInMonth());
 	int daysInSecondMonth(secondMonthDate.daysInMonth());
 
-	fixMonthLength(*m_firstMonth, daysInFirstMonth);
-	fixMonthLength(*m_secondMonth, daysInSecondMonth);
+	const QVariantList &newData = m_newData->data();
 
-	// FIXME: Make this split out the data based upon the current date
-//	m_firstMonth->setVariantList(m_newData->data());
-//	m_secondMonth->setVariantList(m_newData->data());
+	QVariantList::const_iterator dataIndex(newData.begin());
+	QVariantList::const_iterator end(m_newData->data().end());
 
-	m_label = m_newData->formatString();
-	labelChanged(m_label);
+	// Data for the first month
+	QVariantList firstMonthNewData;
+	// Copy the data up to the day of the month it is
+	for (int i(0); i < m_currentDay && dataIndex != end; ++i, ++dataIndex) {
+		firstMonthNewData.prepend(*dataIndex);
+	}
+	// Now fill the end of the month with empty data
+	while (firstMonthNewData.size() < daysInFirstMonth) {
+		firstMonthNewData.append(QVariant());
+	}
+	m_firstMonth->setVariantList(firstMonthNewData);
+
+	// Data for the second month
+	QVariantList secondMonthNewData;
+	// Copy the data up to the day of the month it is
+	for (int i(0); i < daysInSecondMonth && dataIndex != end;
+			++i, ++dataIndex) {
+		secondMonthNewData.prepend(*dataIndex);
+	}
+	// Now fill the beginning of the month with empty data
+	while (secondMonthNewData.size() < daysInSecondMonth) {
+		secondMonthNewData.prepend(QVariant());
+	}
+	m_secondMonth->setVariantList(secondMonthNewData);
+
+	if (newData.empty()) {
+		setLabel("No data");
+	} else {
+		setLabel(m_newData->formatString().arg(newData.first().toString()));
+	}
 
 	if (oldLabelEmpty && !newLabelEmpty) {
 		dataAppeared();
