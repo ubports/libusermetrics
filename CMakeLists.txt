@@ -46,6 +46,6 @@ add_subdirectory(tests)
 
 
 ADD_CUSTOM_TARGET(
-	test_verbose
+	check
 	${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure
 )
