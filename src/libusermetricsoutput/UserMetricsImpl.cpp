@@ -18,7 +18,6 @@
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
 
-#include <QtCore/QDebug>
 #include <QtCore/QDate>
 #include <QtCore/QString>
 #include <QtCore/QVariantList>
@@ -39,7 +38,7 @@ UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
 			readyForDataChangeSlot()), Qt::QueuedConnection);
 
 	DataSetPtr emptyData(new DataSet(ColorThemeImpl(), ColorThemeImpl(), this));
-	emptyData->setFormatString("No data");
+	emptyData->setFormatString("No data sources available");
 	m_dataSets.insert("", emptyData);
 
 	setUsernameInternal("");
@@ -102,54 +101,76 @@ void UserMetricsImpl::prepareToLoadDataSource() {
 // we emit no signal if the data has stayed empty
 }
 
+void UserMetricsImpl::updateMonth(QVariantListModel &month,
+		const int dayOfMonth, const int daysInMonth,
+		QVariantList::const_iterator& index,
+		const QVariantList::const_iterator& end) {
+
+	// Data for the month
+	QVariantList newData;
+
+	// Copy a number of data entries equal to the day of the month it is
+	for (int i(0); i < dayOfMonth; ++i) {
+		if (index == end) {
+			// when we run out of data, pad the remaining days to the
+			// start of the month
+			newData.prepend(QVariant());
+		} else {
+			// pop data from the from of the source
+			newData.prepend(*index);
+			++index;
+		}
+	}
+
+	// Now fill the end of the month with empty data
+	while (newData.size() < daysInMonth) {
+		newData.append(QVariant());
+	}
+
+	month.setVariantList(newData);
+}
+
 void UserMetricsImpl::finishLoadingDataSource() {
 	bool oldLabelEmpty = m_label.isEmpty();
 	bool newLabelEmpty = m_newData->formatString().isEmpty();
 
+	const QDate currentDate(m_dateFactory->currentDate());
+	const QDate &lastUpdated(m_newData->lastUpdated());
+	QDate secondMonthDate(currentDate.addMonths(-1));
+
+	int valuesToCopyForFirstMonth(0);
+	int valuesToCopyForSecondMonth(0);
+
+	if (currentDate.year() == lastUpdated.year()
+			&& currentDate.month() == lastUpdated.month()) {
+		// If the data is for the first month
+		valuesToCopyForFirstMonth = lastUpdated.day();
+		valuesToCopyForSecondMonth = secondMonthDate.daysInMonth();
+	} else if (secondMonthDate.year() == lastUpdated.year()
+			&& secondMonthDate.month() == lastUpdated.month()) {
+		// If the data is for the second month
+		valuesToCopyForSecondMonth = lastUpdated.day();
+	} else {
+		// the data is out of date
+	}
+
+	setCurrentDay(currentDate.day() - 1);
+
 	m_firstColor->setColors(m_newData->firstColor());
 	m_secondColor->setColors(m_newData->secondColor());
 
-	QDate firstMonthDate(m_dateFactory->currentDate());
-	QDate secondMonthDate(firstMonthDate.addMonths(-1));
-
-	setCurrentDay(firstMonthDate.day() - 1);
-
-	int daysInFirstMonth(firstMonthDate.daysInMonth());
-	int daysInSecondMonth(secondMonthDate.daysInMonth());
-
 	const QVariantList &newData = m_newData->data();
-
 	QVariantList::const_iterator dataIndex(newData.begin());
 	QVariantList::const_iterator end(m_newData->data().end());
 
-	// Data for the first month
-	QVariantList firstMonthNewData;
-	// Copy the data up to the day of the month it is
-	for (int i(0); i < m_newData->lastUpdated().day() && dataIndex != end;
-			++i, ++dataIndex) {
-		firstMonthNewData.prepend(*dataIndex);
-	}
-	// Now fill the end of the month with empty data
-	while (firstMonthNewData.size() < daysInFirstMonth) {
-		firstMonthNewData.append(QVariant());
-	}
-	m_firstMonth->setVariantList(firstMonthNewData);
+	updateMonth(*m_firstMonth, valuesToCopyForFirstMonth,
+			currentDate.daysInMonth(), dataIndex, end);
 
-	// Data for the second month
-	QVariantList secondMonthNewData;
-	// Copy the data up to the day of the month it is
-	for (int i(0); i < daysInSecondMonth && dataIndex != end;
-			++i, ++dataIndex) {
-		secondMonthNewData.prepend(*dataIndex);
-	}
-	// Now fill the beginning of the month with empty data
-	while (secondMonthNewData.size() < daysInSecondMonth) {
-		secondMonthNewData.prepend(QVariant());
-	}
-	m_secondMonth->setVariantList(secondMonthNewData);
+	updateMonth(*m_secondMonth, valuesToCopyForSecondMonth,
+			secondMonthDate.daysInMonth(), dataIndex, end);
 
-	if (newData.empty()) {
-		setLabel("No data");
+	if (newData.empty() || valuesToCopyForFirstMonth == 0) {
+		setLabel("No data for today");
 	} else {
 		setLabel(m_newData->formatString().arg(newData.first().toString()));
 	}
@@ -161,7 +182,7 @@ void UserMetricsImpl::finishLoadingDataSource() {
 	} else if (!oldLabelEmpty && !newLabelEmpty) {
 		dataChanged();
 	}
-// we emit no signal if the data has stayed empty
+	// we emit no signal if the data has stayed empty
 }
 
 UserMetricsImpl::DataSetPtr & UserMetricsImpl::data(const QString &username,

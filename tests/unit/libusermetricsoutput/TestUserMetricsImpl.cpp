@@ -57,9 +57,6 @@ protected:
 }
 ;
 
-/**
- * Note that the currentDay property is zero-indexed
- */
 TEST_F(UserMetricsImplTest, CurrentDate) {
 	EXPECT_EQ(6, model->currentDay());
 }
@@ -119,7 +116,7 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
 	model->readyForDataChangeSlot();
 
 	EXPECT_EQ("non-existing-user", model->username());
-	EXPECT_EQ(QString("No data"), model->label());
+	EXPECT_EQ(QString("No data sources available"), model->label());
 }
 
 TEST_F(UserMetricsImplTest, AddDataForToday) {
@@ -130,7 +127,7 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	// First month (January) data:
 	data << 100.0 << 95.0;
 	while (data.size() < 5) {
-		data << 50.0;
+		data << 0.0;
 	}
 	data << 90.0 << 85.0;
 
@@ -138,7 +135,7 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	// December has 31 days
 	data << 80.0 << 75.0;
 	while (data.size() < 36) {
-		data << 50.0;
+		data << 0.0;
 	}
 	data << 70.0 << 65.0;
 
@@ -161,7 +158,7 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 		EXPECT_EQ(QVariant(85.0), month->data(month->index(0, 0)));
 		EXPECT_EQ(QVariant(90.0), month->data(month->index(1, 0)));
 		for (int i(2); i < 4; ++i) {
-			EXPECT_EQ(QVariant(50.0), month->data(month->index(i, 0)));
+			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
 		EXPECT_EQ(QVariant(95.0), month->data(month->index(5, 0)));
 		EXPECT_EQ(QVariant(100.0), month->data(month->index(6, 0)));
@@ -178,7 +175,7 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 		EXPECT_EQ(QVariant(65.0), month->data(month->index(0, 0)));
 		EXPECT_EQ(QVariant(70.0), month->data(month->index(1, 0)));
 		for (int i(2); i < 29; ++i) {
-			EXPECT_EQ(QVariant(50.0), month->data(month->index(i, 0)));
+			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
 		EXPECT_EQ(QVariant(75.0), month->data(month->index(29, 0)));
 		EXPECT_EQ(QVariant(80.0), month->data(month->index(30, 0)));
@@ -197,7 +194,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	// December has 31 days
 	data << 80.0 << 75.0;
 	while (data.size() < 20) {
-		data << 50.0;
+		data << 0.0;
 	}
 	data << 70.0 << 65.0;
 
@@ -238,10 +235,58 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 		EXPECT_EQ(QVariant(65.0), month->data(month->index(13, 0)));
 		EXPECT_EQ(QVariant(70.0), month->data(month->index(14, 0)));
 		for (int i(15); i < 29; ++i) {
-			EXPECT_EQ(QVariant(50.0), month->data(month->index(i, 0)));
+			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
 		EXPECT_EQ(QVariant(75.0), month->data(month->index(29, 0)));
 		EXPECT_EQ(QVariant(80.0), month->data(month->index(30, 0)));
+	}
+}
+
+TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
+	// the fake date provider says the date is 2001/01/07
+
+	QVariantList data;
+
+	// Data just for December
+	data << 95.0 << 100.0 << 90.0 << 85.0;
+
+	UserMetricsImpl::DataSetPtr dataSet(
+			model->data("username", "data-source-id"));
+	dataSet->setFormatString("this format string won't be used %1");
+
+	// The data starts 3 days ago
+	dataSet->setData(QDate(2000, 12, 25), data);
+
+	model->setUsername("username");
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ(QString("No data for today"), model->label());
+
+	// assertions about first month's data
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		EXPECT_EQ(31, month->rowCount());
+		// the rest of the month should be padded with empty variants
+		for (int i(0); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+
+	// assertions about second month's data
+	{
+		const QAbstractItemModel* month(model->secondMonth());
+		EXPECT_EQ(31, month->rowCount());
+		// the start of the month should be padded with empty variants
+		for (int i(0); i < 21; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(85.0), month->data(month->index(21, 0)));
+		EXPECT_EQ(QVariant(90.0), month->data(month->index(22, 0)));
+		EXPECT_EQ(QVariant(100.0), month->data(month->index(23, 0)));
+		EXPECT_EQ(QVariant(95.0), month->data(month->index(24, 0)));
+		for (int i(25); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
 	}
 }
 

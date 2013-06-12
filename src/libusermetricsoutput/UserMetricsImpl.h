@@ -75,6 +75,10 @@ protected:
 
 	virtual void setUsernameInternal(const QString &username);
 
+	void updateMonth(QVariantListModel &month, const int dayOfMonth,
+			const int daysInMonth, QVariantList::const_iterator& index,
+			const QVariantList::const_iterator& end);
+
 	QSharedPointer<DateFactory> m_dateFactory;
 
 	QString m_label;
