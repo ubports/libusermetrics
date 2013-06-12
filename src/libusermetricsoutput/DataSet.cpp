@@ -47,7 +47,7 @@ const QVariantList & DataSet::data() const {
 }
 
 const QDate & DataSet::lastUpdated() const {
-	return lastUpdated();
+	return m_lastUpdated;
 }
 
 void DataSet::setFormatString(const QString &formatString) {

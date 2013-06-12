@@ -112,7 +112,7 @@ void UserMetricsImpl::finishLoadingDataSource() {
 	QDate firstMonthDate(m_dateFactory->currentDate());
 	QDate secondMonthDate(firstMonthDate.addMonths(-1));
 
-	setCurrentDay(firstMonthDate.day());
+	setCurrentDay(firstMonthDate.day() - 1);
 
 	int daysInFirstMonth(firstMonthDate.daysInMonth());
 	int daysInSecondMonth(secondMonthDate.daysInMonth());
@@ -125,7 +125,8 @@ void UserMetricsImpl::finishLoadingDataSource() {
 	// Data for the first month
 	QVariantList firstMonthNewData;
 	// Copy the data up to the day of the month it is
-	for (int i(0); i < m_currentDay && dataIndex != end; ++i, ++dataIndex) {
+	for (int i(0); i < m_newData->lastUpdated().day() && dataIndex != end;
+			++i, ++dataIndex) {
 		firstMonthNewData.prepend(*dataIndex);
 	}
 	// Now fill the end of the month with empty data
