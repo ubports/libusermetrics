@@ -5,7 +5,8 @@ Build-Depends: debhelper (>= 9),
  cmake,
  libgtest-dev,
  google-mock,
- qtbase5-dev
+ qtbase5-dev,
+ doxygen
 Standards-Version: 3.9.4
 Section: libs
 Homepage: http://launchpad.net/libusermetrics
