@@ -402,4 +402,98 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	}
 }
 
+TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
+	// the fake date provider says the date is 2001/01/07
+
+	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
+	UserDataStore::UserDataPtr userData(*userDataIterator);
+
+	// first data set
+	{
+		QVariantList data;
+		data << 100.0 << 95.0 << 0.0 << 0.0 << 0.0 << 0.0 << 90.0 << 85.0;
+		UserData::iterator dataSetIterator = userData->find("data-source-one");
+		UserData::DataSetPtr dataSet(*dataSetIterator);
+		dataSet->setFormatString("data source one %1 value");
+		dataSet->setData(QDate(2001, 1, 4), data);
+	}
+
+	// second data set
+	{
+		QVariantList data;
+		data << 50.0 << 65.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
+				<< 75.0 << 100.0;
+		UserData::iterator dataSetIterator = userData->find("data-source-two");
+		UserData::DataSetPtr dataSet(*dataSetIterator);
+		dataSet->setFormatString("data source 2 %1 value");
+		dataSet->setData(QDate(2001, 1, 7), data);
+	}
+
+	model->setUsername("username");
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ(QString("data source one 100 value"), model->label());
+
+	// assertions about first month's data
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		EXPECT_EQ(31, month->rowCount());
+		for (int i(0); i < 2; ++i) {
+			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(95.0), month->data(month->index(2, 0)));
+		EXPECT_EQ(QVariant(100.0), month->data(month->index(3, 0)));
+		for (int i(4); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+
+	// assertions about second month's data
+	{
+		const QAbstractItemModel* month(model->secondMonth());
+		EXPECT_EQ(31, month->rowCount());
+		for (int i(0); i < 27; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(85.0), month->data(month->index(27, 0)));
+		EXPECT_EQ(QVariant(90.0), month->data(month->index(28, 0)));
+		for (int i(29); i < 31; ++i) {
+			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
+		}
+	}
+
+	model->nextDataSourceSlot();
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ(QString("data source 2 50 value"), model->label());
+
+	// assertions about first month's data
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		EXPECT_EQ(31, month->rowCount());
+		for (int i(0); i < 5; ++i) {
+			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(65.0), month->data(month->index(5, 0)));
+		EXPECT_EQ(QVariant(50.0), month->data(month->index(6, 0)));
+		for (int i(7); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+
+	// assertions about second month's data
+	{
+		const QAbstractItemModel* month(model->secondMonth());
+		EXPECT_EQ(31, month->rowCount());
+		for (int i(0); i < 27; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(100.0), month->data(month->index(27, 0)));
+		EXPECT_EQ(QVariant(75.0), month->data(month->index(28, 0)));
+		for (int i(29); i < 31; ++i) {
+			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
+		}
+	}
+}
+
 } // namespace
