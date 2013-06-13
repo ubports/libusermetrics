@@ -76,12 +76,18 @@ void UserMetricsImpl::setUsernameInternal(const QString &username) {
 
 	m_userDataIterator = m_userDataStore->constFind(m_username);
 
+	// first check to see if there is UserData for this user
 	m_noDataForUser = m_userDataIterator == m_userDataStore->constEnd();
-	if (m_noDataForUser) {
-	} else {
+	if (!m_noDataForUser) {
+		// if there is a UserData container
 		m_userData = *m_userDataIterator;
 		m_dataSetIterator = m_userData->constBegin();
-		m_dataSet = *m_dataSetIterator;
+
+		// now check to see if that container has any data in
+		m_noDataForUser = m_dataSetIterator == m_userData->constEnd();
+		if (!m_noDataForUser) {
+			m_dataSet = *m_dataSetIterator;
+		}
 	}
 
 	prepareToLoadDataSource();

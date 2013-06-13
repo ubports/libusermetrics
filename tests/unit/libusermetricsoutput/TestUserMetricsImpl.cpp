@@ -141,6 +141,34 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
 	}
 }
 
+TEST_F(UserMetricsImplTest, HasEmptyDataForKnownUserWithNoData) {
+	userDataStore->find("existing-user");
+
+	model->setUsername("existing-user");
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ("existing-user", model->username());
+	EXPECT_EQ(QString("No data sources available"), model->label());
+
+	// the first month should be entirely empty
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		EXPECT_EQ(31, month->rowCount());
+		for (int i(0); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+
+	// the second month should be entirely empty
+	{
+		const QAbstractItemModel* month(model->secondMonth());
+		EXPECT_EQ(31, month->rowCount());
+		for (int i(0); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+}
+
 TEST_F(UserMetricsImplTest, AddDataForToday) {
 	// the fake date provider says the date is 2001/01/07
 
