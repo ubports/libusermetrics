@@ -18,7 +18,6 @@
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
 
-#include <QtCore/QDebug>
 #include <QtCore/QDate>
 #include <QtCore/QString>
 #include <QtCore/QVariantList>
@@ -137,8 +136,6 @@ void UserMetricsImpl::updateMonth(QVariantListModel &month,
 }
 
 void UserMetricsImpl::finishLoadingDataSource() {
-	qDebug() << "finishLoadingDataSource";
-
 	const QDate currentDate(m_dateFactory->currentDate());
 
 	const QDate &lastUpdated(m_dataSet->lastUpdated());
