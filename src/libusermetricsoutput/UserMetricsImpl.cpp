@@ -18,29 +18,27 @@
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
 
+#include <QtCore/QDebug>
 #include <QtCore/QDate>
 #include <QtCore/QString>
 #include <QtCore/QVariantList>
-#include <QtCore/QMultiMap>
 
 using namespace UserMetricsOutput;
 
 UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
-		QObject *parent) :
-		UserMetrics(parent), m_dateFactory(dateFactory), m_firstColor(
-				new ColorThemeImpl(this)), m_firstMonth(
+		QSharedPointer<UserDataStore> userDataStore, QObject *parent) :
+		UserMetrics(parent), m_dateFactory(dateFactory), m_userDataStore(
+				userDataStore), m_firstColor(new ColorThemeImpl(this)), m_firstMonth(
 				new QVariantListModel(this)), m_secondColor(
 				new ColorThemeImpl(this)), m_secondMonth(
-				new QVariantListModel(this)), m_currentDay(0) {
+				new QVariantListModel(this)), m_currentDay(), m_noDataForUser(
+				false), m_oldNoDataForUser(false) {
 	connect(this, SIGNAL(nextDataSource()), this, SLOT(nextDataSourceSlot()),
 			Qt::QueuedConnection);
 	connect(this, SIGNAL(readyForDataChange()), this, SLOT(
 			readyForDataChangeSlot()), Qt::QueuedConnection);
 
-	DataSetPtr emptyData(new DataSet(ColorThemeImpl(), ColorThemeImpl(), this));
-	emptyData->setFormatString("No data sources available");
-	m_dataSets.insert("", emptyData);
-
+	setCurrentDay(m_dateFactory->currentDate().day() - 1);
 	setUsernameInternal("");
 }
 
@@ -74,9 +72,16 @@ void UserMetricsImpl::setUsername(const QString &username) {
 void UserMetricsImpl::setUsernameInternal(const QString &username) {
 	m_username = username;
 
-	m_dataIndex = m_dataSets.constFind(m_username);
-	if (m_dataIndex == m_dataSets.end()) {
-		m_dataIndex = m_dataSets.constFind("");
+	m_oldNoDataForUser = m_noDataForUser;
+
+	m_userDataIterator = m_userDataStore->constFind(m_username);
+
+	m_noDataForUser = m_userDataIterator == m_userDataStore->constEnd();
+	if (m_noDataForUser) {
+	} else {
+		m_userData = *m_userDataIterator;
+		m_dataSetIterator = m_userData->constBegin();
+		m_dataSet = *m_dataSetIterator;
 	}
 
 	prepareToLoadDataSource();
@@ -85,17 +90,12 @@ void UserMetricsImpl::setUsernameInternal(const QString &username) {
 }
 
 void UserMetricsImpl::prepareToLoadDataSource() {
-	m_newData = *m_dataIndex;
-
-	bool oldLabelEmpty = m_label.isEmpty();
-	bool newLabelEmpty = m_newData->formatString().isEmpty();
-
-	if (oldLabelEmpty && !newLabelEmpty) {
+	if (m_oldNoDataForUser && !m_noDataForUser) {
 		dataAboutToAppear();
 		finishLoadingDataSource();
-	} else if (!oldLabelEmpty && newLabelEmpty) {
+	} else if (!m_oldNoDataForUser && m_noDataForUser) {
 		dataAboutToDisappear();
-	} else if (!oldLabelEmpty && !newLabelEmpty) {
+	} else if (!m_oldNoDataForUser && !m_noDataForUser) {
 		dataAboutToChange();
 	}
 // we emit no signal if the data has stayed empty
@@ -131,71 +131,73 @@ void UserMetricsImpl::updateMonth(QVariantListModel &month,
 }
 
 void UserMetricsImpl::finishLoadingDataSource() {
-	bool oldLabelEmpty = m_label.isEmpty();
-	bool newLabelEmpty = m_newData->formatString().isEmpty();
+	qDebug() << "finishLoadingDataSource";
 
 	const QDate currentDate(m_dateFactory->currentDate());
-	const QDate &lastUpdated(m_newData->lastUpdated());
+
+	const QDate &lastUpdated(m_dataSet->lastUpdated());
 	QDate secondMonthDate(currentDate.addMonths(-1));
 
 	int valuesToCopyForFirstMonth(0);
 	int valuesToCopyForSecondMonth(0);
 
-	if (currentDate.year() == lastUpdated.year()
-			&& currentDate.month() == lastUpdated.month()) {
-		// If the data is for the first month
-		valuesToCopyForFirstMonth = lastUpdated.day();
-		valuesToCopyForSecondMonth = secondMonthDate.daysInMonth();
-	} else if (secondMonthDate.year() == lastUpdated.year()
-			&& secondMonthDate.month() == lastUpdated.month()) {
-		// If the data is for the second month
-		valuesToCopyForSecondMonth = lastUpdated.day();
+	if (m_noDataForUser) {
+		QVariantList data;
+		QVariantList::const_iterator dataIndex(data.begin());
+		QVariantList::const_iterator end(data.end());
+
+		updateMonth(*m_firstMonth, valuesToCopyForFirstMonth,
+				currentDate.daysInMonth(), dataIndex, end);
+
+		updateMonth(*m_secondMonth, valuesToCopyForSecondMonth,
+				secondMonthDate.daysInMonth(), dataIndex, end);
+
+		setLabel("No data sources available");
 	} else {
-		// the data is out of date
+		if (currentDate.year() == lastUpdated.year()
+				&& currentDate.month() == lastUpdated.month()) {
+			// If the data is for the first month
+			valuesToCopyForFirstMonth = lastUpdated.day();
+			valuesToCopyForSecondMonth = secondMonthDate.daysInMonth();
+		} else if (secondMonthDate.year() == lastUpdated.year()
+				&& secondMonthDate.month() == lastUpdated.month()) {
+			// If the data is for the second month
+			valuesToCopyForSecondMonth = lastUpdated.day();
+		} else {
+			// the data is out of date
+		}
+
+		m_firstColor->setColors(m_dataSet->firstColor());
+		m_secondColor->setColors(m_dataSet->secondColor());
+
+		const QVariantList &data(m_dataSet->data());
+
+		QVariantList::const_iterator dataIndex(data.begin());
+		QVariantList::const_iterator end(data.end());
+
+		updateMonth(*m_firstMonth, valuesToCopyForFirstMonth,
+				currentDate.daysInMonth(), dataIndex, end);
+
+		updateMonth(*m_secondMonth, valuesToCopyForSecondMonth,
+				secondMonthDate.daysInMonth(), dataIndex, end);
+
+		if (data.empty() || valuesToCopyForFirstMonth == 0) {
+			setLabel("No data for today");
+		} else {
+			setLabel(m_dataSet->formatString().arg(data.first().toString()));
+		}
 	}
 
 	setCurrentDay(currentDate.day() - 1);
 
-	m_firstColor->setColors(m_newData->firstColor());
-	m_secondColor->setColors(m_newData->secondColor());
-
-	const QVariantList &newData = m_newData->data();
-	QVariantList::const_iterator dataIndex(newData.begin());
-	QVariantList::const_iterator end(m_newData->data().end());
-
-	updateMonth(*m_firstMonth, valuesToCopyForFirstMonth,
-			currentDate.daysInMonth(), dataIndex, end);
-
-	updateMonth(*m_secondMonth, valuesToCopyForSecondMonth,
-			secondMonthDate.daysInMonth(), dataIndex, end);
-
-	if (newData.empty() || valuesToCopyForFirstMonth == 0) {
-		setLabel("No data for today");
-	} else {
-		setLabel(m_newData->formatString().arg(newData.first().toString()));
-	}
-
-	if (oldLabelEmpty && !newLabelEmpty) {
+	if (m_oldNoDataForUser && !m_noDataForUser) {
 		dataAppeared();
-	} else if (!oldLabelEmpty && newLabelEmpty) {
+	} else if (!m_oldNoDataForUser && m_noDataForUser) {
 		dataDisappeared();
-	} else if (!oldLabelEmpty && !newLabelEmpty) {
+	} else if (!m_oldNoDataForUser && !m_noDataForUser) {
 		dataChanged();
 	}
 	// we emit no signal if the data has stayed empty
-}
-
-UserMetricsImpl::DataSetPtr & UserMetricsImpl::data(const QString &username,
-		const QString &dataSourceId) {
-	DataSetMap::iterator data(m_dataSets.find(username));
-
-	if (data == m_dataSets.end()) {
-		DataSetPtr newData(
-				new DataSet(ColorThemeImpl(), ColorThemeImpl(), this));
-		data = m_dataSets.insert(username, newData);
-	}
-
-	return *data;
 }
 
 QString UserMetricsImpl::label() const {
@@ -227,9 +229,13 @@ int UserMetricsImpl::currentDay() const {
 }
 
 void UserMetricsImpl::nextDataSourceSlot() {
-	++m_dataIndex;
-	if (m_dataIndex == m_dataSets.end() || m_dataIndex.key() != m_username) {
-		m_dataIndex = m_dataSets.constFind(m_username);
+	if (m_noDataForUser) {
+	} else {
+		++m_dataSetIterator;
+		if (m_dataSetIterator == m_userData->constEnd()) {
+			m_dataSetIterator = m_userData->constBegin();
+		}
+		m_dataSet = *m_dataSetIterator;
 	}
 
 	prepareToLoadDataSource();

@@ -16,25 +16,39 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserDataStore.h>
-#include <libusermetricsoutput/DateFactoryImpl.h>
-#include <libusermetricsoutput/UserMetricsImpl.h>
+#ifndef USERMETRICSOUTPUT_USERDATA_H_
+#define USERMETRICSOUTPUT_USERDATA_H_
 
-using namespace UserMetricsOutput;
+#include <libusermetricsoutput/DataSet.h>
 
-UserMetrics::UserMetrics(QObject *parent) :
-		QObject(parent) {
+#include <QtCore/QMap>
+
+namespace UserMetricsOutput {
+
+class UserData: public QObject {
+public:
+	typedef QSharedPointer<DataSet> DataSetPtr;
+
+	typedef QMap<QString, DataSetPtr> DataSetMap;
+
+	typedef DataSetMap::iterator iterator;
+
+	typedef DataSetMap::const_iterator const_iterator;
+
+	UserData(QObject *parent = 0);
+
+	virtual ~UserData();
+
+	virtual const_iterator constBegin() const;
+
+	virtual const_iterator constEnd() const;
+
+	virtual iterator find(const QString & dataSetId);
+
+protected:
+	DataSetMap m_dataSets;
+};
+
 }
 
-UserMetrics::~UserMetrics() {
-}
-
-/**
- * Factory methods
- */
-
-UserMetrics * UserMetrics::getInstance() {
-	return new UserMetricsImpl(
-			QSharedPointer<DateFactory>(new DateFactoryImpl()),
-			QSharedPointer<UserDataStore>(new UserDataStore()));
-}
+#endif // USERMETRICSOUTPUT_USERDATA_H_

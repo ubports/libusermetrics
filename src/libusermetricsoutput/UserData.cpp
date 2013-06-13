@@ -16,25 +16,34 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserDataStore.h>
-#include <libusermetricsoutput/DateFactoryImpl.h>
-#include <libusermetricsoutput/UserMetricsImpl.h>
+#include <libusermetricsoutput/UserData.h>
 
 using namespace UserMetricsOutput;
 
-UserMetrics::UserMetrics(QObject *parent) :
+UserData::UserData(QObject *parent) :
 		QObject(parent) {
 }
 
-UserMetrics::~UserMetrics() {
+UserData::~UserData() {
 }
 
-/**
- * Factory methods
- */
-
-UserMetrics * UserMetrics::getInstance() {
-	return new UserMetricsImpl(
-			QSharedPointer<DateFactory>(new DateFactoryImpl()),
-			QSharedPointer<UserDataStore>(new UserDataStore()));
+UserData::const_iterator UserData::constBegin() const {
+	return m_dataSets.constBegin();
 }
+
+UserData::const_iterator UserData::constEnd() const {
+	return m_dataSets.constEnd();
+}
+
+UserData::iterator UserData::find(const QString & dataSetId) {
+	iterator data(m_dataSets.find(dataSetId));
+
+	if (data == m_dataSets.end()) {
+		UserData::DataSetPtr dataSet(
+				new DataSet(ColorThemeImpl(), ColorThemeImpl(), this));
+		data = m_dataSets.insert(dataSetId, dataSet);
+	}
+
+	return m_dataSets.find(dataSetId);
+}
+

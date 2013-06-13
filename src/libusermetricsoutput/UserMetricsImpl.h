@@ -19,7 +19,7 @@
 #ifndef USERMETRICSOUTPUT_USERMETRICSIMPL_H_
 #define USERMETRICSOUTPUT_USERMETRICSIMPL_H_
 
-#include <libusermetricsoutput/DataSet.h>
+#include <libusermetricsoutput/UserDataStore.h>
 #include <libusermetricsoutput/DateFactory.h>
 #include <libusermetricsoutput/UserMetrics.h>
 #include <libusermetricsoutput/qvariantlistmodel.h>
@@ -32,11 +32,8 @@ class UserMetricsImpl: public UserMetrics {
 Q_OBJECT
 
 public:
-	typedef QSharedPointer<DataSet> DataSetPtr;
-	typedef QMultiMap<QString, DataSetPtr> DataSetMap;
-
 	UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
-			QObject *parent = 0);
+			QSharedPointer<UserDataStore> dataSetStore, QObject *parent = 0);
 
 	virtual ~UserMetricsImpl();
 
@@ -60,9 +57,6 @@ public:
 
 	virtual QAbstractItemModel *secondMonth() const;
 
-	virtual DataSetPtr & data(const QString &username,
-			const QString &dataSourceId);
-
 public Q_SLOTS:
 	virtual void nextDataSourceSlot();
 
@@ -81,6 +75,8 @@ protected:
 
 	QSharedPointer<DateFactory> m_dateFactory;
 
+	QSharedPointer<UserDataStore> m_userDataStore;
+
 	QString m_label;
 
 	QScopedPointer<ColorThemeImpl> m_firstColor;
@@ -93,13 +89,19 @@ protected:
 
 	int m_currentDay;
 
+	bool m_noDataForUser;
+
+	bool m_oldNoDataForUser;
+
 	QString m_username;
 
-	DataSetMap::const_iterator m_dataIndex;
+	UserDataStore::const_iterator m_userDataIterator;
 
-	DataSetPtr m_newData;
+	UserDataStore::UserDataPtr m_userData;
 
-	DataSetMap m_dataSets;
+	UserData::const_iterator m_dataSetIterator;
+
+	UserData::DataSetPtr m_dataSet;
 };
 
 }

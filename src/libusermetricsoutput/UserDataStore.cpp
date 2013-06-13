@@ -17,24 +17,35 @@
  */
 
 #include <libusermetricsoutput/UserDataStore.h>
-#include <libusermetricsoutput/DateFactoryImpl.h>
-#include <libusermetricsoutput/UserMetricsImpl.h>
 
 using namespace UserMetricsOutput;
 
-UserMetrics::UserMetrics(QObject *parent) :
+UserDataStore::UserDataStore(QObject *parent) :
 		QObject(parent) {
+//	DataSetPtr emptyData(new DataSet(ColorThemeImpl(), ColorThemeImpl(), this));
+//	emptyData->setFormatString("No data sources available");
+//	m_dataSets.insert("", emptyData);
 }
 
-UserMetrics::~UserMetrics() {
+UserDataStore::~UserDataStore() {
 }
 
-/**
- * Factory methods
- */
+UserDataStore::const_iterator UserDataStore::constFind(
+		const QString &username) const {
+	return m_userData.constFind(username);
+}
 
-UserMetrics * UserMetrics::getInstance() {
-	return new UserMetricsImpl(
-			QSharedPointer<DateFactory>(new DateFactoryImpl()),
-			QSharedPointer<UserDataStore>(new UserDataStore()));
+UserDataStore::const_iterator UserDataStore::constEnd() const {
+	return m_userData.constEnd();
+}
+
+UserDataStore::iterator UserDataStore::find(const QString &username) {
+	iterator data(m_userData.find(username));
+
+	if (data == m_userData.end()) {
+		UserDataPtr userData(new UserData());
+		data = m_userData.insert(username, userData);
+	}
+
+	return data;
 }

@@ -11,6 +11,8 @@ set(USERMETRICSOUTPUT_SOURCES
 	DataSet.cpp
 	DateFactory.cpp
 	DateFactoryImpl.cpp
+	UserData.cpp
+	UserDataStore.cpp
 	UserMetrics.cpp
 	UserMetricsImpl.cpp
 	qvariantlistmodel.cpp

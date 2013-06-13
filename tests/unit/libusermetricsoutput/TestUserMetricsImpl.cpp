@@ -45,13 +45,17 @@ protected:
 		ON_CALL(*dateFactory, currentDate()).WillByDefault(
 				Return(QDate(2001, 01, 07)));
 
-		model.reset(new UserMetricsImpl(dateFactory));
+		userDataStore.reset(new UserDataStore());
+
+		model.reset(new UserMetricsImpl(dateFactory, userDataStore));
 	}
 
 	virtual ~UserMetricsImplTest() {
 	}
 
 	QSharedPointer<MockDateFactory> dateFactory;
+
+	QSharedPointer<UserDataStore> userDataStore;
 
 	QScopedPointer<UserMetricsImpl> model;
 }
@@ -139,8 +143,12 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	}
 	data << 70.0 << 65.0;
 
-	UserMetricsImpl::DataSetPtr dataSet(
-			model->data("username", "data-source-id"));
+	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
+	UserDataStore::UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->find("data-source-id");
+	UserData::DataSetPtr dataSet(*dataSetIterator);
+
 	dataSet->setFormatString("test format string %1");
 
 	// The data starts today
@@ -198,8 +206,12 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	}
 	data << 70.0 << 65.0;
 
-	UserMetricsImpl::DataSetPtr dataSet(
-			model->data("username", "data-source-id"));
+	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
+	UserDataStore::UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->find("data-source-id");
+	UserData::DataSetPtr dataSet(*dataSetIterator);
+
 	dataSet->setFormatString("test other format string %1");
 
 	// The data starts 3 days ago
@@ -250,8 +262,12 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	// Data just for December
 	data << 95.0 << 100.0 << 90.0 << 85.0;
 
-	UserMetricsImpl::DataSetPtr dataSet(
-			model->data("username", "data-source-id"));
+	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
+	UserDataStore::UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->find("data-source-id");
+	UserData::DataSetPtr dataSet(*dataSetIterator);
+
 	dataSet->setFormatString("this format string won't be used %1");
 
 	// The data starts 3 days ago
