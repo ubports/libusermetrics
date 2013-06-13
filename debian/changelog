@@ -1,3 +1,10 @@
+libusermetrics (1.0.1) UNRELEASED; urgency=low
+
+  * Cleanup packaging for daily-release best practices
+  * Automatic snapshot from revision 53 (bootstrap)
+
+ -- Michael Terry <mterry@ubuntu.com>  Thu, 13 Jun 2013 14:24:21 -0400
+
 libusermetrics (1.0.0) raring; urgency=low
 
   * Initial Release.
