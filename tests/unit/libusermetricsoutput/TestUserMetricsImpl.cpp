@@ -121,6 +121,24 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
 
 	EXPECT_EQ("non-existing-user", model->username());
 	EXPECT_EQ(QString("No data sources available"), model->label());
+
+	// the first month should be entirely empty
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		EXPECT_EQ(31, month->rowCount());
+		for (int i(0); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+
+	// the second month should be entirely empty
+	{
+		const QAbstractItemModel* month(model->secondMonth());
+		EXPECT_EQ(31, month->rowCount());
+		for (int i(0); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
 }
 
 TEST_F(UserMetricsImplTest, AddDataForToday) {
@@ -260,7 +278,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	QVariantList data;
 
 	// Data just for December
-	data << 95.0 << 100.0 << 90.0 << 85.0;
+	data << 95.0 << 100.0 << 90.0 << 0.0;
 
 	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
 	UserDataStore::UserDataPtr userData(*userDataIterator);
@@ -296,7 +314,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 		for (int i(0); i < 21; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(85.0), month->data(month->index(21, 0)));
+		EXPECT_EQ(QVariant(0.0), month->data(month->index(21, 0)));
 		EXPECT_EQ(QVariant(90.0), month->data(month->index(22, 0)));
 		EXPECT_EQ(QVariant(100.0), month->data(month->index(23, 0)));
 		EXPECT_EQ(QVariant(95.0), month->data(month->index(24, 0)));
