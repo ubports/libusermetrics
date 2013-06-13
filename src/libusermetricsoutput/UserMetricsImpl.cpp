@@ -187,7 +187,7 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		updateMonth(*m_secondMonth, valuesToCopyForSecondMonth,
 				secondMonthDate.daysInMonth(), dataIndex, end);
 
-		if (data.empty() || valuesToCopyForFirstMonth == 0) {
+		if (data.empty() || currentDate != lastUpdated) {
 			setLabel("No data for today");
 		} else {
 			setLabel(m_dataSet->formatString().arg(data.first().toString()));

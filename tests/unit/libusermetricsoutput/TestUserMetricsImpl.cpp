@@ -266,7 +266,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
-	EXPECT_EQ(QString("test other format string 95"), model->label());
+	EXPECT_EQ(QString("No data for today"), model->label());
 
 	// assertions about first month's data
 	{
@@ -374,7 +374,7 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
-	EXPECT_EQ(QString("a format string with 100 in it"), model->label());
+	EXPECT_EQ(QString("No data for today"), model->label());
 
 	// assertions about first month's data
 	{
@@ -432,7 +432,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
-	EXPECT_EQ(QString("data source one 100 value"), model->label());
+	EXPECT_EQ(QString("No data for today"), model->label());
 
 	// assertions about first month's data
 	{
