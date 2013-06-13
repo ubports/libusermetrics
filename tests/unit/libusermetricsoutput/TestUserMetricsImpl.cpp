@@ -328,7 +328,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	{
 		const QAbstractItemModel* month(model->firstMonth());
 		EXPECT_EQ(31, month->rowCount());
-		// the rest of the month should be padded with empty variants
+		// the whole month should be padded with empty variants
 		for (int i(0); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
@@ -347,6 +347,56 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 		EXPECT_EQ(QVariant(100.0), month->data(month->index(23, 0)));
 		EXPECT_EQ(QVariant(95.0), month->data(month->index(24, 0)));
 		for (int i(25); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+}
+
+TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
+	// the fake date provider says the date is 2001/01/07
+
+	QVariantList data;
+
+	// Data just for January
+	data << 100.0 << 0.0;
+
+	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
+	UserDataStore::UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->find("data-source-id");
+	UserData::DataSetPtr dataSet(*dataSetIterator);
+
+	dataSet->setFormatString("a format string with %1 in it");
+
+	// The data starts 2 days ago
+	dataSet->setData(QDate(2001, 1, 5), data);
+
+	model->setUsername("username");
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ(QString("a format string with 100 in it"), model->label());
+
+	// assertions about first month's data
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		EXPECT_EQ(31, month->rowCount());
+		// the start of the month should be padded with empty variants
+		for (int i(0); i < 3; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(0.0), month->data(month->index(3, 0)));
+		EXPECT_EQ(QVariant(100.0), month->data(month->index(4, 0)));
+		for (int i(5); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+
+	// assertions about second month's data
+	{
+		const QAbstractItemModel* month(model->secondMonth());
+		EXPECT_EQ(31, month->rowCount());
+		// the whole month should be padded with empty variants
+		for (int i(0); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
 	}
