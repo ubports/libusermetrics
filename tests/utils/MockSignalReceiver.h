@@ -19,6 +19,7 @@
 #ifndef USERMETRICS_TESTUTILS_MOCKSIGNALRECEIVER_H_
 #define USERMETRICS_TESTUTILS_MOCKSIGNALRECEIVER_H_
 
+#include <QtGui/QColor>
 #include <QtCore/QObject>
 #include <gmock/gmock.h>
 
@@ -34,6 +35,20 @@ class MockSignalReceiverInt: public AbstractMockSignalReceiverInt {
 Q_OBJECT
 public:
 	MOCK_METHOD1(receivedSignal, void(int));
+};
+
+/***************************************/
+
+class AbstractMockSignalReceiverQColor: public QObject {
+Q_OBJECT
+public Q_SLOTS:
+	virtual void receivedSignal(QColor) = 0;
+};
+
+class MockSignalReceiverQColor: public AbstractMockSignalReceiverQColor {
+Q_OBJECT
+public:
+	MOCK_METHOD1(receivedSignal, void(QColor));
 };
 
 }
