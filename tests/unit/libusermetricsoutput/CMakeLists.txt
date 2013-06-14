@@ -1,7 +1,9 @@
 
 set(
 	USERMETRICSOUTPUT_UNIT_TESTS_SRC
+	QModelListener.cpp
 	TestColorThemeImpl.cpp
+	TestQVariantListModel.cpp
 	TestUserMetricsImpl.cpp
 )
 
