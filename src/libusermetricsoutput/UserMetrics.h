@@ -23,7 +23,7 @@
 #include <QtGui/QColor>
 #include <QtCore/QAbstractItemModel>
 
-#include <libusermetricsoutput/ColorTheme.h>
+#include <libusermetricsoutput-1/ColorTheme.h>
 
 /*@{*/
 
