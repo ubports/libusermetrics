@@ -1,7 +1,7 @@
 libdir=@CMAKE_INSTALL_FULL_LIBDIR@
 includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
 
-Cflags: -I${includedir}/libusermetricsoutput-@API_VERSION@
+Cflags: -I${includedir}/libusermetrics-@API_VERSION@
 Requires: Qt5Core Qt5Gui
 Libs: -L${libdir} -lusermetricsoutput
 
