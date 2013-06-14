@@ -1,6 +1,7 @@
 
 set(
 	USERMETRICS_TEST_UTILS_SRC
+	QColorPrinter.cpp
 	QStringPrinter.cpp
 	QVariantPrinter.cpp
 	MockSignalReceiver.cpp

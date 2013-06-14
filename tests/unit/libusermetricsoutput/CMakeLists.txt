@@ -1,6 +1,7 @@
 
 set(
 	USERMETRICSOUTPUT_UNIT_TESTS_SRC
+	TestColorThemeImpl.cpp
 	TestUserMetricsImpl.cpp
 )
 
