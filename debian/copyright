@@ -21,6 +21,7 @@ License: LGPL-3
  `/usr/share/common-licenses/LGPL-3'.
 
 Files: src/libusermetricsoutput/qvariantlist*
+       tests/unit/libusermetricsoutput/QModelListener*
 Copyright: 2013 Digia Plc and/or its subsidiary(-ies).
 License:
  Commercial License Usage
