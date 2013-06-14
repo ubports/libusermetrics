@@ -39,8 +39,7 @@ UserData::iterator UserData::find(const QString & dataSetId) {
 	iterator data(m_dataSets.find(dataSetId));
 
 	if (data == m_dataSets.end()) {
-		UserData::DataSetPtr dataSet(
-				new DataSet(ColorThemeImpl(), ColorThemeImpl(), this));
+		UserData::DataSetPtr dataSet(new DataSet(this));
 		data = m_dataSets.insert(dataSetId, dataSet);
 	}
 

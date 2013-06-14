@@ -18,6 +18,7 @@
 
 #include <libusermetricsoutput/UserDataStore.h>
 #include <libusermetricsoutput/DateFactoryImpl.h>
+#include <libusermetricsoutput/HardCodedColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
 
 using namespace UserMetricsOutput;
@@ -36,5 +37,7 @@ UserMetrics::~UserMetrics() {
 UserMetrics * UserMetrics::getInstance() {
 	return new UserMetricsImpl(
 			QSharedPointer<DateFactory>(new DateFactoryImpl()),
-			QSharedPointer<UserDataStore>(new UserDataStore()));
+			QSharedPointer<UserDataStore>(new UserDataStore()),
+			QSharedPointer<ColorThemeProvider>(
+					new HardCodedColorThemeProvider()));
 }

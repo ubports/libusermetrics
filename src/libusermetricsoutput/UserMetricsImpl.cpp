@@ -17,6 +17,8 @@
  */
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
+#include <libusermetricsoutput/UserDataStore.h>
+#include <libusermetricsoutput/DateFactory.h>
 
 #include <QtCore/QDate>
 #include <QtCore/QString>
@@ -25,9 +27,11 @@
 using namespace UserMetricsOutput;
 
 UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
-		QSharedPointer<UserDataStore> userDataStore, QObject *parent) :
+		QSharedPointer<UserDataStore> userDataStore,
+		QSharedPointer<ColorThemeProvider> colorThemeProvider, QObject *parent) :
 		UserMetrics(parent), m_dateFactory(dateFactory), m_userDataStore(
-				userDataStore), m_firstColor(new ColorThemeImpl(this)), m_firstMonth(
+				userDataStore), m_colorThemeProvider(colorThemeProvider), m_firstColor(
+				new ColorThemeImpl(this)), m_firstMonth(
 				new QVariantListModel(this)), m_secondColor(
 				new ColorThemeImpl(this)), m_secondMonth(
 				new QVariantListModel(this)), m_currentDay(), m_noDataForUser(
@@ -170,8 +174,11 @@ void UserMetricsImpl::finishLoadingDataSource() {
 			// the data is out of date
 		}
 
-		m_firstColor->setColors(m_dataSet->firstColor());
-		m_secondColor->setColors(m_dataSet->secondColor());
+		const QString &dataSetId(m_dataSetIterator.key());
+		ColorThemeProvider::ColorThemeRefPair colorTheme(
+				m_colorThemeProvider->getColorTheme(dataSetId));
+		m_firstColor->setColors(colorTheme.first);
+		m_secondColor->setColors(colorTheme.second);
 
 		const QVariantList &data(m_dataSet->data());
 

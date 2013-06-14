@@ -16,33 +16,13 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserDataStore.h>
+#include <libusermetricsoutput/ColorThemeProvider.h>
 
 using namespace UserMetricsOutput;
 
-UserDataStore::UserDataStore(QObject *parent) :
+ColorThemeProvider::ColorThemeProvider(QObject *parent) :
 		QObject(parent) {
 }
 
-UserDataStore::~UserDataStore() {
-}
-
-UserDataStore::const_iterator UserDataStore::constFind(
-		const QString &username) const {
-	return m_userData.constFind(username);
-}
-
-UserDataStore::const_iterator UserDataStore::constEnd() const {
-	return m_userData.constEnd();
-}
-
-UserDataStore::iterator UserDataStore::find(const QString &username) {
-	iterator data(m_userData.find(username));
-
-	if (data == m_userData.end()) {
-		UserDataPtr userData(new UserData());
-		data = m_userData.insert(username, userData);
-	}
-
-	return data;
+ColorThemeProvider::~ColorThemeProvider() {
 }

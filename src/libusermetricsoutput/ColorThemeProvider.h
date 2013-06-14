@@ -16,33 +16,27 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserDataStore.h>
+#ifndef USERMETRICSOUTPUT_COLORTHEMEPROVIDER_H_
+#define USERMETRICSOUTPUT_COLORTHEMEPROVIDER_H_
 
-using namespace UserMetricsOutput;
+#include <libusermetricsoutput/ColorTheme.h>
 
-UserDataStore::UserDataStore(QObject *parent) :
-		QObject(parent) {
+#include <QtCore/QObject>
+#include <QtCore/QString>
+
+namespace UserMetricsOutput {
+
+class ColorThemeProvider: public QObject {
+protected:
+	ColorThemeProvider(QObject *parent = 0);
+
+public:
+	typedef std::pair<const ColorTheme &, const ColorTheme &> ColorThemeRefPair;
+
+	virtual ~ColorThemeProvider();
+
+	virtual ColorThemeRefPair getColorTheme(const QString& dataSetId) = 0;
+};
+
 }
-
-UserDataStore::~UserDataStore() {
-}
-
-UserDataStore::const_iterator UserDataStore::constFind(
-		const QString &username) const {
-	return m_userData.constFind(username);
-}
-
-UserDataStore::const_iterator UserDataStore::constEnd() const {
-	return m_userData.constEnd();
-}
-
-UserDataStore::iterator UserDataStore::find(const QString &username) {
-	iterator data(m_userData.find(username));
-
-	if (data == m_userData.end()) {
-		UserDataPtr userData(new UserData());
-		data = m_userData.insert(username, userData);
-	}
-
-	return data;
-}
+#endif // USERMETRICSOUTPUT_COLORTHEMEPROVIDER_H_

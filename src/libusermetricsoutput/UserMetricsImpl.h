@@ -19,11 +19,14 @@
 #ifndef USERMETRICSOUTPUT_USERMETRICSIMPL_H_
 #define USERMETRICSOUTPUT_USERMETRICSIMPL_H_
 
+#include <libusermetricsoutput/UserMetrics.h>
 #include <libusermetricsoutput/UserDataStore.h>
 #include <libusermetricsoutput/DateFactory.h>
-#include <libusermetricsoutput/UserMetrics.h>
+#include <libusermetricsoutput/ColorThemeImpl.h>
+#include <libusermetricsoutput/ColorThemeProvider.h>
 #include <libusermetricsoutput/qvariantlistmodel.h>
 
+#include <QtCore/QSharedPointer>
 #include <QtCore/QScopedPointer>
 
 namespace UserMetricsOutput {
@@ -33,7 +36,9 @@ Q_OBJECT
 
 public:
 	UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
-			QSharedPointer<UserDataStore> dataSetStore, QObject *parent = 0);
+			QSharedPointer<UserDataStore> dataSetStore,
+			QSharedPointer<ColorThemeProvider> colorThemeProvider,
+			QObject *parent = 0);
 
 	virtual ~UserMetricsImpl();
 
@@ -76,6 +81,8 @@ protected:
 	QSharedPointer<DateFactory> m_dateFactory;
 
 	QSharedPointer<UserDataStore> m_userDataStore;
+
+	QSharedPointer<ColorThemeProvider> m_colorThemeProvider;
 
 	QString m_label;
 

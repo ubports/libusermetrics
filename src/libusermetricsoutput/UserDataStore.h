@@ -21,6 +21,7 @@
 
 #include <libusermetricsoutput/UserData.h>
 
+#include <QtCore/QSharedPointer>
 #include <QtCore/QMap>
 
 namespace UserMetricsOutput {

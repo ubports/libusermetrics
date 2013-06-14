@@ -35,16 +35,11 @@ Q_PROPERTY(const QVariantList data READ data NOTIFY dataChanged FINAL)
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString NOTIFY formatStringChanged FINAL)
 
 public:
-	DataSet(const ColorTheme &firstColor, const ColorTheme &secondColor,
-			QObject* parent);
+	DataSet(QObject* parent);
 
 	~DataSet();
 
 	const QString & formatString() const;
-
-	const ColorTheme & firstColor() const;
-
-	const ColorTheme & secondColor() const;
 
 	const QVariantList & data() const;
 
@@ -64,10 +59,6 @@ Q_SIGNALS:
 
 protected:
 	QString m_formatString;
-
-	ColorThemeImpl m_firstColor;
-
-	ColorThemeImpl m_secondColor;
 
 	QDate m_lastUpdated;
 

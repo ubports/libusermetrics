@@ -8,6 +8,8 @@ FILE(
 set(USERMETRICSOUTPUT_SOURCES
 	ColorTheme.cpp
 	ColorThemeImpl.cpp
+	ColorThemeProvider.cpp
+	HardCodedColorThemeProvider.cpp
 	DataSet.cpp
 	DateFactory.cpp
 	DateFactoryImpl.cpp
