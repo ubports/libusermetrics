@@ -16,11 +16,6 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <utils/QVariantPrinter.h>
+#include <testutils/MockSignalReceiver.h>
 
-using namespace std;
-
-void PrintTo(const QVariant& variant, ostream* os) {
-	*os << "QVariant(" << variant.toString().toStdString() << ")";
-}
-
+using namespace UserMetricsTestUtils;

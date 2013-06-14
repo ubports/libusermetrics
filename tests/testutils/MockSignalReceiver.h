@@ -23,7 +23,7 @@
 #include <QtCore/QObject>
 #include <gmock/gmock.h>
 
-namespace testutils {
+namespace UserMetricsTestUtils {
 
 class AbstractMockSignalReceiverInt: public QObject {
 Q_OBJECT

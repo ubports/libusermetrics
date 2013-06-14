@@ -18,8 +18,8 @@
 
 #include <libusermetricsoutput/qvariantlistmodel.h>
 
-#include <utils/QColorPrinter.h>
-#include <utils/MockSignalReceiver.h>
+#include <testutils/QColorPrinter.h>
+#include <testutils/MockSignalReceiver.h>
 #include <unit/libusermetricsoutput/QModelListener.h>
 
 #include <gtest/gtest.h>
@@ -27,7 +27,7 @@
 
 using namespace std;
 using namespace testing;
-using namespace testutils;
+using namespace UserMetricsTestUtils;
 
 namespace TestsUnitUserMetricsOutput {
 

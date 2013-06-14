@@ -16,6 +16,10 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <utils/MockSignalReceiver.h>
+#include <testutils/QColorPrinter.h>
 
-using namespace testutils;
+using namespace std;
+
+void PrintTo(const QColor& color, ostream* os) {
+	*os << "QString(" << color.name().toStdString() << ")";
+}

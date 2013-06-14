@@ -16,16 +16,11 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <utils/QStringPrinter.h>
+#include <testutils/QVariantPrinter.h>
 
 using namespace std;
 
-void PrintTo(const QString& str, ostream* os)
-{
-    *os << "QString(" << str.toStdString() << ")";
+void PrintTo(const QVariant& variant, ostream* os) {
+	*os << "QVariant(" << variant.toString().toStdString() << ")";
 }
 
-void PrintTo(const QChar& chr, ostream* os)
-{
-    *os << "QChar(" << chr.toLatin1() << ")";
-}

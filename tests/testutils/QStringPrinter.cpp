@@ -16,10 +16,16 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <utils/QColorPrinter.h>
+#include <testutils/QStringPrinter.h>
 
 using namespace std;
 
-void PrintTo(const QColor& color, ostream* os) {
-	*os << "QString(" << color.name().toStdString() << ")";
+void PrintTo(const QString& str, ostream* os)
+{
+    *os << "QString(" << str.toStdString() << ")";
+}
+
+void PrintTo(const QChar& chr, ostream* os)
+{
+    *os << "QChar(" << chr.toLatin1() << ")";
 }

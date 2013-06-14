@@ -18,15 +18,15 @@
 
 #include <libusermetricsoutput/ColorThemeImpl.h>
 
-#include <utils/QColorPrinter.h>
-#include <utils/MockSignalReceiver.h>
+#include <testutils/QColorPrinter.h>
+#include <testutils/MockSignalReceiver.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 using namespace std;
 using namespace UserMetricsOutput;
 using namespace testing;
-using namespace testutils;
+using namespace UserMetricsTestUtils;
 
 namespace {
 
