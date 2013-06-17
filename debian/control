@@ -16,13 +16,32 @@ Homepage: http://launchpad.net/libusermetrics
 Vcs-Bzr: http://bazaar.launchpad.net/~indicator-applet-developers/libusermetrics/trunk
 Vcs-Browser: https://code.launchpad.net/~indicator-applet-developers/libusermetrics/trunk
 
+Package: libusermetricsinput1-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends: libusermetricsinput1 (= ${binary:Version}),
+         ${misc:Depends},
+Description: library for exporting anonymous metrics about users
+ This package contains files that are needed to build applications.
+
+Package: libusermetricsinput1
+Section: libs
+Architecture: any
+Multi-Arch: same
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Pre-Depends: ${misc:Pre-Depends},
+Description: library for exporting anonymous metrics about users
+ This package contains shared libraries to be used by applications.
+
 Package: libusermetricsoutput1-dev
 Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libusermetricsoutput1 (= ${binary:Version}),
          ${misc:Depends},
-Description: library for exporting and retrieving anonymous metrics about users
+Description: library for retrieving anonymous metrics about users
  This package contains files that are needed to build applications.
 
 Package: libusermetricsoutput1
@@ -32,7 +51,7 @@ Multi-Arch: same
 Depends: ${misc:Depends},
          ${shlibs:Depends},
 Pre-Depends: ${misc:Pre-Depends},
-Description: library for exporting and retrieving anonymous metrics about users
+Description: library for retrieving anonymous metrics about users
  This package contains shared libraries to be used by applications.
 
 Package: libusermetrics-doc

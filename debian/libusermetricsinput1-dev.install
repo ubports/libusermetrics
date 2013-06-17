@@ -1,0 +1,3 @@
+usr/include/
+usr/lib/*/libusermetricsinput*.so
+usr/lib/*/pkgconfig/libusermetricsinput*

@@ -12,7 +12,6 @@ set(USERMETRICSINPUT_SOURCES
 
 set(USERMETRICS_INPUT_DEPENDENCIES
 	Core
-	Gui
 )
 
 # Static library version of libusermetricsinput

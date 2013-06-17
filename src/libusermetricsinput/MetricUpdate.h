@@ -29,7 +29,7 @@ class MetricUpdate;
 
 typedef QSharedPointer<MetricUpdate> MetricUpdatePtr;
 
-class MetricUpdate: public QObject {
+class Q_DECL_EXPORT MetricUpdate: public QObject {
 public:
 	virtual ~MetricUpdate();
 
