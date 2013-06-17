@@ -16,7 +16,7 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/HardCodedColorThemeProvider.h>
+#include <libusermetricsoutput/ColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
 #include <testutils/QStringPrinter.h>
 #include <testutils/QVariantPrinter.h>
@@ -38,6 +38,11 @@ public:
 	MOCK_CONST_METHOD0(currentDate, QDate());
 };
 
+class MockColorThemeProvider: public ColorThemeProvider {
+public:
+	MOCK_METHOD1(getColorTheme, ColorThemeProvider::ColorThemeRefPair(const QString &));
+};
+
 class UserMetricsImplTest: public Test {
 protected:
 
@@ -48,7 +53,7 @@ protected:
 
 		userDataStore.reset(new UserDataStore());
 
-		colorThemeProvider.reset(new HardCodedColorThemeProvider());
+		colorThemeProvider.reset(new NiceMock<MockColorThemeProvider>());
 
 		model.reset(
 				new UserMetricsImpl(dateFactory, userDataStore,
@@ -62,7 +67,7 @@ protected:
 
 	QSharedPointer<UserDataStore> userDataStore;
 
-	QSharedPointer<ColorThemeProvider> colorThemeProvider;
+	QSharedPointer<MockColorThemeProvider> colorThemeProvider;
 
 	QScopedPointer<UserMetricsImpl> model;
 }
@@ -207,6 +212,13 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	// The data starts today
 	dataSet->setData(QDate(2001, 01, 07), data);
 
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
+			*blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
+			Return(emptyPair));
+
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
@@ -262,13 +274,20 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
 	UserDataStore::UserDataPtr userData(*userDataIterator);
 
-	UserData::iterator dataSetIterator = userData->find("data-source-id");
+	UserData::iterator dataSetIterator = userData->find("data-source-id2");
 	UserData::DataSetPtr dataSet(*dataSetIterator);
 
 	dataSet->setFormatString("test other format string %1");
 
 	// The data starts 3 days ago
 	dataSet->setData(QDate(2001, 01, 04), data);
+
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
+			*blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id2"))).WillRepeatedly(
+			Return(emptyPair));
 
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
@@ -326,6 +345,13 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	// The data starts 3 days ago
 	dataSet->setData(QDate(2000, 12, 25), data);
 
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
+			*blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
+			Return(emptyPair));
+
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
@@ -377,6 +403,13 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 
 	// The data starts 2 days ago
 	dataSet->setData(QDate(2001, 1, 5), data);
+
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
+			*blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
+			Return(emptyPair));
 
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
@@ -435,6 +468,15 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 		dataSet->setFormatString("data source 2 %1 value");
 		dataSet->setData(QDate(2001, 1, 7), data);
 	}
+
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
+			*blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-one"))).WillRepeatedly(
+			Return(emptyPair));
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-two"))).WillRepeatedly(
+			Return(emptyPair));
 
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
@@ -566,6 +608,19 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			dataSet->setData(QDate(2001, 1, 7), data);
 		}
 	}
+
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
+			*blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-one"))).WillRepeatedly(
+			Return(emptyPair));
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-two"))).WillRepeatedly(
+			Return(emptyPair));
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-three"))).WillRepeatedly(
+			Return(emptyPair));
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-xfour"))).WillRepeatedly(
+			Return(emptyPair));
 
 	model->setUsername("first-user");
 	model->readyForDataChangeSlot();
