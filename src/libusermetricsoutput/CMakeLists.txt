@@ -68,7 +68,7 @@ set_target_properties(
 install(
   TARGETS usermetricsoutput
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libusermetricsoutput-${API_VERSION}"
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libusermetrics-${API_VERSION}/libusermetricsoutput"
 )
 
 # Package config
