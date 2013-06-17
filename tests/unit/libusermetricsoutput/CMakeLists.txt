@@ -15,7 +15,7 @@ add_executable(
 target_link_libraries(
 	usermetricsoutput-unit-tests
 	usermetricsoutput-static
-	usermetricsoutput-test-utils
+	usermetrics-test-utils
 	${GTEST_LIBRARIES}
 	${GMOCK_BOTH_LIBRARIES}
 )

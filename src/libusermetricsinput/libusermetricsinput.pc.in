@@ -1,0 +1,10 @@
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+Cflags: -I${includedir}/libusermetrics-@API_VERSION@
+Requires: Qt5Core
+Libs: -L${libdir} -lusermetricsinput
+
+Name: libusermetricsinput
+Description: A library to provide anonymous metrics about system users
+Version: @ABI_VERSION@

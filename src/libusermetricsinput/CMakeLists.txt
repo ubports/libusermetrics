@@ -1,0 +1,72 @@
+
+FILE(
+	GLOB USERMETRICSINPUT_PUBLIC_HEADERS
+	RELATIVE "${INCLUDE_DIR}/libusermetricsinput"
+	"${INCLUDE_DIR}/libusermetricsinput/*.h"
+)
+
+set(USERMETRICSINPUT_SOURCES
+	MetricUpdate.cpp
+	MetricUpdateImpl.cpp
+)
+
+set(USERMETRICS_INPUT_DEPENDENCIES
+	Core
+	Gui
+)
+
+# Static library version of libusermetricsinput
+
+add_library(
+	usermetricsinput-static
+	STATIC
+	${USERMETRICSINPUT_SOURCES}
+)
+
+qt5_use_modules(
+	usermetricsinput-static
+	${USERMETRICS_INPUT_DEPENDENCIES}
+)
+
+set_target_properties(
+	usermetricsinput-static
+	PROPERTIES
+	INPUT_NAME usermetricsinput
+)
+
+# Shared library version of libusermetricsinput
+
+add_library(
+	usermetricsinput
+	SHARED
+	${USERMETRICSINPUT_SOURCES}
+)
+
+qt5_use_modules(
+	usermetricsinput
+	${USERMETRICS_INPUT_DEPENDENCIES}
+)
+
+set_target_properties(
+	usermetricsinput
+	PROPERTIES
+	VERSION ${API_VERSION}.0.0
+	SOVERSION ${ABI_VERSION}
+	PUBLIC_HEADER "${USERMETRICSINPUT_PUBLIC_HEADERS}"
+)
+
+install(
+  TARGETS usermetricsinput
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/libusermetrics-${API_VERSION}/libusermetricsinput"
+)
+
+# Package config
+
+set(LIBUSERMETRICSINPUT_PC "libusermetricsinput-${API_VERSION}.pc")
+configure_file("libusermetricsinput.pc.in" "${CMAKE_CURRENT_BINARY_DIR}/${LIBUSERMETRICSINPUT_PC}" @ONLY)
+
+install(
+  FILES "${CMAKE_CURRENT_BINARY_DIR}/${LIBUSERMETRICSINPUT_PC}"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+)

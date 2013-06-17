@@ -8,12 +8,12 @@ set(
 )
 
 add_library(
-	usermetricsoutput-test-utils
+	usermetrics-test-utils
 	SHARED
 	${USERMETRICS_TEST_UTILS_SRC}
 )
 
 qt5_use_modules(
-	usermetricsoutput-test-utils
+	usermetrics-test-utils
 	Core
 )
