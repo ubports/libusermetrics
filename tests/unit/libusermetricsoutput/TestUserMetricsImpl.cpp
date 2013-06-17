@@ -609,18 +609,41 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		}
 	}
 
-	QSharedPointer<ColorTheme> blankColorTheme(
-			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	QSharedPointer<ColorTheme> colorThemeOne(
+			new ColorThemeImpl(QColor(255, 0, 0), QColor(0, 255, 0),
+					QColor(0, 0, 255)));
+	QSharedPointer<ColorTheme> colorThemeTwo(
+			new ColorThemeImpl(QColor(254, 0, 0), QColor(0, 254, 0),
+					QColor(0, 0, 254)));
+	QSharedPointer<ColorTheme> colorThemeThree(
+			new ColorThemeImpl(QColor(253, 0, 0), QColor(0, 253, 0),
+					QColor(0, 0, 253)));
+	QSharedPointer<ColorTheme> colorThemeFour(
+			new ColorThemeImpl(QColor(252, 0, 0), QColor(0, 252, 0),
+					QColor(0, 0, 252)));
+	QSharedPointer<ColorTheme> colorThemeFive(
+			new ColorThemeImpl(QColor(251, 0, 0), QColor(0, 251, 0),
+					QColor(0, 0, 251)));
+
+	ColorThemeProvider::ColorThemeRefPair colorDataSourceOne(*colorThemeOne,
+			*colorThemeTwo);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-one"))).WillRepeatedly(
-			Return(emptyPair));
+			Return(colorDataSourceOne));
+
+	ColorThemeProvider::ColorThemeRefPair colorDataSourceTwo(*colorThemeTwo,
+			*colorThemeThree);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-two"))).WillRepeatedly(
-			Return(emptyPair));
+			Return(colorDataSourceTwo));
+
+	ColorThemeProvider::ColorThemeRefPair colorDataSourceThree(*colorThemeThree,
+			*colorThemeFour);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-three"))).WillRepeatedly(
-			Return(emptyPair));
+			Return(colorDataSourceThree));
+
+	ColorThemeProvider::ColorThemeRefPair colorDataSourceFour(*colorThemeFour,
+			*colorThemeFive);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-xfour"))).WillRepeatedly(
-			Return(emptyPair));
+			Return(colorDataSourceFour));
 
 	model->setUsername("first-user");
 	model->readyForDataChangeSlot();
@@ -651,6 +674,14 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		}
 		EXPECT_EQ(QVariant(85.0), month->data(month->index(30, 0)));
 	}
+
+	EXPECT_EQ(colorThemeOne->start(), model->firstColor()->start());
+	EXPECT_EQ(colorThemeOne->main(), model->firstColor()->main());
+	EXPECT_EQ(colorThemeOne->end(), model->firstColor()->end());
+
+	EXPECT_EQ(colorThemeTwo->start(), model->secondColor()->start());
+	EXPECT_EQ(colorThemeTwo->main(), model->secondColor()->main());
+	EXPECT_EQ(colorThemeTwo->end(), model->secondColor()->end());
 
 	model->nextDataSourceSlot();
 	model->readyForDataChangeSlot();
@@ -685,6 +716,14 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		}
 	}
 
+	EXPECT_EQ(colorThemeTwo->start(), model->firstColor()->start());
+	EXPECT_EQ(colorThemeTwo->main(), model->firstColor()->main());
+	EXPECT_EQ(colorThemeTwo->end(), model->firstColor()->end());
+
+	EXPECT_EQ(colorThemeThree->start(), model->secondColor()->start());
+	EXPECT_EQ(colorThemeThree->main(), model->secondColor()->main());
+	EXPECT_EQ(colorThemeThree->end(), model->secondColor()->end());
+
 	model->setUsername("second-user");
 	model->readyForDataChangeSlot();
 
@@ -718,6 +757,14 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		}
 	}
 
+	EXPECT_EQ(colorThemeThree->start(), model->firstColor()->start());
+	EXPECT_EQ(colorThemeThree->main(), model->firstColor()->main());
+	EXPECT_EQ(colorThemeThree->end(), model->firstColor()->end());
+
+	EXPECT_EQ(colorThemeFour->start(), model->secondColor()->start());
+	EXPECT_EQ(colorThemeFour->main(), model->secondColor()->main());
+	EXPECT_EQ(colorThemeFour->end(), model->secondColor()->end());
+
 	model->nextDataSourceSlot();
 	model->readyForDataChangeSlot();
 
@@ -750,6 +797,14 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
 	}
+
+	EXPECT_EQ(colorThemeFour->start(), model->firstColor()->start());
+	EXPECT_EQ(colorThemeFour->main(), model->firstColor()->main());
+	EXPECT_EQ(colorThemeFour->end(), model->firstColor()->end());
+
+	EXPECT_EQ(colorThemeFive->start(), model->secondColor()->start());
+	EXPECT_EQ(colorThemeFive->main(), model->secondColor()->main());
+	EXPECT_EQ(colorThemeFive->end(), model->secondColor()->end());
 }
 
 } // namespace
