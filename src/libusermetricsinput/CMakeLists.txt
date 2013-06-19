@@ -1,11 +1,11 @@
 
+set(EXPORT_FILE_NAME UserMetricsInputExport.h)
+
 FILE(
 	GLOB USERMETRICSINPUT_PUBLIC_HEADERS
 	RELATIVE "${INCLUDE_DIR}/libusermetricsinput"
 	"${INCLUDE_DIR}/libusermetricsinput/*.h"
 )
-
-set(EXPORT_FILE_NAME UserMetricsInputExport.h)
 
 list(
 	APPEND USERMETRICSINPUT_PUBLIC_HEADERS
