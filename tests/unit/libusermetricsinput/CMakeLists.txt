@@ -4,6 +4,7 @@ set(
 	TestMetricImpl.cpp
 	TestMetricManagerImpl.cpp
 	TestMetricUpdateImpl.cpp
+	TestUserMetricInputCAPI.cpp
 )
 
 add_executable(

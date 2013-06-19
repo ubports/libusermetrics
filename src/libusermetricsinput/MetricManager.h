@@ -28,7 +28,7 @@ namespace UserMetricsInput {
 
 class MetricManager;
 
-typedef std::shared_ptr<MetricManager> MetricManagerPtr;
+typedef std::unique_ptr<MetricManager> MetricManagerPtr;
 
 class USERMETRICSINPUT_EXPORT MetricManager {
 public:

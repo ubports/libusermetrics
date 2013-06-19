@@ -22,6 +22,7 @@
 #include <libusermetricsinput/MetricManager.h>
 
 #include <QtCore/QObject>
+#include <QtCore/QMap>
 
 namespace UserMetricsInput {
 
@@ -33,6 +34,9 @@ public:
 
 	virtual MetricPtr add(const std::string &dataSourceId,
 			const std::string &formatString);
+
+protected:
+	QMap<QString, MetricPtr> m_metrics;
 };
 
 }

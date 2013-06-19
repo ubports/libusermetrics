@@ -31,5 +31,7 @@ MetricManagerImpl::~MetricManagerImpl() {
 
 MetricPtr MetricManagerImpl::add(const string &dataSourceId,
 		const string &formatString) {
-	return MetricPtr(new MetricImpl());
+	MetricPtr metric(new MetricImpl(dataSourceId, formatString));
+	m_metrics.insert(QString::fromStdString(dataSourceId), metric);
+	return metric;
 }

@@ -22,16 +22,23 @@
 #include <libusermetricsinput/Metric.h>
 
 #include <QtCore/QObject>
+#include <QtCore/QString>
 
 namespace UserMetricsInput {
 
 class MetricImpl: public Metric, public QObject {
 public:
-	explicit MetricImpl(QObject *parent = 0);
+	explicit MetricImpl(const std::string &dataSourceId,
+			const std::string &formatString, QObject *parent = 0);
 
 	virtual ~MetricImpl();
 
 	virtual MetricUpdatePtr update(const std::string &username);
+
+protected:
+	QString m_dataSourceId;
+
+	QString m_formatString;
 };
 
 }

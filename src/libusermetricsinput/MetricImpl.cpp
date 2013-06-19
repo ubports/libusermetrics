@@ -22,8 +22,10 @@
 using namespace std;
 using namespace UserMetricsInput;
 
-MetricImpl::MetricImpl(QObject *parent) :
-		QObject(parent) {
+MetricImpl::MetricImpl(const std::string &dataSourceId,
+		const std::string &formatString, QObject *parent) :
+		QObject(parent), m_dataSourceId(QString::fromStdString(dataSourceId)), m_formatString(
+				QString::fromStdString(formatString)) {
 }
 
 MetricImpl::~MetricImpl() {

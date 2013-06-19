@@ -19,6 +19,7 @@ set(USERMETRICSINPUT_SOURCES
 	MetricManagerImpl.cpp
 	MetricUpdate.cpp
 	MetricUpdateImpl.cpp
+	usermetricsinput.cpp
 )
 
 set(USERMETRICS_INPUT_DEPENDENCIES

@@ -37,7 +37,7 @@ protected:
 };
 
 TEST_F(TestMetricImpl, Foo) {
-	MetricPtr metric(new MetricImpl());
+	MetricPtr metric(new MetricImpl("datasource-id", "format string %1"));
 
 	MetricUpdatePtr update(metric->update("username"));
 	update->addData(1.0);

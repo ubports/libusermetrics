@@ -16,43 +16,40 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsinput/Metric.h>
-#include <libusermetricsinput/MetricUpdateImpl.h>
+#include <libusermetricsinput/usermetricsinput.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 using namespace std;
 using namespace testing;
-using namespace UserMetricsInput;
 
 namespace {
 
-class MockMetric: public Metric {
-public:
-	virtual MetricUpdatePtr update(const std::string &username) {
-		return MetricUpdatePtr(updateProxy(username));
-	}
-
-	MOCK_METHOD1(updateProxy, MetricUpdate*(const std::string &));
-};
-
-class TestMetricUpdateImpl: public Test {
+class TestUserMetricInputCAPI: public Test {
 protected:
-	TestMetricUpdateImpl() {
+	TestUserMetricInputCAPI() {
 	}
 
-	virtual ~TestMetricUpdateImpl() {
+	virtual ~TestUserMetricInputCAPI() {
 	}
 };
 
-TEST_F(TestMetricUpdateImpl, Foo) {
-	NiceMock<MockMetric> metric;
+TEST_F(TestUserMetricInputCAPI, Foo) {
+	UserMetricsInputMetricManager metricManager =
+			usermetricsinput_metricmanager_new();
 
-	MetricUpdatePtr update(new MetricUpdateImpl(metric, "username"));
-	update->addData(1.0);
-	update->addNull();
-	update->addData(0.1);
+	UserMetricsInputMetric metric = usermetricsinput_metricmanager_add(
+			metricManager, "data-source-id", "format string %1");
+
+	UserMetricsInputMetricUpdate metricUpdate = usermetricsinput_metric_update(
+			metric, "username");
+	usermetricsinput_metricupdate_add_data(metricUpdate, 1.0);
+	usermetricsinput_metricupdate_add_null(metricUpdate);
+	usermetricsinput_metricupdate_add_data(metricUpdate, 0.1);
+	usermetricsinput_metricupdate_delete(metricUpdate);
+
+	usermetricsinput_metricmanager_delete(metricManager);
 }
 
 } // namespace
