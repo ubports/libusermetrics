@@ -5,7 +5,18 @@ FILE(
 	"${INCLUDE_DIR}/libusermetricsinput/*.h"
 )
 
+set(EXPORT_FILE_NAME UserMetricsInputExport.h)
+
+list(
+	APPEND USERMETRICSINPUT_PUBLIC_HEADERS
+	${EXPORT_FILE_NAME}
+)
+
 set(USERMETRICSINPUT_SOURCES
+	Metric.cpp
+	MetricImpl.cpp
+	MetricManager.cpp
+	MetricManagerImpl.cpp
 	MetricUpdate.cpp
 	MetricUpdateImpl.cpp
 )
@@ -39,6 +50,16 @@ add_library(
 	usermetricsinput
 	SHARED
 	${USERMETRICSINPUT_SOURCES}
+)
+
+generate_export_header(
+	usermetricsinput
+	EXPORT_FILE_NAME ${EXPORT_FILE_NAME}
+)
+
+configure_file(
+	"${CMAKE_CURRENT_BINARY_DIR}/${EXPORT_FILE_NAME}"
+	"${INCLUDE_BINARY_DIR}/libusermetricsinput/${EXPORT_FILE_NAME}"
 )
 
 qt5_use_modules(

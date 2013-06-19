@@ -16,23 +16,30 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsinput/MetricUpdateImpl.h>
+#ifndef USERMETRICSINPUT_METRIC_H_
+#define USERMETRICSINPUT_METRIC_H_
 
-using namespace UserMetricsInput;
+#include <memory>
 
-MetricUpdateImpl::MetricUpdateImpl(const Metric &metric,
-		const std::string &username, QObject *parent) :
-		QObject(parent), m_metric(metric), m_username(username) {
+#include <libusermetricsinput/UserMetricsInputExport.h>
+#include <libusermetricsinput/MetricUpdate.h>
+
+namespace UserMetricsInput {
+
+class Metric;
+
+typedef std::unique_ptr<Metric> MetricPtr;
+
+class USERMETRICSINPUT_EXPORT Metric {
+public:
+	virtual ~Metric();
+
+	virtual MetricUpdatePtr update(const std::string &username) = 0;
+
+protected:
+	explicit Metric();
+};
+
 }
 
-MetricUpdateImpl::~MetricUpdateImpl() {
-	// TODO Implement data push on destruction
-}
-
-void MetricUpdateImpl::addData(float data) {
-	m_data << QVariant(data);
-}
-
-void MetricUpdateImpl::addNull() {
-	m_data << QVariant();
-}
+#endif // USERMETRICSINPUT_METRIC_H_

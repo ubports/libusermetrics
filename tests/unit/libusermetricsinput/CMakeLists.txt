@@ -1,7 +1,9 @@
 
 set(
 	USERMETRICSINPUT_UNIT_TESTS_SRC
-	TestMetricUpdate.cpp
+	TestMetricImpl.cpp
+	TestMetricManagerImpl.cpp
+	TestMetricUpdateImpl.cpp
 )
 
 add_executable(

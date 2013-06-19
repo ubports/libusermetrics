@@ -20,14 +20,8 @@
 
 using namespace UserMetricsInput;
 
-MetricUpdate::MetricUpdate(QObject *parent) :
-		QObject(parent) {
+MetricUpdate::MetricUpdate() {
 }
 
 MetricUpdate::~MetricUpdate() {
-}
-
-MetricUpdatePtr MetricUpdate::getInstance(const QString &dataSourceId,
-		const QString &username) {
-	return MetricUpdatePtr(new MetricUpdateImpl(dataSourceId, username));
 }

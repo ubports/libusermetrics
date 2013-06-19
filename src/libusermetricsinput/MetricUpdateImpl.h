@@ -19,13 +19,18 @@
 #ifndef USERMETRICSINPUT_METRICUPDATEIMPL_H_
 #define USERMETRICSINPUT_METRICUPDATEIMPL_H_
 
+#include <QtCore/QObject>
+#include <QtCore/QVariantList>
+
 #include <libusermetricsinput/MetricUpdate.h>
 
 namespace UserMetricsInput {
 
-class MetricUpdateImpl: public MetricUpdate {
+class Metric;
+
+class MetricUpdateImpl: public MetricUpdate, public QObject {
 public:
-	MetricUpdateImpl(const QString &dataSetId, const QString &username,
+	explicit MetricUpdateImpl(const Metric &metric, const std::string &username,
 			QObject *parent = 0);
 
 	virtual ~MetricUpdateImpl();
@@ -33,6 +38,13 @@ public:
 	virtual void addData(float data);
 
 	virtual void addNull();
+
+protected:
+	const Metric &m_metric;
+
+	std::string m_username;
+
+	QVariantList m_data;
 };
 
 }

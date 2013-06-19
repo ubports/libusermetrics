@@ -21,9 +21,12 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(INCLUDE_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/include")
 include_directories(${INCLUDE_DIR})
+include_directories(${INCLUDE_BINARY_DIR})
 
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(SOURCE_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/src")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-permissive -pedantic -Wall -Wextra")
 

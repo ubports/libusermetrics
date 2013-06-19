@@ -16,7 +16,7 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsinput/MetricUpdate.h>
+#include <libusermetricsinput/MetricImpl.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -27,21 +27,22 @@ using namespace UserMetricsInput;
 
 namespace {
 
-class TestDataChange: public Test {
+class TestMetricImpl: public Test {
 protected:
-	TestDataChange() {
+	TestMetricImpl() {
 	}
 
-	virtual ~TestDataChange() {
+	virtual ~TestMetricImpl() {
 	}
 };
 
-TEST_F(TestDataChange, Foo) {
-	MetricUpdatePtr metricUpdate(
-			MetricUpdate::getInstance("dataSourceId", "username"));
-	metricUpdate->addData(1.0);
-	metricUpdate->addNull();
-	metricUpdate->addData(0.1);
+TEST_F(TestMetricImpl, Foo) {
+	MetricPtr metric(new MetricImpl());
+
+	MetricUpdatePtr update(metric->update("username"));
+	update->addData(1.0);
+	update->addNull();
+	update->addData(0.1);
 }
 
 } // namespace
