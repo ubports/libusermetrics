@@ -1,9 +1,32 @@
-libusermetrics (1.0.1) UNRELEASED; urgency=low
+libusermetrics (1.0.1daily13.06.19-0ubuntu1) saucy; urgency=low
 
+  [ Michael Terry ]
   * Cleanup packaging for daily-release best practices
   * Automatic snapshot from revision 53 (bootstrap)
 
- -- Michael Terry <mterry@ubuntu.com>  Thu, 13 Jun 2013 14:24:21 -0400
+  [ Pete Woods ]
+  * Another test to check for multiple users with multiple data sources
+  * Remove debug logging
+  * Unit tests for color theme impl.
+  * Add tests for qvariantlistmodel.
+  * Add debian symbols file to aid ABI preservation.
+  * Rename utils -> testutils
+  * Provide color themes using provider class instead of drawing them
+    straight from data sets
+  * Use a mock in the UserMetricsImpl test for the ColorThemeProvider
+  * Proper test for usage of color theme
+  * Add libusermetricsinput
+  * Sort libusermetricsinput out for installation
+  * Fix debian install paths
+
+  [ Michael Terry ]
+  * Fix include path for clients of the library.
+  * Add missing license files.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 68
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 19 Jun 2013 02:02:14 +0000
 
 libusermetrics (1.0.0) raring; urgency=low
 
