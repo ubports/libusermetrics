@@ -16,7 +16,7 @@ libusermetricsinput.so.1 libusermetricsinput1 #MINVER#
  (c++)"UserMetricsInput::Metric::~Metric()@Base" 1.0.1
  (c++)"UserMetricsInput::Metric::~Metric()@Base" 1.0.1
  (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()@Base" 1.0.1
- (c++)"(optional)std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()@Base" 1.0.1
+ (c++|optional)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()@Base" 1.0.1
  (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::~_Sp_counted_base()@Base" 1.0.1
  (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::~_Sp_counted_base()@Base" 1.0.1
  (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::~_Sp_counted_base()@Base" 1.0.1
