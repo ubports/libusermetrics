@@ -1,39 +1,39 @@
 libusermetricsinput.so.1 libusermetricsinput1 #MINVER#
- _ZN16UserMetricsInput12MetricUpdateC1Ev@Base 1.0.1
- _ZN16UserMetricsInput12MetricUpdateC2Ev@Base 1.0.1
- _ZN16UserMetricsInput12MetricUpdateD0Ev@Base 1.0.1
- _ZN16UserMetricsInput12MetricUpdateD1Ev@Base 1.0.1
- _ZN16UserMetricsInput12MetricUpdateD2Ev@Base 1.0.1
- _ZN16UserMetricsInput13MetricManager11getInstanceEv@Base 1.0.1
- _ZN16UserMetricsInput13MetricManagerC1Ev@Base 1.0.1
- _ZN16UserMetricsInput13MetricManagerC2Ev@Base 1.0.1
- _ZN16UserMetricsInput13MetricManagerD0Ev@Base 1.0.1
- _ZN16UserMetricsInput13MetricManagerD1Ev@Base 1.0.1
- _ZN16UserMetricsInput13MetricManagerD2Ev@Base 1.0.1
- _ZN16UserMetricsInput6MetricC1Ev@Base 1.0.1
- _ZN16UserMetricsInput6MetricC2Ev@Base 1.0.1
- _ZN16UserMetricsInput6MetricD0Ev@Base 1.0.1
- _ZN16UserMetricsInput6MetricD1Ev@Base 1.0.1
- _ZN16UserMetricsInput6MetricD2Ev@Base 1.0.1
- _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv@Base 1.0.1
- (optional)_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@Base 1.0.1
- _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EED0Ev@Base 1.0.1
- _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EED1Ev@Base 1.0.1
- _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EED2Ev@Base 1.0.1
- _ZTIN16UserMetricsInput12MetricUpdateE@Base 1.0.1
- _ZTIN16UserMetricsInput13MetricManagerE@Base 1.0.1
- _ZTIN16UserMetricsInput6MetricE@Base 1.0.1
- _ZTISt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE@Base 1.0.1
- _ZTISt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE@Base 1.0.1
- _ZTSN16UserMetricsInput12MetricUpdateE@Base 1.0.1
- _ZTSN16UserMetricsInput13MetricManagerE@Base 1.0.1
- _ZTSN16UserMetricsInput6MetricE@Base 1.0.1
- _ZTSSt11_Mutex_baseILN9__gnu_cxx12_Lock_policyE2EE@Base 1.0.1
- _ZTSSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE@Base 1.0.1
- _ZTVN16UserMetricsInput12MetricUpdateE@Base 1.0.1
- _ZTVN16UserMetricsInput13MetricManagerE@Base 1.0.1
- _ZTVN16UserMetricsInput6MetricE@Base 1.0.1
- _ZTVSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE@Base 1.0.1
+ (c++)"UserMetricsInput::MetricUpdate::MetricUpdate()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricUpdate::MetricUpdate()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricUpdate::~MetricUpdate()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricUpdate::~MetricUpdate()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricUpdate::~MetricUpdate()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricManager::getInstance()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricManager::MetricManager()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricManager::MetricManager()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricManager::~MetricManager()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricManager::~MetricManager()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricManager::~MetricManager()@Base" 1.0.1
+ (c++)"UserMetricsInput::Metric::Metric()@Base" 1.0.1
+ (c++)"UserMetricsInput::Metric::Metric()@Base" 1.0.1
+ (c++)"UserMetricsInput::Metric::~Metric()@Base" 1.0.1
+ (c++)"UserMetricsInput::Metric::~Metric()@Base" 1.0.1
+ (c++)"UserMetricsInput::Metric::~Metric()@Base" 1.0.1
+ (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()@Base" 1.0.1
+ (c++)"(optional)std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()@Base" 1.0.1
+ (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::~_Sp_counted_base()@Base" 1.0.1
+ (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::~_Sp_counted_base()@Base" 1.0.1
+ (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::~_Sp_counted_base()@Base" 1.0.1
+ (c++)"typeinfo for UserMetricsInput::MetricUpdate@Base" 1.0.1
+ (c++)"typeinfo for UserMetricsInput::MetricManager@Base" 1.0.1
+ (c++)"typeinfo for UserMetricsInput::Metric@Base" 1.0.1
+ (c++)"typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>@Base" 1.0.1
+ (c++)"typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>@Base" 1.0.1
+ (c++)"typeinfo name for UserMetricsInput::MetricUpdate@Base" 1.0.1
+ (c++)"typeinfo name for UserMetricsInput::MetricManager@Base" 1.0.1
+ (c++)"typeinfo name for UserMetricsInput::Metric@Base" 1.0.1
+ (c++)"typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>@Base" 1.0.1
+ (c++)"typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>@Base" 1.0.1
+ (c++)"vtable for UserMetricsInput::MetricUpdate@Base" 1.0.1
+ (c++)"vtable for UserMetricsInput::MetricManager@Base" 1.0.1
+ (c++)"vtable for UserMetricsInput::Metric@Base" 1.0.1
+ (c++)"vtable for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>@Base" 1.0.1
  usermetricsinput_metric_update@Base 1.0.1
  usermetricsinput_metricmanager_add@Base 1.0.1
  usermetricsinput_metricmanager_delete@Base 1.0.1
