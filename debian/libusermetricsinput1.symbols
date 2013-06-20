@@ -16,7 +16,7 @@ libusermetricsinput.so.1 libusermetricsinput1 #MINVER#
  _ZN16UserMetricsInput6MetricD1Ev@Base 1.0.1
  _ZN16UserMetricsInput6MetricD2Ev@Base 1.0.1
  _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_destroyEv@Base 1.0.1
- _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@Base 1.0.1
+ (optional)_ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EE10_M_releaseEv@Base 1.0.1
  _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EED0Ev@Base 1.0.1
  _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EED1Ev@Base 1.0.1
  _ZNSt16_Sp_counted_baseILN9__gnu_cxx12_Lock_policyE2EED2Ev@Base 1.0.1
