@@ -22,6 +22,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QSharedPointer>
 
+#include <QDBusConnection>
+
 class DataSourceAdaptor;
 
 namespace UserMetricsService {
@@ -39,7 +41,8 @@ Q_PROPERTY(QString name READ name)
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString)
 
 public:
-	DBusDataSource(const QString &name);
+	DBusDataSource(const QString &name, QDBusConnection &dbusConnection,
+			QObject *parent = 0);
 
 	virtual ~DBusDataSource();
 
@@ -53,6 +56,8 @@ public:
 
 protected:
 	void lookupDataSource(DataSource *dataSource) const;
+
+	QDBusConnection m_dbusConnection;
 
 	QScopedPointer<DataSourceAdaptor> m_adaptor;
 

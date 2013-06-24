@@ -23,19 +23,19 @@
 
 #include <QDjango.h>
 #include <QDjangoQuerySet.h>
-#include <QSqlDatabase>
 
 #include <QtCore/QDebug>
 
 using namespace UserMetricsService;
 
-DBusUserMetrics::DBusUserMetrics() :
-		m_adaptor(new UserMetricsAdaptor(this)) {
+DBusUserMetrics::DBusUserMetrics(QDBusConnection &dbusConnection,
+		QObject *parent) :
+		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
+				new UserMetricsAdaptor(this)) {
 
 	// DBus setup
-	QDBusConnection connection(QDBusConnection::sessionBus());
-	connection.registerService("com.canonical.UserMetrics");
-	connection.registerObject("/com/canonical/UserMetrics", this);
+	m_dbusConnection.registerService("com.canonical.UserMetrics");
+	m_dbusConnection.registerObject("/com/canonical/UserMetrics", this);
 
 	// Database setup
 	QDjango::registerModel<DataSource>();
@@ -45,6 +45,8 @@ DBusUserMetrics::DBusUserMetrics() :
 }
 
 DBusUserMetrics::~DBusUserMetrics() {
+	m_dbusConnection.unregisterObject("/com/canonical/UserMetrics");
+	m_dbusConnection.unregisterService("com.canonical.UserMetrics");
 }
 
 QList<QDBusObjectPath> DBusUserMetrics::dataSources() const {
@@ -59,7 +61,8 @@ void DBusUserMetrics::syncDatabase() {
 		dataSourceNames << name;
 		// if we don't have a local cache
 		if (!m_dataSources.contains(name)) {
-			DBusDataSourcePtr dbusDataSource(new DBusDataSource(name));
+			DBusDataSourcePtr dbusDataSource(
+					new DBusDataSource(name, m_dbusConnection));
 			m_dataSources.insert(dataSource.name(), dbusDataSource);
 		}
 	}

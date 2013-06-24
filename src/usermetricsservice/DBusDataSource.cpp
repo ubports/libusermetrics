@@ -24,8 +24,10 @@
 
 using namespace UserMetricsService;
 
-DBusDataSource::DBusDataSource(const QString &name) :
-		m_adaptor(new DataSourceAdaptor(this)), m_name(name), m_path(
+DBusDataSource::DBusDataSource(const QString &name,
+		QDBusConnection &dbusConnection, QObject *parent) :
+		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
+				new DataSourceAdaptor(this)), m_name(name), m_path(
 				QString("/com/canonical/UserMetrics/DataSource/%1").arg(m_name)) {
 	// DBus setup
 	QDBusConnection connection(QDBusConnection::sessionBus());

@@ -17,7 +17,10 @@
  */
 
 #include <usermetricsservice/DBusUserMetrics.h>
+
 #include <QtCore/QCoreApplication>
+#include <QDjangoQuerySet.h>
+#include <QSqlDatabase>
 
 using namespace UserMetricsService;
 
@@ -32,6 +35,8 @@ int main(int argc, char *argv[]) {
 
 	QDjango::setDatabase(db);
 
-	DBusUserMetrics userMetrics;
+	QDBusConnection connection(QDBusConnection::sessionBus());
+
+	DBusUserMetrics userMetrics(connection);
 	return application.exec();
 }

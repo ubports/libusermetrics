@@ -37,7 +37,7 @@ Q_OBJECT
 Q_PROPERTY(QList<QDBusObjectPath> dataSources READ dataSources)
 
 public:
-	DBusUserMetrics();
+	DBusUserMetrics(QDBusConnection &dbusConnection, QObject *parent = 0);
 
 	virtual ~DBusUserMetrics();
 
@@ -53,6 +53,8 @@ Q_SIGNALS:
 
 protected:
 	void syncDatabase();
+
+	QDBusConnection m_dbusConnection;
 
 	QScopedPointer<UserMetricsAdaptor> m_adaptor;
 
