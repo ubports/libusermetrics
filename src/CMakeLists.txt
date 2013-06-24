@@ -8,3 +8,4 @@ add_compiler_export_flags()
 
 add_subdirectory("libusermetricsinput")
 add_subdirectory("libusermetricsoutput")
+add_subdirectory("usermetricsservice")

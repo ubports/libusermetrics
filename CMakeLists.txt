@@ -6,19 +6,27 @@ set(ABI_VERSION 1)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}")
 
+find_package(PkgConfig REQUIRED)
+
 find_package(Qt5Core REQUIRED)
 include_directories(${Qt5Core_INCLUDE_DIRS})
 
 find_package(Qt5Gui REQUIRED)
 include_directories(${Qt5Gui_INCLUDE_DIRS})
 
-#find_package(Qt5DBus COMPONENTS Qt5DBusMacros REQUIRED)
-#set(TEST_SOURCES)
-#qt5_add_dbus_adaptor(TEST_SOURCES com.canonical.hud.xml hud.h HudService)
-#include_directories(${Qt5DBus_INCLUDE_DIRS})
+find_package(Qt5DBus COMPONENTS Qt5DBusMacros REQUIRED)
+include_directories(${Qt5DBus_INCLUDE_DIRS})
+
+find_package(Qt5Sql REQUIRED)
+include_directories(${Qt5Sql_INCLUDE_DIRS})
+
+pkg_check_modules(QDJANGO_DB REQUIRED qdjango-db REQUIRED)
+include_directories(${QDJANGO_DB_INCLUDE_DIRS})
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data")
 
 set(INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(INCLUDE_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/include")
