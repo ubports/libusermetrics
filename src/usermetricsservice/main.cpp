@@ -29,7 +29,6 @@ int main(int argc, char *argv[]) {
 
 	// Database setup
 	QSqlDatabase db(QSqlDatabase::addDatabase("QSQLITE"));
-//	db.setDatabaseName(":memory:");
 	db.setDatabaseName("/tmp/usermetrics.db");
 	db.open();
 
@@ -38,5 +37,10 @@ int main(int argc, char *argv[]) {
 	QDBusConnection connection(QDBusConnection::sessionBus());
 
 	DBusUserMetrics userMetrics(connection);
-	return application.exec();
+
+	bool result(application.exec());
+
+	db.close();
+
+	return result;
 }

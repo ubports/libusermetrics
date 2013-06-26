@@ -16,4 +16,5 @@ add_library(
 qt5_use_modules(
 	usermetrics-test-utils
 	Core
+	Gui
 )

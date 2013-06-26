@@ -47,9 +47,13 @@ public:
 	QDBusObjectPath createDataSource(const QString &name,
 			const QString &formatString);
 
+	QSharedPointer<DBusDataSource> dataSource(const QString &name);
+
 	QList<QDBusObjectPath> userData() const;
 
 	QDBusObjectPath createUserData(const QString &username);
+
+	QSharedPointer<DBusUserData> userData(const QString &username);
 
 public Q_SLOTS:
 

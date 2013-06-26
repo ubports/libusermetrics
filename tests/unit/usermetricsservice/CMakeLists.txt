@@ -12,7 +12,9 @@ add_executable(
 target_link_libraries(
 	usermetricsservice-unit-tests
 	usermetricsservice
-	${GTEST_BOTH_LIBRARIES}
+	usermetrics-test-utils
+	${GTEST_LIBRARIES}
+	${GMOCK_BOTH_LIBRARIES}
 )
 
 add_valgrind_test(
