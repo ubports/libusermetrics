@@ -58,5 +58,5 @@ void DBusDataSource::setFormatString(const QString &formatString) {
 	DataSource dataSource;
 	DataSource::findByName(m_name, &dataSource);
 	dataSource.setFormatString(formatString);
-	dataSource.save();
+	Q_ASSERT(dataSource.save());
 }

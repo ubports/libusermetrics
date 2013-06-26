@@ -53,6 +53,7 @@ protected:
 	}
 
 	virtual ~TestUserMetricsService() {
+		QDjango::dropTables();
 		db.close();
 		QSqlDatabase::removeDatabase("test-user-metrics-service");
 	}
@@ -73,27 +74,46 @@ TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 
 		DBusDataSourcePtr facebook(userMetrics.dataSource("facebook"));
 		EXPECT_EQ(QString("facebook"), facebook->name());
+		EXPECT_EQ(QString("%1 messages received"), facebook->formatString());
 
-		{
-			QList<QDBusObjectPath> dataSources(userMetrics.dataSources());
-			EXPECT_EQ(1, dataSources.size());
-			EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/facebook"),
-					dataSources.first().path());
-		}
+		QList<QDBusObjectPath> dataSources(userMetrics.dataSources());
+		EXPECT_EQ(1, dataSources.size());
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/facebook"),
+				dataSources.first().path());
 	}
 
 	{
 		DBusUserMetrics userMetrics(connection);
 
-		{
-			QList<QDBusObjectPath> dataSources(userMetrics.dataSources());
-			EXPECT_EQ(1, dataSources.size());
-			EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/facebook"),
-					dataSources.first().path());
-		}
+		QList<QDBusObjectPath> dataSources(userMetrics.dataSources());
+		EXPECT_EQ(1, dataSources.size());
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/facebook"),
+				dataSources.first().path());
 
 		DBusDataSourcePtr facebook(userMetrics.dataSource("facebook"));
 		EXPECT_EQ(QString("facebook"), facebook->name());
+		EXPECT_EQ(QString("%1 messages received"), facebook->formatString());
+	}
+}
+
+TEST_F(TestUserMetricsService, UpdatesFormatString) {
+	{
+		DBusUserMetrics userMetrics(connection);
+
+		userMetrics.createDataSource("twitter", "%1 tweets received");
+
+		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
+		EXPECT_EQ(QString("%1 tweets received"), twitter->formatString());
+
+		twitter->setFormatString("%1 new format string");
+		EXPECT_EQ(QString("%1 new format string"), twitter->formatString());
+	}
+
+	{
+		DBusUserMetrics userMetrics(connection);
+
+		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
+		EXPECT_EQ(QString("%1 new format string"), twitter->formatString());
 	}
 }
 
@@ -109,23 +129,19 @@ TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
 		EXPECT_EQ(QString("alice"), alice->username());
 
-		{
-			QList<QDBusObjectPath> userData(userMetrics.userData());
-			EXPECT_EQ(1, userData.size());
-			EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/alice"),
-					userData.first().path());
-		}
+		QList<QDBusObjectPath> userData(userMetrics.userData());
+		EXPECT_EQ(1, userData.size());
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/alice"),
+				userData.first().path());
 	}
 
 	{
 		DBusUserMetrics userMetrics(connection);
 
-		{
-			QList<QDBusObjectPath> userData(userMetrics.userData());
-			EXPECT_EQ(1, userData.size());
-			EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/alice"),
-					userData.first().path());
-		}
+		QList<QDBusObjectPath> userData(userMetrics.userData());
+		EXPECT_EQ(1, userData.size());
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/alice"),
+				userData.first().path());
 
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
 		EXPECT_EQ(QString("alice"), alice->username());
@@ -143,6 +159,8 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
 
+		EXPECT_TRUE(alice->dataSets().empty());
+
 		// should re-use the same data set
 		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSet/1"),
 				alice->createDataSet("twitter").path());;
@@ -150,6 +168,12 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 				alice->createDataSet("twitter").path());;
 
 		DBusDataSetPtr twitter(alice->dataSet("twitter"));
+		EXPECT_EQ(1, twitter->id());
+
+		QList<QDBusObjectPath> dataSets(alice->dataSets());
+		EXPECT_EQ(1, dataSets.size());
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSet/1"),
+				dataSets.first().path());
 
 		twitter->update(data);
 	}
@@ -160,10 +184,27 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
 		EXPECT_EQ(QString("alice"), alice->username());
 
+		QList<QDBusObjectPath> dataSets(alice->dataSets());
+		EXPECT_EQ(1, dataSets.size());
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSet/1"),
+				dataSets.first().path());
+
 		DBusDataSetPtr twitter(alice->dataSet("twitter"));
+		EXPECT_EQ(1, twitter->id());
 
 		EXPECT_EQ(data, twitter->data());
 	}
+}
+
+TEST_F(TestUserMetricsService, CreateDataSetsWithUnknownSourceFailsGracefully) {
+	QVariantList data( { 100.0, 50.0, 0.0, -50.0, -100.0 });
+
+	DBusUserMetrics userMetrics(connection);
+
+	userMetrics.createUserData("alice");
+	DBusUserDataPtr alice(userMetrics.userData("alice"));
+
+	EXPECT_EQ(QString(), alice->createDataSet("twitter").path());;
 }
 
 } // namespace

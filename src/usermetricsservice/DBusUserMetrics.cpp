@@ -124,7 +124,7 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		DataSource dataSource;
 		dataSource.setName(name);
 		dataSource.setFormatString(formatString);
-		dataSource.save();
+		Q_ASSERT(dataSource.save());
 
 		syncDatabase();
 	}
@@ -150,7 +150,7 @@ QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
 	if (query.size() == 0) {
 		UserData userData;
 		userData.setUsername(username);
-		userData.save();
+		Q_ASSERT(userData.save());
 
 		syncDatabase();
 	}
