@@ -43,33 +43,84 @@ DBusDataSet::~DBusDataSet() {
 	connection.unregisterObject(m_path);
 }
 
+void DBusDataSet::getData(DataSet &dataSet, QVariantList &data) {
+	QDataStream dataStream(dataSet.data());
+	dataStream >> data;
+}
+
 QVariantList DBusDataSet::data() const {
 	DataSet dataSet;
 	DataSet::findById(m_id, &dataSet);
 
-	const QByteArray &byteArray(dataSet.data());
 	QVariantList data;
-	{
-		QDataStream dataStream(byteArray);
-		dataStream >> data;
-	}
+	getData(dataSet, data);
 
 	return data;
 }
 
 void DBusDataSet::update(const QVariantList &data) {
-	QByteArray byteArray;
-	{
-		QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
-		dataStream << data;
-	}
-
 	DataSet dataSet;
 	DataSet::findById(m_id, &dataSet);
 
-	dataSet.setLastUpdated(m_dateFactory->currentDate());
+	QVariantList oldData;
+	getData(dataSet, oldData);
+
+	QDate currentDate(m_dateFactory->currentDate());
+	int daysSinceLastUpdate(dataSet.lastUpdated().daysTo(currentDate));
+
+	QVariantList newData(data);
+
+	// if we are in this situation we do nothing
+	// new: |4|5|6|7|8|9|0|
+	// old:     |1|2|3|
+	// res: |4|5|6|7|8|9|0|
+	if (daysSinceLastUpdate + oldData.size() > newData.size()) {
+		if (daysSinceLastUpdate < newData.size()) {
+			// if we are in this situation - we need the
+			// protruding data from old
+			// new: |6|7|8|9|0|
+			// old:     |1|2|3|4|5|
+			// res: |6|7|8|9|0|4|5|
+			auto oldDataIt(oldData.constBegin());
+			// wind forward until the data we want
+			for (int i(daysSinceLastUpdate); i < newData.size(); ++i) {
+				++oldDataIt;
+			}
+			// append the rest of the data
+			for (; oldDataIt != oldData.constEnd(); ++oldDataIt) {
+				newData.append(*oldDataIt);
+			}
+		} else {
+			// we are in this situation - there is a gap
+			// and we want the whole of the old data appending
+			// new: |6|7|8|9|0|
+			// old:             |1|2|3|4|5|
+			// res: |6|7|8|9|0|n|1|2|3|4|5|
+			const int daysToPad(daysSinceLastUpdate - newData.size());
+			// pad the data will null variants
+			for (int i(0); i < daysToPad; ++i) {
+				newData.append(QVariant());
+			}
+			// append the whole of the old data
+			newData.append(oldData);
+		}
+	}
+
+	QByteArray byteArray;
+	{
+		QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+		dataStream << newData;
+	}
+
+	dataSet.setLastUpdated(currentDate);
 	dataSet.setData(byteArray);
 	Q_ASSERT(dataSet.save());
+}
+
+QDate DBusDataSet::lastUpdated() const {
+	DataSet dataSet;
+	DataSet::findById(m_id, &dataSet);
+	return dataSet.lastUpdated();
 }
 
 int DBusDataSet::id() const {

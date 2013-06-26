@@ -4,6 +4,7 @@ set(
 	QColorPrinter.cpp
 	QStringPrinter.cpp
 	QVariantPrinter.cpp
+	QVariantListPrinter.cpp
 	MockSignalReceiver.cpp
 )
 

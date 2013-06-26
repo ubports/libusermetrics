@@ -32,6 +32,7 @@ class DateFactory;
 
 namespace UserMetricsService {
 
+class DataSet;
 class DBusDataSet;
 
 typedef QSharedPointer<DBusDataSet> DBusDataSetPtr;
@@ -56,7 +57,11 @@ public:
 
 	void update(const QVariantList &data);
 
+	QDate lastUpdated() const;
+
 protected:
+	static void getData(DataSet &dataSet, QVariantList &data);
+
 	QDBusConnection m_dbusConnection;
 
 	QScopedPointer<DataSetAdaptor> m_adaptor;

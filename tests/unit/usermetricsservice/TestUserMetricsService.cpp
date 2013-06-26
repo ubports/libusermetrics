@@ -23,6 +23,7 @@
 #include <libusermetricscommon/DateFactory.h>
 
 #include <testutils/QStringPrinter.h>
+#include <testutils/QVariantListPrinter.h>
 
 #include <QDjango.h>
 
@@ -219,6 +220,9 @@ TEST_F(TestUserMetricsService, CreateDataSetsWithUnknownSourceFailsGracefully) {
 }
 
 TEST_F(TestUserMetricsService, UpdateData) {
+	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
+			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 8)));
+
 	DBusUserMetrics userMetrics(connection, dateFactory);
 	userMetrics.createDataSource("twitter", "foo");
 
@@ -228,8 +232,80 @@ TEST_F(TestUserMetricsService, UpdateData) {
 	bob->createDataSet("twitter");
 	DBusDataSetPtr twitter(bob->dataSet("twitter"));
 
-	QVariantList data( { 1.0, 2.0, 3.0, 4.0, 5.0 });
-	twitter->update(data);
+	// first update happens on the 5th of the month
+	twitter->update(QVariantList( { 5.0, 4.0, 3.0, 2.0, 1.0 }));
+	EXPECT_EQ(QVariantList( { 5.0, 4.0, 3.0, 2.0, 1.0 }), twitter->data());
+	EXPECT_EQ(QDate(2001, 01, 5), twitter->lastUpdated());
+
+	// second update happens on the 8th of the month
+	// -> 3 new data points and 2 overwritten
+	twitter->update(QVariantList( { 10.0, 9.0, 8.0, 7.0, 6.0 }));
+	EXPECT_EQ(QVariantList( { 10.0, 9.0, 8.0, 7.0, 6.0, 3.0, 2.0, 1.0 }),
+			twitter->data());
+	EXPECT_EQ(QDate(2001, 01, 8), twitter->lastUpdated());
+}
+
+TEST_F(TestUserMetricsService, UpdateDataWithGap) {
+	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
+			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 15)));
+
+	DBusUserMetrics userMetrics(connection, dateFactory);
+	userMetrics.createDataSource("twitter", "foo");
+
+	userMetrics.createUserData("bob");
+	DBusUserDataPtr bob(userMetrics.userData("bob"));
+
+	bob->createDataSet("twitter");
+	DBusDataSetPtr twitter(bob->dataSet("twitter"));
+
+	QVariantList first( { 5.0, 4.0, 3.0, 2.0, 1.0 });
+	QVariantList second( { 10.0, 9.0, 8.0, 7.0, 6.0 });
+	QVariantList expected;
+	expected.append(second);
+	for (int i(0); i < 5; ++i) {
+		expected.append(QVariant());
+	}
+	expected.append(first);
+
+	// first update happens on the 5th of the month
+	twitter->update(first);
+	EXPECT_EQ(first, twitter->data());
+	EXPECT_EQ(QDate(2001, 01, 5), twitter->lastUpdated());
+
+	// second update happens on the 15th of the month
+	// -> 5 new data points, 5 nulls, and none overwritten
+	twitter->update(second);
+	EXPECT_EQ(expected, twitter->data());
+	EXPECT_EQ(QDate(2001, 01, 15), twitter->lastUpdated());
+}
+
+TEST_F(TestUserMetricsService, UpdateDataTotallyOverwrite) {
+	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
+			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 7)));
+
+	DBusUserMetrics userMetrics(connection, dateFactory);
+	userMetrics.createDataSource("twitter", "foo");
+
+	userMetrics.createUserData("bob");
+	DBusUserDataPtr bob(userMetrics.userData("bob"));
+
+	bob->createDataSet("twitter");
+	DBusDataSetPtr twitter(bob->dataSet("twitter"));
+
+	QVariantList first( { 3.0, 2.0, 1.0 });
+	QVariantList second( { 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0 });
+	QVariantList &expected(second);
+
+	// first update happens on the 5th of the month
+	twitter->update(first);
+	EXPECT_EQ(first, twitter->data());
+	EXPECT_EQ(QDate(2001, 01, 5), twitter->lastUpdated());
+
+	// second update happens on the 7th of the month
+	// -> 2 new data points, 3 overwrites, and 2 new appends
+	twitter->update(second);
+	EXPECT_EQ(expected, twitter->data());
+	EXPECT_EQ(QDate(2001, 01, 7), twitter->lastUpdated());
 }
 
 } // namespace
