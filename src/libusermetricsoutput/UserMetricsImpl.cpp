@@ -18,13 +18,14 @@
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
 #include <libusermetricsoutput/UserDataStore.h>
-#include <libusermetricsoutput/DateFactory.h>
+#include <libusermetricscommon/DateFactory.h>
 
 #include <QtCore/QDate>
 #include <QtCore/QString>
 #include <QtCore/QVariantList>
 
 using namespace UserMetricsOutput;
+using namespace UserMetricsCommon;
 
 UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
 		QSharedPointer<UserDataStore> userDataStore,

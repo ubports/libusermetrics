@@ -17,11 +17,12 @@
  */
 
 #include <libusermetricsoutput/UserDataStore.h>
-#include <libusermetricsoutput/DateFactoryImpl.h>
+#include <libusermetricscommon/DateFactoryImpl.h>
 #include <libusermetricsoutput/HardCodedColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
 
 using namespace UserMetricsOutput;
+using namespace UserMetricsCommon;
 
 UserMetrics::UserMetrics(QObject *parent) :
 		QObject(parent) {

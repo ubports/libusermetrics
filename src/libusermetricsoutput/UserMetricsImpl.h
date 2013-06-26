@@ -21,7 +21,7 @@
 
 #include <libusermetricsoutput/UserMetrics.h>
 #include <libusermetricsoutput/UserDataStore.h>
-#include <libusermetricsoutput/DateFactory.h>
+#include <libusermetricscommon/DateFactory.h>
 #include <libusermetricsoutput/ColorThemeImpl.h>
 #include <libusermetricsoutput/ColorThemeProvider.h>
 #include <libusermetricsoutput/qvariantlistmodel.h>
@@ -35,7 +35,7 @@ class UserMetricsImpl: public UserMetrics {
 Q_OBJECT
 
 public:
-	UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
+	UserMetricsImpl(QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
 			QSharedPointer<UserDataStore> dataSetStore,
 			QSharedPointer<ColorThemeProvider> colorThemeProvider,
 			QObject *parent = 0);
@@ -78,7 +78,7 @@ protected:
 			const int daysInMonth, QVariantList::const_iterator& index,
 			const QVariantList::const_iterator& end);
 
-	QSharedPointer<DateFactory> m_dateFactory;
+	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
 
 	QSharedPointer<UserDataStore> m_userDataStore;
 

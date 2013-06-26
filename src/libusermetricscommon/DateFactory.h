@@ -16,12 +16,12 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSOUTPUT_DATEFACTORY_H_
-#define USERMETRICSOUTPUT_DATEFACTORY_H_
+#ifndef USERMETRICSCOMMON_DATEFACTORY_H_
+#define USERMETRICSCOMMON_DATEFACTORY_H_
 
 #include <QtCore/QDate>
 
-namespace UserMetricsOutput {
+namespace UserMetricsCommon {
 
 class DateFactory: public QObject {
 public:
@@ -34,4 +34,4 @@ public:
 
 }
 
-#endif // USERMETRICSOUTPUT_DATEFACTORY_H_
+#endif // USERMETRICSCOMMON_DATEFACTORY_H_

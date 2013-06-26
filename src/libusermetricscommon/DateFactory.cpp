@@ -16,9 +16,9 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/DateFactory.h>
+#include <libusermetricscommon/DateFactory.h>
 
-using namespace UserMetricsOutput;
+using namespace UserMetricsCommon;
 
 DateFactory::DateFactory() {
 }

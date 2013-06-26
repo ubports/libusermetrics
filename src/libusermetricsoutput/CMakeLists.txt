@@ -11,8 +11,6 @@ set(USERMETRICSOUTPUT_SOURCES
 	ColorThemeProvider.cpp
 	HardCodedColorThemeProvider.cpp
 	DataSet.cpp
-	DateFactory.cpp
-	DateFactoryImpl.cpp
 	UserData.cpp
 	UserDataStore.cpp
 	UserMetrics.cpp
@@ -38,6 +36,11 @@ qt5_use_modules(
 	${USERMETRICS_OUTPUT_DEPENDENCIES}
 )
 
+target_link_libraries(
+	usermetricsoutput-static
+	usermetricscommon
+)
+
 set_target_properties(
 	usermetricsoutput-static
 	PROPERTIES
@@ -55,6 +58,11 @@ add_library(
 qt5_use_modules(
 	usermetricsoutput
 	${USERMETRICS_OUTPUT_DEPENDENCIES}
+)
+
+target_link_libraries(
+	usermetricsoutput
+	usermetricscommon
 )
 
 set_target_properties(

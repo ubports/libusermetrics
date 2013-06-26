@@ -16,22 +16,16 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSOUTPUT_DATEFACTORYIMPL_H_
-#define USERMETRICSOUTPUT_DATEFACTORYIMPL_H_
+#include <libusermetricscommon/DateFactoryImpl.h>
 
-#include <DateFactory.h>
+using namespace UserMetricsCommon;
 
-namespace UserMetricsOutput {
-
-class DateFactoryImpl: public DateFactory {
-public:
-	DateFactoryImpl();
-
-	virtual ~DateFactoryImpl();
-
-	virtual QDate currentDate() const;
-};
-
+DateFactoryImpl::DateFactoryImpl() {
 }
 
-#endif // USERMETRICSOUTPUT_DATEFACTORYIMPL_H_
+DateFactoryImpl::~DateFactoryImpl() {
+}
+
+QDate DateFactoryImpl::currentDate() const {
+	return QDate::currentDate();
+}
