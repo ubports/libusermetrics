@@ -56,6 +56,8 @@ public:
 
 	QDBusObjectPath createDataSet(const QString &dataSource);
 
+	QSharedPointer<DBusDataSet> dataSet(const QString &dataSource) const;
+
 protected:
 	void syncDatabase();
 

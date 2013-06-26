@@ -158,10 +158,10 @@ QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
 	return QDBusObjectPath((*m_userData.constFind(username))->path());
 }
 
-DBusDataSourcePtr DBusUserMetrics::dataSource(const QString &name) {
+DBusDataSourcePtr DBusUserMetrics::dataSource(const QString &name) const {
 	return m_dataSources.value(name);
 }
 
-DBusUserDataPtr DBusUserMetrics::userData(const QString &username) {
+DBusUserDataPtr DBusUserMetrics::userData(const QString &username) const {
 	return m_userData.value(username);
 }

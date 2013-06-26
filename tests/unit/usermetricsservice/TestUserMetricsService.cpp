@@ -19,6 +19,7 @@
 #include <usermetricsservice/DBusUserMetrics.h>
 #include <usermetricsservice/DBusDataSource.h>
 #include <usermetricsservice/DBusUserData.h>
+#include <usermetricsservice/DBusDataSet.h>
 
 #include <testutils/QStringPrinter.h>
 
@@ -47,10 +48,12 @@ protected:
 		db.setDatabaseName(":memory:");
 		db.open();
 
+//		QDjango::setDebugEnabled(true);
 		QDjango::setDatabase(db);
 	}
 
 	virtual ~TestUserMetricsService() {
+		db.close();
 		QSqlDatabase::removeDatabase("test-user-metrics-service");
 	}
 
@@ -126,6 +129,40 @@ TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
 		EXPECT_EQ(QString("alice"), alice->username());
+	}
+}
+
+TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
+	QVariantList data( { 100.0, 50.0, 0.0, -50.0, -100.0 });
+
+	{
+		DBusUserMetrics userMetrics(connection);
+
+		userMetrics.createDataSource("twitter", "%1 tweets received");
+		userMetrics.createUserData("alice");
+
+		DBusUserDataPtr alice(userMetrics.userData("alice"));
+
+		// should re-use the same data set
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSet/1"),
+				alice->createDataSet("twitter").path());;
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSet/1"),
+				alice->createDataSet("twitter").path());;
+
+		DBusDataSetPtr twitter(alice->dataSet("twitter"));
+
+		twitter->update(data);
+	}
+
+	{
+		DBusUserMetrics userMetrics(connection);
+
+		DBusUserDataPtr alice(userMetrics.userData("alice"));
+		EXPECT_EQ(QString("alice"), alice->username());
+
+		DBusDataSetPtr twitter(alice->dataSet("twitter"));
+
+		EXPECT_EQ(data, twitter->data());
 	}
 }
 

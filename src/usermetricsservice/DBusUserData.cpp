@@ -73,8 +73,6 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 		return QDBusObjectPath();
 	}
 
-	DataSet dataSet;
-
 	QDjangoQuerySet<DataSet> dataSets;
 	QDjangoQuerySet<DataSet> query = dataSets.filter(
 			QDjangoWhere("userData__username", QDjangoWhere::Equals,
@@ -82,10 +80,10 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 			QDjangoWhere("dataSource__name", QDjangoWhere::Equals,
 					dataSourceName));
 
-	int id;
-
-	qDebug() << "Query size" << query.size();
 	Q_ASSERT(query.size() != -1);
+
+	DataSet dataSet;
+	int id;
 
 	if (query.size() == 0) {
 		UserData userData;
@@ -96,7 +94,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 		DataSource::findByName(dataSourceName, &dataSource);
 		dataSet.setDataSource(&dataSource);
 
-		dataSet.save();
+		Q_ASSERT(dataSet.save());
 
 		id = dataSet.id();
 		qDebug() << "new DataSet " << id;
@@ -132,4 +130,16 @@ void DBusUserData::syncDatabase() {
 	for (int id : toRemove) {
 		m_dataSets.remove(id);
 	}
+}
+
+DBusDataSetPtr DBusUserData::dataSet(const QString &dataSource) const {
+	QDjangoQuerySet<DataSet> dataSets;
+	QScopedPointer<DataSet> dataSet(
+			dataSets.filter(
+					QDjangoWhere("userData__username", QDjangoWhere::Equals,
+							m_username)).get(
+					QDjangoWhere("dataSource__name", QDjangoWhere::Equals,
+							dataSource)));
+
+	return m_dataSets.value(dataSet->id());
 }

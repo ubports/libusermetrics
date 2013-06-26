@@ -16,8 +16,12 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
+#include <usermetricsservice/database/DataSet.h>
 #include <usermetricsservice/DBusDataSet.h>
 #include <usermetricsservice/DataSetAdaptor.h>
+
+#include <QtCore/QByteArray>
+#include <QtCore/QDataStream>
 
 using namespace UserMetricsService;
 
@@ -37,8 +41,33 @@ DBusDataSet::~DBusDataSet() {
 	connection.unregisterObject(m_path);
 }
 
-void DBusDataSet::update(const QVariantList &data) {
+QVariantList DBusDataSet::data() const {
+	DataSet dataSet;
+	DataSet::findById(m_id, &dataSet);
 
+	const QByteArray &byteArray(dataSet.data());
+	QVariantList data;
+	{
+		QDataStream dataStream(byteArray);
+		dataStream >> data;
+	}
+
+	return data;
+}
+
+void DBusDataSet::update(const QVariantList &data) {
+	QByteArray byteArray;
+	{
+		QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+		dataStream << data;
+	}
+
+	DataSet dataSet;
+	DataSet::findById(m_id, &dataSet);
+
+	dataSet.setLastUpdated(QDate::currentDate());
+	dataSet.setData(byteArray);
+	Q_ASSERT(dataSet.save());
 }
 
 int DBusDataSet::id() const {

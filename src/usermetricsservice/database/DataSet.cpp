@@ -18,10 +18,12 @@
 
 #include <usermetricsservice/database/DataSet.h>
 
+#include <QDjangoQuerySet.h>
+
 using namespace UserMetricsService;
 
 DataSet::DataSet() :
-		m_id(0) {
+		m_id(0), m_data() {
 }
 
 DataSet::~DataSet() {
@@ -51,11 +53,23 @@ void DataSet::setDataSource(DataSource *dataSource) {
 	setForeignKey("dataSource", dataSource);
 }
 
-const QString & DataSet::data() const {
+const QByteArray & DataSet::data() const {
 	return m_data;
 }
 
-void DataSet::setData(const QString &data) {
+void DataSet::setData(const QByteArray &data) {
 	m_data = data;
 }
 
+const QDate & DataSet::lastUpdated() const {
+	return m_lastUpdated;
+}
+
+void DataSet::setLastUpdated(const QDate &lastUpdated) {
+	m_lastUpdated = lastUpdated;
+}
+
+void DataSet::findById(int id, DataSet *dataSet) {
+	QDjangoQuerySet<DataSet>().get(QDjangoWhere("id", QDjangoWhere::Equals, id),
+			dataSet);
+}

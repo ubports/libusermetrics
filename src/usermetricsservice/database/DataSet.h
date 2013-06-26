@@ -22,6 +22,8 @@
 #include <usermetricsservice/database/DataSource.h>
 #include <usermetricsservice/database/UserData.h>
 
+#include <QtCore/QDate>
+
 #include <QDjangoModel.h>
 
 namespace UserMetricsService {
@@ -35,7 +37,9 @@ Q_PROPERTY(UserMetricsService::UserData* userData READ userData WRITE setUserDat
 
 Q_PROPERTY(UserMetricsService::DataSource* dataSource READ dataSource WRITE setDataSource)
 
-Q_PROPERTY(QString data READ data WRITE setData)
+Q_PROPERTY(QByteArray data READ data WRITE setData)
+
+Q_PROPERTY(QDate lastUpdated READ lastUpdated WRITE setLastUpdated)
 
 Q_CLASSINFO("id", "primary_key=true auto_increment=true")
 
@@ -43,10 +47,16 @@ Q_CLASSINFO("userData", "on_delete=cascade")
 
 Q_CLASSINFO("dataSource", "on_delete=cascade")
 
+Q_CLASSINFO("data", "null=true")
+
+Q_CLASSINFO("lastUpdated", "null=true")
+
 public:
 	DataSet();
 
 	virtual ~DataSet();
+
+	static void findById(int id, DataSet *dataSet);
 
 	int id() const;
 
@@ -60,14 +70,20 @@ public:
 
 	void setDataSource(DataSource *dataSource);
 
-	const QString & data() const;
+	const QByteArray & data() const;
 
-	void setData(const QString &data);
+	void setData(const QByteArray &data);
+
+	const QDate & lastUpdated() const;
+
+	void setLastUpdated(const QDate &data);
 
 protected:
 	int m_id;
 
-	QString m_data;
+	QByteArray m_data;
+
+	QDate m_lastUpdated;
 };
 
 }

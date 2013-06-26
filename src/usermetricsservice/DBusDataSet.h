@@ -20,6 +20,7 @@
 #define USERMETRICSSERVICE_DBUSDATASET_H_
 
 #include <QtCore/QObject>
+#include <QtCore/QDate>
 #include <QtCore/QScopedPointer>
 #include <QtDBus/QtDBus>
 
@@ -33,6 +34,9 @@ typedef QSharedPointer<DBusDataSet> DBusDataSetPtr;
 
 class DBusDataSet: public QObject {
 Q_OBJECT
+
+Q_PROPERTY(QVariantList data READ data)
+
 public:
 	DBusDataSet(int id, QDBusConnection &dbusConnection, QObject *parent = 0);
 
@@ -41,6 +45,8 @@ public:
 	QString path() const;
 
 	int id() const;
+
+	QVariantList data() const;
 
 	void update(const QVariantList &data);
 
