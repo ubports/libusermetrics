@@ -23,18 +23,20 @@
 #include <usermetricsservice/database/DataSource.h>
 #include <usermetricsservice/database/UserData.h>
 #include <usermetricsservice/database/DataSet.h>
+#include <libusermetricscommon/DateFactory.h>
 
 #include <QDjango.h>
 #include <QDjangoQuerySet.h>
 
 #include <QtCore/QDebug>
 
+using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
 DBusUserMetrics::DBusUserMetrics(QDBusConnection &dbusConnection,
-		QObject *parent) :
+		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
-				new UserMetricsAdaptor(this)) {
+				new UserMetricsAdaptor(this)), m_dateFactory(dateFactory) {
 
 	// DBus setup
 	m_dbusConnection.registerService("com.canonical.UserMetrics");
@@ -97,7 +99,8 @@ void DBusUserMetrics::syncDatabase() {
 			// if we don't have a local cache
 			if (!m_userData.contains(username)) {
 				DBusUserDataPtr dbusUserData(
-						new DBusUserData(username, *this, m_dbusConnection));
+						new DBusUserData(username, *this, m_dbusConnection,
+								m_dateFactory));
 				m_userData.insert(userData.username(), dbusUserData);
 			}
 		}

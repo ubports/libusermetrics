@@ -26,6 +26,10 @@
 
 class DataSetAdaptor;
 
+namespace UserMetricsCommon {
+class DateFactory;
+}
+
 namespace UserMetricsService {
 
 class DBusDataSet;
@@ -38,7 +42,9 @@ Q_OBJECT
 Q_PROPERTY(QVariantList data READ data)
 
 public:
-	DBusDataSet(int id, QDBusConnection &dbusConnection, QObject *parent = 0);
+	DBusDataSet(int id, QDBusConnection &dbusConnection,
+			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
+			QObject *parent = 0);
 
 	virtual ~DBusDataSet();
 
@@ -54,6 +60,8 @@ protected:
 	QDBusConnection m_dbusConnection;
 
 	QScopedPointer<DataSetAdaptor> m_adaptor;
+
+	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
 
 	int m_id;
 

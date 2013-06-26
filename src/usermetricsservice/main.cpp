@@ -17,11 +17,13 @@
  */
 
 #include <usermetricsservice/DBusUserMetrics.h>
+#include <libusermetricscommon/DateFactoryImpl.h>
 
 #include <QtCore/QCoreApplication>
 #include <QDjangoQuerySet.h>
 #include <QSqlDatabase>
 
+using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
 int main(int argc, char *argv[]) {
@@ -36,7 +38,8 @@ int main(int argc, char *argv[]) {
 
 	QDBusConnection connection(QDBusConnection::sessionBus());
 
-	DBusUserMetrics userMetrics(connection);
+	QSharedPointer<DateFactory> dateFactory(new DateFactoryImpl());
+	DBusUserMetrics userMetrics(connection, dateFactory);
 
 	bool result(application.exec());
 

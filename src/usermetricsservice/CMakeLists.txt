@@ -56,6 +56,7 @@ qt5_use_modules(
 
 target_link_libraries(
 	usermetricsservice
+	usermetricscommon
 	${QDJANGO_DB_LIBRARIES}
 )
 

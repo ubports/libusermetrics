@@ -19,16 +19,18 @@
 #include <usermetricsservice/database/DataSet.h>
 #include <usermetricsservice/DBusDataSet.h>
 #include <usermetricsservice/DataSetAdaptor.h>
+#include <libusermetricscommon/DateFactory.h>
 
 #include <QtCore/QByteArray>
 #include <QtCore/QDataStream>
 
+using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
 DBusDataSet::DBusDataSet(int id, QDBusConnection &dbusConnection,
-		QObject *parent) :
+		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
-				new DataSetAdaptor(this)), m_id(id), m_path(
+				new DataSetAdaptor(this)), m_dateFactory(dateFactory), m_id(id), m_path(
 				QString("/com/canonical/UserMetrics/DataSet/%1").arg(m_id)) {
 
 	// DBus setup
@@ -65,7 +67,7 @@ void DBusDataSet::update(const QVariantList &data) {
 	DataSet dataSet;
 	DataSet::findById(m_id, &dataSet);
 
-	dataSet.setLastUpdated(QDate::currentDate());
+	dataSet.setLastUpdated(m_dateFactory->currentDate());
 	dataSet.setData(byteArray);
 	Q_ASSERT(dataSet.save());
 }

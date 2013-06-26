@@ -20,6 +20,7 @@
 #include <usermetricsservice/DBusDataSource.h>
 #include <usermetricsservice/DBusUserData.h>
 #include <usermetricsservice/DBusDataSet.h>
+#include <libusermetricscommon/DateFactory.h>
 
 #include <testutils/QStringPrinter.h>
 
@@ -32,11 +33,17 @@
 
 using namespace std;
 using namespace testing;
+using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
 namespace {
 
 static const QString bus = "unix:path=/tmp/usermetricsservice-test";
+
+class MockDateFactory: public DateFactory {
+public:
+	MOCK_CONST_METHOD0(currentDate, QDate());
+};
 
 class TestUserMetricsService: public Test {
 protected:
@@ -44,9 +51,13 @@ protected:
 			db(
 					QSqlDatabase::addDatabase("QSQLITE",
 							"test-user-metrics-service")), connection(
-					QDBusConnection::connectToBus(bus, "test-connection")) {
+					QDBusConnection::connectToBus(bus, "test-connection")), dateFactory(
+					new NiceMock<MockDateFactory>()) {
 		db.setDatabaseName(":memory:");
 		db.open();
+
+		ON_CALL(*dateFactory, currentDate()).WillByDefault(
+				Return(QDate(2001, 01, 07)));
 
 //		QDjango::setDebugEnabled(true);
 		QDjango::setDatabase(db);
@@ -61,11 +72,13 @@ protected:
 	QSqlDatabase db;
 
 	QDBusConnection connection;
+
+	QSharedPointer<MockDateFactory> dateFactory;
 };
 
 TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 	{
-		DBusUserMetrics userMetrics(connection);
+		DBusUserMetrics userMetrics(connection, dateFactory);
 
 		EXPECT_TRUE(userMetrics.dataSources().empty());
 
@@ -83,7 +96,7 @@ TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(connection);
+		DBusUserMetrics userMetrics(connection, dateFactory);
 
 		QList<QDBusObjectPath> dataSources(userMetrics.dataSources());
 		EXPECT_EQ(1, dataSources.size());
@@ -98,7 +111,7 @@ TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 
 TEST_F(TestUserMetricsService, UpdatesFormatString) {
 	{
-		DBusUserMetrics userMetrics(connection);
+		DBusUserMetrics userMetrics(connection, dateFactory);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received");
 
@@ -110,7 +123,7 @@ TEST_F(TestUserMetricsService, UpdatesFormatString) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(connection);
+		DBusUserMetrics userMetrics(connection, dateFactory);
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("%1 new format string"), twitter->formatString());
@@ -119,7 +132,7 @@ TEST_F(TestUserMetricsService, UpdatesFormatString) {
 
 TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 	{
-		DBusUserMetrics userMetrics(connection);
+		DBusUserMetrics userMetrics(connection, dateFactory);
 
 		EXPECT_TRUE(userMetrics.dataSources().empty());
 
@@ -136,7 +149,7 @@ TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(connection);
+		DBusUserMetrics userMetrics(connection, dateFactory);
 
 		QList<QDBusObjectPath> userData(userMetrics.userData());
 		EXPECT_EQ(1, userData.size());
@@ -152,7 +165,7 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 	QVariantList data( { 100.0, 50.0, 0.0, -50.0, -100.0 });
 
 	{
-		DBusUserMetrics userMetrics(connection);
+		DBusUserMetrics userMetrics(connection, dateFactory);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received");
 		userMetrics.createUserData("alice");
@@ -179,7 +192,7 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(connection);
+		DBusUserMetrics userMetrics(connection, dateFactory);
 
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
 		EXPECT_EQ(QString("alice"), alice->username());
@@ -197,14 +210,26 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 }
 
 TEST_F(TestUserMetricsService, CreateDataSetsWithUnknownSourceFailsGracefully) {
-	QVariantList data( { 100.0, 50.0, 0.0, -50.0, -100.0 });
+	DBusUserMetrics userMetrics(connection, dateFactory);
 
-	DBusUserMetrics userMetrics(connection);
+	userMetrics.createUserData("bob");
+	DBusUserDataPtr bob(userMetrics.userData("bob"));
 
-	userMetrics.createUserData("alice");
-	DBusUserDataPtr alice(userMetrics.userData("alice"));
+	EXPECT_EQ(QString(), bob->createDataSet("twitter").path());
+}
 
-	EXPECT_EQ(QString(), alice->createDataSet("twitter").path());;
+TEST_F(TestUserMetricsService, UpdateData) {
+	DBusUserMetrics userMetrics(connection, dateFactory);
+	userMetrics.createDataSource("twitter", "foo");
+
+	userMetrics.createUserData("bob");
+	DBusUserDataPtr bob(userMetrics.userData("bob"));
+
+	bob->createDataSet("twitter");
+	DBusDataSetPtr twitter(bob->dataSet("twitter"));
+
+	QVariantList data( { 1.0, 2.0, 3.0, 4.0, 5.0 });
+	twitter->update(data);
 }
 
 } // namespace
