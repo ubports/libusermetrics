@@ -68,10 +68,7 @@ QList<QDBusObjectPath> DBusUserData::dataSets() const {
 }
 
 QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
-	qDebug() << "createDataSet(" << dataSourceName << ")";
-
 	if (!DataSource::exists(dataSourceName)) {
-		qDebug() << "Unknown data source: " << dataSourceName;
 		return QDBusObjectPath();
 	}
 
@@ -99,14 +96,12 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 		Q_ASSERT(dataSet.save());
 
 		id = dataSet.id();
-		qDebug() << "new DataSet " << id;
 
 		syncDatabase();
 	} else {
 		query.at(0, &dataSet);
 
 		id = dataSet.id();
-		qDebug() << "existing DataSet " << id;
 	}
 
 	DBusDataSetPtr dataSetPtr(m_dataSets.value(id));

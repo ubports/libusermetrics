@@ -28,8 +28,6 @@
 #include <QDjango.h>
 #include <QDjangoQuerySet.h>
 
-#include <QtCore/QDebug>
-
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
@@ -116,8 +114,6 @@ void DBusUserMetrics::syncDatabase() {
 
 QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		const QString &formatString) {
-	qDebug() << "createDataSource(" << name << "," << formatString << ")";
-
 	QDjangoQuerySet<DataSource> dataSourcesQuery;
 	QDjangoQuerySet<DataSource> dataSourceQuery(
 			dataSourcesQuery.filter(
@@ -144,8 +140,6 @@ QList<QDBusObjectPath> DBusUserMetrics::userData() const {
 }
 
 QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
-	qDebug() << "createUserData(" << username << ")";
-
 	QDjangoQuerySet<UserData> query(
 			QDjangoQuerySet<UserData>().filter(
 					QDjangoWhere("username", QDjangoWhere::Equals, username)));
