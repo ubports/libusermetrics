@@ -16,44 +16,45 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSSERVICE_DBUSDATASET_H_
-#define USERMETRICSSERVICE_DBUSDATASET_H_
+#include <QDjangoModel.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QScopedPointer>
-#include <QtDBus/QtDBus>
-
-class DataSetAdaptor;
+#ifndef USERMETRICSSERVICE_DATASOURCE_H_
+#define USERMETRICSSERVICE_DATASOURCE_H_
 
 namespace UserMetricsService {
 
-class DBusDataSet;
-
-typedef QSharedPointer<DBusDataSet> DBusDataSetPtr;
-
-class DBusDataSet: public QObject {
+class Q_DECL_EXPORT DataSource: public QDjangoModel {
 Q_OBJECT
+
+Q_PROPERTY(QString name READ name WRITE setName)
+
+Q_PROPERTY(QString formatString READ formatString WRITE setFormatString)
+
+Q_CLASSINFO("name", "unique=true")
+
 public:
-	DBusDataSet(int id, QDBusConnection &dbusConnection, QObject *parent = 0);
+	DataSource();
 
-	virtual ~DBusDataSet();
+	virtual ~DataSource();
 
-	QString path() const;
+	static void findByName(const QString &name, DataSource *dataSource);
 
-	int id() const;
+	static bool exists(const QString &name);
 
-	void update(const QVariantList &data);
+	const QString & name() const;
+
+	void setName(const QString &name);
+
+	const QString & formatString() const;
+
+	void setFormatString(const QString &formatString);
 
 protected:
-	QDBusConnection m_dbusConnection;
+	QString m_name;
 
-	QScopedPointer<DataSetAdaptor> m_adaptor;
-
-	int m_id;
-
-	QString m_path;
+	QString m_formatString;
 };
 
 }
 
-#endif // USERMETRICSSERVICE_DBUSDATASET_H_
+#endif // USERMETRICSSERVICE_DATASOURCE_H_

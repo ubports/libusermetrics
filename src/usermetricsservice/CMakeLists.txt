@@ -1,13 +1,12 @@
 
 set(USERMETRICSSERVICE_SOURCES
-	#DataSet.cpp
-	DataSource.cpp
-	#UserData.cpp
+	database/DataSet.cpp
+	database/DataSource.cpp
+	database/UserData.cpp
 	DBusDataSet.cpp
 	DBusDataSource.cpp
 	DBusUserData.cpp
 	DBusUserMetrics.cpp
-	main.cpp
 )
 
 qt5_add_dbus_adaptor(
@@ -26,8 +25,25 @@ qt5_add_dbus_adaptor(
 	DataSourceAdaptor
 )
 
-add_executable(
+qt5_add_dbus_adaptor(
+	USERMETRICSSERVICE_SOURCES
+	"${DATA_DIR}/com.canonical.UserMetrics.UserData.xml"
+	usermetricsservice/DBusUserData.h
+	UserMetricsService::DBusUserData
+	UserDataAdaptor
+)
+
+qt5_add_dbus_adaptor(
+	USERMETRICSSERVICE_SOURCES
+	"${DATA_DIR}/com.canonical.UserMetrics.DataSet.xml"
+	usermetricsservice/DBusDataSet.h
+	UserMetricsService::DBusDataSet
+	DataSetAdaptor
+)
+
+add_library(
 	usermetricsservice
+	STATIC
 	${USERMETRICSSERVICE_SOURCES}
 )
 
@@ -41,4 +57,29 @@ qt5_use_modules(
 target_link_libraries(
 	usermetricsservice
 	${QDJANGO_DB_LIBRARIES}
+)
+
+############################
+# Service executable
+############################
+
+add_executable(
+	usermetricsservice-bin
+	main.cpp
+)
+
+set_target_properties(
+	usermetricsservice-bin
+	PROPERTIES
+	OUTPUT_NAME "usermetricsservice"
+)
+
+qt5_use_modules(
+	usermetricsservice-bin
+	Core
+)
+
+target_link_libraries(
+	usermetricsservice-bin
+	usermetricsservice
 )

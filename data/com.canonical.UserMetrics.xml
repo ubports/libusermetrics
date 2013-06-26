@@ -13,6 +13,17 @@
 			<arg name="name" type="s" direction="in"/>
 			<arg name="formatString" type="s" direction="in"/>
 		</method>
+		
+		<property name="userData" type="ao" access="read"/>
+		
+		<signal name="userDataChanged">
+			<arg name="userData" type="ao" direction="out"/>
+		</signal>
+		
+		<method name="createUserData">
+			<arg type="o" direction="out"/>
+			<arg name="username" type="s" direction="in"/>
+		</method>
 
 	</interface>
 </node>

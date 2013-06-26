@@ -17,12 +17,34 @@
  */
 
 #include <usermetricsservice/DBusDataSet.h>
+#include <usermetricsservice/DataSetAdaptor.h>
 
 using namespace UserMetricsService;
 
-DBusDataSet::DBusDataSet() {
+DBusDataSet::DBusDataSet(int id, QDBusConnection &dbusConnection,
+		QObject *parent) :
+		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
+				new DataSetAdaptor(this)), m_id(id), m_path(
+				QString("/com/canonical/UserMetrics/DataSet/%1").arg(m_id)) {
 
+	// DBus setup
+	QDBusConnection connection(QDBusConnection::sessionBus());
+	connection.registerObject(m_path, this);
 }
 
 DBusDataSet::~DBusDataSet() {
+	QDBusConnection connection(QDBusConnection::sessionBus());
+	connection.unregisterObject(m_path);
+}
+
+void DBusDataSet::update(const QVariantList &data) {
+
+}
+
+int DBusDataSet::id() const {
+	return m_id;
+}
+
+QString DBusDataSet::path() const {
+	return m_path;
 }

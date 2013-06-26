@@ -16,44 +16,34 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSSERVICE_DBUSDATASET_H_
-#define USERMETRICSSERVICE_DBUSDATASET_H_
+#ifndef USERMETRICSSERVICE_USERDATA_H_
+#define USERMETRICSSERVICE_USERDATA_H_
 
-#include <QtCore/QObject>
-#include <QtCore/QScopedPointer>
-#include <QtDBus/QtDBus>
-
-class DataSetAdaptor;
+#include <QDjangoModel.h>
 
 namespace UserMetricsService {
 
-class DBusDataSet;
-
-typedef QSharedPointer<DBusDataSet> DBusDataSetPtr;
-
-class DBusDataSet: public QObject {
+class Q_DECL_EXPORT UserData: public QDjangoModel {
 Q_OBJECT
+
+Q_PROPERTY(QString username READ username WRITE setUsername)
+
+Q_CLASSINFO("username", "unique=true")
+
 public:
-	DBusDataSet(int id, QDBusConnection &dbusConnection, QObject *parent = 0);
+	UserData();
 
-	virtual ~DBusDataSet();
+	virtual ~UserData();
 
-	QString path() const;
+	static void findByName(const QString &name, UserData *dataSource);
 
-	int id() const;
+	const QString & username() const;
 
-	void update(const QVariantList &data);
+	void setUsername(const QString &username);
 
 protected:
-	QDBusConnection m_dbusConnection;
-
-	QScopedPointer<DataSetAdaptor> m_adaptor;
-
-	int m_id;
-
-	QString m_path;
+	QString m_username;
 };
 
 }
-
-#endif // USERMETRICSSERVICE_DBUSDATASET_H_
+#endif // USERMETRICSSERVICE_USERDATA_H_

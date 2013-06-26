@@ -16,44 +16,27 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSSERVICE_DBUSDATASET_H_
-#define USERMETRICSSERVICE_DBUSDATASET_H_
+#include <usermetricsservice/DBusUserMetrics.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QScopedPointer>
-#include <QtDBus/QtDBus>
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
-class DataSetAdaptor;
+using namespace std;
+using namespace testing;
+using namespace UserMetricsService;
 
-namespace UserMetricsService {
+namespace {
 
-class DBusDataSet;
-
-typedef QSharedPointer<DBusDataSet> DBusDataSetPtr;
-
-class DBusDataSet: public QObject {
-Q_OBJECT
-public:
-	DBusDataSet(int id, QDBusConnection &dbusConnection, QObject *parent = 0);
-
-	virtual ~DBusDataSet();
-
-	QString path() const;
-
-	int id() const;
-
-	void update(const QVariantList &data);
-
+class TestUserMetricsService: public Test {
 protected:
-	QDBusConnection m_dbusConnection;
+	TestUserMetricsService() {
+	}
 
-	QScopedPointer<DataSetAdaptor> m_adaptor;
-
-	int m_id;
-
-	QString m_path;
+	virtual ~TestUserMetricsService() {
+	}
 };
 
+TEST_F(TestUserMetricsService, Foo) {
 }
 
-#endif // USERMETRICSSERVICE_DBUSDATASET_H_
+} // namespace

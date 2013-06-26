@@ -17,12 +17,119 @@
  */
 
 #include <usermetricsservice/DBusUserData.h>
+#include <usermetricsservice/DBusDataSet.h>
+#include <usermetricsservice/UserDataAdaptor.h>
+#include <usermetricsservice/database/DataSet.h>
+#include <usermetricsservice/database/DataSource.h>
+#include <usermetricsservice/database/UserData.h>
+
+#include <QDjangoQuerySet.h>
 
 using namespace UserMetricsService;
 
-DBusUserData::DBusUserData() {
+DBusUserData::DBusUserData(const QString &username,
+		DBusUserMetrics &userMetrics, QDBusConnection &dbusConnection,
+		QObject *parent) :
+		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
+				new UserDataAdaptor(this)), m_userMetrics(userMetrics), m_username(
+				username), m_path(
+				QString("/com/canonical/UserMetrics/UserData/%1").arg(
+						m_username)) {
 
+	// DBus setup
+	QDBusConnection connection(QDBusConnection::sessionBus());
+	connection.registerObject(m_path, this);
+
+	// Database setup
+	syncDatabase();
 }
 
 DBusUserData::~DBusUserData() {
+	QDBusConnection connection(QDBusConnection::sessionBus());
+	connection.unregisterObject(m_path);
+}
+
+QString DBusUserData::path() const {
+	return m_path;
+}
+
+QString DBusUserData::username() const {
+	return m_username;
+}
+
+QList<QDBusObjectPath> DBusUserData::dataSets() const {
+	QList<QDBusObjectPath> dataSets;
+	for (DBusDataSetPtr dataSet : m_dataSets.values()) {
+		dataSets << QDBusObjectPath(dataSet->path());
+	}
+	return dataSets;
+}
+
+QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
+	qDebug() << "createDataSet(" << dataSourceName << ")";
+
+	if (!DataSource::exists(dataSourceName)) {
+		qDebug() << "Unknown data source: " << dataSourceName;
+		return QDBusObjectPath();
+	}
+
+	DataSet dataSet;
+
+	QDjangoQuerySet<DataSet> dataSets;
+	QDjangoQuerySet<DataSet> query = dataSets.filter(
+			QDjangoWhere("userData__username", QDjangoWhere::Equals,
+					m_username)).filter(
+			QDjangoWhere("dataSource__name", QDjangoWhere::Equals,
+					dataSourceName));
+
+	int id;
+
+	qDebug() << "Query size" << query.size();
+	Q_ASSERT(query.size() != -1);
+
+	if (query.size() == 0) {
+		UserData userData;
+		UserData::findByName(m_username, &userData);
+		dataSet.setUserData(&userData);
+
+		DataSource dataSource;
+		DataSource::findByName(dataSourceName, &dataSource);
+		dataSet.setDataSource(&dataSource);
+
+		dataSet.save();
+
+		id = dataSet.id();
+		qDebug() << "new DataSet " << id;
+
+		syncDatabase();
+	} else {
+		query.at(0, &dataSet);
+
+		id = dataSet.id();
+		qDebug() << "existing DataSet " << id;
+	}
+
+	DBusDataSetPtr dataSetPtr(m_dataSets.value(id));
+	Q_ASSERT(dataSetPtr.data());
+	return QDBusObjectPath(dataSetPtr->path());
+}
+
+void DBusUserData::syncDatabase() {
+	QSet<int> dataSetIds;
+	QDjangoQuerySet<DataSet> query;
+	for (const DataSet &dataSet : query) {
+		const int id(dataSet.id());
+		dataSetIds << id;
+		// if we don't have a local cache
+		if (!m_dataSets.contains(id)) {
+			DBusDataSetPtr dbusDataSet(new DBusDataSet(id, m_dbusConnection));
+			m_dataSets.insert(id, dbusDataSet);
+		}
+	}
+	// remove any cached references to deleted data sets
+	QSet<int> cachedDataSetIds(QSet<int>::fromList(m_dataSets.keys()));
+	QSet<int> &toRemove(cachedDataSetIds.subtract(dataSetIds));
+	for (int id : toRemove) {
+		m_dataSets.remove(id);
+	}
 }

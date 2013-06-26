@@ -30,6 +30,7 @@ class UserMetricsAdaptor;
 namespace UserMetricsService {
 
 class DBusDataSource;
+class DBusUserData;
 
 class DBusUserMetrics: public QObject {
 Q_OBJECT
@@ -46,10 +47,13 @@ public:
 	QDBusObjectPath createDataSource(const QString &name,
 			const QString &formatString);
 
+	QList<QDBusObjectPath> userData() const;
+
+	QDBusObjectPath createUserData(const QString &username);
+
 public Q_SLOTS:
 
 Q_SIGNALS:
-//	void LateEvent(const QString &eventkind);
 
 protected:
 	void syncDatabase();
@@ -59,6 +63,8 @@ protected:
 	QScopedPointer<UserMetricsAdaptor> m_adaptor;
 
 	QHash<QString, QSharedPointer<DBusDataSource>> m_dataSources;
+
+	QHash<QString, QSharedPointer<DBusUserData>> m_userData;
 };
 
 }

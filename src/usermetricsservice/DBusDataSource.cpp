@@ -16,7 +16,7 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <usermetricsservice/DataSource.h>
+#include <usermetricsservice/database/DataSource.h>
 #include <usermetricsservice/DBusDataSource.h>
 #include <usermetricsservice/DataSourceAdaptor.h>
 
@@ -29,6 +29,7 @@ DBusDataSource::DBusDataSource(const QString &name,
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new DataSourceAdaptor(this)), m_name(name), m_path(
 				QString("/com/canonical/UserMetrics/DataSource/%1").arg(m_name)) {
+
 	// DBus setup
 	QDBusConnection connection(QDBusConnection::sessionBus());
 	connection.registerObject(m_path, this);
@@ -37,15 +38,6 @@ DBusDataSource::DBusDataSource(const QString &name,
 DBusDataSource::~DBusDataSource() {
 	QDBusConnection connection(QDBusConnection::sessionBus());
 	connection.unregisterObject(m_path);
-}
-
-void DBusDataSource::lookupDataSource(DataSource *dataSource) const {
-	QDjangoQuerySet<DataSource> dataSourcesQuery;
-	QDjangoQuerySet<DataSource> dataSourceQuery(
-			dataSourcesQuery.filter(
-					QDjangoWhere("name", QDjangoWhere::Equals, m_name)));
-
-	dataSourceQuery.at(0, dataSource);
 }
 
 QString DBusDataSource::path() const {
@@ -58,13 +50,13 @@ QString DBusDataSource::name() const {
 
 QString DBusDataSource::formatString() const {
 	DataSource dataSource;
-	lookupDataSource(&dataSource);
+	DataSource::findByName(m_name, &dataSource);
 	return dataSource.formatString();
 }
 
 void DBusDataSource::setFormatString(const QString &formatString) {
 	DataSource dataSource;
-	lookupDataSource(&dataSource);
+	DataSource::findByName(m_name, &dataSource);
 	dataSource.setFormatString(formatString);
 	dataSource.save();
 }

@@ -19,13 +19,57 @@
 #ifndef USERMETRICSSERVICE_DBUSUSERDATA_H_
 #define USERMETRICSSERVICE_DBUSUSERDATA_H_
 
+#include <QtCore/QObject>
+#include <QtDBus/QtDBus>
+#include <QtCore/QScopedPointer>
+#include <QtCore/QHash>
+
+class UserDataAdaptor;
+
 namespace UserMetricsService {
 
-class DBusUserData {
+class UserData;
+class DBusDataSet;
+class DBusUserData;
+class DBusUserMetrics;
+
+typedef QSharedPointer<DBusUserData> DBusUserDataPtr;
+
+class DBusUserData: public QObject {
+Q_OBJECT
+
+Q_PROPERTY(QString username READ username)
+
+Q_PROPERTY(QList<QDBusObjectPath> dataSets READ dataSets)
+
 public:
-	DBusUserData();
+	DBusUserData(const QString &username, DBusUserMetrics &userMetrics,
+			QDBusConnection &dbusConnection, QObject *parent = 0);
 
 	virtual ~DBusUserData();
+
+	QString path() const;
+
+	QString username() const;
+
+	QList<QDBusObjectPath> dataSets() const;
+
+	QDBusObjectPath createDataSet(const QString &dataSource);
+
+protected:
+	void syncDatabase();
+
+	QDBusConnection m_dbusConnection;
+
+	QScopedPointer<UserDataAdaptor> m_adaptor;
+
+	DBusUserMetrics &m_userMetrics;
+
+	QString m_username;
+
+	QString m_path;
+
+	QHash<int, QSharedPointer<DBusDataSet>> m_dataSets;
 };
 
 }

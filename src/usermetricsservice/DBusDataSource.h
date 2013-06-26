@@ -20,7 +20,7 @@
 #define USERMETRICSSERVICE_DBUSDATASOURCE_H_
 
 #include <QtCore/QObject>
-#include <QtCore/QSharedPointer>
+#include <QtCore/QScopedPointer>
 
 #include <QDBusConnection>
 
