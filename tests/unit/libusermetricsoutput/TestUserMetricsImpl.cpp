@@ -202,11 +202,12 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	}
 	data << 70.0 << 65.0;
 
-	UserMetricsStore::iterator userDataIterator(userDataStore->find("username"));
-	UserMetricsStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->find("username"));
+	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->find("data-source-id");
-	UserData::DataSetPtr dataSet(*dataSetIterator);
+	DataSetPtr dataSet(*dataSetIterator);
 
 	dataSet->setFormatString("test format string %1");
 
@@ -272,11 +273,12 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	}
 	data << 70.0 << 65.0;
 
-	UserMetricsStore::iterator userDataIterator(userDataStore->find("username"));
-	UserMetricsStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->find("username"));
+	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->find("data-source-id2");
-	UserData::DataSetPtr dataSet(*dataSetIterator);
+	DataSetPtr dataSet(*dataSetIterator);
 
 	dataSet->setFormatString("test other format string %1");
 
@@ -335,11 +337,12 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	// Data just for December
 	data << 95.0 << 100.0 << 90.0 << 0.0;
 
-	UserMetricsStore::iterator userDataIterator(userDataStore->find("username"));
-	UserMetricsStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->find("username"));
+	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->find("data-source-id");
-	UserData::DataSetPtr dataSet(*dataSetIterator);
+	DataSetPtr dataSet(*dataSetIterator);
 
 	dataSet->setFormatString("this format string won't be used %1");
 
@@ -394,11 +397,12 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	// Data just for January
 	data << 100.0 << 0.0;
 
-	UserMetricsStore::iterator userDataIterator(userDataStore->find("username"));
-	UserMetricsStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->find("username"));
+	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->find("data-source-id");
-	UserData::DataSetPtr dataSet(*dataSetIterator);
+	DataSetPtr dataSet(*dataSetIterator);
 
 	dataSet->setFormatString("a format string with %1 in it");
 
@@ -446,15 +450,16 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 	// the fake date provider says the date is 2001/01/07
 
-	UserMetricsStore::iterator userDataIterator(userDataStore->find("username"));
-	UserMetricsStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->find("username"));
+	UserDataPtr userData(*userDataIterator);
 
 	// first data set
 	{
 		QVariantList data;
 		data << 100.0 << 95.0 << 0.0 << 0.0 << 0.0 << 0.0 << 90.0 << 85.0;
 		UserData::iterator dataSetIterator = userData->find("data-source-one");
-		UserData::DataSetPtr dataSet(*dataSetIterator);
+		DataSetPtr dataSet(*dataSetIterator);
 		dataSet->setFormatString("data source one %1 value");
 		dataSet->setData(QDate(2001, 1, 4), data);
 	}
@@ -465,7 +470,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 		data << 50.0 << 65.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 				<< 75.0 << 100.0;
 		UserData::iterator dataSetIterator = userData->find("data-source-two");
-		UserData::DataSetPtr dataSet(*dataSetIterator);
+		DataSetPtr dataSet(*dataSetIterator);
 		dataSet->setFormatString("data source 2 %1 value");
 		dataSet->setData(QDate(2001, 1, 7), data);
 	}
@@ -553,7 +558,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 	{
 		UserMetricsStore::iterator userDataIterator(
 				userDataStore->find("first-user"));
-		UserMetricsStore::UserDataPtr userData(*userDataIterator);
+		UserDataPtr userData(*userDataIterator);
 
 		// first data set
 		{
@@ -561,7 +566,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			data << 100.0 << 95.0 << 0.0 << 0.0 << 0.0 << 0.0 << 90.0 << 85.0;
 			UserData::iterator dataSetIterator = userData->find(
 					"data-source-one");
-			UserData::DataSetPtr dataSet(*dataSetIterator);
+			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setFormatString("data source one %1 value");
 			dataSet->setData(QDate(2001, 1, 7), data);
 		}
@@ -573,7 +578,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 					<< 0.0 << 75.0 << 100.0;
 			UserData::iterator dataSetIterator = userData->find(
 					"data-source-two");
-			UserData::DataSetPtr dataSet(*dataSetIterator);
+			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setFormatString("data source two %1 value");
 			dataSet->setData(QDate(2001, 1, 7), data);
 		}
@@ -583,7 +588,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 	{
 		UserMetricsStore::iterator userDataIterator(
 				userDataStore->find("second-user"));
-		UserMetricsStore::UserDataPtr userData(*userDataIterator);
+		UserDataPtr userData(*userDataIterator);
 
 		// fourth data set
 		{
@@ -592,7 +597,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 					<< 0.0 << 5.0 << 10.0;
 			UserData::iterator dataSetIterator = userData->find(
 					"data-source-three");
-			UserData::DataSetPtr dataSet(*dataSetIterator);
+			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setFormatString("data source three %1 value");
 			dataSet->setData(QDate(2001, 1, 7), data);
 		}
@@ -604,7 +609,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 					<< 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 100.0 << 35.0;
 			UserData::iterator dataSetIterator = userData->find(
 					"data-source-xfour");
-			UserData::DataSetPtr dataSet(*dataSetIterator);
+			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setFormatString("data source four %1 value");
 			dataSet->setData(QDate(2001, 1, 7), data);
 		}

@@ -16,40 +16,27 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSOUTPUT_DATASETSTORE_H_
-#define USERMETRICSOUTPUT_DATASETSTORE_H_
+#ifndef USERMETRICSOUTPUT_SYNCEDUSERMETRICSSTORE_H_
+#define USERMETRICSOUTPUT_SYNCEDUSERMETRICSSTORE_H_
 
-#include <libusermetricsoutput/UserData.h>
-
-#include <QtCore/QSharedPointer>
-#include <QtCore/QMap>
+#include <libusermetricsoutput/UserMetricsStore.h>
+#include <libusermetricscommon/UserMetricsInterface.h>
 
 namespace UserMetricsOutput {
 
-typedef QSharedPointer<UserData> UserDataPtr;
-
-class UserMetricsStore: public QObject {
+class SyncedUserMetricsStore: public UserMetricsStore {
 public:
-	typedef QMap<QString, UserDataPtr> UserDataMap;
+	SyncedUserMetricsStore(const QDBusConnection &dbusConnection,
+			QObject *parent = 0);
 
-	typedef UserDataMap::iterator iterator;
-
-	typedef UserDataMap::const_iterator const_iterator;
-
-	UserMetricsStore(QObject *parent = 0);
-
-	virtual ~UserMetricsStore();
-
-	virtual const_iterator constFind(const QString &username) const;
-
-	virtual const_iterator constEnd() const;
-
-	virtual iterator find(const QString &username);
+	virtual ~SyncedUserMetricsStore();
 
 protected:
-	UserDataMap m_userData;
+	QDBusConnection m_dbusConnection;
+
+	com::canonical::UserMetrics m_interface;
 };
 
 }
 
-#endif // USERMETRICSOUTPUT_DATASETSTORE_H_
+#endif // USERMETRICSOUTPUT_SYNCEDUSERMETRICSSTORE_H_

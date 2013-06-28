@@ -41,6 +41,8 @@ Q_OBJECT
 
 Q_PROPERTY(QList<QDBusObjectPath> dataSources READ dataSources)
 
+Q_PROPERTY(QList<QDBusObjectPath> userDatas READ userDatas)
+
 public:
 	DBusUserMetrics(QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
@@ -55,7 +57,7 @@ public:
 
 	QSharedPointer<DBusDataSource> dataSource(const QString &name) const;
 
-	QList<QDBusObjectPath> userData() const;
+	QList<QDBusObjectPath> userDatas() const;
 
 	QDBusObjectPath createUserData(const QString &username);
 

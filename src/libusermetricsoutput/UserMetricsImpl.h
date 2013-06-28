@@ -104,11 +104,11 @@ protected:
 
 	UserMetricsStore::const_iterator m_userDataIterator;
 
-	UserMetricsStore::UserDataPtr m_userData;
+	UserDataPtr m_userData;
 
 	UserData::const_iterator m_dataSetIterator;
 
-	UserData::DataSetPtr m_dataSet;
+	DataSetPtr m_dataSet;
 };
 
 }

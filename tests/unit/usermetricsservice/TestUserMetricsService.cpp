@@ -141,7 +141,7 @@ TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
 		EXPECT_EQ(QString("alice"), alice->username());
 
-		QList<QDBusObjectPath> userData(userMetrics.userData());
+		QList<QDBusObjectPath> userData(userMetrics.userDatas());
 		EXPECT_EQ(1, userData.size());
 		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/1"),
 				userData.first().path());
@@ -150,7 +150,7 @@ TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 	{
 		DBusUserMetrics userMetrics(*connection, dateFactory);
 
-		QList<QDBusObjectPath> userData(userMetrics.userData());
+		QList<QDBusObjectPath> userData(userMetrics.userDatas());
 		EXPECT_EQ(1, userData.size());
 		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/1"),
 				userData.first().path());

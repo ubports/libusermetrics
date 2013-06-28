@@ -69,7 +69,7 @@ TEST_F(TestUserMetricInputCAPI, TestNothingYet) {
 	{
 		QList<QDBusObjectPath> dataSources = userMetricsInterface.dataSources();
 		EXPECT_EQ(1, dataSources.size());
-		EXPECT_EQ(DBusPaths::dataSource(1), dataSources.first().path());
+		ASSERT_EQ(DBusPaths::dataSource(1), dataSources.first().path());
 	}
 
 	com::canonical::usermetrics::DataSource dataSourceInterface(
@@ -85,6 +85,7 @@ TEST_F(TestUserMetricInputCAPI, TestNothingYet) {
 	com::canonical::usermetrics::DataSet dataSetInterface(
 			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
 	QVariantList data(dataSetInterface.data());
+	ASSERT_EQ(3, data.size());
 	EXPECT_FLOAT_EQ(1.0, data.at(0).toDouble());
 	EXPECT_EQ(QString(""), data.at(1).toString());
 	EXPECT_FLOAT_EQ(0.1, data.at(2).toDouble());

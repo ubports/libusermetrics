@@ -25,10 +25,10 @@
 
 namespace UserMetricsOutput {
 
+typedef QSharedPointer<DataSet> DataSetPtr;
+
 class UserData: public QObject {
 public:
-	typedef QSharedPointer<DataSet> DataSetPtr;
-
 	typedef QMap<QString, DataSetPtr> DataSetMap;
 
 	typedef DataSetMap::iterator iterator;

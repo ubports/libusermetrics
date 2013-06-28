@@ -17,29 +17,28 @@
  */
 
 #include <libusermetricsoutput/SyncedUserMetricsStore.h>
-#include <libusermetricscommon/DateFactoryImpl.h>
-#include <libusermetricsoutput/HardCodedColorThemeProvider.h>
-#include <libusermetricsoutput/UserMetricsImpl.h>
+#include <libusermetricscommon/UserDataInterface.h>
+#include <libusermetricscommon/DBusPaths.h>
 
-using namespace UserMetricsOutput;
+using namespace com;
 using namespace UserMetricsCommon;
+using namespace UserMetricsOutput;
 
-UserMetrics::UserMetrics(QObject *parent) :
-		QObject(parent) {
+SyncedUserMetricsStore::SyncedUserMetricsStore(
+		const QDBusConnection &dbusConnection, QObject *parent) :
+		UserMetricsStore(parent), m_dbusConnection(dbusConnection), m_interface(
+				DBusPaths::serviceName(), DBusPaths::userMetrics(),
+				dbusConnection) {
+	qDebug() << "SyncedUserMetricsStore.new";
+	for (const QDBusObjectPath &path : m_interface.userDatas()) {
+		qDebug() << "SyncedUserMetricsStore.each(" << path.path();
+
+		canonical::usermetrics::UserData userData(DBusPaths::serviceName(),
+				path.path(), m_dbusConnection);
+		QString username(userData.username());
+		find(username);
+	}
 }
 
-UserMetrics::~UserMetrics() {
-}
-
-/**
- * Factory methods
- */
-
-UserMetrics * UserMetrics::getInstance() {
-	return new UserMetricsImpl(
-			QSharedPointer<DateFactory>(new DateFactoryImpl()),
-			QSharedPointer<UserMetricsStore>(
-					new SyncedUserMetricsStore(QDBusConnection::systemBus())),
-			QSharedPointer<ColorThemeProvider>(
-					new HardCodedColorThemeProvider()));
+SyncedUserMetricsStore::~SyncedUserMetricsStore() {
 }

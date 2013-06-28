@@ -145,7 +145,7 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 	return QDBusObjectPath((*m_dataSources.constFind(id))->path());
 }
 
-QList<QDBusObjectPath> DBusUserMetrics::userData() const {
+QList<QDBusObjectPath> DBusUserMetrics::userDatas() const {
 	QList<QDBusObjectPath> userDatas;
 	for (DBusUserDataPtr userData : m_userData.values()) {
 		userDatas << QDBusObjectPath(userData->path());
