@@ -9,6 +9,7 @@ Build-Depends: cmake,
                qtbase5-dev,
                libqdjango-dev,
                valgrind,
+               pkg-config,
 Standards-Version: 3.9.4
 Section: libs
 Homepage: http://launchpad.net/libusermetrics
