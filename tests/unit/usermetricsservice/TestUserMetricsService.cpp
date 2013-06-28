@@ -55,7 +55,7 @@ protected:
 							"test-user-metrics-service")), dateFactory(
 					new NiceMock<MockDateFactory>()) {
 		db.setDatabaseName(":memory:");
-		db.open();
+		Q_ASSERT(db.open());
 
 		ON_CALL(*dateFactory, currentDate()).WillByDefault(
 				Return(QDate(2001, 01, 07)));
