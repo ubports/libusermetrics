@@ -10,6 +10,8 @@ Build-Depends: cmake,
                libqdjango-dev,
                valgrind,
                pkg-config,
+               libqt5sql5-sqlite,
+               sqlite3,
 Standards-Version: 3.9.4
 Section: libs
 Homepage: http://launchpad.net/libusermetrics
