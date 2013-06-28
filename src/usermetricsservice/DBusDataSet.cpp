@@ -118,7 +118,13 @@ void DBusDataSet::update(const QVariantList &data) {
 	Q_ASSERT(dataSet.save());
 }
 
-QDate DBusDataSet::lastUpdated() const {
+uint DBusDataSet::lastUpdated() const {
+	const QDate &lastUpdated(lastUpdatedDate());
+	QDateTime dateTime(lastUpdated);
+	return dateTime.toTime_t();
+}
+
+QDate DBusDataSet::lastUpdatedDate() const {
 	DataSet dataSet;
 	DataSet::findById(m_id, &dataSet);
 	return dataSet.lastUpdated();

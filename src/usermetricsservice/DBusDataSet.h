@@ -42,6 +42,8 @@ Q_OBJECT
 
 Q_PROPERTY(QVariantList data READ data)
 
+Q_PROPERTY(uint lastUpdated READ lastUpdated)
+
 public:
 	DBusDataSet(int id, QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
@@ -57,7 +59,9 @@ public:
 
 	void update(const QVariantList &data);
 
-	QDate lastUpdated() const;
+	uint lastUpdated() const;
+
+	QDate lastUpdatedDate() const;
 
 protected:
 	static void getData(DataSet &dataSet, QVariantList &data);

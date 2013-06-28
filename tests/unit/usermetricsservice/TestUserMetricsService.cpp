@@ -237,13 +237,13 @@ TEST_F(TestUserMetricsService, UpdateData) {
 	// first update happens on the 5th of the month
 	twitter->update(first);
 	EXPECT_EQ(first, twitter->data());
-	EXPECT_EQ(QDate(2001, 01, 5), twitter->lastUpdated());
+	EXPECT_EQ(QDate(2001, 01, 5), twitter->lastUpdatedDate());
 
 	// second update happens on the 8th of the month
 	// -> 3 new data points and 2 overwritten
 	twitter->update(second);
 	EXPECT_EQ(expected, twitter->data());
-	EXPECT_EQ(QDate(2001, 01, 8), twitter->lastUpdated());
+	EXPECT_EQ(QDate(2001, 01, 8), twitter->lastUpdatedDate());
 }
 
 TEST_F(TestUserMetricsService, UpdateDataWithGap) {
@@ -271,13 +271,13 @@ TEST_F(TestUserMetricsService, UpdateDataWithGap) {
 	// first update happens on the 5th of the month
 	twitter->update(first);
 	EXPECT_EQ(first, twitter->data());
-	EXPECT_EQ(QDate(2001, 01, 5), twitter->lastUpdated());
+	EXPECT_EQ(QDate(2001, 01, 5), twitter->lastUpdatedDate());
 
 	// second update happens on the 15th of the month
 	// -> 5 new data points, 5 nulls, and none overwritten
 	twitter->update(second);
 	EXPECT_EQ(expected, twitter->data());
-	EXPECT_EQ(QDate(2001, 01, 15), twitter->lastUpdated());
+	EXPECT_EQ(QDate(2001, 01, 15), twitter->lastUpdatedDate());
 }
 
 TEST_F(TestUserMetricsService, UpdateDataTotallyOverwrite) {
@@ -300,13 +300,13 @@ TEST_F(TestUserMetricsService, UpdateDataTotallyOverwrite) {
 	// first update happens on the 5th of the month
 	twitter->update(first);
 	EXPECT_EQ(first, twitter->data());
-	EXPECT_EQ(QDate(2001, 01, 5), twitter->lastUpdated());
+	EXPECT_EQ(QDate(2001, 01, 5), twitter->lastUpdatedDate());
 
 	// second update happens on the 7th of the month
 	// -> 2 new data points, 3 overwrites, and 2 new appends
 	twitter->update(second);
 	EXPECT_EQ(expected, twitter->data());
-	EXPECT_EQ(QDate(2001, 01, 7), twitter->lastUpdated());
+	EXPECT_EQ(QDate(2001, 01, 7), twitter->lastUpdatedDate());
 }
 
 } // namespace

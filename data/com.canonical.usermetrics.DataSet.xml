@@ -3,7 +3,7 @@
 	<interface name="com.canonical.usermetrics.DataSet">
 		<property name="dataSource" type="o" access="read"/>
 		
-		<!--property name="lastUpdated" type="i" access="read"/-->
+		<property name="lastUpdated" type="u" access="read"/>
 		
 		<property name="data" type="av" access="read"/>
 		

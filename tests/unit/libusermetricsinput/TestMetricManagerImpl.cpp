@@ -102,6 +102,57 @@ TEST_F(TestMetricManagerImpl, TestCanAddDataAndUpdate) {
 	EXPECT_EQ(QString(""), data.at(1).toString());
 	EXPECT_FLOAT_EQ(-50.0, data.at(2).toDouble());
 	EXPECT_FLOAT_EQ(-22.0, data.at(3).toDouble());
+
+	QDateTime dateTime(QDateTime::fromTime_t(dataSetInterface.lastUpdated()));
+	EXPECT_EQ(QDate::currentDate(), dateTime.date());
+}
+
+TEST_F(TestMetricManagerImpl, TestAddMultipleDataSourcesAndUsers) {
+	MetricManagerPtr manager(new MetricManagerImpl(*connection));
+
+	MetricPtr metricOne(
+			manager->add("data-source-one", "format string one %1"));
+	MetricPtr metricTwo(
+			manager->add("data-source-two", "format string two %1"));
+
+	{
+		MetricUpdatePtr updateOne(metricOne->update("the-username-one"));
+		updateOne->addData(100.0);
+		MetricUpdatePtr updateTwo(metricOne->update("the-username-two"));
+		updateTwo->addData(75.0);
+
+		MetricUpdatePtr updateThree(metricTwo->update("the-username-one"));
+		updateThree->addData(50.0);
+		MetricUpdatePtr updateFour(metricTwo->update("the-username-two"));
+		updateFour->addData(25.0);
+	}
+
+	com::canonical::usermetrics::UserData userDataInterfaceOne(
+			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+	EXPECT_EQ(QString("the-username-one"), userDataInterfaceOne.username());
+	com::canonical::usermetrics::UserData userDataInterfaceTwo(
+			DBusPaths::serviceName(), DBusPaths::userData(2), *connection);
+	EXPECT_EQ(QString("the-username-two"), userDataInterfaceTwo.username());
+
+	com::canonical::usermetrics::DataSet dataSetInterfaceOne(
+			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+	QVariantList dataOne(dataSetInterfaceOne.data());
+	EXPECT_FLOAT_EQ(100.0, dataOne.first().toDouble());
+
+	com::canonical::usermetrics::DataSet dataSetInterfaceTwo(
+			DBusPaths::serviceName(), DBusPaths::dataSet(2), *connection);
+	QVariantList dataTwo(dataSetInterfaceTwo.data());
+	EXPECT_FLOAT_EQ(75.0, dataTwo.first().toDouble());
+
+	com::canonical::usermetrics::DataSet dataSetInterfaceThree(
+			DBusPaths::serviceName(), DBusPaths::dataSet(3), *connection);
+	QVariantList dataThree(dataSetInterfaceThree.data());
+	EXPECT_FLOAT_EQ(50.0, dataThree.first().toDouble());
+
+	com::canonical::usermetrics::DataSet dataSetInterfaceFour(
+			DBusPaths::serviceName(), DBusPaths::dataSet(4), *connection);
+	QVariantList dataFour(dataSetInterfaceFour.data());
+	EXPECT_FLOAT_EQ(25.0, dataFour.first().toDouble());
 }
 
 } // namespace
