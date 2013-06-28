@@ -2,7 +2,7 @@
    Ignore pthreads
    Memcheck:Leak
    ...
-   fun:pthread_create
+   fun:pthread_create@@*
 }
 
 {
