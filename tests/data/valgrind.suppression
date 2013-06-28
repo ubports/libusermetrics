@@ -6,6 +6,13 @@
 }
 
 {
+   Glib memalign
+   Memcheck:Leak
+   ...
+   fun:posix_memalign
+}
+
+{
    Ignore glib mainloop
    Memcheck:Leak
    ...
