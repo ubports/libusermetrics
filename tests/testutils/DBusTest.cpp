@@ -17,6 +17,7 @@
  */
 
 #include <testutils/DBusTest.h>
+#include <QtTest/QSignalSpy>
 
 using namespace UserMetricsTestUtils;
 
@@ -27,7 +28,7 @@ DBusTest::~DBusTest() {
 }
 
 int main(int argc, char **argv) {
-	QCoreApplication(argc, argv);
+	QCoreApplication application(argc, argv);
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }
@@ -47,16 +48,22 @@ void DBusTest::SetUp() {
 	connection.reset(
 			new QDBusConnection(QDBusConnection::connectToBus(bus, bus)));
 
+	QDBusServiceWatcher watcher("com.canonical.UserMetrics", *connection,
+			QDBusServiceWatcher::WatchForRegistration);
+	QSignalSpy spy(&watcher,
+			SIGNAL(serviceOwnerChanged(const QString &,const QString &,const QString &)));
+
 	QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
 	env.insert("DBUS_SYSTEM_BUS_ADDRESS", bus);
 	env.insert("DBUS_SESSION_BUS_ADDRESS", bus);
-
 	userMetricsService.setProcessChannelMode(QProcess::MergedChannels);
 	userMetricsService.setProcessEnvironment(env);
 	userMetricsService.start(USERMETRICSSERVICE_BINARY,
 			QStringList() << ":memory:");
-	EXPECT_TRUE(userMetricsService.waitForStarted());
-	userMetricsService.waitForReadyRead(100);
+
+	spy.wait();
+	QVariantList arguments(spy.takeFirst());
+	EXPECT_EQ("com.canonical.UserMetrics", arguments.first().toString());
 }
 
 void DBusTest::TearDown() {

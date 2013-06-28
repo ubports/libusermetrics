@@ -20,4 +20,5 @@ qt5_use_modules(
 	Core
 	Gui
 	DBus
+	Test
 )

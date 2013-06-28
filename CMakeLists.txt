@@ -20,6 +20,9 @@ include_directories(${Qt5DBus_INCLUDE_DIRS})
 find_package(Qt5Sql REQUIRED)
 include_directories(${Qt5Sql_INCLUDE_DIRS})
 
+find_package(Qt5Test REQUIRED)
+include_directories(${Qt5Test_INCLUDE_DIRS})
+
 pkg_check_modules(QDJANGO_DB REQUIRED qdjango-db REQUIRED)
 include_directories(${QDJANGO_DB_INCLUDE_DIRS})
 
@@ -36,7 +39,13 @@ include_directories(${INCLUDE_BINARY_DIR})
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(SOURCE_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/src")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-permissive -pedantic -Wall -Wextra")
+ADD_DEFINITIONS(
+	-std=c++11
+	-fno-permissive
+	-pedantic
+	-Wall
+	-Wextra
+)
 
 include(GNUInstallDirs)
 include(Coverage)
