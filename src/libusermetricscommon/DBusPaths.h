@@ -25,10 +25,6 @@ namespace UserMetricsCommon {
 
 class DBusPaths {
 public:
-	DBusPaths();
-
-	virtual ~DBusPaths();
-
 	static QString serviceName();
 
 	static QString userMetrics();

@@ -20,12 +20,6 @@
 
 using namespace UserMetricsCommon;
 
-DBusPaths::DBusPaths() {
-}
-
-DBusPaths::~DBusPaths() {
-}
-
 QString DBusPaths::serviceName() {
 	return "com.canonical.UserMetrics";
 }
