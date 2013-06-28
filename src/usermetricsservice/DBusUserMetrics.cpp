@@ -37,17 +37,16 @@ DBusUserMetrics::DBusUserMetrics(QDBusConnection &dbusConnection,
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new UserMetricsAdaptor(this)), m_dateFactory(dateFactory) {
 
-	// DBus setup
-	m_dbusConnection.registerService(DBusPaths::serviceName());
-	m_dbusConnection.registerObject(DBusPaths::userMetrics(), this);
-
 	// Database setup
 	QDjango::registerModel<DataSource>();
 	QDjango::registerModel<UserData>();
 	QDjango::registerModel<DataSet>();
 
-//	QDjango::dropTables();
 	QDjango::createTables();
+
+	// DBus setup
+	m_dbusConnection.registerService(DBusPaths::serviceName());
+	m_dbusConnection.registerObject(DBusPaths::userMetrics(), this);
 
 	syncDatabase();
 }
