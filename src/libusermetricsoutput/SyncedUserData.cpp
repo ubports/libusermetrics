@@ -16,30 +16,30 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/SyncedUserMetricsStore.h>
+#include <libusermetricsoutput/SyncedDataSet.h>
 #include <libusermetricsoutput/SyncedUserData.h>
-
-#include <libusermetricscommon/UserDataInterface.h>
+#include <libusermetricscommon/DataSetInterface.h>
 #include <libusermetricscommon/DBusPaths.h>
 
 using namespace com;
 using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
 
-SyncedUserMetricsStore::SyncedUserMetricsStore(
-		const QDBusConnection &dbusConnection, QObject *parent) :
-		UserMetricsStore(parent), m_interface(DBusPaths::serviceName(),
-				DBusPaths::userMetrics(), dbusConnection) {
-	for (const QDBusObjectPath &path : m_interface.userDatas()) {
+SyncedUserData::SyncedUserData(
+		QSharedPointer<com::canonical::usermetrics::UserData> interface,
+		QObject *parent) :
+		UserData(parent), m_interface(interface) {
 
-		QSharedPointer<canonical::usermetrics::UserData> userData(
-				new canonical::usermetrics::UserData(DBusPaths::serviceName(),
-						path.path(), m_interface.connection()));
+	for (const QDBusObjectPath &path : m_interface->dataSets()) {
 
-		QString username(userData->username());
-		insert(username, UserDataPtr(new SyncedUserData(userData)));
+		QSharedPointer<canonical::usermetrics::DataSet> dataSet(
+				new canonical::usermetrics::DataSet(DBusPaths::serviceName(),
+						path.path(), m_interface->connection()));
+
+		QString dataSource(dataSet->dataSource());
+		insert(dataSource, DataSetPtr(new SyncedDataSet(dataSet)));
 	}
 }
 
-SyncedUserMetricsStore::~SyncedUserMetricsStore() {
+SyncedUserData::~SyncedUserData() {
 }

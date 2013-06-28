@@ -24,6 +24,9 @@
 #include <libusermetricscommon/DBusPaths.h>
 
 #include <testutils/DBusTest.h>
+#include <testutils/QStringPrinter.h>
+#include <testutils/QVariantPrinter.h>
+#include <testutils/QVariantListPrinter.h>
 
 #include <gtest/gtest.h>
 
@@ -70,24 +73,45 @@ TEST_F(TestSyncedUserMetricsStore, LoadsUserDataAtStartup) {
 	}
 }
 
-//	{
-//		QList<QDBusObjectPath> dataSources = userMetricsInterface.dataSources();
-//		ASSERT_EQ(1, dataSources.size());
-//		EXPECT_EQ(DBusPaths::dataSource(1), dataSources.first().path());
-//	}
+TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
+	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
+			DBusPaths::userMetrics(), *connection);
 
-//	com::canonical::usermetrics::DataSource dataSourceInterface(
-//			DBusPaths::serviceName(), DBusPaths::dataSource(1), *connection);
-//	EXPECT_EQ(QString("data-source-id-capi"), dataSourceInterface.name());
-//	EXPECT_EQ(QString("format string c-api %1"),
-//			dataSourceInterface.formatString());
-//
-//	com::canonical::usermetrics::UserData userDataInterface(
-//			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
-//	EXPECT_EQ(QString("username_capi"), userDataInterface.username());
-//
-//	com::canonical::usermetrics::DataSet dataSetInterface(
-//			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+	QDBusObjectPath twitterPath(
+			userMetricsInterface.createDataSource("twitter",
+					"twitter format string"));
+	ASSERT_EQ(DBusPaths::dataSource(1), twitterPath.path());
+
+	QDBusObjectPath userDataPath(
+			userMetricsInterface.createUserData("username"));
+	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
+
+	com::canonical::usermetrics::UserData userDataInterface(
+			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+	QDBusObjectPath twitterDataPath(userDataInterface.createDataSet("twitter"));
+	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
+
+	QVariantList data( { 100.0, 50.0, "", -50.0, -100.0 });
+	QVariantList expected( { 100.0, 50.0, QVariant(), -50.0, -100.0 });
+
+	com::canonical::usermetrics::DataSet dataSetInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+	dataSetInterface.update(data);
+
+	SyncedUserMetricsStore store(*connection);
+
+	auto userDataIterator(store.constFind("username"));
+	ASSERT_NE(userDataIterator, store.constEnd());
+	EXPECT_EQ(QString("username"), userDataIterator.key());
+	UserDataPtr userData(*userDataIterator);
+
+	auto dataSetIterator(userData->constBegin());
+	ASSERT_NE(dataSetIterator, userData->constEnd());
+	DataSetPtr dataSet(*dataSetIterator);
+	EXPECT_EQ(expected, dataSet->data());
+	EXPECT_EQ(QDate::currentDate(), dataSet->lastUpdated());
+}
+
 //	QVariantList data(dataSetInterface.data());
 //	ASSERT_EQ(3, data.size());
 //	EXPECT_FLOAT_EQ(1.0, data.at(0).toDouble());

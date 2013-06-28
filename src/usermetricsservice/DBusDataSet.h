@@ -44,6 +44,8 @@ Q_PROPERTY(QVariantList data READ data)
 
 Q_PROPERTY(uint lastUpdated READ lastUpdated)
 
+Q_PROPERTY(QString dataSource READ dataSource)
+
 public:
 	DBusDataSet(int id, QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
@@ -52,6 +54,8 @@ public:
 	virtual ~DBusDataSet();
 
 	QString path() const;
+
+	QString dataSource() const;
 
 	int id() const;
 

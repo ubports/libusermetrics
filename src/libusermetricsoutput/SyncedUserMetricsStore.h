@@ -26,14 +26,12 @@ namespace UserMetricsOutput {
 
 class SyncedUserMetricsStore: public UserMetricsStore {
 public:
-	SyncedUserMetricsStore(const QDBusConnection &dbusConnection,
+	explicit SyncedUserMetricsStore(const QDBusConnection &dbusConnection,
 			QObject *parent = 0);
 
 	virtual ~SyncedUserMetricsStore();
 
 protected:
-	QDBusConnection m_dbusConnection;
-
 	com::canonical::UserMetrics m_interface;
 };
 

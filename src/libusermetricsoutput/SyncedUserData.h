@@ -16,27 +16,26 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserMetricsStore.h>
+#ifndef USERMETRICSOUTPUT_SYNCEDUSERDATA_H_
+#define USERMETRICSOUTPUT_SYNCEDUSERDATA_H_
 
-using namespace UserMetricsOutput;
+#include <libusermetricsoutput/UserData.h>
+#include <libusermetricscommon/UserDataInterface.h>
 
-UserMetricsStore::UserMetricsStore(QObject *parent) :
-		QObject(parent) {
+namespace UserMetricsOutput {
+
+class SyncedUserData: public UserData {
+public:
+	explicit SyncedUserData(
+			QSharedPointer<com::canonical::usermetrics::UserData> interface,
+			QObject *parent = 0);
+
+	virtual ~SyncedUserData();
+
+protected:
+	QSharedPointer<com::canonical::usermetrics::UserData> m_interface;
+};
+
 }
 
-UserMetricsStore::~UserMetricsStore() {
-}
-
-UserMetricsStore::const_iterator UserMetricsStore::constFind(
-		const QString &username) const {
-	return m_userData.constFind(username);
-}
-
-UserMetricsStore::const_iterator UserMetricsStore::constEnd() const {
-	return m_userData.constEnd();
-}
-
-UserMetricsStore::iterator UserMetricsStore::insert(const QString &username,
-		UserDataPtr userData) {
-	return m_userData.insert(username, userData);
-}
+#endif // USERMETRICSOUTPUT_SYNCEDUSERDATA_H_

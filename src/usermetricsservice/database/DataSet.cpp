@@ -22,8 +22,11 @@
 
 using namespace UserMetricsService;
 
-DataSet::DataSet() :
-		m_id(0), m_data() {
+DataSet::DataSet(QObject *parent) :
+		QDjangoModel(parent), m_id(0), m_data(), m_lastUpdated(
+				QDate::currentDate()) {
+	setForeignKey("userData", new UserData(this));
+	setForeignKey("dataSource", new DataSource(this));
 }
 
 DataSet::~DataSet() {

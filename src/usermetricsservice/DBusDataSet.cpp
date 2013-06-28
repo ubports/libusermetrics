@@ -25,6 +25,8 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QDataStream>
 
+#include <QDjangoQuerySet.h>
+
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
@@ -136,4 +138,13 @@ int DBusDataSet::id() const {
 
 QString DBusDataSet::path() const {
 	return m_path;
+}
+
+QString DBusDataSet::dataSource() const {
+	QDjangoQuerySet<DataSet> dataSets;
+	QScopedPointer<DataSet> dataSet(
+			dataSets.selectRelated().get(
+					QDjangoWhere("id", QDjangoWhere::Equals, m_id)));
+	QScopedPointer<DataSource> dataSource(dataSet->dataSource());
+	return dataSource->name();
 }

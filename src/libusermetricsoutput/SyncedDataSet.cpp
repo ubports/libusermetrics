@@ -16,27 +16,21 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserMetricsStore.h>
+#include <libusermetricsoutput/SyncedDataSet.h>
 
 using namespace UserMetricsOutput;
 
-UserMetricsStore::UserMetricsStore(QObject *parent) :
-		QObject(parent) {
+SyncedDataSet::SyncedDataSet(
+		QSharedPointer<com::canonical::usermetrics::DataSet> interface,
+		QObject *parent) :
+		DataSet(parent), m_interface(interface) {
+
+	m_data = m_interface->data();
+	m_lastUpdated = QDateTime::fromTime_t(m_interface->lastUpdated()).date();
+
+	qDebug() << "dataset::data = " << m_data;
+	qDebug() << "dataset::lastUpdated = " << m_lastUpdated;
 }
 
-UserMetricsStore::~UserMetricsStore() {
-}
-
-UserMetricsStore::const_iterator UserMetricsStore::constFind(
-		const QString &username) const {
-	return m_userData.constFind(username);
-}
-
-UserMetricsStore::const_iterator UserMetricsStore::constEnd() const {
-	return m_userData.constEnd();
-}
-
-UserMetricsStore::iterator UserMetricsStore::insert(const QString &username,
-		UserDataPtr userData) {
-	return m_userData.insert(username, userData);
+SyncedDataSet::~SyncedDataSet() {
 }

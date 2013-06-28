@@ -35,14 +35,8 @@ UserData::const_iterator UserData::constEnd() const {
 	return m_dataSets.constEnd();
 }
 
-UserData::iterator UserData::find(const QString & dataSetId) {
-	iterator data(m_dataSets.find(dataSetId));
-
-	if (data == m_dataSets.end()) {
-		DataSetPtr dataSet(new DataSet(this));
-		data = m_dataSets.insert(dataSetId, dataSet);
-	}
-
-	return m_dataSets.find(dataSetId);
+UserData::iterator UserData::insert(const QString &dataSetId,
+		DataSetPtr dataSet) {
+	return m_dataSets.insert(dataSetId, dataSet);
 }
 

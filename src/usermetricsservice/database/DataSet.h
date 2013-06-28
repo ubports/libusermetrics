@@ -52,7 +52,7 @@ Q_CLASSINFO("data", "null=true")
 Q_CLASSINFO("lastUpdated", "null=true")
 
 public:
-	DataSet();
+	explicit DataSet(QObject *parent = 0);
 
 	virtual ~DataSet();
 

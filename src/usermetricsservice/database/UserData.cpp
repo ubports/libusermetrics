@@ -22,8 +22,8 @@
 
 using namespace UserMetricsService;
 
-UserData::UserData() :
-		m_id(0) {
+UserData::UserData(QObject *parent) :
+		QDjangoModel(parent), m_id(0) {
 }
 
 UserData::~UserData() {
