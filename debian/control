@@ -12,6 +12,7 @@ Build-Depends: cmake,
                pkg-config,
                libqt5sql5-sqlite,
                sqlite3,
+               dbus,
 Standards-Version: 3.9.4
 Section: libs
 Homepage: http://launchpad.net/libusermetrics
