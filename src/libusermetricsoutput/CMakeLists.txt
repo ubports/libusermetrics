@@ -12,9 +12,9 @@ set(USERMETRICSOUTPUT_SOURCES
 	HardCodedColorThemeProvider.cpp
 	DataSet.cpp
 	UserData.cpp
-	UserDataStore.cpp
 	UserMetrics.cpp
 	UserMetricsImpl.cpp
+	UserMetricsStore.cpp
 	qvariantlistmodel.cpp
 )
 

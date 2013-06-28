@@ -16,7 +16,7 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserDataStore.h>
+#include <libusermetricsoutput/UserMetricsStore.h>
 #include <libusermetricscommon/DateFactoryImpl.h>
 #include <libusermetricsoutput/HardCodedColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
@@ -38,7 +38,7 @@ UserMetrics::~UserMetrics() {
 UserMetrics * UserMetrics::getInstance() {
 	return new UserMetricsImpl(
 			QSharedPointer<DateFactory>(new DateFactoryImpl()),
-			QSharedPointer<UserDataStore>(new UserDataStore()),
+			QSharedPointer<UserMetricsStore>(new UserMetricsStore()),
 			QSharedPointer<ColorThemeProvider>(
 					new HardCodedColorThemeProvider()));
 }

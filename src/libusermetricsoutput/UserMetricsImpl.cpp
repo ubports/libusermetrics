@@ -17,7 +17,7 @@
  */
 
 #include <libusermetricsoutput/UserMetricsImpl.h>
-#include <libusermetricsoutput/UserDataStore.h>
+#include <libusermetricsoutput/UserMetricsStore.h>
 #include <libusermetricscommon/DateFactory.h>
 
 #include <QtCore/QDate>
@@ -28,7 +28,7 @@ using namespace UserMetricsOutput;
 using namespace UserMetricsCommon;
 
 UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
-		QSharedPointer<UserDataStore> userDataStore,
+		QSharedPointer<UserMetricsStore> userDataStore,
 		QSharedPointer<ColorThemeProvider> colorThemeProvider, QObject *parent) :
 		UserMetrics(parent), m_dateFactory(dateFactory), m_userDataStore(
 				userDataStore), m_colorThemeProvider(colorThemeProvider), m_firstColor(

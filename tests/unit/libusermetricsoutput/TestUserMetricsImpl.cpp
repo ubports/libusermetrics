@@ -52,7 +52,7 @@ protected:
 		ON_CALL(*dateFactory, currentDate()).WillByDefault(
 				Return(QDate(2001, 01, 07)));
 
-		userDataStore.reset(new UserDataStore());
+		userDataStore.reset(new UserMetricsStore());
 
 		colorThemeProvider.reset(new NiceMock<MockColorThemeProvider>());
 
@@ -66,7 +66,7 @@ protected:
 
 	QSharedPointer<MockDateFactory> dateFactory;
 
-	QSharedPointer<UserDataStore> userDataStore;
+	QSharedPointer<UserMetricsStore> userDataStore;
 
 	QSharedPointer<MockColorThemeProvider> colorThemeProvider;
 
@@ -202,8 +202,8 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	}
 	data << 70.0 << 65.0;
 
-	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
-	UserDataStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(userDataStore->find("username"));
+	UserMetricsStore::UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->find("data-source-id");
 	UserData::DataSetPtr dataSet(*dataSetIterator);
@@ -272,8 +272,8 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	}
 	data << 70.0 << 65.0;
 
-	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
-	UserDataStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(userDataStore->find("username"));
+	UserMetricsStore::UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->find("data-source-id2");
 	UserData::DataSetPtr dataSet(*dataSetIterator);
@@ -335,8 +335,8 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	// Data just for December
 	data << 95.0 << 100.0 << 90.0 << 0.0;
 
-	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
-	UserDataStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(userDataStore->find("username"));
+	UserMetricsStore::UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->find("data-source-id");
 	UserData::DataSetPtr dataSet(*dataSetIterator);
@@ -394,8 +394,8 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	// Data just for January
 	data << 100.0 << 0.0;
 
-	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
-	UserDataStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(userDataStore->find("username"));
+	UserMetricsStore::UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->find("data-source-id");
 	UserData::DataSetPtr dataSet(*dataSetIterator);
@@ -446,8 +446,8 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 	// the fake date provider says the date is 2001/01/07
 
-	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
-	UserDataStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(userDataStore->find("username"));
+	UserMetricsStore::UserDataPtr userData(*userDataIterator);
 
 	// first data set
 	{
@@ -551,9 +551,9 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 
 	// data for first user
 	{
-		UserDataStore::iterator userDataIterator(
+		UserMetricsStore::iterator userDataIterator(
 				userDataStore->find("first-user"));
-		UserDataStore::UserDataPtr userData(*userDataIterator);
+		UserMetricsStore::UserDataPtr userData(*userDataIterator);
 
 		// first data set
 		{
@@ -581,9 +581,9 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 
 	// data for second user
 	{
-		UserDataStore::iterator userDataIterator(
+		UserMetricsStore::iterator userDataIterator(
 				userDataStore->find("second-user"));
-		UserDataStore::UserDataPtr userData(*userDataIterator);
+		UserMetricsStore::UserDataPtr userData(*userDataIterator);
 
 		// fourth data set
 		{

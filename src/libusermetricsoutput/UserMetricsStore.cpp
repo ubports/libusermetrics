@@ -16,27 +16,27 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserDataStore.h>
+#include <libusermetricsoutput/UserMetricsStore.h>
 
 using namespace UserMetricsOutput;
 
-UserDataStore::UserDataStore(QObject *parent) :
+UserMetricsStore::UserMetricsStore(QObject *parent) :
 		QObject(parent) {
 }
 
-UserDataStore::~UserDataStore() {
+UserMetricsStore::~UserMetricsStore() {
 }
 
-UserDataStore::const_iterator UserDataStore::constFind(
+UserMetricsStore::const_iterator UserMetricsStore::constFind(
 		const QString &username) const {
 	return m_userData.constFind(username);
 }
 
-UserDataStore::const_iterator UserDataStore::constEnd() const {
+UserMetricsStore::const_iterator UserMetricsStore::constEnd() const {
 	return m_userData.constEnd();
 }
 
-UserDataStore::iterator UserDataStore::find(const QString &username) {
+UserMetricsStore::iterator UserMetricsStore::find(const QString &username) {
 	iterator data(m_userData.find(username));
 
 	if (data == m_userData.end()) {
