@@ -12,3 +12,10 @@
    ...
    fun:g_main_context_push_thread_default
 }
+
+{
+   Ignore glib main context
+   Memcheck:Leak
+   ...
+   fun:g_main_context_new
+}
