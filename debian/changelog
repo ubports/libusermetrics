@@ -1,3 +1,21 @@
+libusermetrics (1.0.1+13.10.20130628-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Add skeleton of libusermetricsinput
+  * Fix copyright headers
+  * Fix installation of libusermetricsinput
+  * First version of C API
+  * Re-order
+  * Add symbols file for libusermetricsinput
+  * Make symbol that appears and dissapears depending on GCC version
+    optional.
+  * Update *.symbols files to use "nice" c++ format.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 77
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 28 Jun 2013 02:03:09 +0000
+
 libusermetrics (1.0.1daily13.06.19-0ubuntu1) saucy; urgency=low
 
   [ Michael Terry ]
