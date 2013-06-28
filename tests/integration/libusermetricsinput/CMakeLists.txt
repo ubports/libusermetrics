@@ -12,7 +12,9 @@ add_executable(
 target_link_libraries(
 	usermetricsinput-integration-tests
 	usermetricsinput
-	${GTEST_BOTH_LIBRARIES}
+	usermetrics-test-utils
+	${GTEST_LIBRARIES}
+	${GMOCK_LIBRARIES}
 )
 
 add_test(

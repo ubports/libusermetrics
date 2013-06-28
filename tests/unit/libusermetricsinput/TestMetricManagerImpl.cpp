@@ -18,6 +18,8 @@
 
 #include <libusermetricsinput/MetricManagerImpl.h>
 #include <libusermetricscommon/UserMetricsInterface.h>
+#include <libusermetricscommon/UserDataInterface.h>
+#include <libusermetricscommon/DataSetInterface.h>
 #include <libusermetricscommon/DataSourceInterface.h>
 #include <libusermetricscommon/DBusPaths.h>
 
@@ -82,12 +84,24 @@ TEST_F(TestMetricManagerImpl, TestCanAddDataAndUpdate) {
 	MetricPtr metric(manager->add("data-source-id", "format string %1"));
 
 	{
-		MetricUpdatePtr update(metric->update("username"));
-		update->addData(1.0);
+		MetricUpdatePtr update(metric->update("the-username"));
+		update->addData(100.0);
 		update->addNull();
-		update->addData(0.1);
+		update->addData(-50.0);
+		update->addData(-22.0);
 	}
-	userMetricsService.waitForReadyRead(100);
+
+	com::canonical::usermetrics::UserData userDataInterface(
+			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+	EXPECT_EQ(QString("the-username"), userDataInterface.username());
+
+	com::canonical::usermetrics::DataSet dataSetInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+	QVariantList data(dataSetInterface.data());
+	EXPECT_FLOAT_EQ(100.0, data.at(0).toDouble());
+	EXPECT_EQ(QString(""), data.at(1).toString());
+	EXPECT_FLOAT_EQ(-50.0, data.at(2).toDouble());
+	EXPECT_FLOAT_EQ(-22.0, data.at(3).toDouble());
 }
 
 } // namespace

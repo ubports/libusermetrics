@@ -17,6 +17,9 @@
  */
 
 #include <libusermetricsinput/MetricManager.h>
+#include <testutils/DBusTest.h>
+
+#include <cstdlib>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -24,10 +27,11 @@
 using namespace std;
 using namespace testing;
 using namespace UserMetricsInput;
+using namespace UserMetricsTestUtils;
 
 namespace {
 
-class TestMetricManager: public Test {
+class TestMetricManager: public DBusTest {
 protected:
 	TestMetricManager() {
 	}
@@ -36,7 +40,18 @@ protected:
 	}
 };
 
-TEST_F(TestMetricManager, Foo) {
+TEST_F(TestMetricManager, Basic) {
+	QByteArray byteArray(bus.toUtf8());
+	setenv("DBUS_SYSTEM_BUS_ADDRESS", byteArray.data(), true);
+
+	MetricManagerPtr manager(MetricManager::getInstance());
+
+	MetricPtr metric(manager->add("data-source-id", "format string %1"));
+
+	MetricUpdatePtr update = metric->update("username");
+	update->addData(1.0);
+	update->addNull();
+	update->addData(0.5);
 }
 
 } // namespace

@@ -41,7 +41,7 @@ void DBusTest::SetUp() {
 
 	dbus.waitForReadyRead();
 	QByteArray readAll(dbus.readAll());
-	QString bus(readAll.trimmed());
+	bus = readAll.trimmed();
 	qDebug() << "DBus address: " << bus;
 
 	connection.reset(

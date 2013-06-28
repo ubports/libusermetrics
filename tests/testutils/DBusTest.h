@@ -37,6 +37,8 @@ protected:
 
 	virtual void TearDown();
 
+	QString bus;
+
 	QScopedPointer<QDBusConnection> connection;
 
 	QProcess dbus;
