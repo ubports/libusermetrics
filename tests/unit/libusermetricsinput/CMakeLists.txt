@@ -1,9 +1,7 @@
 
 set(
 	USERMETRICSINPUT_UNIT_TESTS_SRC
-	TestMetricImpl.cpp
 	TestMetricManagerImpl.cpp
-	TestMetricUpdateImpl.cpp
 	TestUserMetricInputCAPI.cpp
 )
 
@@ -17,7 +15,7 @@ target_link_libraries(
 	usermetricsinput-static
 	usermetrics-test-utils
 	${GTEST_LIBRARIES}
-	${GMOCK_BOTH_LIBRARIES}
+	${GMOCK_LIBRARIES}
 )
 
 add_valgrind_test(

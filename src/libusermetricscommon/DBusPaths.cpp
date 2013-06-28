@@ -16,27 +16,26 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsinput/MetricUpdateImpl.h>
 #include <libusermetricscommon/DBusPaths.h>
 
 using namespace UserMetricsCommon;
-using namespace UserMetricsInput;
 
-MetricUpdateImpl::MetricUpdateImpl(const QString &path,
-		const QDBusConnection &dbusConnection, QObject *parent) :
-		QObject(parent), m_dbusConnection(dbusConnection), m_interface(
-				DBusPaths::serviceName(), path, dbusConnection) {
+QString DBusPaths::serviceName() {
+	return "com.canonical.UserMetrics";
 }
 
-MetricUpdateImpl::~MetricUpdateImpl() {
-	QDBusPendingReply<void> reply(m_interface.update(m_data));
-	reply.waitForFinished();
+QString DBusPaths::userMetrics() {
+	return "/com/canonical/UserMetrics";
 }
 
-void MetricUpdateImpl::addData(double data) {
-	m_data << data;
+QString DBusPaths::userData(int id) {
+	return QString("/com/canonical/UserMetrics/UserData/%1").arg(id);
 }
 
-void MetricUpdateImpl::addNull() {
-	m_data << "";
+QString DBusPaths::dataSource(int id) {
+	return QString("/com/canonical/UserMetrics/DataSource/%1").arg(id);
+}
+
+QString DBusPaths::dataSet(int id) {
+	return QString("/com/canonical/UserMetrics/DataSet/%1").arg(id);
 }

@@ -33,7 +33,7 @@ class USERMETRICSINPUT_EXPORT MetricUpdate {
 public:
 	virtual ~MetricUpdate();
 
-	virtual void addData(float data) = 0;
+	virtual void addData(double data) = 0;
 
 	virtual void addNull() = 0;
 

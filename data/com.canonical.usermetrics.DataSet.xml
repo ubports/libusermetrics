@@ -1,0 +1,20 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+	<interface name="com.canonical.usermetrics.DataSet">
+		<property name="dataSource" type="o" access="read"/>
+		
+		<property name="lastUpdated" type="u" access="read"/>
+		
+		<property name="data" type="av" access="read"/>
+		
+		<signal name="dataChanged">
+			<arg name="data" type="av" direction="out"/>
+		</signal>
+		
+		<method name="update">
+			<arg name="data" type="av" direction="in"/>
+		</method>
+		
+
+	</interface>
+</node>

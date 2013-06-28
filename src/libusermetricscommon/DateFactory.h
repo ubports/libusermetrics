@@ -16,27 +16,22 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsinput/MetricUpdateImpl.h>
-#include <libusermetricscommon/DBusPaths.h>
+#ifndef USERMETRICSCOMMON_DATEFACTORY_H_
+#define USERMETRICSCOMMON_DATEFACTORY_H_
 
-using namespace UserMetricsCommon;
-using namespace UserMetricsInput;
+#include <QtCore/QDate>
 
-MetricUpdateImpl::MetricUpdateImpl(const QString &path,
-		const QDBusConnection &dbusConnection, QObject *parent) :
-		QObject(parent), m_dbusConnection(dbusConnection), m_interface(
-				DBusPaths::serviceName(), path, dbusConnection) {
+namespace UserMetricsCommon {
+
+class DateFactory: public QObject {
+public:
+	DateFactory();
+
+	virtual ~DateFactory();
+
+	virtual QDate currentDate() const = 0;
+};
+
 }
 
-MetricUpdateImpl::~MetricUpdateImpl() {
-	QDBusPendingReply<void> reply(m_interface.update(m_data));
-	reply.waitForFinished();
-}
-
-void MetricUpdateImpl::addData(double data) {
-	m_data << data;
-}
-
-void MetricUpdateImpl::addNull() {
-	m_data << "";
-}
+#endif // USERMETRICSCOMMON_DATEFACTORY_H_

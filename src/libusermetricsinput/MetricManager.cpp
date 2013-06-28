@@ -17,6 +17,7 @@
  */
 
 #include <libusermetricsinput/MetricManagerImpl.h>
+#include <QtDBus/QtDBus>
 
 using namespace UserMetricsInput;
 
@@ -28,5 +29,12 @@ MetricManager::~MetricManager() {
 }
 
 MetricManagerPtr MetricManager::getInstance() {
-	return MetricManagerPtr(new MetricManagerImpl());
+	QDBusConnection dbusConnection(QDBusConnection::systemBus());
+
+//	if (!dbusConnection.interface()->isServiceRegistered(
+//			DBusPaths::serviceName())) {
+//		dbusConnection.interface()->startService(DBusPaths::serviceName());
+//	}
+
+	return MetricManagerPtr(new MetricManagerImpl(dbusConnection));
 }

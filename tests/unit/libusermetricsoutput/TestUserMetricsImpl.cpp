@@ -27,6 +27,7 @@
 #include <gmock/gmock.h>
 
 using namespace std;
+using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
 using namespace testing;
 using namespace UserMetricsTestUtils;

@@ -16,12 +16,12 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSOUTPUT_DATEFACTORYIMPL_H_
-#define USERMETRICSOUTPUT_DATEFACTORYIMPL_H_
+#ifndef USERMETRICSCOMMON_DATEFACTORYIMPL_H_
+#define USERMETRICSCOMMON_DATEFACTORYIMPL_H_
 
-#include <DateFactory.h>
+#include <libusermetricscommon/DateFactory.h>
 
-namespace UserMetricsOutput {
+namespace UserMetricsCommon {
 
 class DateFactoryImpl: public DateFactory {
 public:
@@ -34,4 +34,4 @@ public:
 
 }
 
-#endif // USERMETRICSOUTPUT_DATEFACTORYIMPL_H_
+#endif // USERMETRICSCOMMON_DATEFACTORYIMPL_H_

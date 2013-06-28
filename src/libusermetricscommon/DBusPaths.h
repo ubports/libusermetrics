@@ -16,12 +16,26 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/DateFactory.h>
+#ifndef USERMETRICSCOMMON_DBUSPATHS_H_
+#define USERMETRICSCOMMON_DBUSPATHS_H_
 
-using namespace UserMetricsOutput;
+#include "QtCore/QString"
 
-DateFactory::DateFactory() {
+namespace UserMetricsCommon {
+
+class DBusPaths {
+public:
+	static QString serviceName();
+
+	static QString userMetrics();
+
+	static QString userData(int id);
+
+	static QString dataSource(int id);
+
+	static QString dataSet(int id);
+};
+
 }
 
-DateFactory::~DateFactory() {
-}
+#endif // USERMETRICSCOMMON_DBUSPATHS_H_

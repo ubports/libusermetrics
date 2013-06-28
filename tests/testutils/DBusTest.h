@@ -16,33 +16,35 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsinput/MetricImpl.h>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QProcess>
+#include <QtDBus/QtDBus>
 
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
-using namespace std;
-using namespace testing;
-using namespace UserMetricsInput;
+#ifndef USERMETRICS_TESTUTILS_TESTCOMMON_H_
+#define USERMETRICS_TESTUTILS_TESTCOMMON_H_
 
-namespace {
+namespace UserMetricsTestUtils {
 
-class TestMetricImpl: public Test {
+class DBusTest: public ::testing::Test {
 protected:
-	TestMetricImpl() {
-	}
+	DBusTest();
 
-	virtual ~TestMetricImpl() {
-	}
+	virtual ~DBusTest();
+
+	virtual void SetUp();
+
+	virtual void TearDown();
+
+	QString bus;
+
+	QScopedPointer<QDBusConnection> connection;
+
+	QProcess dbus;
+
+	QProcess userMetricsService;
 };
 
-TEST_F(TestMetricImpl, Foo) {
-	MetricPtr metric(new MetricImpl("datasource-id", "format string %1"));
-
-	MetricUpdatePtr update(metric->update("username"));
-	update->addData(1.0);
-	update->addNull();
-	update->addData(0.1);
 }
-
-} // namespace
+#endif // USERMETRICS_TESTUTILS_TESTCOMMON_H_
