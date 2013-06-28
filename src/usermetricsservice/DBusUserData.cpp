@@ -23,24 +23,22 @@
 #include <usermetricsservice/database/DataSource.h>
 #include <usermetricsservice/database/UserData.h>
 #include <libusermetricscommon/DateFactory.h>
+#include <libusermetricscommon/DBusPaths.h>
 
 #include <QDjangoQuerySet.h>
 
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
-DBusUserData::DBusUserData(const QString &username,
-		DBusUserMetrics &userMetrics, QDBusConnection &dbusConnection,
+DBusUserData::DBusUserData(int id, DBusUserMetrics &userMetrics,
+		QDBusConnection &dbusConnection,
 		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new UserDataAdaptor(this)), m_dateFactory(dateFactory), m_userMetrics(
-				userMetrics), m_username(username), m_path(
-				QString("/com/canonical/UserMetrics/UserData/%1").arg(
-						m_username)) {
+				userMetrics), m_id(id), m_path(DBusPaths::userData(m_id)) {
 
 	// DBus setup
-	QDBusConnection connection(QDBusConnection::sessionBus());
-	connection.registerObject(m_path, this);
+	Q_ASSERT(m_dbusConnection.registerObject(m_path, this));
 
 	// Database setup
 	syncDatabase();
@@ -56,7 +54,9 @@ QString DBusUserData::path() const {
 }
 
 QString DBusUserData::username() const {
-	return m_username;
+	UserData userData;
+	UserData::findById(m_id, &userData);
+	return userData.username();
 }
 
 QList<QDBusObjectPath> DBusUserData::dataSets() const {
@@ -68,14 +68,15 @@ QList<QDBusObjectPath> DBusUserData::dataSets() const {
 }
 
 QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
+	qDebug() << "DBusUserData::createDataSet(" << dataSourceName << ")";
 	if (!DataSource::exists(dataSourceName)) {
+		qDebug() << "UNKNOWN DATA SOURCE " << dataSourceName;
 		return QDBusObjectPath();
 	}
 
 	QDjangoQuerySet<DataSet> dataSets;
 	QDjangoQuerySet<DataSet> query = dataSets.filter(
-			QDjangoWhere("userData__username", QDjangoWhere::Equals,
-					m_username)).filter(
+			QDjangoWhere("userData__id", QDjangoWhere::Equals, m_id)).filter(
 			QDjangoWhere("dataSource__name", QDjangoWhere::Equals,
 					dataSourceName));
 
@@ -86,7 +87,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 
 	if (query.size() == 0) {
 		UserData userData;
-		UserData::findByName(m_username, &userData);
+		UserData::findById(m_id, &userData);
 		dataSet.setUserData(&userData);
 
 		DataSource dataSource;
@@ -134,8 +135,7 @@ DBusDataSetPtr DBusUserData::dataSet(const QString &dataSource) const {
 	QDjangoQuerySet<DataSet> dataSets;
 	QScopedPointer<DataSet> dataSet(
 			dataSets.filter(
-					QDjangoWhere("userData__username", QDjangoWhere::Equals,
-							m_username)).get(
+					QDjangoWhere("userData__id", QDjangoWhere::Equals, m_id)).get(
 					QDjangoWhere("dataSource__name", QDjangoWhere::Equals,
 							dataSource)));
 

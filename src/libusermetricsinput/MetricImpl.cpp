@@ -18,13 +18,22 @@
 
 #include <libusermetricsinput/MetricImpl.h>
 #include <libusermetricsinput/MetricUpdateImpl.h>
+#include <libusermetricscommon/DBusPaths.h>
+#include <libusermetricscommon/UserDataInterface.h>
+
+#include <QtDBus/QtDBus>
 
 using namespace std;
+using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
 MetricImpl::MetricImpl(const std::string &dataSourceId,
-		const std::string &formatString, QObject *parent) :
-		QObject(parent), m_dataSourceId(QString::fromStdString(dataSourceId)), m_formatString(
+		const std::string &formatString, const QDBusConnection &dbusConnection,
+		QObject *parent) :
+		QObject(parent), m_dbusConnection(dbusConnection), m_interface(
+				DBusPaths::serviceName(), DBusPaths::userMetrics(),
+				dbusConnection), m_dataSourceId(
+				QString::fromStdString(dataSourceId)), m_formatString(
 				QString::fromStdString(formatString)) {
 }
 
@@ -32,5 +41,18 @@ MetricImpl::~MetricImpl() {
 }
 
 MetricUpdatePtr MetricImpl::update(const string &username) {
-	return MetricUpdatePtr(new MetricUpdateImpl(*this, username));
+	QDBusObjectPath userDataPath(
+			m_interface.createUserData(QString::fromStdString(username)));
+	qDebug() << userDataPath.path();
+
+	com::canonical::usermetrics::UserData userDataInterface(
+			DBusPaths::serviceName(), userDataPath.path(), m_dbusConnection);
+	Q_ASSERT(userDataInterface.isValid());
+
+	QDBusObjectPath dataSetPath(
+			userDataInterface.createDataSet(m_dataSourceId));
+	qDebug() << dataSetPath.path();
+
+	return MetricUpdatePtr(
+			new MetricUpdateImpl(dataSetPath.path(), m_dbusConnection));
 }

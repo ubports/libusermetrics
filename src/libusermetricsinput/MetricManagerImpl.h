@@ -20,6 +20,7 @@
 #define USERMETRICSINPUT_METRICMANAGERIMPL_H_
 
 #include <libusermetricsinput/MetricManager.h>
+#include <libusermetricscommon/UserMetricsInterface.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QMap>
@@ -28,7 +29,8 @@ namespace UserMetricsInput {
 
 class MetricManagerImpl: public MetricManager, public QObject {
 public:
-	explicit MetricManagerImpl(QObject *parent = 0);
+	explicit MetricManagerImpl(const QDBusConnection &dbusConnection,
+			QObject *parent = 0);
 
 	virtual ~MetricManagerImpl();
 
@@ -36,6 +38,10 @@ public:
 			const std::string &formatString);
 
 protected:
+	QDBusConnection m_dbusConnection;
+
+	com::canonical::UserMetrics m_interface;
+
 	QMap<QString, MetricPtr> m_metrics;
 };
 

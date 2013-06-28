@@ -18,20 +18,39 @@
 
 #include <libusermetricsinput/MetricImpl.h>
 #include <libusermetricsinput/MetricManagerImpl.h>
+#include <libusermetricscommon/DBusPaths.h>
+
+#include <QtDBus/QtDBus>
+#include <QtCore/QDebug>
 
 using namespace std;
+using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
-MetricManagerImpl::MetricManagerImpl(QObject *parent) :
-		QObject(parent) {
+MetricManagerImpl::MetricManagerImpl(const QDBusConnection &dbusConnection,
+		QObject *parent) :
+		QObject(parent), m_dbusConnection(dbusConnection), m_interface(
+				DBusPaths::serviceName(), DBusPaths::userMetrics(),
+				dbusConnection) {
 }
 
 MetricManagerImpl::~MetricManagerImpl() {
 }
 
-MetricPtr MetricManagerImpl::add(const string &dataSourceId,
-		const string &formatString) {
-	MetricPtr metric(new MetricImpl(dataSourceId, formatString));
-	m_metrics.insert(QString::fromStdString(dataSourceId), metric);
-	return metric;
+MetricPtr MetricManagerImpl::add(const string &dataSourceIdIn,
+		const string &formatStringIn) {
+	QString dataSourceId(QString::fromStdString(dataSourceIdIn));
+	QString formatString(QString::fromStdString(formatStringIn));
+
+	QDBusObjectPath path(
+			m_interface.createDataSource(dataSourceId, formatString));
+
+	auto metric(m_metrics.find(dataSourceId));
+	if (metric == m_metrics.end()) {
+		MetricPtr newMetric(
+				new MetricImpl(dataSourceIdIn, formatStringIn,
+						m_dbusConnection));
+		metric = m_metrics.insert(dataSourceId, newMetric);
+	}
+	return *metric;
 }

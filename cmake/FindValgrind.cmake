@@ -11,7 +11,7 @@ find_program(
 )
 
 if(VALGRIND_PROGRAM)
-	set(VALGRIND_PROGRAM_OPTIONS "--error-exitcode=1" "--trace-children=yes" "--leak-check=full" "--quiet")
+	set(VALGRIND_PROGRAM_OPTIONS "--suppressions=${CMAKE_SOURCE_DIR}/tests/data/valgrind.suppression" "--error-exitcode=1" "--leak-check=full" "--quiet")
 endif()
 
 find_package_handle_standard_args(

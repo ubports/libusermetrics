@@ -16,31 +16,32 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSINPUT_METRICUPDATE_H_
-#define USERMETRICSINPUT_METRICUPDATE_H_
+#include <libusermetricscommon/DBusPaths.h>
 
-#include <memory>
+using namespace UserMetricsCommon;
 
-#include <libusermetricsinput/UserMetricsInputExport.h>
-
-namespace UserMetricsInput {
-
-class MetricUpdate;
-
-typedef std::unique_ptr<MetricUpdate> MetricUpdatePtr;
-
-class USERMETRICSINPUT_EXPORT MetricUpdate {
-public:
-	virtual ~MetricUpdate();
-
-	virtual void addData(double data) = 0;
-
-	virtual void addNull() = 0;
-
-protected:
-	explicit MetricUpdate();
-};
-
+DBusPaths::DBusPaths() {
 }
 
-#endif // USERMETRICSINPUT_METRICUPDATE_H_
+DBusPaths::~DBusPaths() {
+}
+
+QString DBusPaths::serviceName() {
+	return "com.canonical.UserMetrics";
+}
+
+QString DBusPaths::userMetrics() {
+	return "/com/canonical/UserMetrics";
+}
+
+QString DBusPaths::userData(int id) {
+	return QString("/com/canonical/UserMetrics/UserData/%1").arg(id);
+}
+
+QString DBusPaths::dataSource(int id) {
+	return QString("/com/canonical/UserMetrics/DataSource/%1").arg(id);
+}
+
+QString DBusPaths::dataSet(int id) {
+	return QString("/com/canonical/UserMetrics/DataSet/%1").arg(id);
+}

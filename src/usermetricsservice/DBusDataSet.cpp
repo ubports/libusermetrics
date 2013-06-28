@@ -20,6 +20,7 @@
 #include <usermetricsservice/DBusDataSet.h>
 #include <usermetricsservice/DataSetAdaptor.h>
 #include <libusermetricscommon/DateFactory.h>
+#include <libusermetricscommon/DBusPaths.h>
 
 #include <QtCore/QByteArray>
 #include <QtCore/QDataStream>
@@ -31,11 +32,10 @@ DBusDataSet::DBusDataSet(int id, QDBusConnection &dbusConnection,
 		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new DataSetAdaptor(this)), m_dateFactory(dateFactory), m_id(id), m_path(
-				QString("/com/canonical/UserMetrics/DataSet/%1").arg(m_id)) {
+				DBusPaths::dataSet(m_id)) {
 
 	// DBus setup
-	QDBusConnection connection(QDBusConnection::sessionBus());
-	connection.registerObject(m_path, this);
+	m_dbusConnection.registerObject(m_path, this);
 }
 
 DBusDataSet::~DBusDataSet() {
@@ -59,6 +59,7 @@ QVariantList DBusDataSet::data() const {
 }
 
 void DBusDataSet::update(const QVariantList &data) {
+	qDebug() << "DBusDataSet::update(" << data << ")";
 	DataSet dataSet;
 	DataSet::findById(m_id, &dataSet);
 

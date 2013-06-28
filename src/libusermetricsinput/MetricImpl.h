@@ -20,22 +20,29 @@
 #define USERMETRICSINPUT_METRICIMPL_H_
 
 #include <libusermetricsinput/Metric.h>
+#include <libusermetricscommon/UserMetricsInterface.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#include <QtDBus/QtDBus>
 
 namespace UserMetricsInput {
 
 class MetricImpl: public Metric, public QObject {
 public:
 	explicit MetricImpl(const std::string &dataSourceId,
-			const std::string &formatString, QObject *parent = 0);
+			const std::string &formatString, const QDBusConnection &dbusConnection,
+			QObject *parent = 0);
 
 	virtual ~MetricImpl();
 
 	virtual MetricUpdatePtr update(const std::string &username);
 
 protected:
+	QDBusConnection m_dbusConnection;
+
+	com::canonical::UserMetrics m_interface;
+
 	QString m_dataSourceId;
 
 	QString m_formatString;

@@ -74,9 +74,9 @@ protected:
 
 	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
 
-	QHash<QString, QSharedPointer<DBusDataSource>> m_dataSources;
+	QHash<int, QSharedPointer<DBusDataSource>> m_dataSources;
 
-	QHash<QString, QSharedPointer<DBusUserData>> m_userData;
+	QHash<int, QSharedPointer<DBusUserData>> m_userData;
 };
 
 }

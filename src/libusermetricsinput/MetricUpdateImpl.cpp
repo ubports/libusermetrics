@@ -17,22 +17,26 @@
  */
 
 #include <libusermetricsinput/MetricUpdateImpl.h>
+#include <libusermetricscommon/DBusPaths.h>
 
+using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
-MetricUpdateImpl::MetricUpdateImpl(const Metric &metric,
-		const std::string &username, QObject *parent) :
-		QObject(parent), m_metric(metric), m_username(username) {
+MetricUpdateImpl::MetricUpdateImpl(const QString &path,
+		const QDBusConnection &dbusConnection, QObject *parent) :
+		QObject(parent), m_dbusConnection(dbusConnection), m_interface(
+				DBusPaths::serviceName(), path, dbusConnection) {
 }
 
 MetricUpdateImpl::~MetricUpdateImpl() {
-	// TODO Implement data push on destruction
+	QDBusPendingReply<void> reply(m_interface.update(m_data));
+	reply.waitForFinished();
 }
 
-void MetricUpdateImpl::addData(float data) {
-	m_data << QVariant(data);
+void MetricUpdateImpl::addData(double data) {
+	m_data << data;
 }
 
 void MetricUpdateImpl::addNull() {
-	m_data << QVariant();
+//	m_data << QVariant();
 }

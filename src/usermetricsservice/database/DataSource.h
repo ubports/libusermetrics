@@ -26,9 +26,13 @@ namespace UserMetricsService {
 class Q_DECL_EXPORT DataSource: public QDjangoModel {
 Q_OBJECT
 
+Q_PROPERTY(int id READ id WRITE setId)
+
 Q_PROPERTY(QString name READ name WRITE setName)
 
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString)
+
+Q_CLASSINFO("id", "primary_key=true auto_increment=true")
 
 Q_CLASSINFO("name", "unique=true")
 
@@ -37,9 +41,15 @@ public:
 
 	virtual ~DataSource();
 
+	static void findById(int id, DataSource *dataSource);
+
 	static void findByName(const QString &name, DataSource *dataSource);
 
 	static bool exists(const QString &name);
+
+	int id() const;
+
+	void setId(int id);
 
 	const QString & name() const;
 
@@ -50,6 +60,8 @@ public:
 	void setFormatString(const QString &formatString);
 
 protected:
+	int m_id;
+
 	QString m_name;
 
 	QString m_formatString;

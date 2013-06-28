@@ -29,14 +29,20 @@ using namespace UserMetricsService;
 int main(int argc, char *argv[]) {
 	QCoreApplication application(argc, argv);
 
+	QString databaseName("/tmp/usermetrics.db");
+	QStringList arguments(application.arguments());
+	if (arguments.size() == 2) {
+		databaseName = arguments.at(1);
+	}
+
 	// Database setup
 	QSqlDatabase db(QSqlDatabase::addDatabase("QSQLITE"));
-	db.setDatabaseName("/tmp/usermetrics.db");
+	db.setDatabaseName(databaseName);
 	db.open();
 
 	QDjango::setDatabase(db);
 
-	QDBusConnection connection(QDBusConnection::sessionBus());
+	QDBusConnection connection(QDBusConnection::systemBus());
 
 	QSharedPointer<DateFactory> dateFactory(new DateFactoryImpl());
 	DBusUserMetrics userMetrics(connection, dateFactory);

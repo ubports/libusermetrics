@@ -19,20 +19,21 @@
 #include <usermetricsservice/database/DataSource.h>
 #include <usermetricsservice/DBusDataSource.h>
 #include <usermetricsservice/DataSourceAdaptor.h>
+#include <libusermetricscommon/DBusPaths.h>
 
 #include <QDjangoQuerySet.h>
 
+using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
-DBusDataSource::DBusDataSource(const QString &name,
-		QDBusConnection &dbusConnection, QObject *parent) :
+DBusDataSource::DBusDataSource(int id, QDBusConnection &dbusConnection,
+		QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
-				new DataSourceAdaptor(this)), m_name(name), m_path(
-				QString("/com/canonical/UserMetrics/DataSource/%1").arg(m_name)) {
+				new DataSourceAdaptor(this)), m_id(id), m_path(
+				DBusPaths::dataSource(m_id)) {
 
 	// DBus setup
-	QDBusConnection connection(QDBusConnection::sessionBus());
-	connection.registerObject(m_path, this);
+	m_dbusConnection.registerObject(m_path, this);
 }
 
 DBusDataSource::~DBusDataSource() {
@@ -45,18 +46,21 @@ QString DBusDataSource::path() const {
 }
 
 QString DBusDataSource::name() const {
-	return m_name;
+	qDebug() << "DBusDataSource::name";
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	return dataSource.name();
 }
 
 QString DBusDataSource::formatString() const {
 	DataSource dataSource;
-	DataSource::findByName(m_name, &dataSource);
+	DataSource::findById(m_id, &dataSource);
 	return dataSource.formatString();
 }
 
 void DBusDataSource::setFormatString(const QString &formatString) {
 	DataSource dataSource;
-	DataSource::findByName(m_name, &dataSource);
+	DataSource::findById(m_id, &dataSource);
 	dataSource.setFormatString(formatString);
 	Q_ASSERT(dataSource.save());
 }

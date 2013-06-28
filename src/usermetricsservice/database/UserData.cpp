@@ -22,10 +22,19 @@
 
 using namespace UserMetricsService;
 
-UserData::UserData() {
+UserData::UserData() :
+		m_id(0) {
 }
 
 UserData::~UserData() {
+}
+
+int UserData::id() const {
+	return m_id;
+}
+
+void UserData::setId(int id) {
+	m_id = id;
 }
 
 const QString & UserData::username() const {
@@ -34,6 +43,11 @@ const QString & UserData::username() const {
 
 void UserData::setUsername(const QString &username) {
 	m_username = username;
+}
+
+void UserData::findById(int id, UserData *userData) {
+	QDjangoQuerySet<UserData>().get(
+			QDjangoWhere("id", QDjangoWhere::Equals, id), userData);
 }
 
 void UserData::findByName(const QString &username, UserData *userData) {

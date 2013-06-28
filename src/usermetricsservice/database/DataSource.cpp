@@ -22,10 +22,19 @@
 
 using namespace UserMetricsService;
 
-DataSource::DataSource() {
+DataSource::DataSource() :
+		m_id(0) {
 }
 
 DataSource::~DataSource() {
+}
+
+int DataSource::id() const {
+	return m_id;
+}
+
+void DataSource::setId(int id) {
+	m_id = id;
 }
 
 const QString & DataSource::name() const {
@@ -42,6 +51,11 @@ const QString & DataSource::formatString() const {
 
 void DataSource::setFormatString(const QString &formatString) {
 	m_formatString = formatString;
+}
+
+void DataSource::findById(int id, DataSource *dataSource) {
+	QDjangoQuerySet<DataSource>().get(
+			QDjangoWhere("id", QDjangoWhere::Equals, id), dataSource);
 }
 
 void DataSource::findByName(const QString &name, DataSource *dataSource) {

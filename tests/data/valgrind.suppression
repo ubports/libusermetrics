@@ -1,0 +1,8 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:pthread_create@@GLIBC_2.2.5
+   fun:_ZN7QThread5startENS_8PriorityE
+   obj:/usr/lib/x86_64-linux-gnu/libQt5Core.so.*
+}

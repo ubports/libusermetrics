@@ -22,6 +22,7 @@
 #include <usermetricsservice/DBusDataSet.h>
 #include <libusermetricscommon/DateFactory.h>
 
+#include <testutils/DBusTest.h>
 #include <testutils/QStringPrinter.h>
 #include <testutils/QVariantListPrinter.h>
 
@@ -36,23 +37,21 @@ using namespace std;
 using namespace testing;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
+using namespace UserMetricsTestUtils;
 
 namespace {
-
-static const QString bus = "unix:path=/tmp/usermetricsservice-test";
 
 class MockDateFactory: public DateFactory {
 public:
 	MOCK_CONST_METHOD0(currentDate, QDate());
 };
 
-class TestUserMetricsService: public Test {
+class TestUserMetricsService: public DBusTest {
 protected:
 	TestUserMetricsService() :
 			db(
 					QSqlDatabase::addDatabase("QSQLITE",
-							"test-user-metrics-service")), connection(
-					QDBusConnection::connectToBus(bus, "test-connection")), dateFactory(
+							"test-user-metrics-service")), dateFactory(
 					new NiceMock<MockDateFactory>()) {
 		db.setDatabaseName(":memory:");
 		db.open();
@@ -72,18 +71,16 @@ protected:
 
 	QSqlDatabase db;
 
-	QDBusConnection connection;
-
 	QSharedPointer<MockDateFactory> dateFactory;
 };
 
 TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 	{
-		DBusUserMetrics userMetrics(connection, dateFactory);
+		DBusUserMetrics userMetrics(*connection, dateFactory);
 
 		EXPECT_TRUE(userMetrics.dataSources().empty());
 
-		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/facebook"),
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/1"),
 				userMetrics.createDataSource("facebook", "%1 messages received").path());
 
 		DBusDataSourcePtr facebook(userMetrics.dataSource("facebook"));
@@ -92,16 +89,16 @@ TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 
 		QList<QDBusObjectPath> dataSources(userMetrics.dataSources());
 		EXPECT_EQ(1, dataSources.size());
-		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/facebook"),
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/1"),
 				dataSources.first().path());
 	}
 
 	{
-		DBusUserMetrics userMetrics(connection, dateFactory);
+		DBusUserMetrics userMetrics(*connection, dateFactory);
 
 		QList<QDBusObjectPath> dataSources(userMetrics.dataSources());
 		EXPECT_EQ(1, dataSources.size());
-		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/facebook"),
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/1"),
 				dataSources.first().path());
 
 		DBusDataSourcePtr facebook(userMetrics.dataSource("facebook"));
@@ -112,7 +109,7 @@ TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 
 TEST_F(TestUserMetricsService, UpdatesFormatString) {
 	{
-		DBusUserMetrics userMetrics(connection, dateFactory);
+		DBusUserMetrics userMetrics(*connection, dateFactory);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received");
 
@@ -124,7 +121,7 @@ TEST_F(TestUserMetricsService, UpdatesFormatString) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(connection, dateFactory);
+		DBusUserMetrics userMetrics(*connection, dateFactory);
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("%1 new format string"), twitter->formatString());
@@ -133,11 +130,11 @@ TEST_F(TestUserMetricsService, UpdatesFormatString) {
 
 TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 	{
-		DBusUserMetrics userMetrics(connection, dateFactory);
+		DBusUserMetrics userMetrics(*connection, dateFactory);
 
 		EXPECT_TRUE(userMetrics.dataSources().empty());
 
-		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/alice"),
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/1"),
 				userMetrics.createUserData("alice").path());
 
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
@@ -145,16 +142,16 @@ TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 
 		QList<QDBusObjectPath> userData(userMetrics.userData());
 		EXPECT_EQ(1, userData.size());
-		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/alice"),
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/1"),
 				userData.first().path());
 	}
 
 	{
-		DBusUserMetrics userMetrics(connection, dateFactory);
+		DBusUserMetrics userMetrics(*connection, dateFactory);
 
 		QList<QDBusObjectPath> userData(userMetrics.userData());
 		EXPECT_EQ(1, userData.size());
-		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/alice"),
+		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/1"),
 				userData.first().path());
 
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
@@ -166,7 +163,7 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 	QVariantList data( { 100.0, 50.0, 0.0, -50.0, -100.0 });
 
 	{
-		DBusUserMetrics userMetrics(connection, dateFactory);
+		DBusUserMetrics userMetrics(*connection, dateFactory);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received");
 		userMetrics.createUserData("alice");
@@ -193,7 +190,7 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(connection, dateFactory);
+		DBusUserMetrics userMetrics(*connection, dateFactory);
 
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
 		EXPECT_EQ(QString("alice"), alice->username());
@@ -211,7 +208,7 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 }
 
 TEST_F(TestUserMetricsService, CreateDataSetsWithUnknownSourceFailsGracefully) {
-	DBusUserMetrics userMetrics(connection, dateFactory);
+	DBusUserMetrics userMetrics(*connection, dateFactory);
 
 	userMetrics.createUserData("bob");
 	DBusUserDataPtr bob(userMetrics.userData("bob"));
@@ -223,7 +220,7 @@ TEST_F(TestUserMetricsService, UpdateData) {
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
 			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 8)));
 
-	DBusUserMetrics userMetrics(connection, dateFactory);
+	DBusUserMetrics userMetrics(*connection, dateFactory);
 	userMetrics.createDataSource("twitter", "foo");
 
 	userMetrics.createUserData("bob");
@@ -249,7 +246,7 @@ TEST_F(TestUserMetricsService, UpdateDataWithGap) {
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
 			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 15)));
 
-	DBusUserMetrics userMetrics(connection, dateFactory);
+	DBusUserMetrics userMetrics(*connection, dateFactory);
 	userMetrics.createDataSource("twitter", "foo");
 
 	userMetrics.createUserData("bob");
@@ -283,7 +280,7 @@ TEST_F(TestUserMetricsService, UpdateDataTotallyOverwrite) {
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
 			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 7)));
 
-	DBusUserMetrics userMetrics(connection, dateFactory);
+	DBusUserMetrics userMetrics(*connection, dateFactory);
 	userMetrics.createDataSource("twitter", "foo");
 
 	userMetrics.createUserData("bob");

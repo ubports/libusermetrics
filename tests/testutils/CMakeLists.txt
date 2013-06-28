@@ -1,6 +1,7 @@
 
 set(
 	USERMETRICS_TEST_UTILS_SRC
+	DBusTest.cpp
 	QColorPrinter.cpp
 	QStringPrinter.cpp
 	QVariantPrinter.cpp
@@ -18,4 +19,5 @@ qt5_use_modules(
 	usermetrics-test-utils
 	Core
 	Gui
+	DBus
 )

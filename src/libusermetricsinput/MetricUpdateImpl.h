@@ -21,8 +21,10 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QVariantList>
+#include <QtDBus/QtDBus>
 
 #include <libusermetricsinput/MetricUpdate.h>
+#include <libusermetricscommon/DataSetInterface.h>
 
 namespace UserMetricsInput {
 
@@ -30,19 +32,19 @@ class Metric;
 
 class MetricUpdateImpl: public MetricUpdate, public QObject {
 public:
-	explicit MetricUpdateImpl(const Metric &metric, const std::string &username,
-			QObject *parent = 0);
+	explicit MetricUpdateImpl(const QString &path,
+			const QDBusConnection &dbusConnection, QObject *parent = 0);
 
 	virtual ~MetricUpdateImpl();
 
-	virtual void addData(float data);
+	virtual void addData(double data);
 
 	virtual void addNull();
 
 protected:
-	const Metric &m_metric;
+	QDBusConnection m_dbusConnection;
 
-	std::string m_username;
+	com::canonical::usermetrics::DataSet m_interface;
 
 	QVariantList m_data;
 };

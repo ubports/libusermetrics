@@ -17,17 +17,27 @@
  */
 
 #include <libusermetricsinput/MetricManagerImpl.h>
+#include <libusermetricscommon/UserMetricsInterface.h>
+#include <libusermetricscommon/DataSourceInterface.h>
+#include <libusermetricscommon/DBusPaths.h>
+
+#include <QtCore/QDebug>
+
+#include <testutils/DBusTest.h>
+#include <testutils/QStringPrinter.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 using namespace std;
 using namespace testing;
+using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
+using namespace UserMetricsTestUtils;
 
 namespace {
 
-class TestMetricManagerImpl: public Test {
+class TestMetricManagerImpl: public DBusTest {
 protected:
 	TestMetricManagerImpl() {
 	}
@@ -36,15 +46,48 @@ protected:
 	}
 };
 
-TEST_F(TestMetricManagerImpl, Foo) {
-	MetricManagerPtr manager(new MetricManagerImpl());
+TEST_F(TestMetricManagerImpl, TestCanAddDataSourceMultipleTimes) {
+	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
+			DBusPaths::userMetrics(), *connection);
+	{
+		QList<QDBusObjectPath> dataSources = userMetricsInterface.dataSources();
+		EXPECT_TRUE(dataSources.empty());
+	}
+
+	{
+		MetricManagerPtr manager(new MetricManagerImpl(*connection));
+		MetricPtr metric(manager->add("data-source-id", "format string %1"));
+	}
+
+	{
+		MetricManagerPtr manager(new MetricManagerImpl(*connection));
+		MetricPtr metric(manager->add("data-source-id", "format string %1"));
+	}
+
+	{
+		QList<QDBusObjectPath> dataSources = userMetricsInterface.dataSources();
+		EXPECT_EQ(1, dataSources.size());
+		EXPECT_EQ(DBusPaths::dataSource(1), dataSources.first().path());
+	}
+
+	com::canonical::usermetrics::DataSource dataSourceInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSource(1), *connection);
+	QString name(dataSourceInterface.name());
+	EXPECT_EQ(QString("data-source-id"), name);
+}
+
+TEST_F(TestMetricManagerImpl, TestCanAddDataAndUpdate) {
+	MetricManagerPtr manager(new MetricManagerImpl(*connection));
 
 	MetricPtr metric(manager->add("data-source-id", "format string %1"));
 
-	MetricUpdatePtr update(metric->update("username"));
-	update->addData(1.0);
-	update->addNull();
-	update->addData(0.1);
+	{
+		MetricUpdatePtr update(metric->update("username"));
+		update->addData(1.0);
+		update->addNull();
+		update->addData(0.1);
+	}
+	userMetricsService.waitForReadyRead(100);
 }
 
 } // namespace

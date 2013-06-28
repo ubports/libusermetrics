@@ -35,21 +35,21 @@ protected:
 	}
 };
 
-TEST_F(TestUserMetricInputCAPI, Foo) {
-	UserMetricsInputMetricManager metricManager =
-			usermetricsinput_metricmanager_new();
-
-	UserMetricsInputMetric metric = usermetricsinput_metricmanager_add(
-			metricManager, "data-source-id", "format string %1");
-
-	UserMetricsInputMetricUpdate metricUpdate = usermetricsinput_metric_update(
-			metric, "username");
-	usermetricsinput_metricupdate_add_data(metricUpdate, 1.0);
-	usermetricsinput_metricupdate_add_null(metricUpdate);
-	usermetricsinput_metricupdate_add_data(metricUpdate, 0.1);
-	usermetricsinput_metricupdate_delete(metricUpdate);
-
-	usermetricsinput_metricmanager_delete(metricManager);
-}
+//TEST_F(TestUserMetricInputCAPI, Foo) {
+//	UserMetricsInputMetricManager metricManager =
+//			usermetricsinput_metricmanager_new();
+//
+//	UserMetricsInputMetric metric = usermetricsinput_metricmanager_add(
+//			metricManager, "data-source-id", "format string %1");
+//
+//	UserMetricsInputMetricUpdate metricUpdate = usermetricsinput_metric_update(
+//			metric, "username");
+//	usermetricsinput_metricupdate_add_data(metricUpdate, 1.0);
+//	usermetricsinput_metricupdate_add_null(metricUpdate);
+//	usermetricsinput_metricupdate_add_data(metricUpdate, 0.1);
+//	usermetricsinput_metricupdate_delete(metricUpdate);
+//
+//	usermetricsinput_metricmanager_delete(metricManager);
+//}
 
 } // namespace

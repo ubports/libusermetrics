@@ -19,7 +19,7 @@ qt5_add_dbus_adaptor(
 
 qt5_add_dbus_adaptor(
 	USERMETRICSSERVICE_SOURCES
-	"${DATA_DIR}/com.canonical.UserMetrics.DataSource.xml"
+	"${DATA_DIR}/com.canonical.usermetrics.DataSource.xml"
 	usermetricsservice/DBusDataSource.h
 	UserMetricsService::DBusDataSource
 	DataSourceAdaptor
@@ -27,7 +27,7 @@ qt5_add_dbus_adaptor(
 
 qt5_add_dbus_adaptor(
 	USERMETRICSSERVICE_SOURCES
-	"${DATA_DIR}/com.canonical.UserMetrics.UserData.xml"
+	"${DATA_DIR}/com.canonical.usermetrics.UserData.xml"
 	usermetricsservice/DBusUserData.h
 	UserMetricsService::DBusUserData
 	UserDataAdaptor
@@ -35,7 +35,7 @@ qt5_add_dbus_adaptor(
 
 qt5_add_dbus_adaptor(
 	USERMETRICSSERVICE_SOURCES
-	"${DATA_DIR}/com.canonical.UserMetrics.DataSet.xml"
+	"${DATA_DIR}/com.canonical.usermetrics.DataSet.xml"
 	usermetricsservice/DBusDataSet.h
 	UserMetricsService::DBusDataSet
 	DataSetAdaptor

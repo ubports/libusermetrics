@@ -16,31 +16,30 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSINPUT_METRICUPDATE_H_
-#define USERMETRICSINPUT_METRICUPDATE_H_
+#ifndef USERMETRICSCOMMON_DBUSPATHS_H_
+#define USERMETRICSCOMMON_DBUSPATHS_H_
 
-#include <memory>
+#include "QtCore/QString"
 
-#include <libusermetricsinput/UserMetricsInputExport.h>
+namespace UserMetricsCommon {
 
-namespace UserMetricsInput {
-
-class MetricUpdate;
-
-typedef std::unique_ptr<MetricUpdate> MetricUpdatePtr;
-
-class USERMETRICSINPUT_EXPORT MetricUpdate {
+class DBusPaths {
 public:
-	virtual ~MetricUpdate();
+	DBusPaths();
 
-	virtual void addData(double data) = 0;
+	virtual ~DBusPaths();
 
-	virtual void addNull() = 0;
+	static QString serviceName();
 
-protected:
-	explicit MetricUpdate();
+	static QString userMetrics();
+
+	static QString userData(int id);
+
+	static QString dataSource(int id);
+
+	static QString dataSet(int id);
 };
 
 }
 
-#endif // USERMETRICSINPUT_METRICUPDATE_H_
+#endif // USERMETRICSCOMMON_DBUSPATHS_H_

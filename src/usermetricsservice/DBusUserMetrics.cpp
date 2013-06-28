@@ -24,6 +24,7 @@
 #include <usermetricsservice/database/UserData.h>
 #include <usermetricsservice/database/DataSet.h>
 #include <libusermetricscommon/DateFactory.h>
+#include <libusermetricscommon/DBusPaths.h>
 
 #include <QDjango.h>
 #include <QDjangoQuerySet.h>
@@ -37,8 +38,8 @@ DBusUserMetrics::DBusUserMetrics(QDBusConnection &dbusConnection,
 				new UserMetricsAdaptor(this)), m_dateFactory(dateFactory) {
 
 	// DBus setup
-	m_dbusConnection.registerService("com.canonical.UserMetrics");
-	m_dbusConnection.registerObject("/com/canonical/UserMetrics", this);
+	m_dbusConnection.registerService(DBusPaths::serviceName());
+	m_dbusConnection.registerObject(DBusPaths::userMetrics(), this);
 
 	// Database setup
 	QDjango::registerModel<DataSource>();
@@ -66,69 +67,83 @@ QList<QDBusObjectPath> DBusUserMetrics::dataSources() const {
 
 void DBusUserMetrics::syncDatabase() {
 	{
-		QSet<QString> dataSourceNames;
+		QSet<int> dataSourceNames;
 		QDjangoQuerySet<DataSource> query;
 		for (const DataSource &dataSource : query) {
-			const QString &name(dataSource.name());
-			dataSourceNames << name;
+			const int id(dataSource.id());
+			dataSourceNames << id;
 			// if we don't have a local cache
-			if (!m_dataSources.contains(name)) {
+			if (!m_dataSources.contains(id)) {
+				qDebug() << "DBusUserMetrics::syncDatabase create DataSource("
+						<< id << ")";
 				DBusDataSourcePtr dbusDataSource(
-						new DBusDataSource(name, m_dbusConnection));
-				m_dataSources.insert(name, dbusDataSource);
+						new DBusDataSource(id, m_dbusConnection));
+				m_dataSources.insert(id, dbusDataSource);
 			}
 		}
 		// remove any cached references to deleted sources
-		QSet<QString> cachedDataSourceNames(
-				QSet<QString>::fromList(m_dataSources.keys()));
-		QSet<QString> &toRemove(
-				cachedDataSourceNames.subtract(dataSourceNames));
-		for (QString name : toRemove) {
-			m_dataSources.remove(name);
+		QSet<int> cachedDataSourceNames(
+				QSet<int>::fromList(m_dataSources.keys()));
+		QSet<int> &toRemove(cachedDataSourceNames.subtract(dataSourceNames));
+		for (int id : toRemove) {
+			m_dataSources.remove(id);
 		}
 	}
 
 	{
-		QSet<QString> usernames;
+		QSet<int> usernames;
 		QDjangoQuerySet<UserData> query;
 		for (const UserData &userData : query) {
-			const QString &username(userData.username());
-			usernames << username;
+			const int id(userData.id());
+			usernames << id;
 			// if we don't have a local cache
-			if (!m_userData.contains(username)) {
+			if (!m_userData.contains(id)) {
+				qDebug() << "DBusUserMetrics::syncDatabase create UserData("
+						<< id << ")";
 				DBusUserDataPtr dbusUserData(
-						new DBusUserData(username, *this, m_dbusConnection,
+						new DBusUserData(id, *this, m_dbusConnection,
 								m_dateFactory));
-				m_userData.insert(userData.username(), dbusUserData);
+				m_userData.insert(id, dbusUserData);
 			}
 		}
 		// remove any cached references to deleted sources
-		QSet<QString> cachedUsernames(
-				QSet<QString>::fromList(m_userData.keys()));
-		QSet<QString> &toRemove(cachedUsernames.subtract(usernames));
-		for (QString name : toRemove) {
-			m_userData.remove(name);
+		QSet<int> cachedUsernames(QSet<int>::fromList(m_userData.keys()));
+		QSet<int> &toRemove(cachedUsernames.subtract(usernames));
+		for (int id : toRemove) {
+			m_userData.remove(id);
 		}
 	}
 }
 
 QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		const QString &formatString) {
+	qDebug() << "createDataSource(" << name << formatString << ")";
 	QDjangoQuerySet<DataSource> dataSourcesQuery;
-	QDjangoQuerySet<DataSource> dataSourceQuery(
+	QDjangoQuerySet<DataSource> query(
 			dataSourcesQuery.filter(
 					QDjangoWhere("name", QDjangoWhere::Equals, name)));
 
-	if (dataSourceQuery.size() == 0) {
+	Q_ASSERT(query.size() != -1);
+
+	int id;
+
+	if (query.size() == 0) {
 		DataSource dataSource;
 		dataSource.setName(name);
 		dataSource.setFormatString(formatString);
 		Q_ASSERT(dataSource.save());
 
+		id = dataSource.id();
+
 		syncDatabase();
+	} else {
+		DataSource dataSource;
+		query.at(0, &dataSource);
+
+		id = dataSource.id();
 	}
 
-	return QDBusObjectPath((*m_dataSources.constFind(name))->path());
+	return QDBusObjectPath((*m_dataSources.constFind(id))->path());
 }
 
 QList<QDBusObjectPath> DBusUserMetrics::userData() const {
@@ -140,25 +155,48 @@ QList<QDBusObjectPath> DBusUserMetrics::userData() const {
 }
 
 QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
+	qDebug() << "createUserData(" << username << ")";
+
 	QDjangoQuerySet<UserData> query(
 			QDjangoQuerySet<UserData>().filter(
 					QDjangoWhere("username", QDjangoWhere::Equals, username)));
+
+	Q_ASSERT(query.size() != -1);
+
+	int id;
 
 	if (query.size() == 0) {
 		UserData userData;
 		userData.setUsername(username);
 		Q_ASSERT(userData.save());
 
+		id = userData.id();
+
+		qDebug() << "-> new data with id(" << id << ")";
+
 		syncDatabase();
+	} else {
+		UserData userData;
+		query.at(0, &userData);
+
+		qDebug() << "-> existing data with id(" << id << ")";
+
+		id = userData.id();
 	}
 
-	return QDBusObjectPath((*m_userData.constFind(username))->path());
+	return QDBusObjectPath((*m_userData.constFind(id))->path());
 }
 
 DBusDataSourcePtr DBusUserMetrics::dataSource(const QString &name) const {
-	return m_dataSources.value(name);
+	DataSource dataSource;
+	DataSource::findByName(name, &dataSource);
+
+	return m_dataSources.value(dataSource.id());
 }
 
 DBusUserDataPtr DBusUserMetrics::userData(const QString &username) const {
-	return m_userData.value(username);
+	UserData userData;
+	UserData::findByName(username, &userData);
+
+	return m_userData.value(userData.id());
 }
