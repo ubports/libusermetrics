@@ -29,6 +29,7 @@
 #include <QDjango.h>
 
 #include <QSqlDatabase>
+#include <QtCore/QVariantList>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -229,16 +230,19 @@ TEST_F(TestUserMetricsService, UpdateData) {
 	bob->createDataSet("twitter");
 	DBusDataSetPtr twitter(bob->dataSet("twitter"));
 
+	QVariantList first( { 5.0, 4.0, 3.0, 2.0, 1.0 });
+	QVariantList second( { 10.0, 9.0, 8.0, 7.0, 6.0 });
+	QVariantList expected( { 10.0, 9.0, 8.0, 7.0, 6.0, 3.0, 2.0, 1.0 });
+
 	// first update happens on the 5th of the month
-	twitter->update(QVariantList( { 5.0, 4.0, 3.0, 2.0, 1.0 }));
-	EXPECT_EQ(QVariantList( { 5.0, 4.0, 3.0, 2.0, 1.0 }), twitter->data());
+	twitter->update(first);
+	EXPECT_EQ(first, twitter->data());
 	EXPECT_EQ(QDate(2001, 01, 5), twitter->lastUpdated());
 
 	// second update happens on the 8th of the month
 	// -> 3 new data points and 2 overwritten
-	twitter->update(QVariantList( { 10.0, 9.0, 8.0, 7.0, 6.0 }));
-	EXPECT_EQ(QVariantList( { 10.0, 9.0, 8.0, 7.0, 6.0, 3.0, 2.0, 1.0 }),
-			twitter->data());
+	twitter->update(second);
+	EXPECT_EQ(expected, twitter->data());
 	EXPECT_EQ(QDate(2001, 01, 8), twitter->lastUpdated());
 }
 
