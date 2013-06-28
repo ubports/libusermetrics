@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 	// Database setup
 	QSqlDatabase db(QSqlDatabase::addDatabase("QSQLITE"));
 	db.setDatabaseName(databaseName);
-	db.open();
+	Q_ASSERT(db.open());
 
 	QDjango::setDatabase(db);
 
