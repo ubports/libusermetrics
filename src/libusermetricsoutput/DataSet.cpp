@@ -46,9 +46,24 @@ void DataSet::setFormatString(const QString &formatString) {
 	}
 }
 
-void DataSet::update(const QDate &lastUpdated, const QVariantList &data) {
-	m_lastUpdated = lastUpdated;
+void DataSet::setData(const QVariantList &data) {
 	m_data = data;
-	lastUpdatedChanged(m_lastUpdated);
+	for (QVariant &variant : m_data) {
+		if (variant.type() == QVariant::String) {
+			variant = QVariant();
+		}
+	}
 	dataChanged(&m_data);
+}
+
+void DataSet::setLastUpdated(const QDate &lastUpdated) {
+	if (m_lastUpdated != lastUpdated) {
+		m_lastUpdated = lastUpdated;
+		lastUpdatedChanged(m_lastUpdated);
+	}
+}
+
+void DataSet::update(const uint lastUpdated, const QVariantList &data) {
+	setLastUpdated(QDateTime::fromTime_t(lastUpdated).date());
+	setData(data);
 }

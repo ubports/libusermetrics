@@ -25,11 +25,7 @@ SyncedDataSet::SyncedDataSet(
 		QObject *parent) :
 		DataSet(parent), m_interface(interface) {
 
-	m_data = m_interface->data();
-	m_lastUpdated = QDateTime::fromTime_t(m_interface->lastUpdated()).date();
-
-	qDebug() << "dataset::data = " << m_data;
-	qDebug() << "dataset::lastUpdated = " << m_lastUpdated;
+	update(m_interface->lastUpdated(), m_interface->data());
 }
 
 SyncedDataSet::~SyncedDataSet() {

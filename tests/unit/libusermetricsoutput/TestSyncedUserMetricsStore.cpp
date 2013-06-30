@@ -100,22 +100,17 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 
 	SyncedUserMetricsStore store(*connection);
 
-	auto userDataIterator(store.constFind("username"));
+	UserMetricsStore::const_iterator userDataIterator(
+			store.constFind("username"));
 	ASSERT_NE(userDataIterator, store.constEnd());
 	EXPECT_EQ(QString("username"), userDataIterator.key());
 	UserDataPtr userData(*userDataIterator);
 
-	auto dataSetIterator(userData->constBegin());
+	UserData::const_iterator dataSetIterator(userData->constBegin());
 	ASSERT_NE(dataSetIterator, userData->constEnd());
 	DataSetPtr dataSet(*dataSetIterator);
 	EXPECT_EQ(expected, dataSet->data());
 	EXPECT_EQ(QDate::currentDate(), dataSet->lastUpdated());
 }
-
-//	QVariantList data(dataSetInterface.data());
-//	ASSERT_EQ(3, data.size());
-//	EXPECT_FLOAT_EQ(1.0, data.at(0).toDouble());
-//	EXPECT_EQ(QString(""), data.at(1).toString());
-//	EXPECT_FLOAT_EQ(0.1, data.at(2).toDouble());
 
 }// namespace

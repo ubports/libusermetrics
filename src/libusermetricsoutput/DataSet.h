@@ -51,10 +51,14 @@ public:
 
 	const QDate & lastUpdated() const;
 
-	void update(const QDate &lastUpdated, const QVariantList &data);
-
 public Q_SLOTS:
+	void update(const uint lastUpdated, const QVariantList &data);
+
 	void setFormatString(const QString &formatString);
+
+	void setData(const QVariantList &data);
+
+	void setLastUpdated(const QDate &lastUpdated);
 
 Q_SIGNALS:
 	void lastUpdatedChanged(const QDate &lastUpdated);

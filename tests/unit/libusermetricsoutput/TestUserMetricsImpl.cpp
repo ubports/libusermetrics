@@ -214,7 +214,8 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	dataSet->setFormatString("test format string %1");
 
 	// The data starts today
-	dataSet->update(QDate(2001, 01, 07), data);
+	dataSet->setLastUpdated(QDate(2001, 01, 07));
+	dataSet->setData(data);
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
@@ -286,7 +287,8 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	dataSet->setFormatString("test other format string %1");
 
 	// The data starts 3 days ago
-	dataSet->update(QDate(2001, 01, 04), data);
+	dataSet->setLastUpdated(QDate(2001, 01, 04));
+	dataSet->setData(data);
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
@@ -351,7 +353,8 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	dataSet->setFormatString("this format string won't be used %1");
 
 	// The data starts 3 days ago
-	dataSet->update(QDate(2000, 12, 25), data);
+	dataSet->setLastUpdated(QDate(2000, 12, 25));
+	dataSet->setData(data);
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
@@ -412,7 +415,8 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	dataSet->setFormatString("a format string with %1 in it");
 
 	// The data starts 2 days ago
-	dataSet->update(QDate(2001, 1, 5), data);
+	dataSet->setLastUpdated(QDate(2001, 1, 5));
+	dataSet->setData(data);
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
@@ -467,7 +471,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 				DataSetPtr(new DataSet()));
 		DataSetPtr dataSet(*dataSetIterator);
 		dataSet->setFormatString("data source one %1 value");
-		dataSet->update(QDate(2001, 1, 4), data);
+		dataSet->setLastUpdated(QDate(2001, 1, 4));
+		dataSet->setData(data);
 	}
 
 	// second data set
@@ -479,7 +484,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 				DataSetPtr(new DataSet()));
 		DataSetPtr dataSet(*dataSetIterator);
 		dataSet->setFormatString("data source 2 %1 value");
-		dataSet->update(QDate(2001, 1, 7), data);
+		dataSet->setLastUpdated(QDate(2001, 1, 7));
+		dataSet->setData(data);
 	}
 
 	QSharedPointer<ColorTheme> blankColorTheme(
@@ -576,7 +582,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 					"data-source-one", DataSetPtr(new DataSet()));
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setFormatString("data source one %1 value");
-			dataSet->update(QDate(2001, 1, 7), data);
+			dataSet->setLastUpdated(QDate(2001, 1, 7));
+			dataSet->setData(data);
 		}
 
 		// second data set
@@ -588,7 +595,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 					"data-source-two", DataSetPtr(new DataSet()));
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setFormatString("data source two %1 value");
-			dataSet->update(QDate(2001, 1, 7), data);
+			dataSet->setLastUpdated(QDate(2001, 1, 7));
+			dataSet->setData(data);
 		}
 	}
 
@@ -608,7 +616,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 					"data-source-three", DataSetPtr(new DataSet()));
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setFormatString("data source three %1 value");
-			dataSet->update(QDate(2001, 1, 7), data);
+			dataSet->setLastUpdated(QDate(2001, 1, 7));
+			dataSet->setData(data);
 		}
 
 		// fifth data set
@@ -620,7 +629,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 					"data-source-xfour", DataSetPtr(new DataSet()));
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setFormatString("data source four %1 value");
-			dataSet->update(QDate(2001, 1, 7), data);
+			dataSet->setLastUpdated(QDate(2001, 1, 7));
+			dataSet->setData(data);
 		}
 	}
 
