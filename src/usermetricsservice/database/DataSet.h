@@ -43,9 +43,9 @@ Q_PROPERTY(QDate lastUpdated READ lastUpdated WRITE setLastUpdated)
 
 Q_CLASSINFO("id", "primary_key=true auto_increment=true")
 
-Q_CLASSINFO("userData", "on_delete=cascade")
+Q_CLASSINFO("userData", "on_delete=cascade db_index=true")
 
-Q_CLASSINFO("dataSource", "on_delete=cascade")
+Q_CLASSINFO("dataSource", "on_delete=cascade db_index=true")
 
 Q_CLASSINFO("data", "null=true")
 
