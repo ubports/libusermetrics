@@ -23,6 +23,7 @@
 #include <QtCore/QDate>
 #include <QtCore/QString>
 #include <QtCore/QVariantList>
+#include <QtCore/QDebug>
 
 using namespace UserMetricsOutput;
 using namespace UserMetricsCommon;
@@ -30,7 +31,7 @@ using namespace UserMetricsCommon;
 UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
 		QSharedPointer<UserMetricsStore> userDataStore,
 		QSharedPointer<ColorThemeProvider> colorThemeProvider, QObject *parent) :
-		UserMetrics(parent), m_dateFactory(dateFactory), m_userDataStore(
+		UserMetrics(parent), m_dateFactory(dateFactory), m_userMetricsStore(
 				userDataStore), m_colorThemeProvider(colorThemeProvider), m_firstColor(
 				new ColorThemeImpl(this)), m_firstMonth(
 				new QVariantListModel(this)), m_secondColor(
@@ -78,10 +79,10 @@ void UserMetricsImpl::setUsernameInternal(const QString &username) {
 
 	m_oldNoDataForUser = m_noDataForUser;
 
-	m_userDataIterator = m_userDataStore->constFind(m_username);
+	m_userDataIterator = m_userMetricsStore->constFind(m_username);
 
 	// first check to see if there is UserData for this user
-	m_noDataForUser = m_userDataIterator == m_userDataStore->constEnd();
+	m_noDataForUser = m_userDataIterator == m_userMetricsStore->constEnd();
 	if (!m_noDataForUser) {
 		// if there is a UserData container
 		m_userData = *m_userDataIterator;
@@ -195,7 +196,14 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		if (data.empty() || currentDate != lastUpdated) {
 			setLabel("No data for today");
 		} else {
-			setLabel(m_dataSet->formatString().arg(data.first().toString()));
+			DataSourcePtr dataSource(m_userMetricsStore->dataSource(dataSetId));
+			if (dataSource.isNull()) {
+				qDebug() << "Data source [" << dataSetId << "] not found.";
+			} else {
+				setLabel(
+						dataSource->formatString().arg(
+								data.first().toString()));
+			}
 		}
 	}
 

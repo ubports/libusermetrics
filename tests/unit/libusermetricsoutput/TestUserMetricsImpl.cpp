@@ -21,6 +21,7 @@
 #include <libusermetricsoutput/DataSet.h>
 #include <testutils/QStringPrinter.h>
 #include <testutils/QVariantPrinter.h>
+#include <testutils/QVariantListPrinter.h>
 #include <testutils/MockSignalReceiver.h>
 
 #include <QtCore/QObject>
@@ -203,6 +204,10 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	}
 	data << 70.0 << 65.0;
 
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("test format string %1");
+	userDataStore->insert("data-source-id", dataSource);
+
 	UserMetricsStore::iterator userDataIterator(
 			userDataStore->insert("username", UserDataPtr(new UserData())));
 	UserDataPtr userData(*userDataIterator);
@@ -210,8 +215,6 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
 			DataSetPtr(new DataSet()));
 	DataSetPtr dataSet(*dataSetIterator);
-
-	dataSet->setFormatString("test format string %1");
 
 	// The data starts today
 	dataSet->setLastUpdated(QDate(2001, 01, 07));
@@ -276,6 +279,10 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	}
 	data << 70.0 << 65.0;
 
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("test other format string %1");
+	userDataStore->insert("data-source-id2", dataSource);
+
 	UserMetricsStore::iterator userDataIterator(
 			userDataStore->insert("username", UserDataPtr(new UserData())));
 	UserDataPtr userData(*userDataIterator);
@@ -283,8 +290,6 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	UserData::iterator dataSetIterator = userData->insert("data-source-id2",
 			DataSetPtr(new DataSet()));
 	DataSetPtr dataSet(*dataSetIterator);
-
-	dataSet->setFormatString("test other format string %1");
 
 	// The data starts 3 days ago
 	dataSet->setLastUpdated(QDate(2001, 01, 04));
@@ -342,6 +347,10 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	// Data just for December
 	data << 95.0 << 100.0 << 90.0 << 0.0;
 
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("this format string won't be used %1");
+	userDataStore->insert("data-source-id", dataSource);
+
 	UserMetricsStore::iterator userDataIterator(
 			userDataStore->insert("username", UserDataPtr(new UserData())));
 	UserDataPtr userData(*userDataIterator);
@@ -349,8 +358,6 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
 			DataSetPtr(new DataSet()));
 	DataSetPtr dataSet(*dataSetIterator);
-
-	dataSet->setFormatString("this format string won't be used %1");
 
 	// The data starts 3 days ago
 	dataSet->setLastUpdated(QDate(2000, 12, 25));
@@ -404,6 +411,10 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	// Data just for January
 	data << 100.0 << 0.0;
 
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("a format string with %1 in it");
+	userDataStore->insert("data-source-id", dataSource);
+
 	UserMetricsStore::iterator userDataIterator(
 			userDataStore->insert("username", UserDataPtr(new UserData())));
 	UserDataPtr userData(*userDataIterator);
@@ -411,8 +422,6 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
 			DataSetPtr(new DataSet()));
 	DataSetPtr dataSet(*dataSetIterator);
-
-	dataSet->setFormatString("a format string with %1 in it");
 
 	// The data starts 2 days ago
 	dataSet->setLastUpdated(QDate(2001, 1, 5));
@@ -465,25 +474,31 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 
 	// first data set
 	{
+		DataSourcePtr dataSource(new DataSource());
+		dataSource->setFormatString("data source one %1 value");
+		userDataStore->insert("data-source-one", dataSource);
+
 		QVariantList data;
 		data << 100.0 << 95.0 << 0.0 << 0.0 << 0.0 << 0.0 << 90.0 << 85.0;
 		UserData::iterator dataSetIterator = userData->insert("data-source-one",
 				DataSetPtr(new DataSet()));
 		DataSetPtr dataSet(*dataSetIterator);
-		dataSet->setFormatString("data source one %1 value");
 		dataSet->setLastUpdated(QDate(2001, 1, 4));
 		dataSet->setData(data);
 	}
 
 	// second data set
 	{
+		DataSourcePtr dataSource(new DataSource());
+		dataSource->setFormatString("data source 2 %1 value");
+		userDataStore->insert("data-source-two", dataSource);
+
 		QVariantList data;
 		data << 50.0 << 65.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 				<< 75.0 << 100.0;
 		UserData::iterator dataSetIterator = userData->insert("data-source-two",
 				DataSetPtr(new DataSet()));
 		DataSetPtr dataSet(*dataSetIterator);
-		dataSet->setFormatString("data source 2 %1 value");
 		dataSet->setLastUpdated(QDate(2001, 1, 7));
 		dataSet->setData(data);
 	}
@@ -576,25 +591,32 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 
 		// first data set
 		{
+			DataSourcePtr dataSource(new DataSource());
+			dataSource->setFormatString("data source one %1 value");
+			userDataStore->insert("data-source-one", dataSource);
+
 			QVariantList data;
 			data << 100.0 << 95.0 << 0.0 << 0.0 << 0.0 << 0.0 << 90.0 << 85.0;
 			UserData::iterator dataSetIterator = userData->insert(
 					"data-source-one", DataSetPtr(new DataSet()));
 			DataSetPtr dataSet(*dataSetIterator);
-			dataSet->setFormatString("data source one %1 value");
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
+
 		}
 
 		// second data set
 		{
+			DataSourcePtr dataSource(new DataSource());
+			dataSource->setFormatString("data source two %1 value");
+			userDataStore->insert("data-source-two", dataSource);
+
 			QVariantList data;
 			data << 50.0 << 65.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 					<< 0.0 << 75.0 << 100.0;
 			UserData::iterator dataSetIterator = userData->insert(
 					"data-source-two", DataSetPtr(new DataSet()));
 			DataSetPtr dataSet(*dataSetIterator);
-			dataSet->setFormatString("data source two %1 value");
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
 		}
@@ -606,29 +628,37 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 				userDataStore->insert("second-user",
 						UserDataPtr(new UserData())));
 		UserDataPtr userData(*userDataIterator);
+		DataSourcePtr foo;
 
 		// fourth data set
 		{
+			DataSourcePtr dataSource(new DataSource());
+			dataSource->setFormatString("data source three %1 value");
+			userDataStore->insert("data-source-three", dataSource);
+
 			QVariantList data;
 			data << 15.0 << 100.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 					<< 0.0 << 5.0 << 10.0;
 			UserData::iterator dataSetIterator = userData->insert(
 					"data-source-three", DataSetPtr(new DataSet()));
 			DataSetPtr dataSet(*dataSetIterator);
-			dataSet->setFormatString("data source three %1 value");
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
 		}
 
 		// fifth data set
 		{
+
+			DataSourcePtr dataSource(new DataSource());
+			dataSource->setFormatString("data source four %1 value");
+			userDataStore->insert("data-source-xfour", dataSource);
+
 			QVariantList data;
 			data << 25.0 << 30.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 					<< 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 100.0 << 35.0;
 			UserData::iterator dataSetIterator = userData->insert(
 					"data-source-xfour", DataSetPtr(new DataSet()));
 			DataSetPtr dataSet(*dataSetIterator);
-			dataSet->setFormatString("data source four %1 value");
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
 		}

@@ -16,19 +16,24 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/SyncedDataSet.h>
+#include <libusermetricsoutput/DataSource.h>
 
 using namespace UserMetricsOutput;
 
-SyncedDataSet::SyncedDataSet(
-		QSharedPointer<com::canonical::usermetrics::DataSet> interface,
-		QObject *parent) :
-		DataSet(parent), m_interface(interface) {
+DataSource::DataSource(QObject *parent) :
+		QObject(parent), m_formatString("") {
 
-	update(m_interface->lastUpdated(), m_interface->data());
-	connect(m_interface.data(), SIGNAL(updated(uint, const QVariantList &)),
-			this, SLOT(update(uint, const QVariantList &)));
 }
 
-SyncedDataSet::~SyncedDataSet() {
+DataSource::~DataSource() {
+}
+
+const QString & DataSource::formatString() const {
+	return m_formatString;
+}
+void DataSource::setFormatString(const QString &formatString) {
+	if (formatString != m_formatString) {
+		m_formatString = formatString;
+		formatStringChanged(m_formatString);
+	}
 }

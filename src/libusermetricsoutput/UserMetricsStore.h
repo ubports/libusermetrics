@@ -19,6 +19,7 @@
 #ifndef USERMETRICSOUTPUT_DATASETSTORE_H_
 #define USERMETRICSOUTPUT_DATASETSTORE_H_
 
+#include <libusermetricsoutput/DataSource.h>
 #include <libusermetricsoutput/UserData.h>
 
 #include <QtCore/QSharedPointer>
@@ -34,6 +35,8 @@ public:
 
 	typedef UserDataMap::const_iterator const_iterator;
 
+	typedef QMap<QString, DataSourcePtr> DataSourceMap;
+
 	explicit UserMetricsStore(QObject *parent = 0);
 
 	virtual ~UserMetricsStore();
@@ -44,8 +47,14 @@ public:
 
 	virtual iterator insert(const QString &username, UserDataPtr userData);
 
+	virtual void insert(const QString &name, DataSourcePtr dataSource);
+
+	virtual DataSourcePtr dataSource(const QString &name);
+
 protected:
 	UserDataMap m_userData;
+
+	DataSourceMap m_dataSources;
 };
 
 }

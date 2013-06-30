@@ -118,6 +118,9 @@ void DBusDataSet::update(const QVariantList &data) {
 	dataSet.setLastUpdated(currentDate);
 	dataSet.setData(byteArray);
 	Q_ASSERT(dataSet.save());
+
+	QDateTime dateTime(currentDate);
+	m_adaptor->updated(dateTime.toTime_t(), newData);
 }
 
 uint DBusDataSet::lastUpdated() const {

@@ -16,19 +16,26 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/SyncedDataSet.h>
+#ifndef SYNCEDDATASOURCE_H_
+#define SYNCEDDATASOURCE_H_
 
-using namespace UserMetricsOutput;
+#include <libusermetricsoutput/DataSource.h>
+#include <libusermetricscommon/DataSourceInterface.h>
 
-SyncedDataSet::SyncedDataSet(
-		QSharedPointer<com::canonical::usermetrics::DataSet> interface,
-		QObject *parent) :
-		DataSet(parent), m_interface(interface) {
+namespace UserMetricsOutput {
 
-	update(m_interface->lastUpdated(), m_interface->data());
-	connect(m_interface.data(), SIGNAL(updated(uint, const QVariantList &)),
-			this, SLOT(update(uint, const QVariantList &)));
+class SyncedDataSource: public DataSource {
+public:
+	SyncedDataSource(
+			QSharedPointer<com::canonical::usermetrics::DataSource> interface,
+			QObject *parent = 0);
+
+	virtual ~SyncedDataSource();
+
+protected:
+	QSharedPointer<com::canonical::usermetrics::DataSource> m_interface;
+};
+
 }
 
-SyncedDataSet::~SyncedDataSet() {
-}
+#endif /* SYNCEDDATASOURCE_H_ */

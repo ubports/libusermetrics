@@ -7,14 +7,14 @@
 		
 		<property name="data" type="av" access="read"/>
 		
-		<signal name="dataChanged">
-			<arg name="data" type="av" direction="out"/>
-		</signal>
-		
 		<method name="update">
 			<arg name="data" type="av" direction="in"/>
 		</method>
 		
+		<signal name="updated">
+			<arg name="lastUpdated" type="u" direction="out"/>
+			<arg name="data" type="av" direction="out"/>
+		</signal>		
 
 	</interface>
 </node>

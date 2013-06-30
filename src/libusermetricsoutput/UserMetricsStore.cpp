@@ -40,3 +40,11 @@ UserMetricsStore::iterator UserMetricsStore::insert(const QString &username,
 		UserDataPtr userData) {
 	return m_userData.insert(username, userData);
 }
+
+DataSourcePtr UserMetricsStore::dataSource(const QString &name) {
+	return m_dataSources.value(name);
+}
+
+void UserMetricsStore::insert(const QString &name, DataSourcePtr dataSource) {
+	m_dataSources.insert(name, dataSource);
+}

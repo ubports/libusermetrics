@@ -6,5 +6,9 @@
 		
 		<property name="formatString" type="s" access="readwrite"/>
 		
+		<signal name="formatStringChanged">
+			<arg name="formatString" type="s" direction="out"/>
+		</signal>	
+		
 	</interface>
 </node>

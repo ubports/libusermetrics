@@ -18,7 +18,9 @@
 
 #include <libusermetricsoutput/SyncedUserMetricsStore.h>
 #include <libusermetricsoutput/SyncedUserData.h>
+#include <libusermetricsoutput/SyncedDataSource.h>
 
+#include <libusermetricscommon/DataSourceInterface.h>
 #include <libusermetricscommon/UserDataInterface.h>
 #include <libusermetricscommon/DBusPaths.h>
 
@@ -30,6 +32,17 @@ SyncedUserMetricsStore::SyncedUserMetricsStore(
 		const QDBusConnection &dbusConnection, QObject *parent) :
 		UserMetricsStore(parent), m_interface(DBusPaths::serviceName(),
 				DBusPaths::userMetrics(), dbusConnection) {
+
+	for (const QDBusObjectPath &path : m_interface.dataSources()) {
+
+		QSharedPointer<canonical::usermetrics::DataSource> dataSource(
+				new canonical::usermetrics::DataSource(DBusPaths::serviceName(),
+						path.path(), m_interface.connection()));
+
+		QString name(dataSource->name());
+		insert(name, DataSourcePtr(new SyncedDataSource(dataSource)));
+	}
+
 	for (const QDBusObjectPath &path : m_interface.userDatas()) {
 
 		QSharedPointer<canonical::usermetrics::UserData> userData(

@@ -46,7 +46,6 @@ QString DBusDataSource::path() const {
 }
 
 QString DBusDataSource::name() const {
-	qDebug() << "DBusDataSource::name";
 	DataSource dataSource;
 	DataSource::findById(m_id, &dataSource);
 	return dataSource.name();
@@ -63,4 +62,5 @@ void DBusDataSource::setFormatString(const QString &formatString) {
 	DataSource::findById(m_id, &dataSource);
 	dataSource.setFormatString(formatString);
 	Q_ASSERT(dataSource.save());
+	m_adaptor->formatStringChanged(formatString);
 }

@@ -11,7 +11,9 @@ set(USERMETRICSOUTPUT_SOURCES
 	ColorThemeProvider.cpp
 	HardCodedColorThemeProvider.cpp
 	DataSet.cpp
+	DataSource.cpp
 	SyncedDataSet.cpp
+	SyncedDataSource.cpp
 	SyncedUserMetricsStore.cpp
 	SyncedUserData.cpp
 	UserData.cpp

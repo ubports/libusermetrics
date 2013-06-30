@@ -80,7 +80,7 @@ protected:
 
 	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
 
-	QSharedPointer<UserMetricsStore> m_userDataStore;
+	QSharedPointer<UserMetricsStore> m_userMetricsStore;
 
 	QSharedPointer<ColorThemeProvider> m_colorThemeProvider;
 

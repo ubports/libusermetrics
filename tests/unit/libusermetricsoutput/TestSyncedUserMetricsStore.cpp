@@ -46,6 +46,33 @@ protected:
 	}
 };
 
+TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
+	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
+			DBusPaths::userMetrics(), *connection);
+
+	QDBusObjectPath dataSourcePath1(
+			userMetricsInterface.createDataSource("data-source-one",
+					"format string one %1"));
+	ASSERT_EQ(DBusPaths::dataSource(1), dataSourcePath1.path());
+
+	QDBusObjectPath dataSourcePath2(
+			userMetricsInterface.createDataSource("data-source-two",
+					"format string two %1"));
+	ASSERT_EQ(DBusPaths::dataSource(2), dataSourcePath2.path());
+
+	SyncedUserMetricsStore store(*connection);
+
+	{
+		DataSourcePtr dataSource(store.dataSource("data-source-one"));
+		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
+	}
+
+	{
+		DataSourcePtr dataSource(store.dataSource("data-source-two"));
+		EXPECT_EQ(QString("format string two %1"), dataSource->formatString());
+	}
+}
+
 TEST_F(TestSyncedUserMetricsStore, LoadsUserDataAtStartup) {
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
 			DBusPaths::userMetrics(), *connection);
@@ -61,13 +88,13 @@ TEST_F(TestSyncedUserMetricsStore, LoadsUserDataAtStartup) {
 	SyncedUserMetricsStore store(*connection);
 
 	{
-		auto it(store.constFind("username1"));
+		UserMetricsStore::const_iterator it(store.constFind("username1"));
 		ASSERT_NE(it, store.constEnd());
 		EXPECT_EQ(QString("username1"), it.key());
 	}
 
 	{
-		auto it(store.constFind("username2"));
+		UserMetricsStore::const_iterator it(store.constFind("username2"));
 		ASSERT_NE(it, store.constEnd());
 		EXPECT_EQ(QString("username2"), it.key());
 	}
@@ -113,4 +140,4 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	EXPECT_EQ(QDate::currentDate(), dataSet->lastUpdated());
 }
 
-}// namespace
+} // namespace

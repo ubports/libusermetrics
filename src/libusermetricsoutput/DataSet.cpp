@@ -27,23 +27,12 @@ DataSet::DataSet(QObject* parent) :
 DataSet::~DataSet() {
 }
 
-const QString & DataSet::formatString() const {
-	return m_formatString;
-}
-
 const QVariantList & DataSet::data() const {
 	return m_data;
 }
 
 const QDate & DataSet::lastUpdated() const {
 	return m_lastUpdated;
-}
-
-void DataSet::setFormatString(const QString &formatString) {
-	if (formatString != m_formatString) {
-		m_formatString = formatString;
-		formatStringChanged(m_formatString);
-	}
 }
 
 void DataSet::setData(const QVariantList &data) {
