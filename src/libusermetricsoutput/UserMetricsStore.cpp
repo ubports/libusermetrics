@@ -16,43 +16,35 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/DataSet.h>
+#include <libusermetricsoutput/UserMetricsStore.h>
 
 using namespace UserMetricsOutput;
 
-DataSet::DataSet(QObject* parent) :
+UserMetricsStore::UserMetricsStore(QObject *parent) :
 		QObject(parent) {
 }
 
-DataSet::~DataSet() {
+UserMetricsStore::~UserMetricsStore() {
 }
 
-const QVariantList & DataSet::data() const {
-	return m_data;
+UserMetricsStore::const_iterator UserMetricsStore::constFind(
+		const QString &username) const {
+	return m_userData.constFind(username);
 }
 
-const QDate & DataSet::lastUpdated() const {
-	return m_lastUpdated;
+UserMetricsStore::const_iterator UserMetricsStore::constEnd() const {
+	return m_userData.constEnd();
 }
 
-void DataSet::setData(const QVariantList &data) {
-	m_data = data;
-	for (QVariant &variant : m_data) {
-		if (variant.type() == QVariant::String) {
-			variant = QVariant();
-		}
-	}
-	dataChanged(&m_data);
+UserMetricsStore::iterator UserMetricsStore::insert(const QString &username,
+		UserDataPtr userData) {
+	return m_userData.insert(username, userData);
 }
 
-void DataSet::setLastUpdated(const QDate &lastUpdated) {
-	if (m_lastUpdated != lastUpdated) {
-		m_lastUpdated = lastUpdated;
-		lastUpdatedChanged(m_lastUpdated);
-	}
+DataSourcePtr UserMetricsStore::dataSource(const QString &name) {
+	return m_dataSources.value(name);
 }
 
-void DataSet::update(const uint lastUpdated, const QVariantList &data) {
-	setLastUpdated(QDateTime::fromTime_t(lastUpdated).date());
-	setData(data);
+void UserMetricsStore::insert(const QString &name, DataSourcePtr dataSource) {
+	m_dataSources.insert(name, dataSource);
 }

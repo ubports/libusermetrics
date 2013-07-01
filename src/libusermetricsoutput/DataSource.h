@@ -16,43 +16,41 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSOUTPUT_USERDATA_H_
-#define USERMETRICSOUTPUT_USERDATA_H_
+#ifndef USERMETRICSOUTPUT_DATASOURCE_H_
+#define USERMETRICSOUTPUT_DATASOURCE_H_
 
-#include <libusermetricsoutput/DataSet.h>
-
-#include <QtCore/QMap>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QSharedPointer>
 
 namespace UserMetricsOutput {
 
-class UserData;
+class DataSource;
 
-typedef QSharedPointer<UserData> UserDataPtr;
+typedef QSharedPointer<DataSource> DataSourcePtr;
 
-class UserData: public QObject {
+class DataSource: public QObject {
 Q_OBJECT
 
+Q_PROPERTY(QString formatString READ formatString WRITE setFormatString NOTIFY formatStringChanged FINAL)
+
 public:
-	typedef QMap<QString, DataSetPtr> DataSetMap;
+	explicit DataSource(QObject *parent = 0);
 
-	typedef DataSetMap::iterator iterator;
+	virtual ~DataSource();
 
-	typedef DataSetMap::const_iterator const_iterator;
+	const QString & formatString() const;
 
-	explicit UserData(QObject *parent = 0);
+public Q_SLOTS:
+	void setFormatString(const QString &formatString);
 
-	virtual ~UserData();
-
-	virtual const_iterator constBegin() const;
-
-	virtual const_iterator constEnd() const;
-
-	virtual iterator insert(const QString &dataSetId, DataSetPtr dataSet);
+Q_SIGNALS:
+	void formatStringChanged(const QString &formatString);
 
 protected:
-	DataSetMap m_dataSets;
+	QString m_formatString;
 };
 
 }
 
-#endif // USERMETRICSOUTPUT_USERDATA_H_
+#endif // USERMETRICSOUTPUT_DATASOURCE_H_

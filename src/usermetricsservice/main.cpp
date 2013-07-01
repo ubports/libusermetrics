@@ -23,13 +23,14 @@
 #include <QDjangoQuerySet.h>
 #include <QSqlDatabase>
 
+using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
 int main(int argc, char *argv[]) {
 	QCoreApplication application(argc, argv);
 
-	QString databaseName("/tmp/usermetrics.db");
+	QString databaseName("/var/lib/usermetrics/usermetrics1.db");
 	QStringList arguments(application.arguments());
 	if (arguments.size() == 2) {
 		databaseName = arguments.at(1);
@@ -38,7 +39,9 @@ int main(int argc, char *argv[]) {
 	// Database setup
 	QSqlDatabase db(QSqlDatabase::addDatabase("QSQLITE"));
 	db.setDatabaseName(databaseName);
-	Q_ASSERT(db.open());
+	if (!db.open()) {
+		throw logic_error("couldn't open database");
+	}
 
 	QDjango::setDatabase(db);
 

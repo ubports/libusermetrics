@@ -37,7 +37,7 @@ Q_CLASSINFO("id", "primary_key=true auto_increment=true")
 Q_CLASSINFO("name", "unique=true")
 
 public:
-	DataSource();
+	explicit DataSource(QObject *parent = 0);
 
 	virtual ~DataSource();
 

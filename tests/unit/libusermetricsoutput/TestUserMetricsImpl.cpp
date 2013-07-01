@@ -18,8 +18,10 @@
 
 #include <libusermetricsoutput/ColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
+#include <libusermetricsoutput/DataSet.h>
 #include <testutils/QStringPrinter.h>
 #include <testutils/QVariantPrinter.h>
+#include <testutils/QVariantListPrinter.h>
 #include <testutils/MockSignalReceiver.h>
 
 #include <QtCore/QObject>
@@ -52,7 +54,7 @@ protected:
 		ON_CALL(*dateFactory, currentDate()).WillByDefault(
 				Return(QDate(2001, 01, 07)));
 
-		userDataStore.reset(new UserDataStore());
+		userDataStore.reset(new UserMetricsStore());
 
 		colorThemeProvider.reset(new NiceMock<MockColorThemeProvider>());
 
@@ -66,7 +68,7 @@ protected:
 
 	QSharedPointer<MockDateFactory> dateFactory;
 
-	QSharedPointer<UserDataStore> userDataStore;
+	QSharedPointer<UserMetricsStore> userDataStore;
 
 	QSharedPointer<MockColorThemeProvider> colorThemeProvider;
 
@@ -155,7 +157,7 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
 }
 
 TEST_F(UserMetricsImplTest, HasEmptyDataForKnownUserWithNoData) {
-	userDataStore->find("existing-user");
+	userDataStore->insert("existing-user", UserDataPtr(new UserData()));
 
 	model->setUsername("existing-user");
 	model->readyForDataChangeSlot();
@@ -202,16 +204,21 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	}
 	data << 70.0 << 65.0;
 
-	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
-	UserDataStore::UserDataPtr userData(*userDataIterator);
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("test format string %1");
+	userDataStore->insert("data-source-id", dataSource);
 
-	UserData::iterator dataSetIterator = userData->find("data-source-id");
-	UserData::DataSetPtr dataSet(*dataSetIterator);
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username", UserDataPtr(new UserData())));
+	UserDataPtr userData(*userDataIterator);
 
-	dataSet->setFormatString("test format string %1");
+	UserData::iterator dataSetIterator = userData->insert("data-source-id",
+			DataSetPtr(new DataSet()));
+	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts today
-	dataSet->setData(QDate(2001, 01, 07), data);
+	dataSet->setLastUpdated(QDate(2001, 01, 07));
+	dataSet->setData(data);
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
@@ -272,16 +279,21 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	}
 	data << 70.0 << 65.0;
 
-	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
-	UserDataStore::UserDataPtr userData(*userDataIterator);
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("test other format string %1");
+	userDataStore->insert("data-source-id2", dataSource);
 
-	UserData::iterator dataSetIterator = userData->find("data-source-id2");
-	UserData::DataSetPtr dataSet(*dataSetIterator);
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username", UserDataPtr(new UserData())));
+	UserDataPtr userData(*userDataIterator);
 
-	dataSet->setFormatString("test other format string %1");
+	UserData::iterator dataSetIterator = userData->insert("data-source-id2",
+			DataSetPtr(new DataSet()));
+	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts 3 days ago
-	dataSet->setData(QDate(2001, 01, 04), data);
+	dataSet->setLastUpdated(QDate(2001, 01, 04));
+	dataSet->setData(data);
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
@@ -335,16 +347,21 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	// Data just for December
 	data << 95.0 << 100.0 << 90.0 << 0.0;
 
-	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
-	UserDataStore::UserDataPtr userData(*userDataIterator);
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("this format string won't be used %1");
+	userDataStore->insert("data-source-id", dataSource);
 
-	UserData::iterator dataSetIterator = userData->find("data-source-id");
-	UserData::DataSetPtr dataSet(*dataSetIterator);
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username", UserDataPtr(new UserData())));
+	UserDataPtr userData(*userDataIterator);
 
-	dataSet->setFormatString("this format string won't be used %1");
+	UserData::iterator dataSetIterator = userData->insert("data-source-id",
+			DataSetPtr(new DataSet()));
+	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts 3 days ago
-	dataSet->setData(QDate(2000, 12, 25), data);
+	dataSet->setLastUpdated(QDate(2000, 12, 25));
+	dataSet->setData(data);
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
@@ -394,16 +411,21 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	// Data just for January
 	data << 100.0 << 0.0;
 
-	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
-	UserDataStore::UserDataPtr userData(*userDataIterator);
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("a format string with %1 in it");
+	userDataStore->insert("data-source-id", dataSource);
 
-	UserData::iterator dataSetIterator = userData->find("data-source-id");
-	UserData::DataSetPtr dataSet(*dataSetIterator);
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username", UserDataPtr(new UserData())));
+	UserDataPtr userData(*userDataIterator);
 
-	dataSet->setFormatString("a format string with %1 in it");
+	UserData::iterator dataSetIterator = userData->insert("data-source-id",
+			DataSetPtr(new DataSet()));
+	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts 2 days ago
-	dataSet->setData(QDate(2001, 1, 5), data);
+	dataSet->setLastUpdated(QDate(2001, 1, 5));
+	dataSet->setData(data);
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
@@ -446,28 +468,39 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 	// the fake date provider says the date is 2001/01/07
 
-	UserDataStore::iterator userDataIterator(userDataStore->find("username"));
-	UserDataStore::UserDataPtr userData(*userDataIterator);
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username", UserDataPtr(new UserData())));
+	UserDataPtr userData(*userDataIterator);
 
 	// first data set
 	{
+		DataSourcePtr dataSource(new DataSource());
+		dataSource->setFormatString("data source one %1 value");
+		userDataStore->insert("data-source-one", dataSource);
+
 		QVariantList data;
 		data << 100.0 << 95.0 << 0.0 << 0.0 << 0.0 << 0.0 << 90.0 << 85.0;
-		UserData::iterator dataSetIterator = userData->find("data-source-one");
-		UserData::DataSetPtr dataSet(*dataSetIterator);
-		dataSet->setFormatString("data source one %1 value");
-		dataSet->setData(QDate(2001, 1, 4), data);
+		UserData::iterator dataSetIterator = userData->insert("data-source-one",
+				DataSetPtr(new DataSet()));
+		DataSetPtr dataSet(*dataSetIterator);
+		dataSet->setLastUpdated(QDate(2001, 1, 4));
+		dataSet->setData(data);
 	}
 
 	// second data set
 	{
+		DataSourcePtr dataSource(new DataSource());
+		dataSource->setFormatString("data source 2 %1 value");
+		userDataStore->insert("data-source-two", dataSource);
+
 		QVariantList data;
 		data << 50.0 << 65.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 				<< 75.0 << 100.0;
-		UserData::iterator dataSetIterator = userData->find("data-source-two");
-		UserData::DataSetPtr dataSet(*dataSetIterator);
-		dataSet->setFormatString("data source 2 %1 value");
-		dataSet->setData(QDate(2001, 1, 7), data);
+		UserData::iterator dataSetIterator = userData->insert("data-source-two",
+				DataSetPtr(new DataSet()));
+		DataSetPtr dataSet(*dataSetIterator);
+		dataSet->setLastUpdated(QDate(2001, 1, 7));
+		dataSet->setData(data);
 	}
 
 	QSharedPointer<ColorTheme> blankColorTheme(
@@ -551,62 +584,83 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 
 	// data for first user
 	{
-		UserDataStore::iterator userDataIterator(
-				userDataStore->find("first-user"));
-		UserDataStore::UserDataPtr userData(*userDataIterator);
+		UserMetricsStore::iterator userDataIterator(
+				userDataStore->insert("first-user",
+						UserDataPtr(new UserData())));
+		UserDataPtr userData(*userDataIterator);
 
 		// first data set
 		{
+			DataSourcePtr dataSource(new DataSource());
+			dataSource->setFormatString("data source one %1 value");
+			userDataStore->insert("data-source-one", dataSource);
+
 			QVariantList data;
 			data << 100.0 << 95.0 << 0.0 << 0.0 << 0.0 << 0.0 << 90.0 << 85.0;
-			UserData::iterator dataSetIterator = userData->find(
-					"data-source-one");
-			UserData::DataSetPtr dataSet(*dataSetIterator);
-			dataSet->setFormatString("data source one %1 value");
-			dataSet->setData(QDate(2001, 1, 7), data);
+			UserData::iterator dataSetIterator = userData->insert(
+					"data-source-one", DataSetPtr(new DataSet()));
+			DataSetPtr dataSet(*dataSetIterator);
+			dataSet->setLastUpdated(QDate(2001, 1, 7));
+			dataSet->setData(data);
+
 		}
 
 		// second data set
 		{
+			DataSourcePtr dataSource(new DataSource());
+			dataSource->setFormatString("data source two %1 value");
+			userDataStore->insert("data-source-two", dataSource);
+
 			QVariantList data;
 			data << 50.0 << 65.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 					<< 0.0 << 75.0 << 100.0;
-			UserData::iterator dataSetIterator = userData->find(
-					"data-source-two");
-			UserData::DataSetPtr dataSet(*dataSetIterator);
-			dataSet->setFormatString("data source two %1 value");
-			dataSet->setData(QDate(2001, 1, 7), data);
+			UserData::iterator dataSetIterator = userData->insert(
+					"data-source-two", DataSetPtr(new DataSet()));
+			DataSetPtr dataSet(*dataSetIterator);
+			dataSet->setLastUpdated(QDate(2001, 1, 7));
+			dataSet->setData(data);
 		}
 	}
 
 	// data for second user
 	{
-		UserDataStore::iterator userDataIterator(
-				userDataStore->find("second-user"));
-		UserDataStore::UserDataPtr userData(*userDataIterator);
+		UserMetricsStore::iterator userDataIterator(
+				userDataStore->insert("second-user",
+						UserDataPtr(new UserData())));
+		UserDataPtr userData(*userDataIterator);
+		DataSourcePtr foo;
 
 		// fourth data set
 		{
+			DataSourcePtr dataSource(new DataSource());
+			dataSource->setFormatString("data source three %1 value");
+			userDataStore->insert("data-source-three", dataSource);
+
 			QVariantList data;
 			data << 15.0 << 100.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 					<< 0.0 << 5.0 << 10.0;
-			UserData::iterator dataSetIterator = userData->find(
-					"data-source-three");
-			UserData::DataSetPtr dataSet(*dataSetIterator);
-			dataSet->setFormatString("data source three %1 value");
-			dataSet->setData(QDate(2001, 1, 7), data);
+			UserData::iterator dataSetIterator = userData->insert(
+					"data-source-three", DataSetPtr(new DataSet()));
+			DataSetPtr dataSet(*dataSetIterator);
+			dataSet->setLastUpdated(QDate(2001, 1, 7));
+			dataSet->setData(data);
 		}
 
 		// fifth data set
 		{
+
+			DataSourcePtr dataSource(new DataSource());
+			dataSource->setFormatString("data source four %1 value");
+			userDataStore->insert("data-source-xfour", dataSource);
+
 			QVariantList data;
 			data << 25.0 << 30.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 					<< 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 100.0 << 35.0;
-			UserData::iterator dataSetIterator = userData->find(
-					"data-source-xfour");
-			UserData::DataSetPtr dataSet(*dataSetIterator);
-			dataSet->setFormatString("data source four %1 value");
-			dataSet->setData(QDate(2001, 1, 7), data);
+			UserData::iterator dataSetIterator = userData->insert(
+					"data-source-xfour", DataSetPtr(new DataSet()));
+			DataSetPtr dataSet(*dataSetIterator);
+			dataSet->setLastUpdated(QDate(2001, 1, 7));
+			dataSet->setData(data);
 		}
 	}
 

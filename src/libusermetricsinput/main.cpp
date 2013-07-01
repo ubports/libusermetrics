@@ -17,36 +17,32 @@
  */
 
 #include <libusermetricsinput/MetricManager.h>
-#include <testutils/DBusTest.h>
-
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
+#include <string>
+#include <iostream>
+#include <cstdlib>
 
 using namespace std;
-using namespace testing;
 using namespace UserMetricsInput;
-using namespace UserMetricsTestUtils;
 
-namespace {
-
-class TestMetricManager: public DBusTest {
-protected:
-	TestMetricManager() {
+int main(int argc, char *argv[]) {
+	if (argc < 4) {
+		cerr << "Usage: " << argv[0] << " DATA_SOURCE_ID FORMAT_STRING <DATA>"
+				<< endl;
+		return 1;
 	}
 
-	virtual ~TestMetricManager() {
-	}
-};
+	string dataSourceId(argv[1]);
+	string formatString(argv[2]);
+	string username(getenv("USER"));
 
-TEST_F(TestMetricManager, Basic) {
 	MetricManagerPtr manager(MetricManager::getInstance());
+	MetricPtr metric(manager->add(dataSourceId, formatString));
+	MetricUpdatePtr update = metric->update(username);
 
-	MetricPtr metric(manager->add("data-source-id", "format string %1"));
+	for (int i(3); i < argc; ++i) {
+		double data(stod(string(argv[i])));
+		update->addData(data);
+	}
 
-	MetricUpdatePtr update = metric->update("username");
-	update->addData(1.0);
-	update->addNull();
-	update->addData(0.5);
+	return 0;
 }
-
-} // namespace

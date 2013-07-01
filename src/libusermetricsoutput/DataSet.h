@@ -27,39 +27,39 @@
 
 namespace UserMetricsOutput {
 
+class DataSet;
+
+typedef QSharedPointer<DataSet> DataSetPtr;
+
 class DataSet: public QObject {
 Q_OBJECT
 
 Q_PROPERTY(QDate lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged FINAL)
+
 Q_PROPERTY(const QVariantList data READ data NOTIFY dataChanged FINAL)
-Q_PROPERTY(QString formatString READ formatString WRITE setFormatString NOTIFY formatStringChanged FINAL)
 
 public:
-	DataSet(QObject* parent);
+	explicit DataSet(QObject* parent = 0);
 
-	~DataSet();
-
-	const QString & formatString() const;
+	virtual ~DataSet();
 
 	const QVariantList & data() const;
 
 	const QDate & lastUpdated() const;
 
-	void setData(const QDate &lastUpdated, const QVariantList &data);
-
 public Q_SLOTS:
-	void setFormatString(const QString &formatString);
+	void update(const uint lastUpdated, const QVariantList &data);
+
+	void setData(const QVariantList &data);
+
+	void setLastUpdated(const QDate &lastUpdated);
 
 Q_SIGNALS:
 	void lastUpdatedChanged(const QDate &lastUpdated);
 
 	void dataChanged(const QVariantList *data);
 
-	void formatStringChanged(const QString &formatString);
-
 protected:
-	QString m_formatString;
-
 	QDate m_lastUpdated;
 
 	QVariantList m_data;

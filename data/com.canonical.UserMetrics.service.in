@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.canonical.UserMetrics
+Exec=@CMAKE_INSTALL_FULL_LIBEXECDIR@/libusermetrics/usermetricsservice
+User=usermetrics

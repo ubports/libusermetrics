@@ -23,14 +23,15 @@
 
 #include <QDjangoQuerySet.h>
 
+using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
-DBusDataSource::DBusDataSource(int id, QDBusConnection &dbusConnection,
-		QObject *parent) :
+DBusDataSource::DBusDataSource(int id, const QString &name,
+		QDBusConnection &dbusConnection, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new DataSourceAdaptor(this)), m_id(id), m_path(
-				DBusPaths::dataSource(m_id)) {
+				DBusPaths::dataSource(m_id)), m_name(name) {
 
 	// DBus setup
 	m_dbusConnection.registerObject(m_path, this);
@@ -46,10 +47,7 @@ QString DBusDataSource::path() const {
 }
 
 QString DBusDataSource::name() const {
-	qDebug() << "DBusDataSource::name";
-	DataSource dataSource;
-	DataSource::findById(m_id, &dataSource);
-	return dataSource.name();
+	return m_name;
 }
 
 QString DBusDataSource::formatString() const {
@@ -62,5 +60,8 @@ void DBusDataSource::setFormatString(const QString &formatString) {
 	DataSource dataSource;
 	DataSource::findById(m_id, &dataSource);
 	dataSource.setFormatString(formatString);
-	Q_ASSERT(dataSource.save());
+	if (!dataSource.save()) {
+		throw logic_error("couldn't save data source");
+	}
+	m_adaptor->formatStringChanged(formatString);
 }

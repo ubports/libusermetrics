@@ -6,8 +6,14 @@
 		
 		<property name="dataSets" type="ao" access="read"/>
 		
-		<signal name="dataSetsChanged">
-			<arg name="dataSets" type="ao" direction="out"/>
+		<signal name="dataSetAdded">
+			<arg name="dataSourceName" type="s" direction="out"/>
+			<arg name="path" type="o" direction="out"/>
+		</signal>
+		
+		<signal name="dataSetRemoved">
+			<arg name="dataSourceName" type="s" direction="out"/>
+			<arg name="path" type="o" direction="out"/>
 		</signal>
 		
 		<method name="createDataSet">

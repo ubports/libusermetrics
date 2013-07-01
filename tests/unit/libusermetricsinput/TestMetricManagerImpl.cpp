@@ -68,7 +68,7 @@ TEST_F(TestMetricManagerImpl, TestCanAddDataSourceMultipleTimes) {
 
 	{
 		QList<QDBusObjectPath> dataSources = userMetricsInterface.dataSources();
-		EXPECT_EQ(1, dataSources.size());
+		ASSERT_EQ(1, dataSources.size());
 		EXPECT_EQ(DBusPaths::dataSource(1), dataSources.first().path());
 	}
 

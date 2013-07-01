@@ -35,7 +35,7 @@ Q_CLASSINFO("id", "primary_key=true auto_increment=true")
 Q_CLASSINFO("username", "unique=true")
 
 public:
-	UserData();
+	explicit UserData(QObject *parent = 0);
 
 	virtual ~UserData();
 

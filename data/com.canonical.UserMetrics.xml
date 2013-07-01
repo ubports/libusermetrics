@@ -4,8 +4,14 @@
 	
 		<property name="dataSources" type="ao" access="read"/>
 		
-		<signal name="dataSourcesChanged">
-			<arg name="dataSources" type="ao" direction="out"/>
+		<signal name="dataSourceAdded">
+			<arg name="name" type="s" direction="out"/>
+			<arg name="path" type="o" direction="out"/>
+		</signal>
+		
+		<signal name="dataSourceRemoved">
+			<arg name="name" type="s" direction="out"/>
+			<arg name="path" type="o" direction="out"/>
 		</signal>
 		
 		<method name="createDataSource">
@@ -14,10 +20,16 @@
 			<arg name="formatString" type="s" direction="in"/>
 		</method>
 		
-		<property name="userData" type="ao" access="read"/>
+		<property name="userDatas" type="ao" access="read"/>
 		
-		<signal name="userDataChanged">
-			<arg name="userData" type="ao" direction="out"/>
+		<signal name="userDataAdded">
+			<arg name="username" type="s" direction="out"/>
+			<arg name="path" type="o" direction="out"/>
+		</signal>
+		
+		<signal name="userDataRemoved">
+			<arg name="username" type="s" direction="out"/>
+			<arg name="path" type="o" direction="out"/>
 		</signal>
 		
 		<method name="createUserData">

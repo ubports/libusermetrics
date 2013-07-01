@@ -50,6 +50,12 @@ ADD_DEFINITIONS(
 include(GNUInstallDirs)
 include(Coverage)
 
+# Workaround for libexecdir on debian
+if (EXISTS "/etc/debian_version") 
+  set(CMAKE_INSTALL_LIBEXECDIR ${CMAKE_INSTALL_LIBDIR})
+  set(CMAKE_INSTALL_FULL_LIBEXECDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}")
+endif()
+
 set(DOXYFILE_SOURCE_DIR "include")
 include(UseDoxygen)
 if(DOXYGEN_FOUND AND BUILD_DOXYGEN)
@@ -60,6 +66,7 @@ if(DOXYGEN_FOUND AND BUILD_DOXYGEN)
 endif()
 
 add_subdirectory("src")
+add_subdirectory("data")
 
 enable_testing()
 add_subdirectory(tests)

@@ -16,33 +16,24 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserDataStore.h>
+#include <libusermetricsoutput/DataSource.h>
 
 using namespace UserMetricsOutput;
 
-UserDataStore::UserDataStore(QObject *parent) :
-		QObject(parent) {
+DataSource::DataSource(QObject *parent) :
+		QObject(parent), m_formatString("") {
+
 }
 
-UserDataStore::~UserDataStore() {
+DataSource::~DataSource() {
 }
 
-UserDataStore::const_iterator UserDataStore::constFind(
-		const QString &username) const {
-	return m_userData.constFind(username);
+const QString & DataSource::formatString() const {
+	return m_formatString;
 }
-
-UserDataStore::const_iterator UserDataStore::constEnd() const {
-	return m_userData.constEnd();
-}
-
-UserDataStore::iterator UserDataStore::find(const QString &username) {
-	iterator data(m_userData.find(username));
-
-	if (data == m_userData.end()) {
-		UserDataPtr userData(new UserData());
-		data = m_userData.insert(username, userData);
+void DataSource::setFormatString(const QString &formatString) {
+	if (formatString != m_formatString) {
+		m_formatString = formatString;
+		formatStringChanged(m_formatString);
 	}
-
-	return data;
 }

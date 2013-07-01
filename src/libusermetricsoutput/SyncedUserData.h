@@ -16,40 +16,34 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#ifndef USERMETRICSOUTPUT_DATASETSTORE_H_
-#define USERMETRICSOUTPUT_DATASETSTORE_H_
+#ifndef USERMETRICSOUTPUT_SYNCEDUSERDATA_H_
+#define USERMETRICSOUTPUT_SYNCEDUSERDATA_H_
 
 #include <libusermetricsoutput/UserData.h>
-
-#include <QtCore/QSharedPointer>
-#include <QtCore/QMap>
+#include <libusermetricscommon/UserDataInterface.h>
 
 namespace UserMetricsOutput {
 
-class UserDataStore: public QObject {
+class SyncedUserData: public UserData {
+Q_OBJECT
+
 public:
-	typedef QSharedPointer<UserData> UserDataPtr;
+	explicit SyncedUserData(
+			QSharedPointer<com::canonical::usermetrics::UserData> interface,
+			QObject *parent = 0);
 
-	typedef QMap<QString, UserDataPtr> UserDataMap;
+	virtual ~SyncedUserData();
 
-	typedef UserDataMap::iterator iterator;
+public Q_SLOTS:
+	void addDataSet(const QString &dataSourceName, const QDBusObjectPath &path);
 
-	typedef UserDataMap::const_iterator const_iterator;
-
-	UserDataStore(QObject *parent = 0);
-
-	virtual ~UserDataStore();
-
-	virtual const_iterator constFind(const QString &username) const;
-
-	virtual const_iterator constEnd() const;
-
-	virtual iterator find(const QString &username);
+	void removeDataSet(const QString &dataSourceName,
+			const QDBusObjectPath &path);
 
 protected:
-	UserDataMap m_userData;
+	QSharedPointer<com::canonical::usermetrics::UserData> m_interface;
 };
 
 }
 
-#endif // USERMETRICSOUTPUT_DATASETSTORE_H_
+#endif // USERMETRICSOUTPUT_SYNCEDUSERDATA_H_

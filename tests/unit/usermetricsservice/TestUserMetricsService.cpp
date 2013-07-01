@@ -55,7 +55,9 @@ protected:
 							"test-user-metrics-service")), dateFactory(
 					new NiceMock<MockDateFactory>()) {
 		db.setDatabaseName(":memory:");
-		Q_ASSERT(db.open());
+		if (!db.open()) {
+			throw logic_error("couldn't open database");
+		}
 
 		ON_CALL(*dateFactory, currentDate()).WillByDefault(
 				Return(QDate(2001, 01, 07)));
@@ -141,7 +143,7 @@ TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
 		EXPECT_EQ(QString("alice"), alice->username());
 
-		QList<QDBusObjectPath> userData(userMetrics.userData());
+		QList<QDBusObjectPath> userData(userMetrics.userDatas());
 		EXPECT_EQ(1, userData.size());
 		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/1"),
 				userData.first().path());
@@ -150,7 +152,7 @@ TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 	{
 		DBusUserMetrics userMetrics(*connection, dateFactory);
 
-		QList<QDBusObjectPath> userData(userMetrics.userData());
+		QList<QDBusObjectPath> userData(userMetrics.userDatas());
 		EXPECT_EQ(1, userData.size());
 		EXPECT_EQ(QString("/com/canonical/UserMetrics/UserData/1"),
 				userData.first().path());
@@ -264,7 +266,7 @@ TEST_F(TestUserMetricsService, UpdateDataWithGap) {
 	QVariantList expected;
 	expected.append(second);
 	for (int i(0); i < 5; ++i) {
-		expected.append(QVariant());
+		expected.append(QVariant(""));
 	}
 	expected.append(first);
 

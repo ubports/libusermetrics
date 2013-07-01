@@ -44,8 +44,11 @@ Q_PROPERTY(QVariantList data READ data)
 
 Q_PROPERTY(uint lastUpdated READ lastUpdated)
 
+Q_PROPERTY(QString dataSource READ dataSource)
+
 public:
-	DBusDataSet(int id, QDBusConnection &dbusConnection,
+	DBusDataSet(int id, const QString &dataSource,
+			QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
 			QObject *parent = 0);
 
@@ -53,15 +56,18 @@ public:
 
 	QString path() const;
 
+	QString dataSource() const;
+
 	int id() const;
 
 	QVariantList data() const;
 
-	void update(const QVariantList &data);
-
 	uint lastUpdated() const;
 
 	QDate lastUpdatedDate() const;
+
+public Q_SLOTS:
+	void update(const QVariantList &data);
 
 protected:
 	static void getData(DataSet &dataSet, QVariantList &data);
@@ -75,6 +81,8 @@ protected:
 	int m_id;
 
 	QString m_path;
+
+	QString m_dataSource;
 };
 
 }

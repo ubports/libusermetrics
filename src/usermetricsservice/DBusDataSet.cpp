@@ -25,14 +25,18 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QDataStream>
 
+#include <QDjangoQuerySet.h>
+
+using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
-DBusDataSet::DBusDataSet(int id, QDBusConnection &dbusConnection,
+DBusDataSet::DBusDataSet(int id, const QString &dataSource,
+		QDBusConnection &dbusConnection,
 		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new DataSetAdaptor(this)), m_dateFactory(dateFactory), m_id(id), m_path(
-				DBusPaths::dataSet(m_id)) {
+				DBusPaths::dataSet(m_id)), m_dataSource(dataSource) {
 
 	// DBus setup
 	m_dbusConnection.registerObject(m_path, this);
@@ -59,7 +63,6 @@ QVariantList DBusDataSet::data() const {
 }
 
 void DBusDataSet::update(const QVariantList &data) {
-	qDebug() << "DBusDataSet::update(" << data << ")";
 	DataSet dataSet;
 	DataSet::findById(m_id, &dataSet);
 
@@ -100,7 +103,7 @@ void DBusDataSet::update(const QVariantList &data) {
 			const int daysToPad(daysSinceLastUpdate - newData.size());
 			// pad the data will null variants
 			for (int i(0); i < daysToPad; ++i) {
-				newData.append(QVariant());
+				newData.append(QVariant(""));
 			}
 			// append the whole of the old data
 			newData.append(oldData);
@@ -115,7 +118,12 @@ void DBusDataSet::update(const QVariantList &data) {
 
 	dataSet.setLastUpdated(currentDate);
 	dataSet.setData(byteArray);
-	Q_ASSERT(dataSet.save());
+	if (!dataSet.save()) {
+		throw logic_error("couldn't save data set");
+	}
+
+	QDateTime dateTime(currentDate);
+	m_adaptor->updated(dateTime.toTime_t(), newData);
 }
 
 uint DBusDataSet::lastUpdated() const {
@@ -136,4 +144,8 @@ int DBusDataSet::id() const {
 
 QString DBusDataSet::path() const {
 	return m_path;
+}
+
+QString DBusDataSet::dataSource() const {
+	return m_dataSource;
 }

@@ -22,8 +22,8 @@
 
 using namespace UserMetricsService;
 
-DataSource::DataSource() :
-		m_id(0) {
+DataSource::DataSource(QObject *parent) :
+		QDjangoModel(parent), m_id(0) {
 }
 
 DataSource::~DataSource() {

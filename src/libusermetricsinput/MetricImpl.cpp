@@ -43,15 +43,15 @@ MetricImpl::~MetricImpl() {
 MetricUpdatePtr MetricImpl::update(const string &username) {
 	QDBusObjectPath userDataPath(
 			m_interface.createUserData(QString::fromStdString(username)));
-	qDebug() << userDataPath.path();
 
 	com::canonical::usermetrics::UserData userDataInterface(
 			DBusPaths::serviceName(), userDataPath.path(), m_dbusConnection);
-	Q_ASSERT(userDataInterface.isValid());
+	if (!userDataInterface.isValid()) {
+		throw logic_error("user data interface invalid");
+	}
 
 	QDBusObjectPath dataSetPath(
 			userDataInterface.createDataSet(m_dataSourceId));
-	qDebug() << dataSetPath.path();
 
 	return MetricUpdatePtr(
 			new MetricUpdateImpl(dataSetPath.path(), m_dbusConnection));

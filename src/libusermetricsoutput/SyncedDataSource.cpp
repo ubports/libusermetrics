@@ -16,30 +16,19 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/SyncedUserMetricsStore.h>
-#include <libusermetricscommon/DateFactoryImpl.h>
-#include <libusermetricsoutput/HardCodedColorThemeProvider.h>
-#include <libusermetricsoutput/UserMetricsImpl.h>
+#include <libusermetricsoutput/SyncedDataSource.h>
 
 using namespace UserMetricsOutput;
-using namespace UserMetricsCommon;
 
-UserMetrics::UserMetrics(QObject *parent) :
-		QObject(parent) {
+SyncedDataSource::SyncedDataSource(
+		QSharedPointer<com::canonical::usermetrics::DataSource> interface,
+		QObject *parent) :
+		DataSource(parent), m_interface(interface) {
+
+	m_formatString = m_interface->formatString();
+	connect(m_interface.data(), SIGNAL(formatStringChanged(const QString &)),
+			this, SLOT(setFormatString(const QString &)));
 }
 
-UserMetrics::~UserMetrics() {
-}
-
-/**
- * Factory methods
- */
-
-UserMetrics * UserMetrics::getInstance() {
-	return new UserMetricsImpl(
-			QSharedPointer<DateFactory>(new DateFactoryImpl()),
-			QSharedPointer<UserMetricsStore>(
-					new SyncedUserMetricsStore(QDBusConnection::systemBus())),
-			QSharedPointer<ColorThemeProvider>(
-					new HardCodedColorThemeProvider()));
+SyncedDataSource::~SyncedDataSource() {
 }

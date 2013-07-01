@@ -18,6 +18,7 @@
 
 #include <testutils/DBusTest.h>
 #include <QtTest/QSignalSpy>
+#include <cstdlib>
 
 using namespace UserMetricsTestUtils;
 
@@ -43,7 +44,9 @@ void DBusTest::SetUp() {
 	dbus.waitForReadyRead();
 	QByteArray readAll(dbus.readAll());
 	bus = readAll.trimmed();
-	qDebug() << "DBus address: " << bus;
+
+	QByteArray byteArray(bus.toUtf8());
+	setenv("DBUS_SYSTEM_BUS_ADDRESS", byteArray.data(), true);
 
 	connection.reset(
 			new QDBusConnection(QDBusConnection::connectToBus(bus, bus)));

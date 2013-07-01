@@ -102,3 +102,28 @@ install(
   FILES "${CMAKE_CURRENT_BINARY_DIR}/${LIBUSERMETRICSINPUT_PC}"
   DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
 )
+
+##########################
+# Command line interface
+##########################
+
+add_executable(
+	usermetricsinput-bin
+	main.cpp
+)
+
+set_target_properties(
+	usermetricsinput-bin
+	PROPERTIES
+	OUTPUT_NAME "usermetricsinput"
+)
+
+install(
+  TARGETS usermetricsinput-bin
+  RUNTIME DESTINATION bin
+)
+
+target_link_libraries(
+	usermetricsinput-bin
+	usermetricsinput
+)

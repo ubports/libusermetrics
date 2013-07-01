@@ -11,16 +11,22 @@ set(USERMETRICSOUTPUT_SOURCES
 	ColorThemeProvider.cpp
 	HardCodedColorThemeProvider.cpp
 	DataSet.cpp
+	DataSource.cpp
+	SyncedDataSet.cpp
+	SyncedDataSource.cpp
+	SyncedUserMetricsStore.cpp
+	SyncedUserData.cpp
 	UserData.cpp
-	UserDataStore.cpp
 	UserMetrics.cpp
 	UserMetricsImpl.cpp
+	UserMetricsStore.cpp
 	qvariantlistmodel.cpp
 )
 
 set(USERMETRICS_OUTPUT_DEPENDENCIES
 	Core
 	Gui
+	DBus
 )
 
 # Static library version of libusermetricsoutput

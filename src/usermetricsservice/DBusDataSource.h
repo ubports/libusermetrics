@@ -41,7 +41,7 @@ Q_PROPERTY(QString name READ name)
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString)
 
 public:
-	DBusDataSource(int id, QDBusConnection &dbusConnection,
+	DBusDataSource(int id, const QString &name, QDBusConnection &dbusConnection,
 			QObject *parent = 0);
 
 	virtual ~DBusDataSource();
@@ -64,6 +64,8 @@ protected:
 	int m_id;
 
 	QString m_path;
+
+	QString m_name;
 };
 
 }

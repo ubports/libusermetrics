@@ -16,28 +16,28 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsinput/MetricManagerImpl.h>
-#include <libusermetricscommon/DBusPaths.h>
-#include <QtDBus/QtDBus>
+#ifndef SYNCEDDATASOURCE_H_
+#define SYNCEDDATASOURCE_H_
 
-using namespace UserMetricsCommon;
-using namespace UserMetricsInput;
+#include <libusermetricsoutput/DataSource.h>
+#include <libusermetricscommon/DataSourceInterface.h>
 
-MetricManager::MetricManager() {
+namespace UserMetricsOutput {
+
+class SyncedDataSource: public DataSource {
+Q_OBJECT
+
+public:
+	SyncedDataSource(
+			QSharedPointer<com::canonical::usermetrics::DataSource> interface,
+			QObject *parent = 0);
+
+	virtual ~SyncedDataSource();
+
+protected:
+	QSharedPointer<com::canonical::usermetrics::DataSource> m_interface;
+};
 
 }
 
-MetricManager::~MetricManager() {
-}
-
-MetricManagerPtr MetricManager::getInstance() {
-	QDBusConnection dbusConnection(QDBusConnection::systemBus());
-
-	QDBusConnectionInterface* interface = dbusConnection.interface();
-	if (!interface->isServiceRegistered(DBusPaths::serviceName())) {
-		QDBusReply<void> reply(
-				interface->startService(DBusPaths::serviceName()));
-	}
-
-	return MetricManagerPtr(new MetricManagerImpl(dbusConnection));
-}
+#endif /* SYNCEDDATASOURCE_H_ */

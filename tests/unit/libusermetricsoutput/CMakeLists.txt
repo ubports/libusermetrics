@@ -5,6 +5,7 @@ set(
 	TestColorThemeImpl.cpp
 	TestQVariantListModel.cpp
 	TestUserMetricsImpl.cpp
+	TestSyncedUserMetricsStore.cpp
 )
 
 add_executable(

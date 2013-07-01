@@ -20,7 +20,7 @@
 #define USERMETRICSOUTPUT_USERMETRICSIMPL_H_
 
 #include <libusermetricsoutput/UserMetrics.h>
-#include <libusermetricsoutput/UserDataStore.h>
+#include <libusermetricsoutput/UserMetricsStore.h>
 #include <libusermetricscommon/DateFactory.h>
 #include <libusermetricsoutput/ColorThemeImpl.h>
 #include <libusermetricsoutput/ColorThemeProvider.h>
@@ -36,7 +36,7 @@ Q_OBJECT
 
 public:
 	UserMetricsImpl(QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
-			QSharedPointer<UserDataStore> dataSetStore,
+			QSharedPointer<UserMetricsStore> dataSetStore,
 			QSharedPointer<ColorThemeProvider> colorThemeProvider,
 			QObject *parent = 0);
 
@@ -80,7 +80,7 @@ protected:
 
 	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
 
-	QSharedPointer<UserDataStore> m_userDataStore;
+	QSharedPointer<UserMetricsStore> m_userMetricsStore;
 
 	QSharedPointer<ColorThemeProvider> m_colorThemeProvider;
 
@@ -102,13 +102,13 @@ protected:
 
 	QString m_username;
 
-	UserDataStore::const_iterator m_userDataIterator;
+	UserMetricsStore::const_iterator m_userDataIterator;
 
-	UserDataStore::UserDataPtr m_userData;
+	UserDataPtr m_userData;
 
 	UserData::const_iterator m_dataSetIterator;
 
-	UserData::DataSetPtr m_dataSet;
+	DataSetPtr m_dataSet;
 };
 
 }
