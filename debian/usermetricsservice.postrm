@@ -1,0 +1,26 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "purge" ] ; then
+        if getent passwd usermetrics >/dev/null; then
+                if [ -x /usr/sbin/deluser ]; then
+                        deluser --system usermetrics
+                fi
+        fi
+
+        if getent group usermetrics >/dev/null; then
+                if [ -x /usr/sbin/delgroup ]; then
+                        delgroup --system usermetrics
+                fi
+        fi
+
+        # we cannot use the --remove-home option when we delete the user above
+        # because it will refuse to remove things in /var, so clean it up this
+        # way
+        if [ -d /var/lib/usermetrics ]; then
+                rm -r /var/lib/usermetrics
+        fi
+
+fi
+#DEBHELPER#
+exit 0
