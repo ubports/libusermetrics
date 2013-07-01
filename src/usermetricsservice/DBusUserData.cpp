@@ -27,6 +27,7 @@
 
 #include <QDjangoQuerySet.h>
 
+using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
@@ -38,9 +39,11 @@ DBusUserData::DBusUserData(int id, DBusUserMetrics &userMetrics,
 				userMetrics), m_id(id), m_path(DBusPaths::userData(m_id)) {
 
 	// DBus setup
-	Q_ASSERT(m_dbusConnection.registerObject(m_path, this));
+	if (!m_dbusConnection.registerObject(m_path, this)) {
+		throw exception();
+	}
 
-	// Database setup
+// Database setup
 	syncDatabase();
 }
 
@@ -80,10 +83,11 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 			QDjangoWhere("dataSource__name", QDjangoWhere::Equals,
 					dataSourceName));
 
-	Q_ASSERT(query.size() != -1);
+	if (query.size() == -1) {
+		throw exception();
+	}
 
 	DataSet dataSet;
-	int id;
 
 	if (query.size() == 0) {
 		UserData userData;
@@ -94,19 +98,19 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 		DataSource::findByName(dataSourceName, &dataSource);
 		dataSet.setDataSource(&dataSource);
 
-		Q_ASSERT(dataSet.save());
-
-		id = dataSet.id();
+		if (!dataSet.save()) {
+			throw exception();
+		}
 
 		syncDatabase();
 	} else {
 		query.at(0, &dataSet);
-
-		id = dataSet.id();
 	}
 
-	DBusDataSetPtr dataSetPtr(m_dataSets.value(id));
-	Q_ASSERT(dataSetPtr.data());
+	DBusDataSetPtr dataSetPtr(m_dataSets.value(dataSet.id()));
+	if (!dataSetPtr.data()) {
+		throw exception();
+	}
 	return QDBusObjectPath(dataSetPtr->path());
 }
 

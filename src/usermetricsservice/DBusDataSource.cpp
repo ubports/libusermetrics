@@ -23,6 +23,7 @@
 
 #include <QDjangoQuerySet.h>
 
+using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
@@ -61,6 +62,8 @@ void DBusDataSource::setFormatString(const QString &formatString) {
 	DataSource dataSource;
 	DataSource::findById(m_id, &dataSource);
 	dataSource.setFormatString(formatString);
-	Q_ASSERT(dataSource.save());
+	if (!dataSource.save()) {
+		throw exception();
+	}
 	m_adaptor->formatStringChanged(formatString);
 }

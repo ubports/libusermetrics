@@ -61,11 +61,12 @@ public:
 
 	QVariantList data() const;
 
-	void update(const QVariantList &data);
-
 	uint lastUpdated() const;
 
 	QDate lastUpdatedDate() const;
+
+public Q_SLOTS:
+	void update(const QVariantList &data);
 
 protected:
 	static void getData(DataSet &dataSet, QVariantList &data);

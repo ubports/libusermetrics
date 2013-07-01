@@ -29,6 +29,7 @@
 #include <QDjango.h>
 #include <QDjangoQuerySet.h>
 
+using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
@@ -122,27 +123,27 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 			dataSourcesQuery.filter(
 					QDjangoWhere("name", QDjangoWhere::Equals, name)));
 
-	Q_ASSERT(query.size() != -1);
+	if (query.size() == -1) {
+		throw exception();
+	}
 
-	int id;
+	DataSource dataSource;
 
 	if (query.size() == 0) {
-		DataSource dataSource;
 		dataSource.setName(name);
 		dataSource.setFormatString(formatString);
-		Q_ASSERT(dataSource.save());
 
-		id = dataSource.id();
+		if (!dataSource.save()) {
+			throw exception();
+		}
 
 		syncDatabase();
 	} else {
 		DataSource dataSource;
 		query.at(0, &dataSource);
-
-		id = dataSource.id();
 	}
 
-	return QDBusObjectPath((*m_dataSources.constFind(id))->path());
+	return QDBusObjectPath((*m_dataSources.constFind(dataSource.id()))->path());
 }
 
 QList<QDBusObjectPath> DBusUserMetrics::userDatas() const {
@@ -160,30 +161,26 @@ QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
 			QDjangoQuerySet<UserData>().filter(
 					QDjangoWhere("username", QDjangoWhere::Equals, username)));
 
-	Q_ASSERT(query.size() != -1);
+	if (query.size() == -1) {
+		throw exception();
+	}
 
-	int id;
+	UserData userData;
 
 	if (query.size() == 0) {
-		UserData userData;
 		userData.setUsername(username);
-		Q_ASSERT(userData.save());
 
-		id = userData.id();
-
-		qDebug() << "-> new data with id(" << id << ")";
+		if (!userData.save()) {
+			throw exception();
+		}
 
 		syncDatabase();
 	} else {
 		UserData userData;
 		query.at(0, &userData);
-
-		qDebug() << "-> existing data with id(" << id << ")";
-
-		id = userData.id();
 	}
 
-	return QDBusObjectPath((*m_userData.constFind(id))->path());
+	return QDBusObjectPath((*m_userData.constFind(userData.id()))->path());
 }
 
 DBusDataSourcePtr DBusUserMetrics::dataSource(const QString &name) const {

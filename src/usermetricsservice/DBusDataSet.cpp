@@ -27,6 +27,7 @@
 
 #include <QDjangoQuerySet.h>
 
+using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
@@ -117,7 +118,9 @@ void DBusDataSet::update(const QVariantList &data) {
 
 	dataSet.setLastUpdated(currentDate);
 	dataSet.setData(byteArray);
-	Q_ASSERT(dataSet.save());
+	if (!dataSet.save()) {
+		throw exception();
+	}
 
 	QDateTime dateTime(currentDate);
 	m_adaptor->updated(dateTime.toTime_t(), newData);
