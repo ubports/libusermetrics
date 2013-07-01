@@ -1,2 +1,2 @@
-usr/libexec
+usr/lib/*/libusermetrics
 usr/share/dbus-1

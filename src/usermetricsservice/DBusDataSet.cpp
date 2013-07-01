@@ -104,7 +104,7 @@ void DBusDataSet::update(const QVariantList &data) {
 			const int daysToPad(daysSinceLastUpdate - newData.size());
 			// pad the data will null variants
 			for (int i(0); i < daysToPad; ++i) {
-				newData.append(QVariant());
+				newData.append(QVariant(""));
 			}
 			// append the whole of the old data
 			newData.append(oldData);
@@ -123,6 +123,7 @@ void DBusDataSet::update(const QVariantList &data) {
 		throw logic_error("couldn't save data set");
 	}
 
+	qDebug() << "about to send " << newData;
 	QDateTime dateTime(currentDate);
 	m_adaptor->updated(dateTime.toTime_t(), newData);
 }

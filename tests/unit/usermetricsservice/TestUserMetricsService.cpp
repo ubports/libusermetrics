@@ -266,7 +266,7 @@ TEST_F(TestUserMetricsService, UpdateDataWithGap) {
 	QVariantList expected;
 	expected.append(second);
 	for (int i(0); i < 5; ++i) {
-		expected.append(QVariant());
+		expected.append(QVariant(""));
 	}
 	expected.append(first);
 

@@ -28,8 +28,6 @@ set(USERMETRICS_OUTPUT_DEPENDENCIES
 	Gui
 )
 
-add_compiler_export_flags()
-
 # Static library version of libusermetricsoutput
 
 add_library(
