@@ -198,7 +198,7 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		} else {
 			DataSourcePtr dataSource(m_userMetricsStore->dataSource(dataSetId));
 			if (dataSource.isNull()) {
-				qDebug() << "Data source [" << dataSetId << "] not found.";
+				qWarning() << "Data source [" << dataSetId << "] not found.";
 			} else {
 				setLabel(
 						dataSource->formatString().arg(

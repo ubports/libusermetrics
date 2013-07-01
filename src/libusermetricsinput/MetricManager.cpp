@@ -17,8 +17,10 @@
  */
 
 #include <libusermetricsinput/MetricManagerImpl.h>
+#include <libusermetricscommon/DBusPaths.h>
 #include <QtDBus/QtDBus>
 
+using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
 MetricManager::MetricManager() {
@@ -31,10 +33,11 @@ MetricManager::~MetricManager() {
 MetricManagerPtr MetricManager::getInstance() {
 	QDBusConnection dbusConnection(QDBusConnection::systemBus());
 
-//	if (!dbusConnection.interface()->isServiceRegistered(
-//			DBusPaths::serviceName())) {
-//		dbusConnection.interface()->startService(DBusPaths::serviceName());
-//	}
+	QDBusConnectionInterface* interface = dbusConnection.interface();
+	if (!interface->isServiceRegistered(DBusPaths::serviceName())) {
+		QDBusReply<void> reply(
+				interface->startService(DBusPaths::serviceName()));
+	}
 
 	return MetricManagerPtr(new MetricManagerImpl(dbusConnection));
 }

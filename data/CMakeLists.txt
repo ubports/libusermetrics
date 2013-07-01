@@ -37,15 +37,15 @@ install(
 
 set(
 	DBUSSERVICEDIR
-	"${CMAKE_INSTALL_DATADIR}/dbus-1/services/"
+	"${CMAKE_INSTALL_DATADIR}/dbus-1/system-services/"
 )
 
 set(USERMETRICS_SERVICE
-	"${CMAKE_CURRENT_BINARY_DIR}/com.canonical.usermetrics.service"
+	"${CMAKE_CURRENT_BINARY_DIR}/com.canonical.UserMetrics.service"
 )
 
 configure_file(
-	"com.canonical.usermetrics.service.in"
+	"com.canonical.UserMetrics.service.in"
 	${USERMETRICS_SERVICE}
 	@ONLY
 )

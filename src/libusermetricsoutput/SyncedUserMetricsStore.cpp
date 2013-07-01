@@ -78,7 +78,6 @@ SyncedUserMetricsStore::~SyncedUserMetricsStore() {
 
 void SyncedUserMetricsStore::addUserData(const QString &username,
 		const QDBusObjectPath &path) {
-	qDebug() << "SyncedUserMetricsStore::addUserData " << username;
 
 	QSharedPointer<canonical::usermetrics::UserData> userData(
 			new canonical::usermetrics::UserData(DBusPaths::serviceName(),
@@ -94,7 +93,6 @@ void SyncedUserMetricsStore::removeUserData(const QString &username,
 
 void SyncedUserMetricsStore::addDataSource(const QString &name,
 		const QDBusObjectPath &path) {
-	qDebug() << "SyncedUserMetricsStore::addDataSource " << name;
 
 	QSharedPointer<canonical::usermetrics::DataSource> dataSource(
 			new canonical::usermetrics::DataSource(DBusPaths::serviceName(),

@@ -55,7 +55,6 @@ SyncedUserData::~SyncedUserData() {
 
 void SyncedUserData::addDataSet(const QString &dataSourceName,
 		const QDBusObjectPath &path) {
-	qDebug() << "SyncedUserData::addDataSet" << dataSourceName;
 	QSharedPointer<canonical::usermetrics::DataSet> dataSet(
 			new canonical::usermetrics::DataSet(DBusPaths::serviceName(),
 					path.path(), m_interface->connection()));
