@@ -1,0 +1,42 @@
+###########################
+# Dbus Interfaces
+###########################
+
+set(
+	DBUSIFACEDIR
+	"${CMAKE_INSTALL_DATADIR}/dbus-1/interfaces/"
+)
+
+install(
+	FILES
+	com.canonical.usermetrics.DataSet.xml
+	com.canonical.usermetrics.DataSource.xml
+	com.canonical.usermetrics.UserData.xml
+	com.canonical.UserMetrics.xml
+	DESTINATION ${DBUSIFACEDIR}
+)
+
+###########################
+# Dbus Services
+###########################
+
+set(
+	DBUSSERVICEDIR
+	"${CMAKE_INSTALL_DATADIR}/dbus-1/services/"
+)
+
+set(USERMETRICS_SERVICE
+	"${CMAKE_CURRENT_BINARY_DIR}/com.canonical.usermetrics.service"
+)
+
+configure_file(
+	"com.canonical.usermetrics.service.in"
+	${USERMETRICS_SERVICE}
+	@ONLY
+)
+
+install(
+	FILES
+	${USERMETRICS_SERVICE}
+	DESTINATION ${DBUSSERVICEDIR}
+)

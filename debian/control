@@ -21,6 +21,18 @@ Homepage: http://launchpad.net/libusermetrics
 Vcs-Bzr: http://bazaar.launchpad.net/~indicator-applet-developers/libusermetrics/trunk
 Vcs-Browser: https://code.launchpad.net/~indicator-applet-developers/libusermetrics/trunk
 
+Package: usermetricsservice
+Architecture: any
+Multi-Arch: same
+Depends:
+ dbus,
+ sqlite3,
+ libqt5sql5-sqlite,
+ ${misc:Depends},
+ ${shlibs:Depends}
+Description: library for exporting anonymous metrics about users
+ This package contains the service which stores the metrics.
+
 Package: libusermetricsinput1-dev
 Section: libdevel
 Architecture: any
@@ -34,7 +46,8 @@ Package: libusermetricsinput1
 Section: libs
 Architecture: any
 Multi-Arch: same
-Depends: ${misc:Depends},
+Depends: usermetricsservice (= ${binary:Version}),
+         ${misc:Depends},
          ${shlibs:Depends},
 Pre-Depends: ${misc:Pre-Depends},
 Description: library for exporting anonymous metrics about users
@@ -53,7 +66,8 @@ Package: libusermetricsoutput1
 Section: libs
 Architecture: any
 Multi-Arch: same
-Depends: ${misc:Depends},
+Depends: usermetricsservice (= ${binary:Version}),
+         ${misc:Depends},
          ${shlibs:Depends},
 Pre-Depends: ${misc:Pre-Depends},
 Description: library for retrieving anonymous metrics about users

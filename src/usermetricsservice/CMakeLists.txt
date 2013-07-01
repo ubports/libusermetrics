@@ -84,3 +84,12 @@ target_link_libraries(
 	usermetricsservice-bin
 	usermetricsservice
 )
+
+#########################
+# Installation
+#########################
+
+install(
+  TARGETS usermetricsservice-bin
+  RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_LIBEXECDIR}/libusermetrics"
+)

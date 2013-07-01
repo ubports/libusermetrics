@@ -27,6 +27,8 @@ set(USERMETRICS_INPUT_DEPENDENCIES
 	DBus
 )
 
+add_compiler_export_flags()
+
 # Static library version of libusermetricsinput
 
 add_library(

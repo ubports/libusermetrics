@@ -30,7 +30,7 @@ using namespace UserMetricsService;
 int main(int argc, char *argv[]) {
 	QCoreApplication application(argc, argv);
 
-	QString databaseName("/tmp/usermetrics.db");
+	QString databaseName("/var/lib/usermetrics.db");
 	QStringList arguments(application.arguments());
 	if (arguments.size() == 2) {
 		databaseName = arguments.at(1);

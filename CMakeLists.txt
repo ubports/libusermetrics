@@ -60,6 +60,7 @@ if(DOXYGEN_FOUND AND BUILD_DOXYGEN)
 endif()
 
 add_subdirectory("src")
+add_subdirectory("data")
 
 enable_testing()
 add_subdirectory(tests)
