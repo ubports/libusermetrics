@@ -108,22 +108,22 @@ install(
 ##########################
 
 add_executable(
-	usermetricinput-bin
+	usermetricsinput-bin
 	main.cpp
 )
 
 set_target_properties(
-	usermetricinput-bin
+	usermetricsinput-bin
 	PROPERTIES
-	OUTPUT_NAME "usermetricinput"
+	OUTPUT_NAME "usermetricsinput"
 )
 
 install(
-  TARGETS usermetricinput-bin
+  TARGETS usermetricsinput-bin
   RUNTIME DESTINATION bin
 )
 
 target_link_libraries(
-	usermetricinput-bin
+	usermetricsinput-bin
 	usermetricsinput
 )
