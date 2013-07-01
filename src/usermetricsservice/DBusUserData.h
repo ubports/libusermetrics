@@ -47,7 +47,7 @@ Q_PROPERTY(QString username READ username)
 Q_PROPERTY(QList<QDBusObjectPath> dataSets READ dataSets)
 
 public:
-	DBusUserData(int id, DBusUserMetrics &userMetrics,
+	DBusUserData(int id, const QString &username, DBusUserMetrics &userMetrics,
 			QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
 			QObject *parent = 0);
@@ -78,6 +78,8 @@ protected:
 	int m_id;
 
 	QString m_path;
+
+	QString m_username;
 
 	QHash<int, QSharedPointer<DBusDataSet>> m_dataSets;
 };

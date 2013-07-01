@@ -25,6 +25,8 @@
 namespace UserMetricsOutput {
 
 class SyncedDataSet: public DataSet {
+Q_OBJECT
+
 public:
 	explicit SyncedDataSet(
 			QSharedPointer<com::canonical::usermetrics::DataSet> interface,

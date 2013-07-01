@@ -30,6 +30,8 @@ class UserData;
 typedef QSharedPointer<UserData> UserDataPtr;
 
 class UserData: public QObject {
+Q_OBJECT
+
 public:
 	typedef QMap<QString, DataSetPtr> DataSetMap;
 

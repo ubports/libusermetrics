@@ -28,6 +28,7 @@
 namespace UserMetricsOutput {
 
 class UserMetricsStore: public QObject {
+Q_OBJECT
 public:
 	typedef QMap<QString, UserDataPtr> UserDataMap;
 

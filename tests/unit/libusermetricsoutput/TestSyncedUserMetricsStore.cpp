@@ -28,6 +28,8 @@
 #include <testutils/QVariantPrinter.h>
 #include <testutils/QVariantListPrinter.h>
 
+#include <QtTest/QSignalSpy>
+
 #include <gtest/gtest.h>
 
 using namespace std;
@@ -73,6 +75,51 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 	}
 }
 
+TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
+	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
+			DBusPaths::userMetrics(), *connection);
+
+	QDBusObjectPath dataSourcePath1(
+			userMetricsInterface.createDataSource("data-source-one",
+					"format string one %1"));
+	ASSERT_EQ(DBusPaths::dataSource(1), dataSourcePath1.path());
+
+	SyncedUserMetricsStore store(*connection);
+
+	{
+		DataSourcePtr dataSource(store.dataSource("data-source-one"));
+		ASSERT_FALSE(dataSource.isNull());
+		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
+	}
+
+	{
+		DataSourcePtr dataSource(store.dataSource("data-source-two"));
+		ASSERT_TRUE(dataSource.isNull());
+	}
+
+	QSignalSpy spy(&userMetricsInterface,
+			SIGNAL(dataSourceAdded(const QString &, const QDBusObjectPath &)));
+
+	QDBusObjectPath dataSourcePath2(
+			userMetricsInterface.createDataSource("data-source-two",
+					"format string two %1"));
+	ASSERT_EQ(DBusPaths::dataSource(2), dataSourcePath2.path());
+
+	spy.wait();
+
+	{
+		DataSourcePtr dataSource(store.dataSource("data-source-one"));
+		ASSERT_FALSE(dataSource.isNull());
+		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
+	}
+
+	{
+		DataSourcePtr dataSource(store.dataSource("data-source-two"));
+		ASSERT_FALSE(dataSource.isNull());
+		EXPECT_EQ(QString("format string two %1"), dataSource->formatString());
+	}
+}
+
 TEST_F(TestSyncedUserMetricsStore, LoadsUserDataAtStartup) {
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
 			DBusPaths::userMetrics(), *connection);
@@ -86,6 +133,49 @@ TEST_F(TestSyncedUserMetricsStore, LoadsUserDataAtStartup) {
 	ASSERT_EQ(DBusPaths::userData(2), userDataPath2.path());
 
 	SyncedUserMetricsStore store(*connection);
+
+	{
+		UserMetricsStore::const_iterator it(store.constFind("username1"));
+		ASSERT_NE(it, store.constEnd());
+		EXPECT_EQ(QString("username1"), it.key());
+	}
+
+	{
+		UserMetricsStore::const_iterator it(store.constFind("username2"));
+		ASSERT_NE(it, store.constEnd());
+		EXPECT_EQ(QString("username2"), it.key());
+	}
+}
+
+TEST_F(TestSyncedUserMetricsStore, SyncsNewUserData) {
+	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
+			DBusPaths::userMetrics(), *connection);
+
+	QDBusObjectPath userDataPath(
+			userMetricsInterface.createUserData("username1"));
+	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
+
+	SyncedUserMetricsStore store(*connection);
+
+	{
+		UserMetricsStore::const_iterator it(store.constFind("username1"));
+		ASSERT_NE(it, store.constEnd());
+		EXPECT_EQ(QString("username1"), it.key());
+	}
+
+	{
+		UserMetricsStore::const_iterator it(store.constFind("username2"));
+		ASSERT_EQ(it, store.constEnd());
+	}
+
+	QSignalSpy spy(&userMetricsInterface,
+			SIGNAL(userDataAdded(const QString &, const QDBusObjectPath &)));
+
+	QDBusObjectPath userDataPath2(
+			userMetricsInterface.createUserData("username2"));
+	ASSERT_EQ(DBusPaths::userData(2), userDataPath2.path());
+
+	spy.wait();
 
 	{
 		UserMetricsStore::const_iterator it(store.constFind("username1"));
@@ -138,6 +228,77 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	DataSetPtr dataSet(*dataSetIterator);
 	EXPECT_EQ(expected, dataSet->data());
 	EXPECT_EQ(QDate::currentDate(), dataSet->lastUpdated());
+}
+
+TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
+	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
+			DBusPaths::userMetrics(), *connection);
+
+	QDBusObjectPath twitterPath(
+			userMetricsInterface.createDataSource("twitter",
+					"twitter format string"));
+	ASSERT_EQ(DBusPaths::dataSource(1), twitterPath.path());
+
+	QDBusObjectPath facebookPath(
+			userMetricsInterface.createDataSource("facebook",
+					"facebook format string"));
+	ASSERT_EQ(DBusPaths::dataSource(2), facebookPath.path());
+
+	QDBusObjectPath userDataPath(
+			userMetricsInterface.createUserData("username"));
+	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
+
+	com::canonical::usermetrics::UserData userDataInterface(
+			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+
+	QDBusObjectPath twitterDataPath(userDataInterface.createDataSet("twitter"));
+	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
+
+	SyncedUserMetricsStore store(*connection);
+
+	{
+		UserMetricsStore::const_iterator userDataIterator(
+				store.constFind("username"));
+		ASSERT_NE(userDataIterator, store.constEnd());
+		EXPECT_EQ(QString("username"), userDataIterator.key());
+		UserDataPtr userData(*userDataIterator);
+
+		UserData::const_iterator dataSetIterator(userData->constBegin());
+		ASSERT_NE(dataSetIterator, userData->constEnd());
+		EXPECT_EQ(QString("twitter"), dataSetIterator.key());
+
+		++dataSetIterator;
+		ASSERT_EQ(dataSetIterator, userData->constEnd());
+	}
+
+	QSignalSpy spy(&userDataInterface,
+			SIGNAL(dataSetAdded(const QString &, const QDBusObjectPath &)));
+
+	QDBusObjectPath facebookDataPath(
+			userDataInterface.createDataSet("facebook"));
+	ASSERT_EQ(DBusPaths::dataSet(2), facebookDataPath.path());
+
+	spy.wait();
+
+	{
+		UserMetricsStore::const_iterator userDataIterator(
+				store.constFind("username"));
+		ASSERT_NE(userDataIterator, store.constEnd());
+		EXPECT_EQ(QString("username"), userDataIterator.key());
+		UserDataPtr userData(*userDataIterator);
+
+		UserData::const_iterator dataSetIterator(userData->constBegin());
+
+		ASSERT_NE(dataSetIterator, userData->constEnd());
+		EXPECT_EQ(QString("facebook"), dataSetIterator.key());
+
+		++dataSetIterator;
+		ASSERT_NE(dataSetIterator, userData->constEnd());
+		EXPECT_EQ(QString("twitter"), dataSetIterator.key());
+
+		++dataSetIterator;
+		ASSERT_EQ(dataSetIterator, userData->constEnd());
+	}
 }
 
 } // namespace

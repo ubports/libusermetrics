@@ -25,6 +25,8 @@
 namespace UserMetricsOutput {
 
 class SyncedDataSource: public DataSource {
+Q_OBJECT
+
 public:
 	SyncedDataSource(
 			QSharedPointer<com::canonical::usermetrics::DataSource> interface,

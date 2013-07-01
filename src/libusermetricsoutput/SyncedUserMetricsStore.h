@@ -25,11 +25,22 @@
 namespace UserMetricsOutput {
 
 class SyncedUserMetricsStore: public UserMetricsStore {
+Q_OBJECT
+
 public:
 	explicit SyncedUserMetricsStore(const QDBusConnection &dbusConnection,
 			QObject *parent = 0);
 
 	virtual ~SyncedUserMetricsStore();
+
+public Q_SLOTS:
+	void addUserData(const QString &username, const QDBusObjectPath &path);
+
+	void removeUserData(const QString &username, const QDBusObjectPath &path);
+
+	void addDataSource(const QString &username, const QDBusObjectPath &path);
+
+	void removeDataSource(const QString &username, const QDBusObjectPath &path);
 
 protected:
 	com::canonical::UserMetrics m_interface;

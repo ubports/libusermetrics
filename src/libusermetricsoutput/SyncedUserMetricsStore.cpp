@@ -52,7 +52,59 @@ SyncedUserMetricsStore::SyncedUserMetricsStore(
 		QString username(userData->username());
 		insert(username, UserDataPtr(new SyncedUserData(userData)));
 	}
+
+	connect(&m_interface,
+			SIGNAL(dataSourceAdded(const QString &, const QDBusObjectPath &)),
+			this,
+			SLOT(addDataSource(const QString &, const QDBusObjectPath &)));
+
+	connect(&m_interface,
+			SIGNAL(dataSourceRemoved(const QString &, const QDBusObjectPath &)),
+			this,
+			SLOT(removeDataSource(const QString &, const QDBusObjectPath &)));
+
+	connect(&m_interface,
+			SIGNAL(userDataAdded(const QString &, const QDBusObjectPath &)),
+			this, SLOT(addUserData(const QString &, const QDBusObjectPath &)));
+
+	connect(&m_interface,
+			SIGNAL(userDataRemoved(const QString &, const QDBusObjectPath &)),
+			this,
+			SLOT(removeUserData(const QString &, const QDBusObjectPath &)));
 }
 
 SyncedUserMetricsStore::~SyncedUserMetricsStore() {
+}
+
+void SyncedUserMetricsStore::addUserData(const QString &username,
+		const QDBusObjectPath &path) {
+	qDebug() << "SyncedUserMetricsStore::addUserData " << username;
+
+	QSharedPointer<canonical::usermetrics::UserData> userData(
+			new canonical::usermetrics::UserData(DBusPaths::serviceName(),
+					path.path(), m_interface.connection()));
+	insert(username, UserDataPtr(new SyncedUserData(userData)));
+}
+
+void SyncedUserMetricsStore::removeUserData(const QString &username,
+		const QDBusObjectPath &path) {
+	Q_UNUSED(path);
+	m_dataSources.remove(username);
+}
+
+void SyncedUserMetricsStore::addDataSource(const QString &name,
+		const QDBusObjectPath &path) {
+	qDebug() << "SyncedUserMetricsStore::addDataSource " << name;
+
+	QSharedPointer<canonical::usermetrics::DataSource> dataSource(
+			new canonical::usermetrics::DataSource(DBusPaths::serviceName(),
+					path.path(), m_interface.connection()));
+
+	insert(name, DataSourcePtr(new SyncedDataSource(dataSource)));
+}
+
+void SyncedUserMetricsStore::removeDataSource(const QString &name,
+		const QDBusObjectPath &path) {
+	Q_UNUSED(path);
+	m_userData.remove(name);
 }

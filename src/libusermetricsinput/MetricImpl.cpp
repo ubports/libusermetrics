@@ -27,10 +27,6 @@ using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
-//struct UserDataInterfaceInvalidException: exception {
-//	char const* what() const throw ();
-//};
-
 MetricImpl::MetricImpl(const std::string &dataSourceId,
 		const std::string &formatString, const QDBusConnection &dbusConnection,
 		QObject *parent) :
@@ -52,7 +48,7 @@ MetricUpdatePtr MetricImpl::update(const string &username) {
 	com::canonical::usermetrics::UserData userDataInterface(
 			DBusPaths::serviceName(), userDataPath.path(), m_dbusConnection);
 	if (!userDataInterface.isValid()) {
-		throw exception();
+		throw logic_error("user data interface invalid");
 	}
 
 	QDBusObjectPath dataSetPath(

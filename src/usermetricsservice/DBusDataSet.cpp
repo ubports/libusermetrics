@@ -31,11 +31,12 @@ using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
-DBusDataSet::DBusDataSet(int id, QDBusConnection &dbusConnection,
+DBusDataSet::DBusDataSet(int id, const QString &dataSource,
+		QDBusConnection &dbusConnection,
 		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new DataSetAdaptor(this)), m_dateFactory(dateFactory), m_id(id), m_path(
-				DBusPaths::dataSet(m_id)) {
+				DBusPaths::dataSet(m_id)), m_dataSource(dataSource) {
 
 	// DBus setup
 	m_dbusConnection.registerObject(m_path, this);
@@ -119,7 +120,7 @@ void DBusDataSet::update(const QVariantList &data) {
 	dataSet.setLastUpdated(currentDate);
 	dataSet.setData(byteArray);
 	if (!dataSet.save()) {
-		throw exception();
+		throw logic_error("couldn't save data set");
 	}
 
 	QDateTime dateTime(currentDate);
@@ -147,10 +148,5 @@ QString DBusDataSet::path() const {
 }
 
 QString DBusDataSet::dataSource() const {
-	QDjangoQuerySet<DataSet> dataSets;
-	QScopedPointer<DataSet> dataSet(
-			dataSets.selectRelated().get(
-					QDjangoWhere("id", QDjangoWhere::Equals, m_id)));
-	QScopedPointer<DataSource> dataSource(dataSet->dataSource());
-	return dataSource->name();
+	return m_dataSource;
 }

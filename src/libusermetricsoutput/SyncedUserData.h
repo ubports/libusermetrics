@@ -25,12 +25,20 @@
 namespace UserMetricsOutput {
 
 class SyncedUserData: public UserData {
+Q_OBJECT
+
 public:
 	explicit SyncedUserData(
 			QSharedPointer<com::canonical::usermetrics::UserData> interface,
 			QObject *parent = 0);
 
 	virtual ~SyncedUserData();
+
+public Q_SLOTS:
+	void addDataSet(const QString &dataSourceName, const QDBusObjectPath &path);
+
+	void removeDataSet(const QString &dataSourceName,
+			const QDBusObjectPath &path);
 
 protected:
 	QSharedPointer<com::canonical::usermetrics::UserData> m_interface;

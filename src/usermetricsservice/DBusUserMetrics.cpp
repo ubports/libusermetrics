@@ -58,6 +58,8 @@ DBusUserMetrics::~DBusUserMetrics() {
 }
 
 QList<QDBusObjectPath> DBusUserMetrics::dataSources() const {
+	qDebug() << "DBusUserMetrics::dataSources "
+			<< m_dataSources.values().size();
 	QList<QDBusObjectPath> dataSources;
 	for (DBusDataSourcePtr dataSource : m_dataSources.values()) {
 		dataSources << QDBusObjectPath(dataSource->path());
@@ -74,11 +76,12 @@ void DBusUserMetrics::syncDatabase() {
 			dataSourceNames << id;
 			// if we don't have a local cache
 			if (!m_dataSources.contains(id)) {
-				qDebug() << "DBusUserMetrics::syncDatabase create DataSource("
-						<< id << ")";
 				DBusDataSourcePtr dbusDataSource(
-						new DBusDataSource(id, m_dbusConnection));
+						new DBusDataSource(id, dataSource.name(),
+								m_dbusConnection));
 				m_dataSources.insert(id, dbusDataSource);
+				m_adaptor->dataSourceAdded(dbusDataSource->name(),
+						QDBusObjectPath(dbusDataSource->path()));
 			}
 		}
 		// remove any cached references to deleted sources
@@ -86,7 +89,9 @@ void DBusUserMetrics::syncDatabase() {
 				QSet<int>::fromList(m_dataSources.keys()));
 		QSet<int> &toRemove(cachedDataSourceNames.subtract(dataSourceNames));
 		for (int id : toRemove) {
-			m_dataSources.remove(id);
+			DBusDataSourcePtr dataSource(m_dataSources.take(id));
+			m_adaptor->dataSourceRemoved(dataSource->name(),
+					QDBusObjectPath(dataSource->path()));
 		}
 	}
 
@@ -98,19 +103,21 @@ void DBusUserMetrics::syncDatabase() {
 			usernames << id;
 			// if we don't have a local cache
 			if (!m_userData.contains(id)) {
-				qDebug() << "DBusUserMetrics::syncDatabase create UserData("
-						<< id << ")";
 				DBusUserDataPtr dbusUserData(
-						new DBusUserData(id, *this, m_dbusConnection,
-								m_dateFactory));
+						new DBusUserData(id, userData.username(), *this,
+								m_dbusConnection, m_dateFactory));
 				m_userData.insert(id, dbusUserData);
+				m_adaptor->userDataAdded(dbusUserData->username(),
+						QDBusObjectPath(dbusUserData->path()));
 			}
 		}
 		// remove any cached references to deleted sources
 		QSet<int> cachedUsernames(QSet<int>::fromList(m_userData.keys()));
 		QSet<int> &toRemove(cachedUsernames.subtract(usernames));
 		for (int id : toRemove) {
-			m_userData.remove(id);
+			DBusUserDataPtr userData(m_userData.take(id));
+			m_adaptor->userDataRemoved(userData->username(),
+					QDBusObjectPath(userData->path()));
 		}
 	}
 }
@@ -124,7 +131,7 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 					QDjangoWhere("name", QDjangoWhere::Equals, name)));
 
 	if (query.size() == -1) {
-		throw exception();
+		throw logic_error("data source query failed");
 	}
 
 	DataSource dataSource;
@@ -134,12 +141,11 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		dataSource.setFormatString(formatString);
 
 		if (!dataSource.save()) {
-			throw exception();
+			throw logic_error("could not save data source");
 		}
 
 		syncDatabase();
 	} else {
-		DataSource dataSource;
 		query.at(0, &dataSource);
 	}
 
@@ -162,7 +168,7 @@ QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
 					QDjangoWhere("username", QDjangoWhere::Equals, username)));
 
 	if (query.size() == -1) {
-		throw exception();
+		throw logic_error("user data query failed");
 	}
 
 	UserData userData;
@@ -171,12 +177,11 @@ QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
 		userData.setUsername(username);
 
 		if (!userData.save()) {
-			throw exception();
+			throw logic_error("could not save user data");
 		}
 
 		syncDatabase();
 	} else {
-		UserData userData;
 		query.at(0, &userData);
 	}
 

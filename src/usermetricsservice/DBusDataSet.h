@@ -47,7 +47,8 @@ Q_PROPERTY(uint lastUpdated READ lastUpdated)
 Q_PROPERTY(QString dataSource READ dataSource)
 
 public:
-	DBusDataSet(int id, QDBusConnection &dbusConnection,
+	DBusDataSet(int id, const QString &dataSource,
+			QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
 			QObject *parent = 0);
 
@@ -80,6 +81,8 @@ protected:
 	int m_id;
 
 	QString m_path;
+
+	QString m_dataSource;
 };
 
 }

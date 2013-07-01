@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 	QSqlDatabase db(QSqlDatabase::addDatabase("QSQLITE"));
 	db.setDatabaseName(databaseName);
 	if (!db.open()) {
-		throw exception();
+		throw logic_error("couldn't open database");
 	}
 
 	QDjango::setDatabase(db);

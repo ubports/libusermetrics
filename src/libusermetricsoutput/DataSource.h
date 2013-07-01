@@ -35,7 +35,7 @@ Q_OBJECT
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString NOTIFY formatStringChanged FINAL)
 
 public:
-	DataSource(QObject *parent = 0);
+	explicit DataSource(QObject *parent = 0);
 
 	virtual ~DataSource();
 
