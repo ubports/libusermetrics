@@ -63,7 +63,6 @@ QVariantList DBusDataSet::data() const {
 }
 
 void DBusDataSet::update(const QVariantList &data) {
-	qDebug() << "DBusDataSet::update(" << data << ")";
 	DataSet dataSet;
 	DataSet::findById(m_id, &dataSet);
 
@@ -123,7 +122,6 @@ void DBusDataSet::update(const QVariantList &data) {
 		throw logic_error("couldn't save data set");
 	}
 
-	qDebug() << "about to send " << newData;
 	QDateTime dateTime(currentDate);
 	m_adaptor->updated(dateTime.toTime_t(), newData);
 }

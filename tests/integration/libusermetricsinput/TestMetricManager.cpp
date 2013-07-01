@@ -19,8 +19,6 @@
 #include <libusermetricsinput/MetricManager.h>
 #include <testutils/DBusTest.h>
 
-#include <cstdlib>
-
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
@@ -41,9 +39,6 @@ protected:
 };
 
 TEST_F(TestMetricManager, Basic) {
-	QByteArray byteArray(bus.toUtf8());
-	setenv("DBUS_SYSTEM_BUS_ADDRESS", byteArray.data(), true);
-
 	MetricManagerPtr manager(MetricManager::getInstance());
 
 	MetricPtr metric(manager->add("data-source-id", "format string %1"));

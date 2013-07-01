@@ -1,4 +1,19 @@
 ###########################
+# Policy
+###########################
+
+set(
+	DBUSCONFDIR
+	/etc/dbus-1/system.d
+)
+
+install(
+	FILES
+	"com.canonical.UserMetrics.conf"
+	DESTINATION ${DBUSCONFDIR}
+)
+
+###########################
 # Dbus Interfaces
 ###########################
 

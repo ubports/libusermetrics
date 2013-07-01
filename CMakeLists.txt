@@ -6,9 +6,6 @@ set(ABI_VERSION 1)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}")
 
-set(CMAKE_INSTALL_LIBEXECDIR ${CMAKE_INSTALL_LIBDIR})
-set(CMAKE_INSTALL_FULL_LIBEXECDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}")
-
 find_package(PkgConfig REQUIRED)
 
 find_package(Qt5Core REQUIRED)
@@ -52,6 +49,12 @@ ADD_DEFINITIONS(
 
 include(GNUInstallDirs)
 include(Coverage)
+
+# Workaround for libexecdir on debian
+if (EXISTS "/etc/debian_version") 
+  set(CMAKE_INSTALL_LIBEXECDIR ${CMAKE_INSTALL_LIBDIR})
+  set(CMAKE_INSTALL_FULL_LIBEXECDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}")
+endif()
 
 set(DOXYFILE_SOURCE_DIR "include")
 include(UseDoxygen)

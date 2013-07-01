@@ -46,20 +46,25 @@ DBusUserMetrics::DBusUserMetrics(QDBusConnection &dbusConnection,
 	QDjango::createTables();
 
 	// DBus setup
-	m_dbusConnection.registerService(DBusPaths::serviceName());
-	m_dbusConnection.registerObject(DBusPaths::userMetrics(), this);
+
+	if (!m_dbusConnection.registerService(DBusPaths::serviceName())) {
+		qWarning() << "Unable to register user metrics service on DBus";
+	}
+	if (!m_dbusConnection.registerObject(DBusPaths::userMetrics(), this)) {
+		throw logic_error("Unable to register user metrics object on DBus");
+	}
 
 	syncDatabase();
 }
 
 DBusUserMetrics::~DBusUserMetrics() {
-	m_dbusConnection.unregisterObject("/com/canonical/UserMetrics");
-	m_dbusConnection.unregisterService("com.canonical.UserMetrics");
+	m_dbusConnection.unregisterObject(DBusPaths::userMetrics());
+	if (!m_dbusConnection.unregisterService(DBusPaths::serviceName())) {
+		qWarning() << "Unable to unregister user metrics service on DBus";
+	}
 }
 
 QList<QDBusObjectPath> DBusUserMetrics::dataSources() const {
-	qDebug() << "DBusUserMetrics::dataSources "
-			<< m_dataSources.values().size();
 	QList<QDBusObjectPath> dataSources;
 	for (DBusDataSourcePtr dataSource : m_dataSources.values()) {
 		dataSources << QDBusObjectPath(dataSource->path());
@@ -124,7 +129,6 @@ void DBusUserMetrics::syncDatabase() {
 
 QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		const QString &formatString) {
-	qDebug() << "createDataSource(" << name << formatString << ")";
 	QDjangoQuerySet<DataSource> dataSourcesQuery;
 	QDjangoQuerySet<DataSource> query(
 			dataSourcesQuery.filter(
@@ -161,8 +165,6 @@ QList<QDBusObjectPath> DBusUserMetrics::userDatas() const {
 }
 
 QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
-	qDebug() << "createUserData(" << username << ")";
-
 	QDjangoQuerySet<UserData> query(
 			QDjangoQuerySet<UserData>().filter(
 					QDjangoWhere("username", QDjangoWhere::Equals, username)));

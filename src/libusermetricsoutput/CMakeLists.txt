@@ -26,6 +26,7 @@ set(USERMETRICSOUTPUT_SOURCES
 set(USERMETRICS_OUTPUT_DEPENDENCIES
 	Core
 	Gui
+	DBus
 )
 
 # Static library version of libusermetricsoutput

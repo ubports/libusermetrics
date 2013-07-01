@@ -14,7 +14,7 @@ target_link_libraries(
 	usermetricsservice
 	usermetrics-test-utils
 	${GTEST_LIBRARIES}
-	${GMOCK_BOTH_LIBRARIES}
+	${GMOCK_LIBRARIES}
 )
 
 add_valgrind_test(

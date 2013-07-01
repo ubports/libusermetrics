@@ -70,9 +70,8 @@ QList<QDBusObjectPath> DBusUserData::dataSets() const {
 }
 
 QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
-	qDebug() << "DBusUserData::createDataSet(" << dataSourceName << ")";
 	if (!DataSource::exists(dataSourceName)) {
-		qDebug() << "UNKNOWN DATA SOURCE " << dataSourceName;
+		qWarning() << "Unknown data source [" << dataSourceName << "]";
 		return QDBusObjectPath();
 	}
 
