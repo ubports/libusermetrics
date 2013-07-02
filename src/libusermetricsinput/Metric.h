@@ -19,25 +19,23 @@
 #ifndef USERMETRICSINPUT_METRIC_H_
 #define USERMETRICSINPUT_METRIC_H_
 
-#include <memory>
-
-#include <libusermetricsinput/UserMetricsInputExport.h>
 #include <libusermetricsinput/MetricUpdate.h>
+#include <QtCore/QSharedPointer>
 
 namespace UserMetricsInput {
 
 class Metric;
 
-typedef std::shared_ptr<Metric> MetricPtr;
+typedef QSharedPointer<Metric> MetricPtr;
 
-class USERMETRICSINPUT_EXPORT Metric {
+class Q_DECL_EXPORT Metric: public QObject {
 public:
+	explicit Metric(QObject *parent = 0);
+
 	virtual ~Metric();
 
-	virtual MetricUpdatePtr update(const std::string &username) = 0;
+	virtual MetricUpdate * update(const QString &username) = 0;
 
-protected:
-	explicit Metric();
 };
 
 }

@@ -22,6 +22,7 @@
 #include <libusermetricsoutput/ColorTheme.h>
 #include <libusermetricsoutput/ColorThemeProvider.h>
 
+#include <QtCore/QMap>
 #include <QtCore/QVector>
 #include <QtCore/QSharedPointer>
 
@@ -29,24 +30,27 @@ namespace UserMetricsOutput {
 
 class HardCodedColorThemeProvider: public ColorThemeProvider {
 public:
-	typedef QSharedPointer<ColorTheme> ColorThemePtr;
-
-	typedef std::pair<ColorThemePtr, ColorThemePtr> ColorThemePtrPair;
 
 	typedef QVector<ColorThemePtrPair> ColorThemeList;
 
 	typedef ColorThemeList::const_iterator const_interator;
 
+	typedef QMap<QString, ColorThemePtrPair> ColorThemeMap;
+
+	typedef ColorThemeMap::const_iterator map_const_iterator;
+
 	HardCodedColorThemeProvider(QObject *parent = 0);
 
 	virtual ~HardCodedColorThemeProvider();
 
-	virtual ColorThemeRefPair getColorTheme(const QString& dataSetId);
+	virtual ColorThemePtrPair getColorTheme(const QString& dataSetId);
 
 protected:
 	ColorThemeList m_colorThemes;
 
 	const_interator m_color;
+
+	ColorThemeMap m_colorThemeMap;
 };
 
 }

@@ -19,12 +19,12 @@
 #include <libusermetricsoutput/ColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
 #include <libusermetricsoutput/DataSet.h>
+
 #include <testutils/QStringPrinter.h>
 #include <testutils/QVariantPrinter.h>
 #include <testutils/QVariantListPrinter.h>
 #include <testutils/MockSignalReceiver.h>
 
-#include <QtCore/QObject>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
@@ -43,7 +43,7 @@ public:
 
 class MockColorThemeProvider: public ColorThemeProvider {
 public:
-	MOCK_METHOD1(getColorTheme, ColorThemeProvider::ColorThemeRefPair(const QString &));
+	MOCK_METHOD1(getColorTheme, ColorThemePtrPair(const QString &));
 };
 
 class UserMetricsImplTest: public Test {
@@ -222,8 +222,7 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
@@ -236,13 +235,13 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	{
 		const QAbstractItemModel* month(model->firstMonth());
 		EXPECT_EQ(31, month->rowCount());
-		EXPECT_EQ(QVariant(85.0), month->data(month->index(0, 0)));
-		EXPECT_EQ(QVariant(90.0), month->data(month->index(1, 0)));
+		EXPECT_EQ(QVariant(0.85), month->data(month->index(0, 0)));
+		EXPECT_EQ(QVariant(0.9), month->data(month->index(1, 0)));
 		for (int i(2); i < 4; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(95.0), month->data(month->index(5, 0)));
-		EXPECT_EQ(QVariant(100.0), month->data(month->index(6, 0)));
+		EXPECT_EQ(QVariant(0.95), month->data(month->index(5, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(6, 0)));
 		// the rest of the month should be padded with empty variants
 		for (int i(7); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
@@ -253,13 +252,13 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	{
 		const QAbstractItemModel* month(model->secondMonth());
 		EXPECT_EQ(31, month->rowCount());
-		EXPECT_EQ(QVariant(65.0), month->data(month->index(0, 0)));
-		EXPECT_EQ(QVariant(70.0), month->data(month->index(1, 0)));
+		EXPECT_EQ(QVariant(0.65), month->data(month->index(0, 0)));
+		EXPECT_EQ(QVariant(0.7), month->data(month->index(1, 0)));
 		for (int i(2); i < 29; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(75.0), month->data(month->index(29, 0)));
-		EXPECT_EQ(QVariant(80.0), month->data(month->index(30, 0)));
+		EXPECT_EQ(QVariant(0.75), month->data(month->index(29, 0)));
+		EXPECT_EQ(QVariant(0.80), month->data(month->index(30, 0)));
 	}
 }
 
@@ -297,8 +296,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id2"))).WillRepeatedly(
 			Return(emptyPair));
 
@@ -311,10 +309,10 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	{
 		const QAbstractItemModel* month(model->firstMonth());
 		EXPECT_EQ(31, month->rowCount());
-		EXPECT_EQ(QVariant(85.0), month->data(month->index(0, 0)));
-		EXPECT_EQ(QVariant(90.0), month->data(month->index(1, 0)));
-		EXPECT_EQ(QVariant(100.0), month->data(month->index(2, 0)));
-		EXPECT_EQ(QVariant(95.0), month->data(month->index(3, 0)));
+		EXPECT_EQ(QVariant(0.85), month->data(month->index(0, 0)));
+		EXPECT_EQ(QVariant(0.90), month->data(month->index(1, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(2, 0)));
+		EXPECT_EQ(QVariant(0.95), month->data(month->index(3, 0)));
 		// the rest of the month should be padded with empty variants
 		for (int i(4); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
@@ -329,13 +327,13 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 		for (int i(0); i < 13; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(65.0), month->data(month->index(13, 0)));
-		EXPECT_EQ(QVariant(70.0), month->data(month->index(14, 0)));
+		EXPECT_EQ(QVariant(0.65), month->data(month->index(13, 0)));
+		EXPECT_EQ(QVariant(0.7), month->data(month->index(14, 0)));
 		for (int i(15); i < 29; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(75.0), month->data(month->index(29, 0)));
-		EXPECT_EQ(QVariant(80.0), month->data(month->index(30, 0)));
+		EXPECT_EQ(QVariant(0.75), month->data(month->index(29, 0)));
+		EXPECT_EQ(QVariant(0.8), month->data(month->index(30, 0)));
 	}
 }
 
@@ -365,8 +363,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
@@ -394,9 +391,9 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
 		EXPECT_EQ(QVariant(0.0), month->data(month->index(21, 0)));
-		EXPECT_EQ(QVariant(90.0), month->data(month->index(22, 0)));
-		EXPECT_EQ(QVariant(100.0), month->data(month->index(23, 0)));
-		EXPECT_EQ(QVariant(95.0), month->data(month->index(24, 0)));
+		EXPECT_EQ(QVariant(0.9), month->data(month->index(22, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(23, 0)));
+		EXPECT_EQ(QVariant(0.95), month->data(month->index(24, 0)));
 		for (int i(25); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
@@ -429,8 +426,7 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
@@ -448,7 +444,7 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
 		EXPECT_EQ(QVariant(0.0), month->data(month->index(3, 0)));
-		EXPECT_EQ(QVariant(100.0), month->data(month->index(4, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(4, 0)));
 		for (int i(5); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
@@ -505,8 +501,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-one"))).WillRepeatedly(
 			Return(emptyPair));
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-two"))).WillRepeatedly(
@@ -524,8 +519,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 		for (int i(0); i < 2; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(95.0), month->data(month->index(2, 0)));
-		EXPECT_EQ(QVariant(100.0), month->data(month->index(3, 0)));
+		EXPECT_EQ(QVariant(0.95), month->data(month->index(2, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(3, 0)));
 		for (int i(4); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
@@ -538,8 +533,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 		for (int i(0); i < 27; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(85.0), month->data(month->index(27, 0)));
-		EXPECT_EQ(QVariant(90.0), month->data(month->index(28, 0)));
+		EXPECT_EQ(QVariant(0.85), month->data(month->index(27, 0)));
+		EXPECT_EQ(QVariant(0.9), month->data(month->index(28, 0)));
 		for (int i(29); i < 31; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
@@ -557,8 +552,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 		for (int i(0); i < 5; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(65.0), month->data(month->index(5, 0)));
-		EXPECT_EQ(QVariant(50.0), month->data(month->index(6, 0)));
+		EXPECT_EQ(QVariant(0.65), month->data(month->index(5, 0)));
+		EXPECT_EQ(QVariant(0.5), month->data(month->index(6, 0)));
 		for (int i(7); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
@@ -571,8 +566,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 		for (int i(0); i < 27; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(100.0), month->data(month->index(27, 0)));
-		EXPECT_EQ(QVariant(75.0), month->data(month->index(28, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(27, 0)));
+		EXPECT_EQ(QVariant(0.75), month->data(month->index(28, 0)));
 		for (int i(29); i < 31; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
@@ -680,23 +675,19 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			new ColorThemeImpl(QColor(251, 0, 0), QColor(0, 251, 0),
 					QColor(0, 0, 251)));
 
-	ColorThemeProvider::ColorThemeRefPair colorDataSourceOne(*colorThemeOne,
-			*colorThemeTwo);
+	ColorThemePtrPair colorDataSourceOne(colorThemeOne, colorThemeTwo);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-one"))).WillRepeatedly(
 			Return(colorDataSourceOne));
 
-	ColorThemeProvider::ColorThemeRefPair colorDataSourceTwo(*colorThemeTwo,
-			*colorThemeThree);
+	ColorThemePtrPair colorDataSourceTwo(colorThemeTwo, colorThemeThree);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-two"))).WillRepeatedly(
 			Return(colorDataSourceTwo));
 
-	ColorThemeProvider::ColorThemeRefPair colorDataSourceThree(*colorThemeThree,
-			*colorThemeFour);
+	ColorThemePtrPair colorDataSourceThree(colorThemeThree, colorThemeFour);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-three"))).WillRepeatedly(
 			Return(colorDataSourceThree));
 
-	ColorThemeProvider::ColorThemeRefPair colorDataSourceFour(*colorThemeFour,
-			*colorThemeFive);
+	ColorThemePtrPair colorDataSourceFour(colorThemeFour, colorThemeFive);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-xfour"))).WillRepeatedly(
 			Return(colorDataSourceFour));
 
@@ -709,12 +700,12 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 	{
 		const QAbstractItemModel* month(model->firstMonth());
 		EXPECT_EQ(31, month->rowCount());
-		EXPECT_EQ(QVariant(90.0), month->data(month->index(0, 0)));
+		EXPECT_EQ(QVariant(0.9), month->data(month->index(0, 0)));
 		for (int i(1); i < 5; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(95.0), month->data(month->index(5, 0)));
-		EXPECT_EQ(QVariant(100.0), month->data(month->index(6, 0)));
+		EXPECT_EQ(QVariant(0.95), month->data(month->index(5, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(6, 0)));
 		for (int i(7); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
@@ -727,7 +718,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		for (int i(0); i < 30; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(85.0), month->data(month->index(30, 0)));
+		EXPECT_EQ(QVariant(0.85), month->data(month->index(30, 0)));
 	}
 
 	EXPECT_EQ(colorThemeOne->start(), model->firstColor()->start());
@@ -750,8 +741,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		for (int i(0); i < 5; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(65.0), month->data(month->index(5, 0)));
-		EXPECT_EQ(QVariant(50.0), month->data(month->index(6, 0)));
+		EXPECT_EQ(QVariant(0.65), month->data(month->index(5, 0)));
+		EXPECT_EQ(QVariant(0.5), month->data(month->index(6, 0)));
 		for (int i(7); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
@@ -764,8 +755,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		for (int i(0); i < 27; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(100.0), month->data(month->index(27, 0)));
-		EXPECT_EQ(QVariant(75.0), month->data(month->index(28, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(27, 0)));
+		EXPECT_EQ(QVariant(0.75), month->data(month->index(28, 0)));
 		for (int i(29); i < 31; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
@@ -791,8 +782,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		for (int i(0); i < 5; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(100.0), month->data(month->index(5, 0)));
-		EXPECT_EQ(QVariant(15.0), month->data(month->index(6, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(5, 0)));
+		EXPECT_EQ(QVariant(0.15), month->data(month->index(6, 0)));
 		for (int i(7); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
@@ -805,8 +796,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		for (int i(0); i < 27; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(10.0), month->data(month->index(27, 0)));
-		EXPECT_EQ(QVariant(5.0), month->data(month->index(28, 0)));
+		EXPECT_EQ(QVariant(0.1), month->data(month->index(27, 0)));
+		EXPECT_EQ(QVariant(0.05), month->data(month->index(28, 0)));
 		for (int i(29); i < 31; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
@@ -832,8 +823,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		for (int i(0); i < 5; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(30.0), month->data(month->index(5, 0)));
-		EXPECT_EQ(QVariant(25.0), month->data(month->index(6, 0)));
+		EXPECT_EQ(QVariant(0.3), month->data(month->index(5, 0)));
+		EXPECT_EQ(QVariant(0.25), month->data(month->index(6, 0)));
 		for (int i(7); i < 31; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
@@ -846,8 +837,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		for (int i(0); i < 23; ++i) {
 			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
-		EXPECT_EQ(QVariant(35.0), month->data(month->index(23, 0)));
-		EXPECT_EQ(QVariant(100.0), month->data(month->index(24, 0)));
+		EXPECT_EQ(QVariant(0.35), month->data(month->index(23, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(24, 0)));
 		for (int i(25); i < 31; ++i) {
 			EXPECT_EQ(QVariant(0.0), month->data(month->index(i, 0)));
 		}

@@ -25,9 +25,9 @@ SyncedDataSet::SyncedDataSet(
 		QObject *parent) :
 		DataSet(parent), m_interface(interface) {
 
-	update(m_interface->lastUpdated(), m_interface->data());
 	connect(m_interface.data(), SIGNAL(updated(uint, const QVariantList &)),
 			this, SLOT(update(uint, const QVariantList &)));
+	update(m_interface->lastUpdated(), m_interface->data());
 }
 
 SyncedDataSet::~SyncedDataSet() {

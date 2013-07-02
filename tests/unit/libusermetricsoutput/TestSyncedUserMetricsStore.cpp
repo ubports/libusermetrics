@@ -54,12 +54,12 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 
 	QDBusObjectPath dataSourcePath1(
 			userMetricsInterface.createDataSource("data-source-one",
-					"format string one %1"));
+					"format string one %1", ""));
 	ASSERT_EQ(DBusPaths::dataSource(1), dataSourcePath1.path());
 
 	QDBusObjectPath dataSourcePath2(
 			userMetricsInterface.createDataSource("data-source-two",
-					"format string two %1"));
+					"format string two %1", ""));
 	ASSERT_EQ(DBusPaths::dataSource(2), dataSourcePath2.path());
 
 	SyncedUserMetricsStore store(*connection);
@@ -81,7 +81,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 
 	QDBusObjectPath dataSourcePath1(
 			userMetricsInterface.createDataSource("data-source-one",
-					"format string one %1"));
+					"format string one %1", "text-domain-one"));
 	ASSERT_EQ(DBusPaths::dataSource(1), dataSourcePath1.path());
 
 	SyncedUserMetricsStore store(*connection);
@@ -90,6 +90,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 		DataSourcePtr dataSource(store.dataSource("data-source-one"));
 		ASSERT_FALSE(dataSource.isNull());
 		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
+		EXPECT_EQ(QString("text-domain-one"), dataSource->textDomain());
 	}
 
 	{
@@ -102,7 +103,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 
 	QDBusObjectPath dataSourcePath2(
 			userMetricsInterface.createDataSource("data-source-two",
-					"format string two %1"));
+					"format string two %1", "text-domain-two"));
 	ASSERT_EQ(DBusPaths::dataSource(2), dataSourcePath2.path());
 
 	spy.wait();
@@ -111,12 +112,14 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 		DataSourcePtr dataSource(store.dataSource("data-source-one"));
 		ASSERT_FALSE(dataSource.isNull());
 		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
+		EXPECT_EQ(QString("text-domain-one"), dataSource->textDomain());
 	}
 
 	{
 		DataSourcePtr dataSource(store.dataSource("data-source-two"));
 		ASSERT_FALSE(dataSource.isNull());
 		EXPECT_EQ(QString("format string two %1"), dataSource->formatString());
+		EXPECT_EQ(QString("text-domain-two"), dataSource->textDomain());
 	}
 }
 
@@ -196,7 +199,7 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 
 	QDBusObjectPath twitterPath(
 			userMetricsInterface.createDataSource("twitter",
-					"twitter format string"));
+					"twitter format string", ""));
 	ASSERT_EQ(DBusPaths::dataSource(1), twitterPath.path());
 
 	QDBusObjectPath userDataPath(
@@ -209,7 +212,7 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
 
 	QVariantList data( { 100.0, 50.0, "", -50.0, -100.0 });
-	QVariantList expected( { 100.0, 50.0, QVariant(), -50.0, -100.0 });
+	QVariantList expected( { 1.0, 0.75, QVariant(), 0.25, 0.0 });
 
 	com::canonical::usermetrics::DataSet dataSetInterface(
 			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
@@ -236,12 +239,12 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 
 	QDBusObjectPath twitterPath(
 			userMetricsInterface.createDataSource("twitter",
-					"twitter format string"));
+					"twitter format string", ""));
 	ASSERT_EQ(DBusPaths::dataSource(1), twitterPath.path());
 
 	QDBusObjectPath facebookPath(
 			userMetricsInterface.createDataSource("facebook",
-					"facebook format string"));
+					"facebook format string", ""));
 	ASSERT_EQ(DBusPaths::dataSource(2), facebookPath.path());
 
 	QDBusObjectPath userDataPath(

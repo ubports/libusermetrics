@@ -30,7 +30,7 @@ namespace UserMetricsInput {
 
 class Metric;
 
-class MetricUpdateImpl: public MetricUpdate, public QObject {
+class MetricUpdateImpl: public MetricUpdate {
 public:
 	explicit MetricUpdateImpl(const QString &path,
 			const QDBusConnection &dbusConnection, QObject *parent = 0);

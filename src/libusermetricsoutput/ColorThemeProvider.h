@@ -26,16 +26,19 @@
 
 namespace UserMetricsOutput {
 
+typedef QSharedPointer<ColorTheme> ColorThemePtr;
+
+typedef std::pair<ColorThemePtr, ColorThemePtr> ColorThemePtrPair;
+
 class ColorThemeProvider: public QObject {
 protected:
 	ColorThemeProvider(QObject *parent = 0);
 
 public:
-	typedef std::pair<const ColorTheme &, const ColorTheme &> ColorThemeRefPair;
 
 	virtual ~ColorThemeProvider();
 
-	virtual ColorThemeRefPair getColorTheme(const QString& dataSetId) = 0;
+	virtual ColorThemePtrPair getColorTheme(const QString& dataSetId) = 0;
 };
 
 }

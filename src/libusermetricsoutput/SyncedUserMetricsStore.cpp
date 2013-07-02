@@ -33,6 +33,25 @@ SyncedUserMetricsStore::SyncedUserMetricsStore(
 		UserMetricsStore(parent), m_interface(DBusPaths::serviceName(),
 				DBusPaths::userMetrics(), dbusConnection) {
 
+	connect(&m_interface,
+			SIGNAL(dataSourceAdded(const QString &, const QDBusObjectPath &)),
+			this,
+			SLOT(addDataSource(const QString &, const QDBusObjectPath &)));
+
+	connect(&m_interface,
+			SIGNAL(dataSourceRemoved(const QString &, const QDBusObjectPath &)),
+			this,
+			SLOT(removeDataSource(const QString &, const QDBusObjectPath &)));
+
+	connect(&m_interface,
+			SIGNAL(userDataAdded(const QString &, const QDBusObjectPath &)),
+			this, SLOT(addUserData(const QString &, const QDBusObjectPath &)));
+
+	connect(&m_interface,
+			SIGNAL(userDataRemoved(const QString &, const QDBusObjectPath &)),
+			this,
+			SLOT(removeUserData(const QString &, const QDBusObjectPath &)));
+
 	for (const QDBusObjectPath &path : m_interface.dataSources()) {
 
 		QSharedPointer<canonical::usermetrics::DataSource> dataSource(
@@ -52,25 +71,6 @@ SyncedUserMetricsStore::SyncedUserMetricsStore(
 		QString username(userData->username());
 		insert(username, UserDataPtr(new SyncedUserData(userData)));
 	}
-
-	connect(&m_interface,
-			SIGNAL(dataSourceAdded(const QString &, const QDBusObjectPath &)),
-			this,
-			SLOT(addDataSource(const QString &, const QDBusObjectPath &)));
-
-	connect(&m_interface,
-			SIGNAL(dataSourceRemoved(const QString &, const QDBusObjectPath &)),
-			this,
-			SLOT(removeDataSource(const QString &, const QDBusObjectPath &)));
-
-	connect(&m_interface,
-			SIGNAL(userDataAdded(const QString &, const QDBusObjectPath &)),
-			this, SLOT(addUserData(const QString &, const QDBusObjectPath &)));
-
-	connect(&m_interface,
-			SIGNAL(userDataRemoved(const QString &, const QDBusObjectPath &)),
-			this,
-			SLOT(removeUserData(const QString &, const QDBusObjectPath &)));
 }
 
 SyncedUserMetricsStore::~SyncedUserMetricsStore() {

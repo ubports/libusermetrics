@@ -17,30 +17,31 @@
  */
 
 #include <libusermetricsinput/MetricManager.h>
-#include <string>
-#include <iostream>
-#include <cstdlib>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QDebug>
 
 using namespace std;
 using namespace UserMetricsInput;
 
 int main(int argc, char *argv[]) {
-	if (argc < 4) {
-		cerr << "Usage: " << argv[0] << " DATA_SOURCE_ID FORMAT_STRING <DATA>"
-				<< endl;
+	if (argc < 5) {
+		qWarning() << "Usage: " << argv[0]
+				<< " DATA_SOURCE_ID FORMAT_STRING USERNAME <DATA>";
 		return 1;
 	}
 
-	string dataSourceId(argv[1]);
-	string formatString(argv[2]);
-	string username(getenv("USER"));
+	QCoreApplication application(argc, argv);
+
+	QString dataSourceId(QString::fromUtf8(argv[1]));
+	QString formatString(QString::fromUtf8(argv[2]));
+	QString username(QString::fromUtf8(argv[3]));
 
 	MetricManagerPtr manager(MetricManager::getInstance());
 	MetricPtr metric(manager->add(dataSourceId, formatString));
-	MetricUpdatePtr update = metric->update(username);
+	MetricUpdatePtr update(metric->update(username));
 
-	for (int i(3); i < argc; ++i) {
-		double data(stod(string(argv[i])));
+	for (int i(4); i < argc; ++i) {
+		double data(stod(argv[i]));
 		update->addData(data);
 	}
 

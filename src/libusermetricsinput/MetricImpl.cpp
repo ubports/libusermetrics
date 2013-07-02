@@ -27,22 +27,19 @@ using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
-MetricImpl::MetricImpl(const std::string &dataSourceId,
-		const std::string &formatString, const QDBusConnection &dbusConnection,
-		QObject *parent) :
-		QObject(parent), m_dbusConnection(dbusConnection), m_interface(
+MetricImpl::MetricImpl(const QString &dataSourceId, const QString &formatString,
+		const QDBusConnection &dbusConnection, QObject *parent) :
+		Metric(parent), m_dbusConnection(dbusConnection), m_interface(
 				DBusPaths::serviceName(), DBusPaths::userMetrics(),
-				dbusConnection), m_dataSourceId(
-				QString::fromStdString(dataSourceId)), m_formatString(
-				QString::fromStdString(formatString)) {
+				dbusConnection), m_dataSourceId(dataSourceId), m_formatString(
+				formatString) {
 }
 
 MetricImpl::~MetricImpl() {
 }
 
-MetricUpdatePtr MetricImpl::update(const string &username) {
-	QDBusObjectPath userDataPath(
-			m_interface.createUserData(QString::fromStdString(username)));
+MetricUpdate * MetricImpl::update(const QString &username) {
+	QDBusObjectPath userDataPath(m_interface.createUserData(username));
 
 	com::canonical::usermetrics::UserData userDataInterface(
 			DBusPaths::serviceName(), userDataPath.path(), m_dbusConnection);
@@ -53,6 +50,5 @@ MetricUpdatePtr MetricImpl::update(const string &username) {
 	QDBusObjectPath dataSetPath(
 			userDataInterface.createDataSet(m_dataSourceId));
 
-	return MetricUpdatePtr(
-			new MetricUpdateImpl(dataSetPath.path(), m_dbusConnection));
+	return new MetricUpdateImpl(dataSetPath.path(), m_dbusConnection);
 }

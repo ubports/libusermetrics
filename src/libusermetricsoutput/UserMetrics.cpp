@@ -20,6 +20,7 @@
 #include <libusermetricscommon/DateFactoryImpl.h>
 #include <libusermetricsoutput/HardCodedColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
+#include <libusermetricscommon/DBusPaths.h>
 
 using namespace UserMetricsOutput;
 using namespace UserMetricsCommon;
@@ -31,15 +32,19 @@ UserMetrics::UserMetrics(QObject *parent) :
 UserMetrics::~UserMetrics() {
 }
 
-/**
- * Factory methods
- */
-
 UserMetrics * UserMetrics::getInstance() {
+	QDBusConnection dbusConnection(QDBusConnection::systemBus());
+
+	QDBusConnectionInterface* interface = dbusConnection.interface();
+	if (!interface->isServiceRegistered(DBusPaths::serviceName())) {
+		QDBusReply<void> reply(
+				interface->startService(DBusPaths::serviceName()));
+	}
+
 	return new UserMetricsImpl(
 			QSharedPointer<DateFactory>(new DateFactoryImpl()),
 			QSharedPointer<UserMetricsStore>(
-					new SyncedUserMetricsStore(QDBusConnection::systemBus())),
+					new SyncedUserMetricsStore(dbusConnection)),
 			QSharedPointer<ColorThemeProvider>(
 					new HardCodedColorThemeProvider()));
 }

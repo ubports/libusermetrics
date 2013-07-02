@@ -3,6 +3,7 @@ set(
 	USERMETRICSOUTPUT_UNIT_TESTS_SRC
 	QModelListener.cpp
 	TestColorThemeImpl.cpp
+	TestDataSet.cpp
 	TestQVariantListModel.cpp
 	TestUserMetricsImpl.cpp
 	TestSyncedUserMetricsStore.cpp
@@ -18,7 +19,7 @@ target_link_libraries(
 	usermetricsoutput-static
 	usermetrics-test-utils
 	${GTEST_LIBRARIES}
-	${GMOCK_BOTH_LIBRARIES}
+	${GMOCK_LIBRARIES}
 )
 
 add_valgrind_test(

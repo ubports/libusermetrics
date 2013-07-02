@@ -40,6 +40,8 @@ Q_PROPERTY(QString name READ name)
 
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString)
 
+Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain)
+
 public:
 	DBusDataSource(int id, const QString &name, QDBusConnection &dbusConnection,
 			QObject *parent = 0);
@@ -53,6 +55,10 @@ public:
 	QString formatString() const;
 
 	void setFormatString(const QString &formatString);
+
+	QString textDomain() const;
+
+	void setTextDomain(const QString &textDomain);
 
 protected:
 	void lookupDataSource(DataSource *dataSource) const;

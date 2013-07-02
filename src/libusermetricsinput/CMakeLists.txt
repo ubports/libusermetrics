@@ -123,6 +123,11 @@ install(
   RUNTIME DESTINATION bin
 )
 
+qt5_use_modules(
+	usermetricsinput-bin
+	Core
+)
+
 target_link_libraries(
 	usermetricsinput-bin
 	usermetricsinput

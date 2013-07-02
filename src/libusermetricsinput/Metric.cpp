@@ -20,7 +20,8 @@
 
 using namespace UserMetricsInput;
 
-Metric::Metric() {
+Metric::Metric(QObject *parent) :
+		QObject(parent) {
 }
 
 Metric::~Metric() {

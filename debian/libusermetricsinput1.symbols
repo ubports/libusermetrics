@@ -1,39 +1,29 @@
 libusermetricsinput.so.1 libusermetricsinput1 #MINVER#
- (c++)"UserMetricsInput::MetricUpdate::MetricUpdate()@Base" 1.0.1
- (c++)"UserMetricsInput::MetricUpdate::MetricUpdate()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricUpdate::MetricUpdate(QObject*)@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricUpdate::MetricUpdate(QObject*)@Base" 1.0.1
  (c++)"UserMetricsInput::MetricUpdate::~MetricUpdate()@Base" 1.0.1
  (c++)"UserMetricsInput::MetricUpdate::~MetricUpdate()@Base" 1.0.1
  (c++)"UserMetricsInput::MetricUpdate::~MetricUpdate()@Base" 1.0.1
  (c++)"UserMetricsInput::MetricManager::getInstance()@Base" 1.0.1
- (c++)"UserMetricsInput::MetricManager::MetricManager()@Base" 1.0.1
- (c++)"UserMetricsInput::MetricManager::MetricManager()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricManager::MetricManager(QObject*)@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricManager::MetricManager(QObject*)@Base" 1.0.1
  (c++)"UserMetricsInput::MetricManager::~MetricManager()@Base" 1.0.1
  (c++)"UserMetricsInput::MetricManager::~MetricManager()@Base" 1.0.1
  (c++)"UserMetricsInput::MetricManager::~MetricManager()@Base" 1.0.1
- (c++)"UserMetricsInput::Metric::Metric()@Base" 1.0.1
- (c++)"UserMetricsInput::Metric::Metric()@Base" 1.0.1
+ (c++)"UserMetricsInput::Metric::Metric(QObject*)@Base" 1.0.1
+ (c++)"UserMetricsInput::Metric::Metric(QObject*)@Base" 1.0.1
  (c++)"UserMetricsInput::Metric::~Metric()@Base" 1.0.1
  (c++)"UserMetricsInput::Metric::~Metric()@Base" 1.0.1
  (c++)"UserMetricsInput::Metric::~Metric()@Base" 1.0.1
- (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_destroy()@Base" 1.0.1
- (c++|optional)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::_M_release()@Base" 1.0.1
- (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::~_Sp_counted_base()@Base" 1.0.1
- (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::~_Sp_counted_base()@Base" 1.0.1
- (c++)"std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>::~_Sp_counted_base()@Base" 1.0.1
  (c++)"typeinfo for UserMetricsInput::MetricUpdate@Base" 1.0.1
  (c++)"typeinfo for UserMetricsInput::MetricManager@Base" 1.0.1
  (c++)"typeinfo for UserMetricsInput::Metric@Base" 1.0.1
- (c++)"typeinfo for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>@Base" 1.0.1
- (c++)"typeinfo for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>@Base" 1.0.1
  (c++)"typeinfo name for UserMetricsInput::MetricUpdate@Base" 1.0.1
  (c++)"typeinfo name for UserMetricsInput::MetricManager@Base" 1.0.1
  (c++)"typeinfo name for UserMetricsInput::Metric@Base" 1.0.1
- (c++)"typeinfo name for std::_Mutex_base<(__gnu_cxx::_Lock_policy)2>@Base" 1.0.1
- (c++)"typeinfo name for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>@Base" 1.0.1
  (c++)"vtable for UserMetricsInput::MetricUpdate@Base" 1.0.1
  (c++)"vtable for UserMetricsInput::MetricManager@Base" 1.0.1
  (c++)"vtable for UserMetricsInput::Metric@Base" 1.0.1
- (c++)"vtable for std::_Sp_counted_base<(__gnu_cxx::_Lock_policy)2>@Base" 1.0.1
  usermetricsinput_metric_update@Base 1.0.1
  usermetricsinput_metricmanager_add@Base 1.0.1
  usermetricsinput_metricmanager_delete@Base 1.0.1

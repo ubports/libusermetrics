@@ -24,7 +24,7 @@ using namespace UserMetricsInput;
 
 MetricUpdateImpl::MetricUpdateImpl(const QString &path,
 		const QDBusConnection &dbusConnection, QObject *parent) :
-		QObject(parent), m_dbusConnection(dbusConnection), m_interface(
+		MetricUpdate(parent), m_dbusConnection(dbusConnection), m_interface(
 				DBusPaths::serviceName(), path, dbusConnection) {
 }
 
