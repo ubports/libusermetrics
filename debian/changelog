@@ -1,3 +1,14 @@
+libusermetrics (1.0.1+13.10.20130702-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Implement most of storage service and wire up input API.
+  * Wire up the output API to the storage service.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 80
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 02 Jul 2013 02:02:52 +0000
+
 libusermetrics (1.0.1+13.10.20130628-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]
