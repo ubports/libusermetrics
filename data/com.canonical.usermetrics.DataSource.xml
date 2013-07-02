@@ -8,6 +8,12 @@
 		
 		<signal name="formatStringChanged">
 			<arg name="formatString" type="s" direction="out"/>
+		</signal>
+		
+		<property name="textDomain" type="s" access="read"/>
+			
+		<signal name="textDomainChanged">
+			<arg name="textDomain" type="s" direction="out"/>
 		</signal>	
 		
 	</interface>

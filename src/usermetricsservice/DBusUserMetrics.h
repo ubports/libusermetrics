@@ -53,7 +53,7 @@ public:
 	QList<QDBusObjectPath> dataSources() const;
 
 	QDBusObjectPath createDataSource(const QString &name,
-			const QString &formatString);
+			const QString &formatString, const QString &textDomain);
 
 	QSharedPointer<DBusDataSource> dataSource(const QString &name) const;
 

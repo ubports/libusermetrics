@@ -67,3 +67,21 @@ void DBusDataSource::setFormatString(const QString &formatString) {
 		m_adaptor->formatStringChanged(formatString);
 	}
 }
+
+QString DBusDataSource::textDomain() const {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	return dataSource.textDomain();
+}
+
+void DBusDataSource::setTextDomain(const QString &textDomain) {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	if (textDomain != dataSource.textDomain()) {
+		dataSource.setTextDomain(textDomain);
+		if (!dataSource.save()) {
+			throw logic_error("couldn't save data source");
+		}
+		m_adaptor->textDomainChanged(textDomain);
+	}
+}

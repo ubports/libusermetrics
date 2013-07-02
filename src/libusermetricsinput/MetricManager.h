@@ -36,7 +36,7 @@ public:
 	static MetricManager * getInstance();
 
 	virtual MetricPtr add(const QString &dataSourceId,
-			const QString &formatString) = 0;
+			const QString &formatString, const QString &textDomain = "") = 0;
 };
 
 }

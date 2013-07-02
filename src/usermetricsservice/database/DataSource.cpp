@@ -53,6 +53,14 @@ void DataSource::setFormatString(const QString &formatString) {
 	m_formatString = formatString;
 }
 
+const QString & DataSource::textDomain() const {
+	return m_textDomain;
+}
+
+void DataSource::setTextDomain(const QString &textDomain) {
+	m_textDomain = textDomain;
+}
+
 void DataSource::findById(int id, DataSource *dataSource) {
 	QDjangoQuerySet<DataSource>().get(
 			QDjangoWhere("id", QDjangoWhere::Equals, id), dataSource);

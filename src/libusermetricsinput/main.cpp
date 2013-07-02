@@ -18,17 +18,15 @@
 
 #include <libusermetricsinput/MetricManager.h>
 #include <QtCore/QCoreApplication>
-#include <string>
-#include <iostream>
-#include <cstdlib>
+#include <QtCore/QDebug>
 
 using namespace std;
 using namespace UserMetricsInput;
 
 int main(int argc, char *argv[]) {
 	if (argc < 5) {
-		cerr << "Usage: " << argv[0]
-				<< " DATA_SOURCE_ID FORMAT_STRING USERNAME <DATA>" << endl;
+		qWarning() << "Usage: " << argv[0]
+				<< " DATA_SOURCE_ID FORMAT_STRING USERNAME <DATA>";
 		return 1;
 	}
 
@@ -43,7 +41,7 @@ int main(int argc, char *argv[]) {
 	MetricUpdatePtr update(metric->update(username));
 
 	for (int i(4); i < argc; ++i) {
-		double data(stod(string(argv[i])));
+		double data(stod(argv[i]));
 		update->addData(data);
 	}
 

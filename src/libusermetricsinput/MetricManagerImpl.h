@@ -34,7 +34,7 @@ public:
 	virtual ~MetricManagerImpl();
 
 	virtual MetricPtr add(const QString &dataSourceId,
-			const QString &formatString);
+			const QString &formatString, const QString &textDomain = "");
 
 protected:
 	QDBusConnection m_dbusConnection;

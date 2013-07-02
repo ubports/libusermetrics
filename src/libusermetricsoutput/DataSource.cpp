@@ -31,9 +31,21 @@ DataSource::~DataSource() {
 const QString & DataSource::formatString() const {
 	return m_formatString;
 }
+
 void DataSource::setFormatString(const QString &formatString) {
 	if (formatString != m_formatString) {
 		m_formatString = formatString;
 		formatStringChanged(m_formatString);
+	}
+}
+
+const QString & DataSource::textDomain() const {
+	return m_textDomain;
+}
+
+void DataSource::setTextDomain(const QString &textDomain) {
+	if (textDomain != m_textDomain) {
+		m_textDomain = textDomain;
+		textDomainChanged(m_textDomain);
 	}
 }

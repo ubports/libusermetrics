@@ -34,6 +34,8 @@ Q_OBJECT
 
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString NOTIFY formatStringChanged FINAL)
 
+Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain NOTIFY textDomainChanged FINAL)
+
 public:
 	explicit DataSource(QObject *parent = 0);
 
@@ -41,14 +43,22 @@ public:
 
 	const QString & formatString() const;
 
+	const QString & textDomain() const;
+
 public Q_SLOTS:
 	void setFormatString(const QString &formatString);
+
+	void setTextDomain(const QString &textDomain);
 
 Q_SIGNALS:
 	void formatStringChanged(const QString &formatString);
 
+	void textDomainChanged(const QString &textDomain);
+
 protected:
 	QString m_formatString;
+
+	QString m_textDomain;
 };
 
 }
