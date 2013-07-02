@@ -1,3 +1,9 @@
+libusermetrics (1.0.2) saucy; urgency=low
+
+  * It should be in a functional state now.
+
+ -- Pete Woods <pete.woods@canonical.com>  Tue, 02 Jul 2013 16:25:17 +0100
+
 libusermetrics (1.0.1+13.10.20130702-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]
