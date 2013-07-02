@@ -59,9 +59,11 @@ QString DBusDataSource::formatString() const {
 void DBusDataSource::setFormatString(const QString &formatString) {
 	DataSource dataSource;
 	DataSource::findById(m_id, &dataSource);
-	dataSource.setFormatString(formatString);
-	if (!dataSource.save()) {
-		throw logic_error("couldn't save data source");
+	if (formatString != dataSource.formatString()) {
+		dataSource.setFormatString(formatString);
+		if (!dataSource.save()) {
+			throw logic_error("couldn't save data source");
+		}
+		m_adaptor->formatStringChanged(formatString);
 	}
-	m_adaptor->formatStringChanged(formatString);
 }

@@ -151,6 +151,8 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		syncDatabase();
 	} else {
 		query.at(0, &dataSource);
+		(*m_dataSources.constFind(dataSource.id()))->setFormatString(
+				formatString);
 	}
 
 	return QDBusObjectPath((*m_dataSources.constFind(dataSource.id()))->path());

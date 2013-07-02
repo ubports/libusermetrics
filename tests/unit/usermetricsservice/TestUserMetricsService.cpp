@@ -131,6 +131,30 @@ TEST_F(TestUserMetricsService, UpdatesFormatString) {
 	}
 }
 
+TEST_F(TestUserMetricsService, UpdatesFormatStringOnCreate) {
+	{
+		DBusUserMetrics userMetrics(*connection, dateFactory);
+
+		userMetrics.createDataSource("twitter", "%1 tweets received");
+
+		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
+		EXPECT_EQ(QString("twitter"), twitter->name());
+		EXPECT_EQ(QString("%1 tweets received"), twitter->formatString());
+
+		userMetrics.createDataSource("twitter", "%1 new format string");
+
+		EXPECT_EQ(QString("twitter"), twitter->name());
+		EXPECT_EQ(QString("%1 new format string"), twitter->formatString());
+	}
+
+	{
+		DBusUserMetrics userMetrics(*connection, dateFactory);
+
+		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
+		EXPECT_EQ(QString("%1 new format string"), twitter->formatString());
+	}
+}
+
 TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 	{
 		DBusUserMetrics userMetrics(*connection, dateFactory);
