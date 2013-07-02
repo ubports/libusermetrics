@@ -18,6 +18,7 @@
 
 #include <libusermetricsoutput/DataSet.h>
 
+using namespace std;
 using namespace UserMetricsOutput;
 
 DataSet::DataSet(QObject* parent) :
@@ -35,13 +36,48 @@ const QDate & DataSet::lastUpdated() const {
 	return m_lastUpdated;
 }
 
+const QVariant & DataSet::head() const {
+	return m_head;
+}
+
 void DataSet::setData(const QVariantList &data) {
 	m_data = data;
+
+	double min(numeric_limits<double>::max());
+	double max(numeric_limits<double>::min());
+
 	for (QVariant &variant : m_data) {
 		if (variant.type() == QVariant::String) {
 			variant = QVariant();
+		} else if (variant.type() == QVariant::Double) {
+			double value(variant.toDouble());
+			if (value < min) {
+				min = value;
+			}
+			if (value > max) {
+				max = value;
+			}
 		}
 	}
+
+	QVariant head;
+	if (data.isEmpty()) {
+		head = QVariant();
+	} else {
+		head = data.first();
+	}
+	if (m_head != head) {
+		m_head = head;
+		headChanged(m_head);
+	}
+
+	for (QVariant &variant : m_data) {
+		if (variant.type() == QVariant::Double) {
+			double value(variant.toDouble());
+			variant = (value - min) / (max - min);
+		}
+	}
+
 	dataChanged(&m_data);
 }
 

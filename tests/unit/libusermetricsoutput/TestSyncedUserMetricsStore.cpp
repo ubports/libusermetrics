@@ -209,7 +209,7 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
 
 	QVariantList data( { 100.0, 50.0, "", -50.0, -100.0 });
-	QVariantList expected( { 100.0, 50.0, QVariant(), -50.0, -100.0 });
+	QVariantList expected( { 1.0, 0.75, QVariant(), 0.25, 0.0 });
 
 	com::canonical::usermetrics::DataSet dataSetInterface(
 			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);

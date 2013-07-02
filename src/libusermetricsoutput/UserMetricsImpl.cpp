@@ -202,7 +202,7 @@ void UserMetricsImpl::finishLoadingDataSource() {
 			} else {
 				setLabel(
 						dataSource->formatString().arg(
-								data.first().toString()));
+								m_dataSet->head().toString()));
 			}
 		}
 	}

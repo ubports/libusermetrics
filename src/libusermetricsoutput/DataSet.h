@@ -38,6 +38,8 @@ Q_PROPERTY(QDate lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged FINAL)
 
 Q_PROPERTY(const QVariantList data READ data NOTIFY dataChanged FINAL)
 
+Q_PROPERTY(const QVariant head READ head NOTIFY headChanged FINAL)
+
 public:
 	explicit DataSet(QObject* parent = 0);
 
@@ -46,6 +48,8 @@ public:
 	const QVariantList & data() const;
 
 	const QDate & lastUpdated() const;
+
+	const QVariant & head() const;
 
 public Q_SLOTS:
 	void update(const uint lastUpdated, const QVariantList &data);
@@ -59,10 +63,14 @@ Q_SIGNALS:
 
 	void dataChanged(const QVariantList *data);
 
+	void headChanged(const QVariant &head);
+
 protected:
 	QDate m_lastUpdated;
 
 	QVariantList m_data;
+
+	QVariant m_head;
 };
 
 }
