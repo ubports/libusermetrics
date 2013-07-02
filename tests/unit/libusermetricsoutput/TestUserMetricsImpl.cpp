@@ -43,7 +43,7 @@ public:
 
 class MockColorThemeProvider: public ColorThemeProvider {
 public:
-	MOCK_METHOD1(getColorTheme, ColorThemeProvider::ColorThemeRefPair(const QString &));
+	MOCK_METHOD1(getColorTheme, ColorThemePtrPair(const QString &));
 };
 
 class UserMetricsImplTest: public Test {
@@ -222,8 +222,7 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
@@ -297,8 +296,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id2"))).WillRepeatedly(
 			Return(emptyPair));
 
@@ -365,8 +363,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
@@ -429,8 +426,7 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
@@ -505,8 +501,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 
 	QSharedPointer<ColorTheme> blankColorTheme(
 			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemeProvider::ColorThemeRefPair emptyPair(*blankColorTheme,
-			*blankColorTheme);
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-one"))).WillRepeatedly(
 			Return(emptyPair));
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-two"))).WillRepeatedly(
@@ -680,23 +675,19 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			new ColorThemeImpl(QColor(251, 0, 0), QColor(0, 251, 0),
 					QColor(0, 0, 251)));
 
-	ColorThemeProvider::ColorThemeRefPair colorDataSourceOne(*colorThemeOne,
-			*colorThemeTwo);
+	ColorThemePtrPair colorDataSourceOne(colorThemeOne, colorThemeTwo);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-one"))).WillRepeatedly(
 			Return(colorDataSourceOne));
 
-	ColorThemeProvider::ColorThemeRefPair colorDataSourceTwo(*colorThemeTwo,
-			*colorThemeThree);
+	ColorThemePtrPair colorDataSourceTwo(colorThemeTwo, colorThemeThree);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-two"))).WillRepeatedly(
 			Return(colorDataSourceTwo));
 
-	ColorThemeProvider::ColorThemeRefPair colorDataSourceThree(*colorThemeThree,
-			*colorThemeFour);
+	ColorThemePtrPair colorDataSourceThree(colorThemeThree, colorThemeFour);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-three"))).WillRepeatedly(
 			Return(colorDataSourceThree));
 
-	ColorThemeProvider::ColorThemeRefPair colorDataSourceFour(*colorThemeFour,
-			*colorThemeFive);
+	ColorThemePtrPair colorDataSourceFour(colorThemeFour, colorThemeFive);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-xfour"))).WillRepeatedly(
 			Return(colorDataSourceFour));
 

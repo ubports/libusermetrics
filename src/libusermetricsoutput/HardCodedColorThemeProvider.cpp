@@ -26,48 +26,30 @@ using namespace UserMetricsOutput;
 
 HardCodedColorThemeProvider::HardCodedColorThemeProvider(QObject *parent) :
 		ColorThemeProvider(parent) {
-	QVector<QColor> colors;
-	colors.push_back(QColor::fromRgbF(0.3, 0.27, 0.32));
-	colors.push_back(QColor::fromRgbF(0.83, 0.49, 0.58));
-	colors.push_back(QColor::fromRgbF(0.63, 0.51, 0.59));
+	QColor orange(QColor::fromRgbF(0.9, 0.3, 0.1));
+	QColor yellow(QColor::fromRgbF(1.0, 0.6, 0.0));
+	QColor red(QColor::fromRgbF(0.8, 0.0, 0.0));
+	QColor darkPurple(QColor::fromRgbF(0.5, 0.2, 0.3));
+	QColor lightPurple(QColor::fromRgbF(0.8, 0.1, 0.8));
+	QColor pink(QColor::fromRgbF(0.75, 0.13, 0.75));
 
-	colors.push_back(QColor::fromRgbF(0.28, 0.26, 0.4));
-	colors.push_back(QColor::fromRgbF(0.47, 0.38, 0.56));
-	colors.push_back(QColor::fromRgbF(0.69, 0.65, 0.78));
-
-	colors.push_back(QColor::fromRgbF(0.32, 0.21, 0.16));
-	colors.push_back(QColor::fromRgbF(0.55, 0.45, 0.32));
-	colors.push_back(QColor::fromRgbF(0.85, 0.74, 0.53));
-
-	colors.push_back(QColor::fromRgbF(0.25, 0.31, 0.19));
-	colors.push_back(QColor::fromRgbF(0.63, 0.53, 0.3));
-	colors.push_back(QColor::fromRgbF(0.89, 0.56, 0.31));
-
-	colors.push_back(QColor::fromRgbF(0.17, 0.34, 0.36));
-	colors.push_back(QColor::fromRgbF(0.36, 0.54, 0.49));
-	colors.push_back(QColor::fromRgbF(0.65, 0.76, 0.64));
-
-	colors.push_back(QColor::fromRgbF(0.21, 0.38, 0.37));
-	colors.push_back(QColor::fromRgbF(0.35, 0.49, 0.5));
-	colors.push_back(QColor::fromRgbF(0.67, 0.75, 0.82));
-
-	ColorThemePtr first(
-			ColorThemePtr(new ColorThemeImpl(colors[0], colors[1], colors[2])));
-	ColorThemePtr second(
-			ColorThemePtr(new ColorThemeImpl(colors[3], colors[4], colors[5])));
-	ColorThemePtr eighth(
-			ColorThemePtr(new ColorThemeImpl(colors[6], colors[7], colors[8])));
-	ColorThemePtr ninth(
+	ColorThemePtr orangeTheme(
+			ColorThemePtr(new ColorThemeImpl(yellow, orange, red)));
+	ColorThemePtr yellowTheme(
+			ColorThemePtr(new ColorThemeImpl(orange, yellow, orange)));
+	ColorThemePtr redTheme(ColorThemePtr(new ColorThemeImpl(red, red, red)));
+	ColorThemePtr darkPurpleTheme(
+			ColorThemePtr(new ColorThemeImpl(lightPurple, darkPurple, pink)));
+	ColorThemePtr lightPurpleTheme(
 			ColorThemePtr(
-					new ColorThemeImpl(colors[9], colors[10], colors[11])));
-	ColorThemePtr eleventh(
-			ColorThemePtr(
-					new ColorThemeImpl(colors[12], colors[13], colors[14])));
-	ColorThemePtr twelfth(
-			ColorThemePtr(
-					new ColorThemeImpl(colors[15], colors[16], colors[17])));
+					new ColorThemeImpl(lightPurple, lightPurple, lightPurple)));
+	ColorThemePtr pinkTheme(
+			ColorThemePtr(new ColorThemeImpl(lightPurple, pink, darkPurple)));
 
-	m_colorThemes << ColorThemePtrPair(first, second);
+	m_colorThemes << ColorThemePtrPair(yellowTheme, orangeTheme);
+	m_colorThemes << ColorThemePtrPair(pinkTheme, orangeTheme);
+	m_colorThemes << ColorThemePtrPair(darkPurpleTheme, redTheme);
+	m_colorThemes << ColorThemePtrPair(lightPurpleTheme, darkPurpleTheme);
 
 	m_color = m_colorThemes.begin();
 }
@@ -75,16 +57,24 @@ HardCodedColorThemeProvider::HardCodedColorThemeProvider(QObject *parent) :
 HardCodedColorThemeProvider::~HardCodedColorThemeProvider() {
 }
 
-ColorThemeProvider::ColorThemeRefPair HardCodedColorThemeProvider::getColorTheme(
+ColorThemePtrPair HardCodedColorThemeProvider::getColorTheme(
 		const QString &dataSetId) {
-	Q_UNUSED(dataSetId);
+	ColorThemePtrPair result;
 
-	ColorThemePtrPair current(*m_color);
-	ColorThemeRefPair result(*current.first, *current.second);
+	map_const_iterator it(m_colorThemeMap.constFind(dataSetId));
+	if (it == m_colorThemeMap.constEnd()) {
+		// get the next available color
+		result = *m_color;
 
-	++m_color;
-	if (m_color == m_colorThemes.end()) {
-		m_color = m_colorThemes.begin();
+		++m_color;
+		if (m_color == m_colorThemes.end()) {
+			m_color = m_colorThemes.begin();
+		}
+
+		m_colorThemeMap.insert(dataSetId, result);
+	} else {
+		// there was a mapped value
+		result = *it;
 	}
 
 	return result;

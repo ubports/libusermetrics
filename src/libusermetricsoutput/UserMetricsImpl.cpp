@@ -109,7 +109,7 @@ void UserMetricsImpl::prepareToLoadDataSource() {
 	} else if (!m_oldNoDataForUser && !m_noDataForUser) {
 		dataAboutToChange();
 	}
-// we emit no signal if the data has stayed empty
+	// we emit no signal if the data has stayed empty
 }
 
 void UserMetricsImpl::updateMonth(QVariantListModel &month,
@@ -177,10 +177,10 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		}
 
 		const QString &dataSetId(m_dataSetIterator.key());
-		ColorThemeProvider::ColorThemeRefPair colorTheme(
+		ColorThemePtrPair colorTheme(
 				m_colorThemeProvider->getColorTheme(dataSetId));
-		m_firstColor->setColors(colorTheme.first);
-		m_secondColor->setColors(colorTheme.second);
+		m_firstColor->setColors(*colorTheme.first);
+		m_secondColor->setColors(*colorTheme.second);
 
 		const QVariantList &data(m_dataSet->data());
 
@@ -256,6 +256,8 @@ void UserMetricsImpl::nextDataSourceSlot() {
 		}
 		m_dataSet = *m_dataSetIterator;
 	}
+
+	m_oldNoDataForUser = m_noDataForUser;
 
 	prepareToLoadDataSource();
 }
