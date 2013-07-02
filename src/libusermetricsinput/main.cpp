@@ -25,21 +25,21 @@ using namespace std;
 using namespace UserMetricsInput;
 
 int main(int argc, char *argv[]) {
-	if (argc < 4) {
-		cerr << "Usage: " << argv[0] << " DATA_SOURCE_ID FORMAT_STRING <DATA>"
+	if (argc < 5) {
+		cerr << "Usage: " << argv[0] << " DATA_SOURCE_ID FORMAT_STRING USERNAME <DATA>"
 				<< endl;
 		return 1;
 	}
 
 	string dataSourceId(argv[1]);
 	string formatString(argv[2]);
-	string username(getenv("USER"));
+	string username(argv[3]);
 
 	MetricManagerPtr manager(MetricManager::getInstance());
 	MetricPtr metric(manager->add(dataSourceId, formatString));
 	MetricUpdatePtr update = metric->update(username);
 
-	for (int i(3); i < argc; ++i) {
+	for (int i(4); i < argc; ++i) {
 		double data(stod(string(argv[i])));
 		update->addData(data);
 	}
