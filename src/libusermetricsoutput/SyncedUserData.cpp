@@ -30,6 +30,15 @@ SyncedUserData::SyncedUserData(
 		QObject *parent) :
 		UserData(parent), m_interface(interface) {
 
+	connect(m_interface.data(),
+			SIGNAL(dataSetAdded(const QString &, const QDBusObjectPath &)),
+			this, SLOT(addDataSet(const QString &, const QDBusObjectPath &)));
+
+	connect(m_interface.data(),
+			SIGNAL(dataSetRemoved(const QString &, const QDBusObjectPath &)),
+			this,
+			SLOT(removeDataSet(const QString &, const QDBusObjectPath &)));
+
 	for (const QDBusObjectPath &path : m_interface->dataSets()) {
 
 		QSharedPointer<canonical::usermetrics::DataSet> dataSet(
@@ -40,14 +49,6 @@ SyncedUserData::SyncedUserData(
 		insert(dataSource, DataSetPtr(new SyncedDataSet(dataSet)));
 	}
 
-	connect(m_interface.data(),
-			SIGNAL(dataSetAdded(const QString &, const QDBusObjectPath &)),
-			this, SLOT(addDataSet(const QString &, const QDBusObjectPath &)));
-
-	connect(m_interface.data(),
-			SIGNAL(dataSetRemoved(const QString &, const QDBusObjectPath &)),
-			this,
-			SLOT(removeDataSet(const QString &, const QDBusObjectPath &)));
 }
 
 SyncedUserData::~SyncedUserData() {

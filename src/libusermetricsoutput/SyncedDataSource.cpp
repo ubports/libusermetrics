@@ -25,9 +25,9 @@ SyncedDataSource::SyncedDataSource(
 		QObject *parent) :
 		DataSource(parent), m_interface(interface) {
 
-	m_formatString = m_interface->formatString();
 	connect(m_interface.data(), SIGNAL(formatStringChanged(const QString &)),
 			this, SLOT(setFormatString(const QString &)));
+	m_formatString = m_interface->formatString();
 }
 
 SyncedDataSource::~SyncedDataSource() {
