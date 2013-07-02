@@ -21,11 +21,12 @@
 using namespace std;
 
 void PrintTo(const QVariantList& variantList, ostream* os) {
-	QString output;
-	for (const QVariant &variant : variantList) {
-		output.append(variant.toString());
-		output.append(", ");
+	*os << "QVariantList(";
+	for (typename QVariantList::size_type i = 0; i < variantList.count(); ++i) {
+		if (i)
+			*os << ", ";
+		*os << variantList.at(i).toString().toStdString();
 	}
-	*os << "QVariantList(" << output.toStdString() << ")";
+	*os<< ')';
 }
 
