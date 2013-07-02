@@ -17,6 +17,7 @@
  */
 
 #include <libusermetricsinput/MetricManager.h>
+#include <QtCore/QCoreApplication>
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -26,18 +27,20 @@ using namespace UserMetricsInput;
 
 int main(int argc, char *argv[]) {
 	if (argc < 5) {
-		cerr << "Usage: " << argv[0] << " DATA_SOURCE_ID FORMAT_STRING USERNAME <DATA>"
-				<< endl;
+		cerr << "Usage: " << argv[0]
+				<< " DATA_SOURCE_ID FORMAT_STRING USERNAME <DATA>" << endl;
 		return 1;
 	}
 
-	string dataSourceId(argv[1]);
-	string formatString(argv[2]);
-	string username(argv[3]);
+	QCoreApplication application(argc, argv);
+
+	QString dataSourceId(QString::fromUtf8(argv[1]));
+	QString formatString(QString::fromUtf8(argv[2]));
+	QString username(QString::fromUtf8(argv[3]));
 
 	MetricManagerPtr manager(MetricManager::getInstance());
 	MetricPtr metric(manager->add(dataSourceId, formatString));
-	MetricUpdatePtr update = metric->update(username);
+	MetricUpdatePtr update(metric->update(username));
 
 	for (int i(4); i < argc; ++i) {
 		double data(stod(string(argv[i])));

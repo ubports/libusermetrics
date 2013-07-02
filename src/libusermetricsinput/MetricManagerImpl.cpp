@@ -23,13 +23,12 @@
 #include <QtDBus/QtDBus>
 #include <QtCore/QDebug>
 
-using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
 MetricManagerImpl::MetricManagerImpl(const QDBusConnection &dbusConnection,
 		QObject *parent) :
-		QObject(parent), m_dbusConnection(dbusConnection), m_interface(
+		MetricManager(parent), m_dbusConnection(dbusConnection), m_interface(
 				DBusPaths::serviceName(), DBusPaths::userMetrics(),
 				dbusConnection) {
 }
@@ -37,19 +36,15 @@ MetricManagerImpl::MetricManagerImpl(const QDBusConnection &dbusConnection,
 MetricManagerImpl::~MetricManagerImpl() {
 }
 
-MetricPtr MetricManagerImpl::add(const string &dataSourceIdIn,
-		const string &formatStringIn) {
-	QString dataSourceId(QString::fromStdString(dataSourceIdIn));
-	QString formatString(QString::fromStdString(formatStringIn));
-
+MetricPtr MetricManagerImpl::add(const QString &dataSourceId,
+		const QString &formatString) {
 	QDBusObjectPath path(
 			m_interface.createDataSource(dataSourceId, formatString));
 
 	auto metric(m_metrics.find(dataSourceId));
 	if (metric == m_metrics.end()) {
 		MetricPtr newMetric(
-				new MetricImpl(dataSourceIdIn, formatStringIn,
-						m_dbusConnection));
+				new MetricImpl(dataSourceId, formatString, m_dbusConnection));
 		metric = m_metrics.insert(dataSourceId, newMetric);
 	}
 	return *metric;

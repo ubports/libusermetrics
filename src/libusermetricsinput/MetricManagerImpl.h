@@ -22,20 +22,19 @@
 #include <libusermetricsinput/MetricManager.h>
 #include <libusermetricscommon/UserMetricsInterface.h>
 
-#include <QtCore/QObject>
 #include <QtCore/QMap>
 
 namespace UserMetricsInput {
 
-class MetricManagerImpl: public MetricManager, public QObject {
+class MetricManagerImpl: public MetricManager {
 public:
 	explicit MetricManagerImpl(const QDBusConnection &dbusConnection,
 			QObject *parent = 0);
 
 	virtual ~MetricManagerImpl();
 
-	virtual MetricPtr add(const std::string &dataSourceId,
-			const std::string &formatString);
+	virtual MetricPtr add(const QString &dataSourceId,
+			const QString &formatString);
 
 protected:
 	QDBusConnection m_dbusConnection;

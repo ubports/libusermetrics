@@ -32,7 +32,7 @@ extern "C" {
 UserMetricsInputMetricManager usermetricsinput_metricmanager_new() {
 	try {
 		MetricManagerPtr metricManager(MetricManager::getInstance());
-		return reinterpret_cast<UserMetricsInputMetricManager>(metricManager.release());
+		return reinterpret_cast<UserMetricsInputMetricManager>(metricManager.take());
 	} catch (exception &e) {
 		fprintf(stderr, "Error creating MetricManager: %s\n", e.what());
 	}
@@ -54,7 +54,7 @@ UserMetricsInputMetric usermetricsinput_metricmanager_add(
 	try {
 		MetricManager *metricManager(reinterpret_cast<MetricManager*>(m));
 		MetricPtr metric(metricManager->add(dataSourceId, formatString));
-		return reinterpret_cast<UserMetricsInputMetric>(metric.get());
+		return reinterpret_cast<UserMetricsInputMetric>(metric.data());
 	} catch (exception &e) {
 		fprintf(stderr, "Error adding metric: %s\n", e.what());
 	}
@@ -65,15 +65,17 @@ UserMetricsInputMetricUpdate usermetricsinput_metric_update(
 		UserMetricsInputMetric m, const char *username) {
 	try {
 		Metric *metric(reinterpret_cast<Metric*>(m));
-		MetricUpdatePtr metricUpdate(metric->update(username));
-		return reinterpret_cast<UserMetricsInputMetric>(metricUpdate.release());
+		MetricUpdatePtr metricUpdate(
+				metric->update(QString::fromUtf8(username)));
+		return reinterpret_cast<UserMetricsInputMetric>(metricUpdate.take());
 	} catch (exception &e) {
 		fprintf(stderr, "Error adding metric: %s\n", e.what());
 	}
 	return nullptr;
 }
 
-void usermetricsinput_metricupdate_delete(UserMetricsInputMetricUpdate metricUpdate) {
+void usermetricsinput_metricupdate_delete(
+		UserMetricsInputMetricUpdate metricUpdate) {
 	try {
 		delete reinterpret_cast<MetricUpdate*>(metricUpdate);
 	} catch (exception &e) {

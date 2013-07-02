@@ -43,7 +43,7 @@ TEST_F(TestMetricManager, Basic) {
 
 	MetricPtr metric(manager->add("data-source-id", "format string %1"));
 
-	MetricUpdatePtr update = metric->update("username");
+	MetricUpdatePtr update(metric->update("username"));
 	update->addData(1.0);
 	update->addNull();
 	update->addData(0.5);

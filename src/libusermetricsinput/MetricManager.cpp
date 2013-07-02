@@ -23,14 +23,15 @@
 using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
-MetricManager::MetricManager() {
+MetricManager::MetricManager(QObject *parent) :
+		QObject(parent) {
 
 }
 
 MetricManager::~MetricManager() {
 }
 
-MetricManagerPtr MetricManager::getInstance() {
+MetricManager * MetricManager::getInstance() {
 	QDBusConnection dbusConnection(QDBusConnection::systemBus());
 
 	QDBusConnectionInterface* interface = dbusConnection.interface();
@@ -39,5 +40,5 @@ MetricManagerPtr MetricManager::getInstance() {
 				interface->startService(DBusPaths::serviceName()));
 	}
 
-	return MetricManagerPtr(new MetricManagerImpl(dbusConnection));
+	return new MetricManagerImpl(dbusConnection);
 }

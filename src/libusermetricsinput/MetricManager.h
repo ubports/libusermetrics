@@ -19,27 +19,24 @@
 #ifndef USERMETRICSINPUT_METRICMANAGER_H_
 #define USERMETRICSINPUT_METRICMANAGER_H_
 
-#include <memory>
-
-#include <libusermetricsinput/UserMetricsInputExport.h>
 #include <libusermetricsinput/Metric.h>
 
 namespace UserMetricsInput {
 
 class MetricManager;
 
-typedef std::unique_ptr<MetricManager> MetricManagerPtr;
+typedef QScopedPointer<MetricManager> MetricManagerPtr;
 
-class USERMETRICSINPUT_EXPORT MetricManager {
+class Q_DECL_EXPORT MetricManager: public QObject {
 public:
+	explicit MetricManager(QObject *parent = 0);
+
 	virtual ~MetricManager();
 
-	static MetricManagerPtr getInstance();
+	static MetricManager * getInstance();
 
-	virtual MetricPtr add(const std::string &dataSourceId,
-			const std::string &formatString) = 0;
-protected:
-	explicit MetricManager();
+	virtual MetricPtr add(const QString &dataSourceId,
+			const QString &formatString) = 0;
 };
 
 }

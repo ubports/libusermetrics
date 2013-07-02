@@ -28,15 +28,15 @@
 
 namespace UserMetricsInput {
 
-class MetricImpl: public Metric, public QObject {
+class MetricImpl: public Metric {
 public:
-	explicit MetricImpl(const std::string &dataSourceId,
-			const std::string &formatString, const QDBusConnection &dbusConnection,
+	explicit MetricImpl(const QString &dataSourceId,
+			const QString &formatString, const QDBusConnection &dbusConnection,
 			QObject *parent = 0);
 
 	virtual ~MetricImpl();
 
-	virtual MetricUpdatePtr update(const std::string &username);
+	virtual MetricUpdate * update(const QString &username);
 
 protected:
 	QDBusConnection m_dbusConnection;
