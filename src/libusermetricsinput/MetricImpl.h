@@ -36,7 +36,7 @@ public:
 
 	virtual ~MetricImpl();
 
-	virtual MetricUpdate * update(const QString &username);
+	virtual MetricUpdate * update(const QString &username = "");
 
 protected:
 	QDBusConnection m_dbusConnection;

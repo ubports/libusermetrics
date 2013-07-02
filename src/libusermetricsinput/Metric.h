@@ -34,7 +34,7 @@ public:
 
 	virtual ~Metric();
 
-	virtual MetricUpdate * update(const QString &username) = 0;
+	virtual MetricUpdate * update(const QString &username = "") = 0;
 
 };
 
