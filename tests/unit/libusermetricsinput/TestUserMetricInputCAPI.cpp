@@ -52,7 +52,7 @@ TEST_F(TestUserMetricInputCAPI, TestNothingYet) {
 			usermetricsinput_metricmanager_new();
 
 	UserMetricsInputMetric metric = usermetricsinput_metricmanager_add(
-			metricManager, "data-source-id-capi", "format string c-api %1");
+			metricManager, "data-source-id-capi", "format string c-api %1", "");
 
 	UserMetricsInputMetricUpdate metricUpdate = usermetricsinput_metric_update(
 			metric, "username_capi");

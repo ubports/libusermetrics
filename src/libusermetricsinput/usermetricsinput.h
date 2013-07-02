@@ -38,12 +38,15 @@ typedef void* UserMetricsInputMetric;
 typedef void* UserMetricsInputMetricManager;
 typedef void* UserMetricsInputMetricUpdate;
 
+/**
+ * @brief Construct a new UserMetricsInputMetricManager
+ */
 USERMETRICSINPUT_EXPORT UserMetricsInputMetricManager usermetricsinput_metricmanager_new();
 USERMETRICSINPUT_EXPORT void usermetricsinput_metricmanager_delete(
 		UserMetricsInputMetricManager metricManager);
 USERMETRICSINPUT_EXPORT UserMetricsInputMetric usermetricsinput_metricmanager_add(
 		UserMetricsInputMetricManager metricManager, const char *dataSourceId,
-		const char *formatString);
+		const char *formatString, const char *textDomain);
 
 USERMETRICSINPUT_EXPORT UserMetricsInputMetricUpdate usermetricsinput_metric_update(
 		UserMetricsInputMetric metric, const char *username);
@@ -54,6 +57,11 @@ USERMETRICSINPUT_EXPORT void usermetricsinput_metricupdate_add_data(
 		UserMetricsInputMetricUpdate metricUpdate, float data);
 USERMETRICSINPUT_EXPORT void usermetricsinput_metricupdate_add_null(
 		UserMetricsInputMetricUpdate metricUpdate);
+
+/**
+ * @example MetricManagerCAPI.c
+ *   UserMetricsInputMetricManager example
+ **/
 
 #ifdef __cplusplus
 }

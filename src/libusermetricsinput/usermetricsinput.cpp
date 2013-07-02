@@ -50,10 +50,11 @@ void usermetricsinput_metricmanager_delete(
 
 UserMetricsInputMetric usermetricsinput_metricmanager_add(
 		UserMetricsInputMetricManager m, const char *dataSourceId,
-		const char *formatString) {
+		const char *formatString, const char *textDomain) {
 	try {
 		MetricManager *metricManager(reinterpret_cast<MetricManager*>(m));
-		MetricPtr metric(metricManager->add(dataSourceId, formatString));
+		MetricPtr metric(
+				metricManager->add(dataSourceId, formatString, textDomain));
 		return reinterpret_cast<UserMetricsInputMetric>(metric.data());
 	} catch (exception &e) {
 		fprintf(stderr, "Error adding metric: %s\n", e.what());
