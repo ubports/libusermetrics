@@ -61,10 +61,10 @@ void DataSet::setData(const QVariantList &data) {
 	}
 
 	QVariant head;
-	if (data.isEmpty()) {
+	if (m_data.isEmpty()) {
 		head = QVariant();
 	} else {
-		head = data.first();
+		head = m_data.first();
 	}
 	if (m_head != head) {
 		m_head = head;
@@ -73,8 +73,12 @@ void DataSet::setData(const QVariantList &data) {
 
 	for (QVariant &variant : m_data) {
 		if (variant.type() == QVariant::Double) {
-			double value(variant.toDouble());
-			variant = (value - min) / (max - min);
+			if (min != max) {
+				double value(variant.toDouble());
+				variant = (value - min) / (max - min);
+			} else {
+				variant = 0.5;
+			}
 		}
 	}
 
