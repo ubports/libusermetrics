@@ -47,9 +47,6 @@ DBusUserMetrics::DBusUserMetrics(QDBusConnection &dbusConnection,
 
 	// DBus setup
 
-	if (!m_dbusConnection.registerService(DBusPaths::serviceName())) {
-		qWarning() << "Unable to register user metrics service on DBus";
-	}
 	if (!m_dbusConnection.registerObject(DBusPaths::userMetrics(), this)) {
 		throw logic_error("Unable to register user metrics object on DBus");
 	}
@@ -59,9 +56,6 @@ DBusUserMetrics::DBusUserMetrics(QDBusConnection &dbusConnection,
 
 DBusUserMetrics::~DBusUserMetrics() {
 	m_dbusConnection.unregisterObject(DBusPaths::userMetrics());
-	if (!m_dbusConnection.unregisterService(DBusPaths::serviceName())) {
-		qWarning() << "Unable to unregister user metrics service on DBus";
-	}
 }
 
 QList<QDBusObjectPath> DBusUserMetrics::dataSources() const {

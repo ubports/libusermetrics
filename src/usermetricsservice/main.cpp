@@ -18,6 +18,7 @@
 
 #include <usermetricsservice/DBusUserMetrics.h>
 #include <libusermetricscommon/DateFactoryImpl.h>
+#include <libusermetricscommon/DBusPaths.h>
 
 #include <QtCore/QCoreApplication>
 #include <QDjangoQuerySet.h>
@@ -48,9 +49,17 @@ int main(int argc, char *argv[]) {
 	QDBusConnection connection(QDBusConnection::systemBus());
 
 	QSharedPointer<DateFactory> dateFactory(new DateFactoryImpl());
+
+	if (!connection.registerService(DBusPaths::serviceName())) {
+		qWarning() << "Unable to register user metrics service on DBus";
+		return 1;
+	}
 	DBusUserMetrics userMetrics(connection, dateFactory);
 
 	bool result(application.exec());
+	if (!connection.unregisterService(DBusPaths::serviceName())) {
+		qWarning() << "Unable to unregister user metrics service on DBus";
+	}
 
 	db.close();
 
