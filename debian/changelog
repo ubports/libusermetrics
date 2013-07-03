@@ -4,6 +4,21 @@ libusermetrics (1.0.3-0ubuntu1) saucy; urgency=low
 
  -- Pete Woods <pete.woods@canonical.com>  Wed, 03 Jul 2013 14:42:57 +0100
 
+libusermetrics (1.0.2+13.10.20130703.1-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Add support for providing and storing text domain for format strings
+  * Support string for empty data
+  * Update doxyfile format
+  * Make prerm script more heavy handed
+  * Only try and register the service inside main
+  * Log daemon output to syslog
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 88
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 03 Jul 2013 14:16:44 +0000
+
 libusermetrics (1.0.2) saucy; urgency=low
 
   * It should be in a functional state now.
