@@ -40,6 +40,8 @@ Q_PROPERTY(QString name READ name)
 
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString)
 
+Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString)
+
 Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain)
 
 public:
@@ -55,6 +57,10 @@ public:
 	QString formatString() const;
 
 	void setFormatString(const QString &formatString);
+
+	QString emptyDataString() const;
+
+	void setEmptyDataString(const QString &emptyDataString);
 
 	QString textDomain() const;
 

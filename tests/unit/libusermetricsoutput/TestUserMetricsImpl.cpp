@@ -280,6 +280,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 
 	DataSourcePtr dataSource(new DataSource());
 	dataSource->setFormatString("test other format string %1");
+	dataSource->setEmptyDataString("no data source two");
 	userDataStore->insert("data-source-id2", dataSource);
 
 	UserMetricsStore::iterator userDataIterator(
@@ -303,7 +304,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
-	EXPECT_EQ(QString("No data for today"), model->label());
+	EXPECT_EQ(QString("no data source two"), model->label());
 
 	// assertions about first month's data
 	{
@@ -347,6 +348,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 
 	DataSourcePtr dataSource(new DataSource());
 	dataSource->setFormatString("this format string won't be used %1");
+	dataSource->setEmptyDataString("there's no data");
 	userDataStore->insert("data-source-id", dataSource);
 
 	UserMetricsStore::iterator userDataIterator(
@@ -370,7 +372,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
-	EXPECT_EQ(QString("No data for today"), model->label());
+	EXPECT_EQ(QString("there's no data"), model->label());
 
 	// assertions about first month's data
 	{
@@ -433,7 +435,7 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
-	EXPECT_EQ(QString("No data for today"), model->label());
+	EXPECT_EQ(QString("No data for today (data-source-id)"), model->label());
 
 	// assertions about first month's data
 	{
@@ -472,6 +474,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 	{
 		DataSourcePtr dataSource(new DataSource());
 		dataSource->setFormatString("data source one %1 value");
+		dataSource->setEmptyDataString("no data source one");
 		userDataStore->insert("data-source-one", dataSource);
 
 		QVariantList data;
@@ -487,6 +490,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 	{
 		DataSourcePtr dataSource(new DataSource());
 		dataSource->setFormatString("data source 2 %1 value");
+		dataSource->setEmptyDataString("no data source two");
 		userDataStore->insert("data-source-two", dataSource);
 
 		QVariantList data;
@@ -510,7 +514,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
-	EXPECT_EQ(QString("No data for today"), model->label());
+	EXPECT_EQ(QString("no data source one"), model->label());
 
 	// assertions about first month's data
 	{

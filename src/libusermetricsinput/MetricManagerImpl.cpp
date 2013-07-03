@@ -37,10 +37,11 @@ MetricManagerImpl::~MetricManagerImpl() {
 }
 
 MetricPtr MetricManagerImpl::add(const QString &dataSourceId,
-		const QString &formatString, const QString &textDomain) {
+		const QString &formatString, const QString &emptyDataString,
+		const QString &textDomain) {
 	QDBusObjectPath path(
 			m_interface.createDataSource(dataSourceId, formatString,
-					textDomain));
+					emptyDataString, textDomain));
 
 	auto metric(m_metrics.find(dataSourceId));
 	if (metric == m_metrics.end()) {

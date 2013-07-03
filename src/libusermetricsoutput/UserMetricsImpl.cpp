@@ -193,10 +193,19 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		updateMonth(*m_secondMonth, valuesToCopyForSecondMonth,
 				secondMonthDate.daysInMonth(), dataIndex, end);
 
+		DataSourcePtr dataSource(m_userMetricsStore->dataSource(dataSetId));
 		if (data.empty() || currentDate != lastUpdated) {
-			setLabel("No data for today");
+			const QString &emptyDataString = dataSource->emptyDataString();
+			if (emptyDataString.isEmpty()) {
+				QString empty("No data for today");
+				empty.append(" (");
+				empty.append(dataSetId);
+				empty.append(")");
+				setLabel(empty);
+			} else {
+				setLabel(emptyDataString);
+			}
 		} else {
-			DataSourcePtr dataSource(m_userMetricsStore->dataSource(dataSetId));
 			if (dataSource.isNull()) {
 				qWarning() << "Data source [" << dataSetId << "] not found.";
 			} else {

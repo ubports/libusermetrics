@@ -53,6 +53,14 @@ void DataSource::setFormatString(const QString &formatString) {
 	m_formatString = formatString;
 }
 
+const QString & DataSource::emptyDataString() const {
+	return m_emptyDataString;
+}
+
+void DataSource::setEmptyDataString(const QString &emptyDataString) {
+	m_emptyDataString = emptyDataString;
+}
+
 const QString & DataSource::textDomain() const {
 	return m_textDomain;
 }

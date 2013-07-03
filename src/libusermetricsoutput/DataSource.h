@@ -34,6 +34,8 @@ Q_OBJECT
 
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString NOTIFY formatStringChanged FINAL)
 
+Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString NOTIFY emptyDataStringChanged FINAL)
+
 Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain NOTIFY textDomainChanged FINAL)
 
 public:
@@ -43,20 +45,28 @@ public:
 
 	const QString & formatString() const;
 
+	const QString & emptyDataString() const;
+
 	const QString & textDomain() const;
 
 public Q_SLOTS:
 	void setFormatString(const QString &formatString);
+
+	void setEmptyDataString(const QString &emptyDataString);
 
 	void setTextDomain(const QString &textDomain);
 
 Q_SIGNALS:
 	void formatStringChanged(const QString &formatString);
 
+	void emptyDataStringChanged(const QString &emptyDataString);
+
 	void textDomainChanged(const QString &textDomain);
 
 protected:
 	QString m_formatString;
+
+	QString m_emptyDataString;
 
 	QString m_textDomain;
 };

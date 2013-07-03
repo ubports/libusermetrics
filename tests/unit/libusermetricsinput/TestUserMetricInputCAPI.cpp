@@ -52,7 +52,8 @@ TEST_F(TestUserMetricInputCAPI, TestNothingYet) {
 			usermetricsinput_metricmanager_new();
 
 	UserMetricsInputMetric metric = usermetricsinput_metricmanager_add(
-			metricManager, "data-source-id-capi", "format string c-api %1", "");
+			metricManager, "data-source-id-capi", "format string c-api %1",
+			"empty data string", "text domain");
 
 	UserMetricsInputMetricUpdate metricUpdate = usermetricsinput_metric_update(
 			metric, "username_capi");
@@ -77,6 +78,9 @@ TEST_F(TestUserMetricInputCAPI, TestNothingYet) {
 	EXPECT_EQ(QString("data-source-id-capi"), dataSourceInterface.name());
 	EXPECT_EQ(QString("format string c-api %1"),
 			dataSourceInterface.formatString());
+	EXPECT_EQ(QString("empty data string"),
+			dataSourceInterface.emptyDataString());
+	EXPECT_EQ(QString("text domain"), dataSourceInterface.textDomain());
 
 	com::canonical::usermetrics::UserData userDataInterface(
 			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);

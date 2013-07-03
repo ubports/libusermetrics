@@ -128,7 +128,8 @@ void DBusUserMetrics::syncDatabase() {
 }
 
 QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
-		const QString &formatString, const QString &textDomain) {
+		const QString &formatString, const QString &emptyDataString,
+		const QString &textDomain) {
 	QDjangoQuerySet<DataSource> dataSourcesQuery;
 	QDjangoQuerySet<DataSource> query(
 			dataSourcesQuery.filter(
@@ -143,6 +144,7 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 	if (query.size() == 0) {
 		dataSource.setName(name);
 		dataSource.setFormatString(formatString);
+		dataSource.setEmptyDataString(emptyDataString);
 		dataSource.setTextDomain(textDomain);
 
 		if (!dataSource.save()) {
@@ -154,8 +156,15 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		query.at(0, &dataSource);
 		const DBusDataSourcePtr dbusDataSource(
 				*m_dataSources.constFind(dataSource.id()));
-		dbusDataSource->setFormatString(formatString);
-		dbusDataSource->setTextDomain(textDomain);
+		if (dataSource.formatString() != formatString) {
+			dbusDataSource->setFormatString(formatString);
+		}
+		if (dataSource.emptyDataString() != emptyDataString) {
+			dbusDataSource->setEmptyDataString(emptyDataString);
+		}
+		if (dataSource.textDomain() != textDomain) {
+			dbusDataSource->setTextDomain(textDomain);
+		}
 	}
 
 	return QDBusObjectPath((*m_dataSources.constFind(dataSource.id()))->path());

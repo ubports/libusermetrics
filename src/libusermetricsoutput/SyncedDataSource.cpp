@@ -27,9 +27,12 @@ SyncedDataSource::SyncedDataSource(
 
 	connect(m_interface.data(), SIGNAL(formatStringChanged(const QString &)),
 			this, SLOT(setFormatString(const QString &)));
+	connect(m_interface.data(), SIGNAL(emptyDataStringChanged(const QString &)),
+			this, SLOT(setEmptyDataString(const QString &)));
 	connect(m_interface.data(), SIGNAL(textDomainChanged(const QString &)),
 			this, SLOT(setTextDomain(const QString &)));
 	setFormatString(m_interface->formatString());
+	setEmptyDataString(m_interface->emptyDataString());
 	setTextDomain(m_interface->textDomain());
 }
 

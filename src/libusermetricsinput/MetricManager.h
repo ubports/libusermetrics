@@ -54,7 +54,8 @@ public:
 	 * @brief Foo
 	 */
 	virtual MetricPtr add(const QString &dataSourceId,
-			const QString &formatString, const QString &textDomain = "") = 0;
+			const QString &formatString, const QString &emptyDataString = "",
+			const QString &textDomain = "") = 0;
 };
 
 /**
@@ -64,7 +65,6 @@ public:
  *   UserMetricsInput::MetricManager example 2
  **/
 }
-
 
 /*@}*/
 

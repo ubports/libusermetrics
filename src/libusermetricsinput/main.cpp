@@ -24,9 +24,9 @@ using namespace std;
 using namespace UserMetricsInput;
 
 int main(int argc, char *argv[]) {
-	if (argc < 5) {
+	if (argc < 6) {
 		qWarning() << "Usage: " << argv[0]
-				<< " DATA_SOURCE_ID FORMAT_STRING USERNAME <DATA>";
+				<< " DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>";
 		return 1;
 	}
 
@@ -34,13 +34,14 @@ int main(int argc, char *argv[]) {
 
 	QString dataSourceId(QString::fromUtf8(argv[1]));
 	QString formatString(QString::fromUtf8(argv[2]));
-	QString username(QString::fromUtf8(argv[3]));
+	QString emptyDataString(QString::fromUtf8(argv[3]));
+	QString username(QString::fromUtf8(argv[4]));
 
 	MetricManagerPtr manager(MetricManager::getInstance());
-	MetricPtr metric(manager->add(dataSourceId, formatString));
+	MetricPtr metric(manager->add(dataSourceId, formatString, emptyDataString));
 	MetricUpdatePtr update(metric->update(username));
 
-	for (int i(4); i < argc; ++i) {
+	for (int i(5); i < argc; ++i) {
 		double data(stod(argv[i]));
 		update->addData(data);
 	}

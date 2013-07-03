@@ -10,6 +10,12 @@
 			<arg name="formatString" type="s" direction="out"/>
 		</signal>
 		
+		<property name="emptyDataString" type="s" access="readwrite"/>
+		
+		<signal name="emptyDataStringChanged">
+			<arg name="emptyDataString" type="s" direction="out"/>
+		</signal>
+		
 		<property name="textDomain" type="s" access="read"/>
 			
 		<signal name="textDomainChanged">

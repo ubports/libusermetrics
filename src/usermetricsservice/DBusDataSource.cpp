@@ -68,6 +68,24 @@ void DBusDataSource::setFormatString(const QString &formatString) {
 	}
 }
 
+QString DBusDataSource::emptyDataString() const {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	return dataSource.emptyDataString();
+}
+
+void DBusDataSource::setEmptyDataString(const QString &emptyDataString) {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	if (emptyDataString != dataSource.emptyDataString()) {
+		dataSource.setEmptyDataString(emptyDataString);
+		if (!dataSource.save()) {
+			throw logic_error("couldn't save data source");
+		}
+		m_adaptor->emptyDataStringChanged(emptyDataString);
+	}
+}
+
 QString DBusDataSource::textDomain() const {
 	DataSource dataSource;
 	DataSource::findById(m_id, &dataSource);

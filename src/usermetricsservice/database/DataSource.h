@@ -32,6 +32,8 @@ Q_PROPERTY(QString name READ name WRITE setName)
 
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString)
 
+Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString)
+
 Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain)
 
 Q_CLASSINFO("id", "primary_key=true auto_increment=true")
@@ -61,6 +63,10 @@ public:
 
 	void setFormatString(const QString &formatString);
 
+	const QString & emptyDataString() const;
+
+	void setEmptyDataString(const QString &emptyDataString);
+
 	const QString & textDomain() const;
 
 	void setTextDomain(const QString &textDomain);
@@ -71,6 +77,8 @@ protected:
 	QString m_name;
 
 	QString m_formatString;
+
+	QString m_emptyDataString;
 
 	QString m_textDomain;
 };
