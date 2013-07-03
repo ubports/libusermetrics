@@ -1,3 +1,9 @@
+libusermetrics (1.0.3-0ubuntu1) saucy; urgency=low
+
+  * Fix the packaging - force dbus to reload its configuration.
+
+ -- Pete Woods <pete.woods@canonical.com>  Wed, 03 Jul 2013 14:42:57 +0100
+
 libusermetrics (1.0.2) saucy; urgency=low
 
   * It should be in a functional state now.
