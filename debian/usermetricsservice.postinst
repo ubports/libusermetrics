@@ -25,6 +25,9 @@ if [ -d /var/lib/usermetrics ]; then
   chmod 0750 /var/lib/usermetrics
 fi
 
+# Force dbus to reload its configuration
+touch "/etc/dbus-1/system.d/com.canonical.UserMetrics.conf"
+
 #DEBHELPER#
 
 exit 0
