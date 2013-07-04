@@ -21,7 +21,10 @@
 #include <libusermetricscommon/DBusPaths.h>
 
 #include <QtCore/QCoreApplication>
+#include <QtCore/QTranslator>
+#include <QtCore/QLibraryInfo>
 #include <QtCore/QDebug>
+
 #include <QDjangoQuerySet.h>
 #include <QSqlDatabase>
 

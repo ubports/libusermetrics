@@ -18,6 +18,8 @@
 
 #include <libusermetricsinput/MetricManager.h>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QTranslator>
+#include <QtCore/QLibraryInfo>
 #include <QtCore/QDebug>
 
 using namespace std;
