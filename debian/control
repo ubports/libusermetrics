@@ -4,7 +4,7 @@ Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Build-Depends: cmake,
                debhelper (>= 9),
                doxygen,
-               google-mock,
+               google-mock (>= 1.6.0+svn437),
                libgtest-dev,
                qtbase5-dev,
                libqdjango-dev,
