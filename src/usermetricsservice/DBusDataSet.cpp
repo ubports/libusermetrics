@@ -16,6 +16,8 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
+#include <stdexcept>
+
 #include <usermetricsservice/database/DataSet.h>
 #include <usermetricsservice/DBusDataSet.h>
 #include <usermetricsservice/DataSetAdaptor.h>

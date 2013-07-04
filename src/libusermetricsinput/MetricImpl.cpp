@@ -16,6 +16,8 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
+#include <stdexcept>
+
 #include <libusermetricsinput/MetricImpl.h>
 #include <libusermetricsinput/MetricUpdateImpl.h>
 #include <libusermetricscommon/DBusPaths.h>
