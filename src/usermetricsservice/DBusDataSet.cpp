@@ -119,7 +119,7 @@ void DBusDataSet::update(const QVariantList &data) {
 	dataSet.setLastUpdated(currentDate);
 	dataSet.setData(byteArray);
 	if (!dataSet.save()) {
-		throw logic_error("couldn't save data set");
+		throw logic_error(tr("Could not save data set").toStdString());
 	}
 
 	QDateTime dateTime(currentDate);

@@ -62,7 +62,7 @@ void DBusDataSource::setFormatString(const QString &formatString) {
 	if (formatString != dataSource.formatString()) {
 		dataSource.setFormatString(formatString);
 		if (!dataSource.save()) {
-			throw logic_error("couldn't save data source");
+			throw logic_error(tr("Could not save data source").toStdString());
 		}
 		m_adaptor->formatStringChanged(formatString);
 	}
@@ -80,7 +80,7 @@ void DBusDataSource::setEmptyDataString(const QString &emptyDataString) {
 	if (emptyDataString != dataSource.emptyDataString()) {
 		dataSource.setEmptyDataString(emptyDataString);
 		if (!dataSource.save()) {
-			throw logic_error("couldn't save data source");
+			throw logic_error(tr("Could not save data source").toStdString());
 		}
 		m_adaptor->emptyDataStringChanged(emptyDataString);
 	}
@@ -98,7 +98,7 @@ void DBusDataSource::setTextDomain(const QString &textDomain) {
 	if (textDomain != dataSource.textDomain()) {
 		dataSource.setTextDomain(textDomain);
 		if (!dataSource.save()) {
-			throw logic_error("couldn't save data source");
+			throw logic_error(tr("Could not save data source").toStdString());
 		}
 		m_adaptor->textDomainChanged(textDomain);
 	}

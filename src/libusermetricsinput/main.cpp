@@ -24,13 +24,23 @@ using namespace std;
 using namespace UserMetricsInput;
 
 int main(int argc, char *argv[]) {
+	QCoreApplication application(argc, argv);
+
+	QTranslator qtTranslator;
+	qtTranslator.load("qt_" + QLocale::system().name(),
+			QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+	application.installTranslator(&qtTranslator);
+
+	QTranslator myappTranslator;
+	myappTranslator.load("usermetrics_" + QLocale::system().name());
+	application.installTranslator(&myappTranslator);
+
 	if (argc < 6) {
-		qWarning() << "Usage: " << argv[0]
-				<< " DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>";
+		qWarning() << QCoreApplication::tr("Usage: ") << argv[0]
+				<< QCoreApplication::tr(
+						" DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>");
 		return 1;
 	}
-
-	QCoreApplication application(argc, argv);
 
 	QString dataSourceId(QString::fromUtf8(argv[1]));
 	QString formatString(QString::fromUtf8(argv[2]));

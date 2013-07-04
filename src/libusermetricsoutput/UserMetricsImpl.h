@@ -78,6 +78,9 @@ protected:
 			const int daysInMonth, QVariantList::const_iterator& index,
 			const QVariantList::const_iterator& end);
 
+	QString trExternal(const QString &input, const QString &textDomain,
+			const QVariant &count);
+
 	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
 
 	QSharedPointer<UserMetricsStore> m_userMetricsStore;

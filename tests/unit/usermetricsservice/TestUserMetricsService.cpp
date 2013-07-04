@@ -56,7 +56,7 @@ protected:
 					new NiceMock<MockDateFactory>()) {
 		db.setDatabaseName(":memory:");
 		if (!db.open()) {
-			throw logic_error("couldn't open database");
+			throw logic_error("Could not open memory database");
 		}
 
 		ON_CALL(*dateFactory, currentDate()).WillByDefault(

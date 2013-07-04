@@ -21,6 +21,7 @@
 #include <libusermetricscommon/DBusPaths.h>
 
 #include <QtCore/QCoreApplication>
+#include <QtCore/QDebug>
 #include <QDjangoQuerySet.h>
 #include <QSqlDatabase>
 
@@ -30,6 +31,15 @@ using namespace UserMetricsService;
 
 int main(int argc, char *argv[]) {
 	QCoreApplication application(argc, argv);
+
+	QTranslator qtTranslator;
+	qtTranslator.load("qt_" + QLocale::system().name(),
+			QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+	application.installTranslator(&qtTranslator);
+
+	QTranslator myappTranslator;
+	myappTranslator.load("usermetrics_" + QLocale::system().name());
+	application.installTranslator(&myappTranslator);
 
 	QString databaseName("/var/lib/usermetrics/usermetrics3.db");
 	QStringList arguments(application.arguments());
@@ -41,7 +51,9 @@ int main(int argc, char *argv[]) {
 	QSqlDatabase db(QSqlDatabase::addDatabase("QSQLITE"));
 	db.setDatabaseName(databaseName);
 	if (!db.open()) {
-		throw logic_error("couldn't open database");
+		qWarning() << QCoreApplication::tr("Could not open database") << " ["
+				<< databaseName << "]";
+		return 1;
 	}
 
 	QDjango::setDatabase(db);
@@ -51,14 +63,18 @@ int main(int argc, char *argv[]) {
 	QSharedPointer<DateFactory> dateFactory(new DateFactoryImpl());
 
 	if (!connection.registerService(DBusPaths::serviceName())) {
-		qWarning() << "Unable to register user metrics service on DBus";
+		qWarning()
+				<< QCoreApplication::tr(
+						"Unable to register user metrics service on DBus");
 		return 1;
 	}
 	DBusUserMetrics userMetrics(connection, dateFactory);
 
 	bool result(application.exec());
 	if (!connection.unregisterService(DBusPaths::serviceName())) {
-		qWarning() << "Unable to unregister user metrics service on DBus";
+		qWarning()
+				<< QCoreApplication::tr(
+						"Unable to unregister user metrics service on DBus");
 	}
 
 	db.close();

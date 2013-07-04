@@ -161,7 +161,7 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		updateMonth(*m_secondMonth, valuesToCopyForSecondMonth,
 				secondMonthDate.daysInMonth(), dataIndex, end);
 
-		setLabel("No data sources available");
+		setLabel(tr("No data sources available"));
 	} else {
 		if (currentDate.year() == lastUpdated.year()
 				&& currentDate.month() == lastUpdated.month()) {
@@ -197,21 +197,24 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		if (data.empty() || currentDate != lastUpdated) {
 			const QString &emptyDataString = dataSource->emptyDataString();
 			if (emptyDataString.isEmpty()) {
-				QString empty("No data for today");
+				QString empty(tr("No data for today"));
 				empty.append(" (");
 				empty.append(dataSetId);
 				empty.append(")");
 				setLabel(empty);
 			} else {
-				setLabel(emptyDataString);
+				setLabel(
+						trExternal(emptyDataString, dataSource->textDomain(),
+								QVariant()));
 			}
 		} else {
 			if (dataSource.isNull()) {
-				qWarning() << "Data source [" << dataSetId << "] not found.";
+				qWarning() << tr("Data source not found") << " [" << dataSetId
+						<< "]";
 			} else {
 				setLabel(
-						dataSource->formatString().arg(
-								m_dataSet->head().toString()));
+						trExternal(dataSource->formatString(),
+								dataSource->textDomain(), m_dataSet->head()));
 			}
 		}
 	}
@@ -226,6 +229,17 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		dataChanged();
 	}
 	// we emit no signal if the data has stayed empty
+}
+
+QString UserMetricsImpl::trExternal(const QString &input,
+		const QString &textDomain, const QVariant &count) {
+	//FIXME: Need to support loading translations from external text domain
+	Q_UNUSED(textDomain);
+	QByteArray ba(input.toUtf8());
+	if (count.isNull()) {
+		return tr(ba.data());
+	}
+	return tr(ba.data()).arg(count.toString());
 }
 
 QString UserMetricsImpl::label() const {
