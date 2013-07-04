@@ -1,3 +1,9 @@
+libusermetrics (1.0.3+13.10.20130704-0ubuntu1) saucy; urgency=low
+
+  * Automatic snapshot from revision 90
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 04 Jul 2013 02:02:24 +0000
+
 libusermetrics (1.0.3-0ubuntu1) saucy; urgency=low
 
   * Fix the packaging - force dbus to reload its configuration.
