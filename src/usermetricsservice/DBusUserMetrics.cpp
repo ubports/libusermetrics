@@ -16,6 +16,8 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
+#include <stdexcept>
+
 #include <usermetricsservice/DBusDataSource.h>
 #include <usermetricsservice/DBusUserMetrics.h>
 #include <usermetricsservice/DBusUserData.h>
@@ -48,7 +50,8 @@ DBusUserMetrics::DBusUserMetrics(QDBusConnection &dbusConnection,
 	// DBus setup
 
 	if (!m_dbusConnection.registerObject(DBusPaths::userMetrics(), this)) {
-		throw logic_error("Unable to register user metrics object on DBus");
+		throw logic_error(
+				tr("Unable to register user metrics object on DBus").toStdString());
 	}
 
 	syncDatabase();
@@ -130,7 +133,7 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 					QDjangoWhere("name", QDjangoWhere::Equals, name)));
 
 	if (query.size() == -1) {
-		throw logic_error("data source query failed");
+		throw logic_error(tr("Data source query failed").toStdString());
 	}
 
 	DataSource dataSource;
@@ -142,7 +145,7 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		dataSource.setTextDomain(textDomain);
 
 		if (!dataSource.save()) {
-			throw logic_error("could not save data source");
+			throw logic_error(tr("Could not save data source").toStdString());
 		}
 
 		syncDatabase();
@@ -178,7 +181,7 @@ QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
 					QDjangoWhere("username", QDjangoWhere::Equals, username)));
 
 	if (query.size() == -1) {
-		throw logic_error("user data query failed");
+		throw logic_error(tr("User data query failed").toStdString());
 	}
 
 	UserData userData;
@@ -187,7 +190,7 @@ QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
 		userData.setUsername(username);
 
 		if (!userData.save()) {
-			throw logic_error("could not save user data");
+			throw logic_error(tr("Could not save user data").toStdString());
 		}
 
 		syncDatabase();

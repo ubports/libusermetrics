@@ -16,6 +16,8 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
+#include <stdexcept>
+
 #include <usermetricsservice/DBusUserData.h>
 #include <usermetricsservice/DBusDataSet.h>
 #include <usermetricsservice/UserDataAdaptor.h>
@@ -41,7 +43,8 @@ DBusUserData::DBusUserData(int id, const QString &username,
 
 	// DBus setup
 	if (!m_dbusConnection.registerObject(m_path, this)) {
-		throw logic_error("could not register user data object with DBus");
+		throw logic_error(
+				tr("Could not register user data object with DBus").toStdString());
 	}
 
 // Database setup
@@ -71,7 +74,8 @@ QList<QDBusObjectPath> DBusUserData::dataSets() const {
 
 QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 	if (!DataSource::exists(dataSourceName)) {
-		qWarning() << "Unknown data source [" << dataSourceName << "]";
+		qWarning() << tr("Unknown data source") << ": [" << dataSourceName
+				<< "]";
 		return QDBusObjectPath();
 	}
 
@@ -82,7 +86,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 					dataSourceName));
 
 	if (query.size() == -1) {
-		throw logic_error("data set query failed");
+		throw logic_error(tr("Data set query failed").toStdString());
 	}
 
 	DataSet dataSet;
@@ -97,7 +101,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 		dataSet.setDataSource(&dataSource);
 
 		if (!dataSet.save()) {
-			throw logic_error("couldn't save data set");
+			throw logic_error(tr("Could not save data set").toStdString());
 		}
 
 		syncDatabase();
@@ -107,7 +111,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 
 	DBusDataSetPtr dataSetPtr(m_dataSets.value(dataSet.id()));
 	if (dataSetPtr.isNull()) {
-		throw logic_error("new data set could not be found");
+		throw logic_error(tr("New data set could not be found").toStdString());
 	}
 	return QDBusObjectPath(dataSetPtr->path());
 }
