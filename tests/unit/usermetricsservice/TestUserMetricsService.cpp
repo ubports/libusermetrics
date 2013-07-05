@@ -87,7 +87,7 @@ TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 
 		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/1"),
 				userMetrics.createDataSource("facebook", "%1 messages received",
-						"", "").path());
+						"no facebook data", "facebook text domain").path());
 
 		DBusDataSourcePtr facebook(userMetrics.dataSource("facebook"));
 		EXPECT_EQ(QString("facebook"), facebook->name());
@@ -110,6 +110,8 @@ TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 		DBusDataSourcePtr facebook(userMetrics.dataSource("facebook"));
 		EXPECT_EQ(QString("facebook"), facebook->name());
 		EXPECT_EQ(QString("%1 messages received"), facebook->formatString());
+		EXPECT_EQ(QString("no facebook data"), facebook->emptyDataString());
+		EXPECT_EQ(QString("facebook text domain"), facebook->textDomain());
 	}
 }
 
@@ -153,6 +155,28 @@ TEST_F(TestUserMetricsService, UpdatesEmptyDataString) {
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("no tweeties today"), twitter->emptyDataString());
+	}
+}
+
+TEST_F(TestUserMetricsService, UpdatesTextDomain) {
+	{
+		DBusUserMetrics userMetrics(*connection, dateFactory);
+
+		userMetrics.createDataSource("twitter", "%1 tweets received", "",
+				"start text domain");
+
+		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
+		EXPECT_EQ(QString("start text domain"), twitter->textDomain());
+
+		twitter->setTextDomain("changed text domain");
+		EXPECT_EQ(QString("changed text domain"), twitter->textDomain());
+	}
+
+	{
+		DBusUserMetrics userMetrics(*connection, dateFactory);
+
+		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
+		EXPECT_EQ(QString("changed text domain"), twitter->textDomain());
 	}
 }
 
