@@ -1,3 +1,9 @@
+libusermetrics (1.0.4-0ubuntu1) saucy; urgency=low
+
+  * Support external translations.
+
+ -- Pete Woods <pete.woods@canonical.com>  Fri, 05 Jul 2013 16:31:40 +0100
+
 libusermetrics (1.0.3+13.10.20130704-0ubuntu1) saucy; urgency=low
 
   * Automatic snapshot from revision 90
