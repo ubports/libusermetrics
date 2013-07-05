@@ -28,12 +28,6 @@ DBusTest::DBusTest() {
 DBusTest::~DBusTest() {
 }
 
-int main(int argc, char **argv) {
-	QCoreApplication application(argc, argv);
-	::testing::InitGoogleTest(&argc, argv);
-	return RUN_ALL_TESTS();
-}
-
 void DBusTest::SetUp() {
 	dbus.setProcessChannelMode(QProcess::MergedChannels);
 	QStringList params;

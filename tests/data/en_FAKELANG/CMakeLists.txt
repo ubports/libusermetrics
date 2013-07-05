@@ -1,0 +1,2 @@
+
+add_subdirectory(LC_MESSAGES)

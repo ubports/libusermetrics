@@ -38,7 +38,7 @@ public:
 	UserMetricsImpl(QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
 			QSharedPointer<UserMetricsStore> dataSetStore,
 			QSharedPointer<ColorThemeProvider> colorThemeProvider,
-			QObject *parent = 0);
+			const QString &localeDir, QObject *parent = 0);
 
 	virtual ~UserMetricsImpl();
 
@@ -86,6 +86,8 @@ protected:
 	QSharedPointer<UserMetricsStore> m_userMetricsStore;
 
 	QSharedPointer<ColorThemeProvider> m_colorThemeProvider;
+
+	QString m_localeDir;
 
 	QString m_label;
 

@@ -22,6 +22,7 @@
 #include <usermetricsservice/DBusDataSource.h>
 #include <usermetricsservice/DataSourceAdaptor.h>
 #include <libusermetricscommon/DBusPaths.h>
+#include <libusermetricscommon/Localisation.h>
 
 #include <QDjangoQuerySet.h>
 
@@ -64,7 +65,7 @@ void DBusDataSource::setFormatString(const QString &formatString) {
 	if (formatString != dataSource.formatString()) {
 		dataSource.setFormatString(formatString);
 		if (!dataSource.save()) {
-			throw logic_error(tr("Could not save data source").toStdString());
+			throw logic_error(_("Could not save data source"));
 		}
 		m_adaptor->formatStringChanged(formatString);
 	}
@@ -82,7 +83,7 @@ void DBusDataSource::setEmptyDataString(const QString &emptyDataString) {
 	if (emptyDataString != dataSource.emptyDataString()) {
 		dataSource.setEmptyDataString(emptyDataString);
 		if (!dataSource.save()) {
-			throw logic_error(tr("Could not save data source").toStdString());
+			throw logic_error(_("Could not save data source"));
 		}
 		m_adaptor->emptyDataStringChanged(emptyDataString);
 	}
@@ -100,7 +101,7 @@ void DBusDataSource::setTextDomain(const QString &textDomain) {
 	if (textDomain != dataSource.textDomain()) {
 		dataSource.setTextDomain(textDomain);
 		if (!dataSource.save()) {
-			throw logic_error(tr("Could not save data source").toStdString());
+			throw logic_error(_("Could not save data source"));
 		}
 		m_adaptor->textDomainChanged(textDomain);
 	}

@@ -4,6 +4,11 @@ cmake_minimum_required(VERSION 2.8.9)
 set(API_VERSION 1)
 set(ABI_VERSION 1)
 
+set(GETTEXT_PACKAGE libusermetrics)
+add_definitions(
+	-DGETTEXT_PACKAGE="${GETTEXT_PACKAGE}"
+)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}")
 
 find_package(PkgConfig REQUIRED)
@@ -39,13 +44,6 @@ include_directories(${INCLUDE_BINARY_DIR})
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(SOURCE_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/src")
 
-ADD_DEFINITIONS(
-	-std=c++11
-	-fno-permissive
-	-pedantic
-	-Wall
-	-Wextra
-)
 
 include(GNUInstallDirs)
 include(Coverage)
@@ -56,6 +54,15 @@ if (EXISTS "/etc/debian_version")
   set(CMAKE_INSTALL_FULL_LIBEXECDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}")
 endif()
 
+add_definitions(
+	-std=c++11
+	-fno-permissive
+	-pedantic
+	-Wall
+	-Wextra
+	-DLOCALEDIR="${CMAKE_INSTALL_FULL_DATADIR}/locale"
+)
+
 set(DOXYFILE_SOURCE_DIR "include")
 include(UseDoxygen)
 if(DOXYGEN_FOUND AND BUILD_DOXYGEN)
@@ -65,12 +72,12 @@ if(DOXYGEN_FOUND AND BUILD_DOXYGEN)
 	)
 endif()
 
+add_subdirectory("po")
 add_subdirectory("src")
 add_subdirectory("data")
 
 enable_testing()
 add_subdirectory(tests)
-
 
 ADD_CUSTOM_TARGET(
 	check

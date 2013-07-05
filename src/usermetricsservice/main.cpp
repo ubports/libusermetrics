@@ -19,10 +19,9 @@
 #include <usermetricsservice/DBusUserMetrics.h>
 #include <libusermetricscommon/DateFactoryImpl.h>
 #include <libusermetricscommon/DBusPaths.h>
+#include <libusermetricscommon/Localisation.h>
 
 #include <QtCore/QCoreApplication>
-#include <QtCore/QTranslator>
-#include <QtCore/QLibraryInfo>
 #include <QtCore/QDebug>
 
 #include <QDjangoQuerySet.h>
@@ -35,14 +34,9 @@ using namespace UserMetricsService;
 int main(int argc, char *argv[]) {
 	QCoreApplication application(argc, argv);
 
-	QTranslator qtTranslator;
-	qtTranslator.load("qt_" + QLocale::system().name(),
-			QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-	application.installTranslator(&qtTranslator);
-
-	QTranslator myappTranslator;
-	myappTranslator.load("usermetrics_" + QLocale::system().name());
-	application.installTranslator(&myappTranslator);
+	setlocale(LC_ALL, "");
+	bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
+	textdomain (GETTEXT_PACKAGE);
 
 	QString databaseName("/var/lib/usermetrics/usermetrics3.db");
 	QStringList arguments(application.arguments());
@@ -54,8 +48,8 @@ int main(int argc, char *argv[]) {
 	QSqlDatabase db(QSqlDatabase::addDatabase("QSQLITE"));
 	db.setDatabaseName(databaseName);
 	if (!db.open()) {
-		qWarning() << QCoreApplication::tr("Could not open database") << " ["
-				<< databaseName << "]";
+		qWarning() << _("Could not open database") << " [" << databaseName
+				<< "]";
 		return 1;
 	}
 
@@ -66,18 +60,14 @@ int main(int argc, char *argv[]) {
 	QSharedPointer<DateFactory> dateFactory(new DateFactoryImpl());
 
 	if (!connection.registerService(DBusPaths::serviceName())) {
-		qWarning()
-				<< QCoreApplication::tr(
-						"Unable to register user metrics service on DBus");
+		qWarning() << _("Unable to register user metrics service on DBus");
 		return 1;
 	}
 	DBusUserMetrics userMetrics(connection, dateFactory);
 
 	bool result(application.exec());
 	if (!connection.unregisterService(DBusPaths::serviceName())) {
-		qWarning()
-				<< QCoreApplication::tr(
-						"Unable to unregister user metrics service on DBus");
+		qWarning() << _("Unable to unregister user metrics service on DBus");
 	}
 
 	db.close();

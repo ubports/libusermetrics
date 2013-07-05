@@ -46,5 +46,5 @@ UserMetrics * UserMetrics::getInstance() {
 			QSharedPointer<UserMetricsStore>(
 					new SyncedUserMetricsStore(dbusConnection)),
 			QSharedPointer<ColorThemeProvider>(
-					new HardCodedColorThemeProvider()));
+					new HardCodedColorThemeProvider()), LOCALEDIR);
 }

@@ -7,6 +7,7 @@ set(
 	QVariantPrinter.cpp
 	QVariantListPrinter.cpp
 	MockSignalReceiver.cpp
+	main.cpp
 )
 
 add_library(

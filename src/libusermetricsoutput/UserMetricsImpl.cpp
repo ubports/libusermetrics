@@ -19,6 +19,7 @@
 #include <libusermetricsoutput/UserMetricsImpl.h>
 #include <libusermetricsoutput/UserMetricsStore.h>
 #include <libusermetricscommon/DateFactory.h>
+#include <libusermetricscommon/Localisation.h>
 
 #include <QtCore/QDate>
 #include <QtCore/QString>
@@ -30,10 +31,11 @@ using namespace UserMetricsCommon;
 
 UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
 		QSharedPointer<UserMetricsStore> userDataStore,
-		QSharedPointer<ColorThemeProvider> colorThemeProvider, QObject *parent) :
+		QSharedPointer<ColorThemeProvider> colorThemeProvider,
+		const QString &localeDir, QObject *parent) :
 		UserMetrics(parent), m_dateFactory(dateFactory), m_userMetricsStore(
-				userDataStore), m_colorThemeProvider(colorThemeProvider), m_firstColor(
-				new ColorThemeImpl(this)), m_firstMonth(
+				userDataStore), m_colorThemeProvider(colorThemeProvider), m_localeDir(
+				localeDir), m_firstColor(new ColorThemeImpl(this)), m_firstMonth(
 				new QVariantListModel(this)), m_secondColor(
 				new ColorThemeImpl(this)), m_secondMonth(
 				new QVariantListModel(this)), m_currentDay(), m_noDataForUser(
@@ -161,7 +163,7 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		updateMonth(*m_secondMonth, valuesToCopyForSecondMonth,
 				secondMonthDate.daysInMonth(), dataIndex, end);
 
-		setLabel(tr("No data sources available"));
+		setLabel(_("No data sources available"));
 	} else {
 		if (currentDate.year() == lastUpdated.year()
 				&& currentDate.month() == lastUpdated.month()) {
@@ -194,23 +196,24 @@ void UserMetricsImpl::finishLoadingDataSource() {
 				secondMonthDate.daysInMonth(), dataIndex, end);
 
 		DataSourcePtr dataSource(m_userMetricsStore->dataSource(dataSetId));
-		if (data.empty() || currentDate != lastUpdated) {
-			const QString &emptyDataString = dataSource->emptyDataString();
-			if (emptyDataString.isEmpty()) {
-				QString empty(tr("No data for today"));
-				empty.append(" (");
-				empty.append(dataSetId);
-				empty.append(")");
-				setLabel(empty);
-			} else {
-				setLabel(
-						trExternal(emptyDataString, dataSource->textDomain(),
-								QVariant()));
-			}
+		if (dataSource.isNull()) {
+			qWarning() << _("Data source not found") << " [" << dataSetId
+					<< "]";
 		} else {
-			if (dataSource.isNull()) {
-				qWarning() << tr("Data source not found") << " [" << dataSetId
-						<< "]";
+			if (data.empty() || currentDate != lastUpdated
+					|| m_dataSet->head().isNull()) {
+				const QString &emptyDataString = dataSource->emptyDataString();
+				if (emptyDataString.isEmpty()) {
+					QString empty(_("No data for today"));
+					empty.append(" (");
+					empty.append(dataSetId);
+					empty.append(")");
+					setLabel(empty);
+				} else {
+					setLabel(
+							trExternal(emptyDataString,
+									dataSource->textDomain(), QVariant()));
+				}
 			} else {
 				setLabel(
 						trExternal(dataSource->formatString(),
@@ -233,13 +236,30 @@ void UserMetricsImpl::finishLoadingDataSource() {
 
 QString UserMetricsImpl::trExternal(const QString &input,
 		const QString &textDomain, const QVariant &count) {
-	//FIXME: Need to support loading translations from external text domain
-	Q_UNUSED(textDomain);
-	QByteArray ba(input.toUtf8());
-	if (count.isNull()) {
-		return tr(ba.data());
+	// Set the textdomain to match the program we're translating
+	if (!textDomain.isEmpty()) {
+		QByteArray textDomainBa(textDomain.toUtf8());
+		QByteArray localeDirBa(m_localeDir.toUtf8());
+		bindtextdomain((const char *) textDomainBa.data(),
+				(const char *) localeDirBa.data());
+		textdomain((const char *) textDomainBa.data());
 	}
-	return tr(ba.data()).arg(count.toString());
+
+	QString result;
+
+	QByteArray inputBa(input.toUtf8());
+	if (count.isNull()) {
+		result = _(inputBa.data());
+	} else {
+		result = QString(_(inputBa.data())).arg(count.toString());
+	}
+
+	// Restore the original textdomain
+	if (!textDomain.isEmpty()) {
+		textdomain(GETTEXT_PACKAGE);
+	}
+
+	return result;
 }
 
 QString UserMetricsImpl::label() const {
