@@ -26,6 +26,7 @@
 #include <usermetricsservice/database/UserData.h>
 #include <libusermetricscommon/DateFactory.h>
 #include <libusermetricscommon/DBusPaths.h>
+#include <libusermetricscommon/Localisation.h>
 
 #include <QDjangoQuerySet.h>
 
@@ -43,8 +44,7 @@ DBusUserData::DBusUserData(int id, const QString &username,
 
 	// DBus setup
 	if (!m_dbusConnection.registerObject(m_path, this)) {
-		throw logic_error(
-				tr("Could not register user data object with DBus").toStdString());
+		throw logic_error(_("Could not register user data object with DBus"));
 	}
 
 // Database setup
@@ -74,7 +74,7 @@ QList<QDBusObjectPath> DBusUserData::dataSets() const {
 
 QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 	if (!DataSource::exists(dataSourceName)) {
-		qWarning() << tr("Unknown data source") << ": [" << dataSourceName
+		qWarning() << _("Unknown data source") << ": [" << dataSourceName
 				<< "]";
 		return QDBusObjectPath();
 	}
@@ -86,7 +86,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 					dataSourceName));
 
 	if (query.size() == -1) {
-		throw logic_error(tr("Data set query failed").toStdString());
+		throw logic_error(_("Data set query failed"));
 	}
 
 	DataSet dataSet;
@@ -101,7 +101,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 		dataSet.setDataSource(&dataSource);
 
 		if (!dataSet.save()) {
-			throw logic_error(tr("Could not save data set").toStdString());
+			throw logic_error(_("Could not save data set"));
 		}
 
 		syncDatabase();
@@ -111,7 +111,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 
 	DBusDataSetPtr dataSetPtr(m_dataSets.value(dataSet.id()));
 	if (dataSetPtr.isNull()) {
-		throw logic_error(tr("New data set could not be found").toStdString());
+		throw logic_error(_("New data set could not be found"));
 	}
 	return QDBusObjectPath(dataSetPtr->path());
 }

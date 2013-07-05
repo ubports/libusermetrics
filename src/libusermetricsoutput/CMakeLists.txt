@@ -69,6 +69,7 @@ qt5_use_modules(
 target_link_libraries(
 	usermetricsoutput
 	usermetricscommon
+	${Gettext_LIBRARIES}
 )
 
 set_target_properties(

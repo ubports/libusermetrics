@@ -23,6 +23,7 @@
 #include <usermetricsservice/DataSetAdaptor.h>
 #include <libusermetricscommon/DateFactory.h>
 #include <libusermetricscommon/DBusPaths.h>
+#include <libusermetricscommon/Localisation.h>
 
 #include <QtCore/QByteArray>
 #include <QtCore/QDataStream>
@@ -121,7 +122,7 @@ void DBusDataSet::update(const QVariantList &data) {
 	dataSet.setLastUpdated(currentDate);
 	dataSet.setData(byteArray);
 	if (!dataSet.save()) {
-		throw logic_error(tr("Could not save data set").toStdString());
+		throw logic_error(_("Could not save data set"));
 	}
 
 	QDateTime dateTime(currentDate);

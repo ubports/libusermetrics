@@ -28,6 +28,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <cstdlib>
+
 using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
@@ -35,6 +37,14 @@ using namespace testing;
 using namespace UserMetricsTestUtils;
 
 namespace {
+
+static const char* get_language() {
+	return getenv("LANGUAGE");
+}
+
+static void set_language(const char* language) {
+	setenv("LANGUAGE", language, true);
+}
 
 class MockDateFactory: public DateFactory {
 public:
@@ -60,7 +70,7 @@ protected:
 
 		model.reset(
 				new UserMetricsImpl(dateFactory, userDataStore,
-						colorThemeProvider));
+						colorThemeProvider, TEST_LOCALEDIR));
 	}
 
 	virtual ~UserMetricsImplTest() {
@@ -260,6 +270,85 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 		EXPECT_EQ(QVariant(0.75), month->data(month->index(29, 0)));
 		EXPECT_EQ(QVariant(0.80), month->data(month->index(30, 0)));
 	}
+}
+
+TEST_F(UserMetricsImplTest, AddTranslatedData) {
+	QVariantList data;
+	data << 100.0;
+
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("%1 untranslated messages received");
+	dataSource->setTextDomain("foo");
+	userDataStore->insert("data-source-id", dataSource);
+
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username", UserDataPtr(new UserData())));
+	UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->insert("data-source-id",
+			DataSetPtr(new DataSet()));
+	DataSetPtr dataSet(*dataSetIterator);
+
+	// The data starts today
+	dataSet->setLastUpdated(QDate(2001, 01, 07));
+	dataSet->setData(data);
+
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
+			Return(emptyPair));
+
+	const char* language = get_language();
+	set_language("en_FAKELANG");
+
+	model->setUsername("username");
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ(QString("100 translated messages received").toStdString(),
+			model->label().toStdString());
+
+	set_language(language);
+}
+
+TEST_F(UserMetricsImplTest, AddTranslatedEmptyData) {
+	QVariantList data;
+	data << "";
+
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("%1 untranslated messages received");
+	dataSource->setEmptyDataString("no untranslated messages today");
+	dataSource->setTextDomain("foo");
+	userDataStore->insert("data-source-id", dataSource);
+
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username", UserDataPtr(new UserData())));
+	UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->insert("data-source-id",
+			DataSetPtr(new DataSet()));
+	DataSetPtr dataSet(*dataSetIterator);
+
+	// The data starts today
+	dataSet->setLastUpdated(QDate(2001, 01, 07));
+	dataSet->setData(data);
+
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
+			Return(emptyPair));
+
+	const char* language = get_language();
+	set_language("en_FAKELANG");
+
+	model->setUsername("username");
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ(QString("no translated messages today").toStdString(),
+			model->label().toStdString());
+
+	set_language(language);
 }
 
 TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {

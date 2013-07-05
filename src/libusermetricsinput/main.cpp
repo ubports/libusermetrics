@@ -17,9 +17,8 @@
  */
 
 #include <libusermetricsinput/MetricManager.h>
+#include <libusermetricscommon/Localisation.h>
 #include <QtCore/QCoreApplication>
-#include <QtCore/QTranslator>
-#include <QtCore/QLibraryInfo>
 #include <QtCore/QDebug>
 
 using namespace std;
@@ -28,19 +27,14 @@ using namespace UserMetricsInput;
 int main(int argc, char *argv[]) {
 	QCoreApplication application(argc, argv);
 
-	QTranslator qtTranslator;
-	qtTranslator.load("qt_" + QLocale::system().name(),
-			QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-	application.installTranslator(&qtTranslator);
-
-	QTranslator myappTranslator;
-	myappTranslator.load("usermetrics_" + QLocale::system().name());
-	application.installTranslator(&myappTranslator);
+	setlocale(LC_ALL, "");
+	bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
+	textdomain(GETTEXT_PACKAGE);
 
 	if (argc < 6) {
-		qWarning() << QCoreApplication::tr("Usage: ") << argv[0]
-				<< QCoreApplication::tr(
-						" DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>");
+		qWarning() << _("Usage: ") << argv[0] << " "
+				<< _(
+						"DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>");
 		return 1;
 	}
 
