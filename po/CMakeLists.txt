@@ -22,7 +22,6 @@ FILE(
 
 xgettext_create_pot_file(
 	${POT_FILE}
-	ALL
 	CPP
 	QT
 	INPUT ${SRC_FILES}
@@ -32,6 +31,8 @@ xgettext_create_pot_file(
 	PACKAGE_NAME ${GETTEXT_PACKAGE}
 	COPYRIGHT_HOLDER "Canonical Ltd."
 )
+
+add_custom_target(update-pot DEPENDS ${POT_FILE})
 
 gettext_create_translations(
 	${POT_FILE}
