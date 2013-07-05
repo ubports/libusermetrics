@@ -21,31 +21,31 @@
 
 #include <libintl.h>
 
-static inline char * _(const char *__msgid) {
+inline char * _(const char *__msgid) {
 	return gettext(__msgid);
 }
 
-static inline char * _(const char *__domainname, const char *__msgid) {
+inline char * _(const char *__domainname, const char *__msgid) {
 	return dgettext(__domainname, __msgid);
 }
 
-static inline char * _(const char *__domainname, const char *__msgid,
+inline char * _(const char *__domainname, const char *__msgid,
 		int __category) {
 	return dcgettext(__domainname, __msgid, __category);
 }
 
-static inline char * _(const char *__msgid1, const char *__msgid2,
+inline char * _(const char *__msgid1, const char *__msgid2,
 		unsigned long int __n) {
 	return ngettext(__msgid1, __msgid2, __n);
 
 }
 
-static inline char * _(const char *__domainname, const char *__msgid1,
+inline char * _(const char *__domainname, const char *__msgid1,
 		const char *__msgid2, unsigned long int __n) {
 	return dngettext(__domainname, __msgid1, __msgid2, __n);
 }
 
-static inline char * _(const char *__domainname, const char *__msgid1,
+inline char * _(const char *__domainname, const char *__msgid1,
 		const char *__msgid2, unsigned long int __n, int __category) {
 	return dcngettext(__domainname, __msgid1, __msgid2, __n, __category);
 }

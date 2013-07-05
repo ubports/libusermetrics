@@ -23,7 +23,10 @@
 int main(int argc, char **argv) {
 	setenv("LANG", "C.UTF-8", true);
 	unsetenv("LC_ALL");
+
 	setlocale(LC_ALL, "");
+	bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
+	textdomain(GETTEXT_PACKAGE);
 
 	QCoreApplication application(argc, argv);
 	::testing::InitGoogleTest(&argc, argv);

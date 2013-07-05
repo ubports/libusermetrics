@@ -38,12 +38,13 @@ using namespace UserMetricsTestUtils;
 
 namespace {
 
-static const char* get_language() {
+static QString get_language() {
 	return getenv("LANGUAGE");
 }
 
-static void set_language(const char* language) {
-	setenv("LANGUAGE", language, true);
+static void setLanguage(const QString &language) {
+	QByteArray ba(language.toUtf8());
+	setenv("LANGUAGE", ba.data(), true);
 }
 
 class MockDateFactory: public DateFactory {
@@ -299,8 +300,8 @@ TEST_F(UserMetricsImplTest, AddTranslatedData) {
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
-	const char* language = get_language();
-	set_language("en_FAKELANG");
+	QString language(get_language());
+	setLanguage("en_FAKELANG");
 
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
@@ -308,7 +309,7 @@ TEST_F(UserMetricsImplTest, AddTranslatedData) {
 	EXPECT_EQ(QString("100 translated messages received").toStdString(),
 			model->label().toStdString());
 
-	set_language(language);
+	setLanguage(language);
 }
 
 TEST_F(UserMetricsImplTest, AddTranslatedEmptyData) {
@@ -339,8 +340,8 @@ TEST_F(UserMetricsImplTest, AddTranslatedEmptyData) {
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
-	const char* language = get_language();
-	set_language("en_FAKELANG");
+	QString language(get_language());
+	setLanguage("en_FAKELANG");
 
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
@@ -348,7 +349,7 @@ TEST_F(UserMetricsImplTest, AddTranslatedEmptyData) {
 	EXPECT_EQ(QString("no translated messages today").toStdString(),
 			model->label().toStdString());
 
-	set_language(language);
+	setLanguage(language);
 }
 
 TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
