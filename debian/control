@@ -13,6 +13,7 @@ Build-Depends: cmake,
                libqt5sql5-sqlite,
                sqlite3,
                dbus,
+               gettext,
 Standards-Version: 3.9.4
 Section: libs
 Homepage: http://launchpad.net/libusermetrics
@@ -55,6 +56,7 @@ Section: libs
 Architecture: any
 Multi-Arch: same
 Depends: usermetricsservice (= ${binary:Version}),
+         gettext,
          ${misc:Depends},
          ${shlibs:Depends},
 Pre-Depends: ${misc:Pre-Depends},
