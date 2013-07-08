@@ -76,9 +76,7 @@ void UserMetricsImpl::setUsername(const QString &username) {
 	setUsernameInternal(username);
 }
 
-void UserMetricsImpl::setUsernameInternal(const QString &username) {
-	m_username = username;
-
+void UserMetricsImpl::checkForUserData() {
 	m_oldNoDataForUser = m_noDataForUser;
 
 	m_userDataIterator = m_userMetricsStore->constFind(m_username);
@@ -96,6 +94,12 @@ void UserMetricsImpl::setUsernameInternal(const QString &username) {
 			m_dataSet = *m_dataSetIterator;
 		}
 	}
+}
+
+void UserMetricsImpl::setUsernameInternal(const QString &username) {
+	m_username = username;
+
+	checkForUserData();
 
 	prepareToLoadDataSource();
 
@@ -292,15 +296,17 @@ int UserMetricsImpl::currentDay() const {
 
 void UserMetricsImpl::nextDataSourceSlot() {
 	if (m_noDataForUser) {
+		// check again to see if there's data now
+		checkForUserData();
 	} else {
+		m_oldNoDataForUser = m_noDataForUser;
+
 		++m_dataSetIterator;
 		if (m_dataSetIterator == m_userData->constEnd()) {
 			m_dataSetIterator = m_userData->constBegin();
 		}
 		m_dataSet = *m_dataSetIterator;
 	}
-
-	m_oldNoDataForUser = m_noDataForUser;
 
 	prepareToLoadDataSource();
 }
