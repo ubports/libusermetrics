@@ -27,6 +27,8 @@
 #include <QDjangoQuerySet.h>
 #include <QSqlDatabase>
 
+#include <csignal>
+
 using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
@@ -36,7 +38,7 @@ int main(int argc, char *argv[]) {
 
 	setlocale(LC_ALL, "");
 	bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
-	textdomain (GETTEXT_PACKAGE);
+	textdomain(GETTEXT_PACKAGE);
 
 	QString databaseName("/var/lib/usermetrics/usermetrics3.db");
 	QStringList arguments(application.arguments());
@@ -64,6 +66,9 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	DBusUserMetrics userMetrics(connection, dateFactory);
+
+	signal(SIGINT, &QCoreApplication::exit);
+	signal(SIGTERM, &QCoreApplication::exit);
 
 	bool result(application.exec());
 	if (!connection.unregisterService(DBusPaths::serviceName())) {
