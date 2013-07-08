@@ -1,3 +1,18 @@
+libusermetrics (1.0.4+13.10.20130708-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Add basic translation support No actual translations as yet, though
+  * Fix missing includes
+  * Increase test coverage
+
+  [ Didier Roche ]
+  * simplify slightly the packaging.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 96
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 08 Jul 2013 02:02:32 +0000
+
 libusermetrics (1.0.4-0ubuntu1) saucy; urgency=low
 
   * Support external translations.
