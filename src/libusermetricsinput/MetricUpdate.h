@@ -37,7 +37,6 @@ public:
 	virtual void addData(double data) = 0;
 
 	virtual void addNull() = 0;
-
 };
 
 }

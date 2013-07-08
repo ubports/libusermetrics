@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-05 17:40+0100\n"
+"POT-Creation-Date: 2013-07-08 12:33+0100\n"
 "PO-Revision-Date: 2013-07-05 15:09+0100\n"
 "Last-Translator: Pete Woods <pete.woods@canonical.com>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/usermetricsservice/main.cpp:51
+#: src/usermetricsservice/main.cpp:53
 msgid "Could not open database"
 msgstr ""
 
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Could not register user data object with DBus"
 msgstr ""
 
-#: src/usermetricsservice/DBusDataSet.cpp:125
+#: src/usermetricsservice/DBusDataSet.cpp:120
 #: src/usermetricsservice/DBusUserData.cpp:104
 msgid "Could not save data set"
 msgstr ""
@@ -73,11 +73,11 @@ msgstr "No data sources available"
 msgid "Unable to register user metrics object on DBus"
 msgstr "Unable to register user metrics object on DBus"
 
-#: src/usermetricsservice/main.cpp:63
+#: src/usermetricsservice/main.cpp:65
 msgid "Unable to register user metrics service on DBus"
 msgstr "Unable to register user metrics service on DBus"
 
-#: src/usermetricsservice/main.cpp:70
+#: src/usermetricsservice/main.cpp:75
 msgid "Unable to unregister user metrics service on DBus"
 msgstr "Unable to unregister user metrics service on DBus"
 

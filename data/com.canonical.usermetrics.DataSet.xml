@@ -11,6 +11,10 @@
 			<arg name="data" type="av" direction="in"/>
 		</method>
 		
+		<method name="increment">
+			<arg name="amount" type="d" direction="in"/>
+		</method>
+		
 		<signal name="updated">
 			<arg name="lastUpdated" type="u" direction="out"/>
 			<arg name="data" type="av" direction="out"/>
