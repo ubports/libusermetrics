@@ -33,6 +33,11 @@ using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
+static void exitQt(int sig) {
+	Q_UNUSED(sig);
+	QCoreApplication::exit(0);
+}
+
 int main(int argc, char *argv[]) {
 	QCoreApplication application(argc, argv);
 
@@ -67,8 +72,8 @@ int main(int argc, char *argv[]) {
 	}
 	DBusUserMetrics userMetrics(connection, dateFactory);
 
-	signal(SIGINT, &QCoreApplication::exit);
-	signal(SIGTERM, &QCoreApplication::exit);
+	signal(SIGINT, &exitQt);
+	signal(SIGTERM, &exitQt);
 
 	bool result(application.exec());
 	if (!connection.unregisterService(DBusPaths::serviceName())) {
