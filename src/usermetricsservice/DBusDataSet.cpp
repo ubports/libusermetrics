@@ -65,13 +65,8 @@ QVariantList DBusDataSet::data() const {
 	return data;
 }
 
-void DBusDataSet::update(const QVariantList &data) {
-	DataSet dataSet;
-	DataSet::findById(m_id, &dataSet);
-
-	QVariantList oldData;
-	getData(dataSet, oldData);
-
+void DBusDataSet::internalUpdate(DataSet &dataSet, const QVariantList &oldData,
+		const QVariantList &data) {
 	QDate currentDate(m_dateFactory->currentDate());
 	int daysSinceLastUpdate(dataSet.lastUpdated().daysTo(currentDate));
 
@@ -127,6 +122,37 @@ void DBusDataSet::update(const QVariantList &data) {
 
 	QDateTime dateTime(currentDate);
 	m_adaptor->updated(dateTime.toTime_t(), newData);
+}
+
+void DBusDataSet::update(const QVariantList &data) {
+	DataSet dataSet;
+	DataSet::findById(m_id, &dataSet);
+
+	QVariantList oldData;
+	getData(dataSet, oldData);
+
+	internalUpdate(dataSet, oldData, data);
+}
+
+void DBusDataSet::increment(double amount) {
+	DataSet dataSet;
+	DataSet::findById(m_id, &dataSet);
+
+	QVariantList oldData;
+	getData(dataSet, oldData);
+
+	QVariantList data;
+
+	QDate currentDate(m_dateFactory->currentDate());
+	if (dataSet.lastUpdated() == currentDate && !oldData.empty()) {
+		double value(oldData.first().toDouble());
+		value += amount;
+		data << value;
+	} else {
+		data << amount;
+	}
+
+	internalUpdate(dataSet, oldData, data);
 }
 
 uint DBusDataSet::lastUpdated() const {

@@ -36,6 +36,9 @@ public:
 
 	virtual MetricUpdate * update(const QString &username = "") = 0;
 
+	virtual void increment(double amount = 1.0f,
+			const QString &username = "") = 0;
+
 };
 
 }

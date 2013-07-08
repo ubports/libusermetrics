@@ -69,8 +69,13 @@ public:
 public Q_SLOTS:
 	void update(const QVariantList &data);
 
+	void increment(double amount);
+
 protected:
 	static void getData(DataSet &dataSet, QVariantList &data);
+
+	void internalUpdate(DataSet &dataSet, const QVariantList &oldData,
+			const QVariantList &data);
 
 	QDBusConnection m_dbusConnection;
 

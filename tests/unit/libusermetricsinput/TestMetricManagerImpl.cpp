@@ -155,4 +155,65 @@ TEST_F(TestMetricManagerImpl, TestAddMultipleDataSourcesAndUsers) {
 	EXPECT_FLOAT_EQ(25.0, dataFour.first().toDouble());
 }
 
+TEST_F(TestMetricManagerImpl, TestCanAddDataAndIncrement) {
+	MetricManagerPtr manager(new MetricManagerImpl(*connection));
+
+	MetricPtr metric(manager->add("data-source-id", "format string %1"));
+	metric->increment(1.0, "the-username");
+
+	com::canonical::usermetrics::UserData userDataInterface(
+			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+	EXPECT_EQ(QString("the-username"), userDataInterface.username());
+
+	com::canonical::usermetrics::DataSet dataSetInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+	{
+		QVariantList data(dataSetInterface.data());
+		ASSERT_EQ(1, data.size());
+		EXPECT_FLOAT_EQ(1.0, data.at(0).toDouble());
+	}
+
+	metric->increment(2.0, "the-username");
+	{
+		QVariantList data(dataSetInterface.data());
+		ASSERT_EQ(1, data.size());
+		EXPECT_FLOAT_EQ(3.0, data.at(0).toDouble());
+	}
+
+	QDateTime dateTime(QDateTime::fromTime_t(dataSetInterface.lastUpdated()));
+	EXPECT_EQ(QDate::currentDate(), dateTime.date());
+}
+
+TEST_F(TestMetricManagerImpl, TestCanAddNullAndIncrement) {
+	MetricManagerPtr manager(new MetricManagerImpl(*connection));
+
+	MetricPtr metric(manager->add("data-source-id", "format string %1"));
+	{
+		MetricUpdatePtr update(metric->update("the-username"));
+		update->addNull();
+	}
+
+	com::canonical::usermetrics::UserData userDataInterface(
+			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+	EXPECT_EQ(QString("the-username"), userDataInterface.username());
+
+	com::canonical::usermetrics::DataSet dataSetInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+	{
+		QVariantList data(dataSetInterface.data());
+		ASSERT_EQ(1, data.size());
+		EXPECT_EQ(QString(""), data.at(0).toString());
+	}
+
+	metric->increment(5.2, "the-username");
+	{
+		QVariantList data(dataSetInterface.data());
+		ASSERT_EQ(1, data.size());
+		EXPECT_FLOAT_EQ(5.2, data.at(0).toDouble());
+	}
+
+	QDateTime dateTime(QDateTime::fromTime_t(dataSetInterface.lastUpdated()));
+	EXPECT_EQ(QDate::currentDate(), dateTime.date());
+}
+
 } // namespace

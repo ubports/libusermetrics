@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-05 17:40+0100\n"
+"POT-Creation-Date: 2013-07-05 15:09+0100\n"
 "PO-Revision-Date: 2013-07-05 15:09+0100\n"
 "Last-Translator: Pete Woods <pete.woods@canonical.com>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -41,7 +41,7 @@ msgstr "Couldn't save data source"
 msgid "Could not save user data"
 msgstr "Couldn't save user data"
 
-#: src/libusermetricsinput/main.cpp:37
+#: src/libusermetricsinput/main.cpp:38
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 
@@ -49,7 +49,7 @@ msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 msgid "Data set query failed"
 msgstr "Data set query failed"
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:200
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:213
 msgid "Data source not found"
 msgstr "Data source not found"
 
@@ -61,11 +61,11 @@ msgstr "Data source query failed"
 msgid "New data set could not be found"
 msgstr "New data set couldn't be found"
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:207
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:201
 msgid "No data for today"
 msgstr "No data for today"
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:166
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:165
 msgid "No data sources available"
 msgstr "No data sources available"
 
@@ -85,7 +85,7 @@ msgstr "Unable to unregister user metrics service on DBus"
 msgid "Unknown data source"
 msgstr "Unknown data source"
 
-#: src/libusermetricsinput/main.cpp:35
+#: src/libusermetricsinput/main.cpp:36
 msgid "Usage: "
 msgstr "Usage: "
 

@@ -22,6 +22,7 @@
 #include <libusermetricsinput/MetricUpdateImpl.h>
 #include <libusermetricscommon/DBusPaths.h>
 #include <libusermetricscommon/UserDataInterface.h>
+#include <libusermetricscommon/DataSetInterface.h>
 
 #include <QtDBus/QtDBus>
 
@@ -42,7 +43,7 @@ MetricImpl::MetricImpl(const QString &dataSourceId, const QString &formatString,
 MetricImpl::~MetricImpl() {
 }
 
-MetricUpdate * MetricImpl::update(const QString &usernameIn) {
+QDBusObjectPath MetricImpl::createDataSet(const QString &usernameIn) {
 	QString username;
 	if (usernameIn.isEmpty()) {
 		username = QString::fromUtf8(getenv("USER"));
@@ -58,8 +59,20 @@ MetricUpdate * MetricImpl::update(const QString &usernameIn) {
 		throw logic_error("user data interface invalid");
 	}
 
-	QDBusObjectPath dataSetPath(
-			userDataInterface.createDataSet(m_dataSourceId));
+	return userDataInterface.createDataSet(m_dataSourceId);
+}
+
+MetricUpdate * MetricImpl::update(const QString &username) {
+	QDBusObjectPath dataSetPath(createDataSet(username));
 
 	return new MetricUpdateImpl(dataSetPath.path(), m_dbusConnection);
+}
+
+void MetricImpl::increment(double amount, const QString &username) {
+	QDBusObjectPath dataSetPath(createDataSet(username));
+
+	com::canonical::usermetrics::DataSet dataSetInterface(
+			DBusPaths::serviceName(), dataSetPath.path(), m_dbusConnection);
+
+	dataSetInterface.increment(amount);
 }

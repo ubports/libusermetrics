@@ -38,7 +38,11 @@ public:
 
 	virtual MetricUpdate * update(const QString &username = "");
 
+	virtual void increment(double amount = 1.0f, const QString &username = "");
+
 protected:
+	virtual QDBusObjectPath createDataSet(const QString &usernameIn);
+
 	QDBusConnection m_dbusConnection;
 
 	com::canonical::UserMetrics m_interface;
