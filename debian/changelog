@@ -1,3 +1,13 @@
+libusermetrics (1.0.4+13.10.20130709-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Add new simple "increment" API
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 98
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 09 Jul 2013 02:03:17 +0000
+
 libusermetrics (1.0.4+13.10.20130708-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]
