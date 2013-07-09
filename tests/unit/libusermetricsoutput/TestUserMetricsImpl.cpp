@@ -167,6 +167,77 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
 	}
 }
 
+TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUserThenAppearsWhenAdded) {
+	model->setUsername("soon-to-exist-user");
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ("soon-to-exist-user", model->username());
+	EXPECT_EQ(QString("No data sources available"), model->label());
+
+	// the first month should be entirely empty
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		ASSERT_EQ(31, month->rowCount());
+		for (int i(0); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+
+	// the second month should be entirely empty
+	{
+		const QAbstractItemModel* month(model->secondMonth());
+		ASSERT_EQ(31, month->rowCount());
+		for (int i(0); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("test format string %1");
+	userDataStore->insert("data-source-id", dataSource);
+
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("soon-to-exist-user",
+					UserDataPtr(new UserData())));
+	UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->insert("data-source-id",
+			DataSetPtr(new DataSet()));
+	DataSetPtr dataSet(*dataSetIterator);
+
+	QVariantList data;
+	data << 1.0;
+
+	// The data starts today
+	dataSet->setLastUpdated(QDate(2001, 01, 07));
+	dataSet->setData(data);
+
+	ColorThemePtr blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
+			Return(emptyPair));
+
+	model->nextDataSourceSlot();
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ(QString("test format string 1").toStdString(),
+			model->label().toStdString());
+
+	// assertions about first month's data
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		ASSERT_EQ(31, month->rowCount());
+		for (int i(0); i < 6; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(0.5), month->data(month->index(6, 0)));
+		for (int i(7); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+}
+
 TEST_F(UserMetricsImplTest, HasEmptyDataForKnownUserWithNoData) {
 	userDataStore->insert("existing-user", UserDataPtr(new UserData()));
 

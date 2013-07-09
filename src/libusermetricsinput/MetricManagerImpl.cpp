@@ -23,6 +23,9 @@
 #include <QtDBus/QtDBus>
 #include <QtCore/QDebug>
 
+#include <stdexcept>
+
+using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
@@ -39,9 +42,17 @@ MetricManagerImpl::~MetricManagerImpl() {
 MetricPtr MetricManagerImpl::add(const QString &dataSourceId,
 		const QString &formatString, const QString &emptyDataString,
 		const QString &textDomain) {
-	QDBusObjectPath path(
+	QDBusPendingReply<QDBusObjectPath> reply(
 			m_interface.createDataSource(dataSourceId, formatString,
 					emptyDataString, textDomain));
+
+	reply.waitForFinished();
+
+	if (reply.isError()) {
+		throw logic_error(reply.error().message().toStdString());
+	}
+
+	QDBusObjectPath path(reply.value());
 
 	auto metric(m_metrics.find(dataSourceId));
 	if (metric == m_metrics.end()) {

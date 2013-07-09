@@ -1,3 +1,9 @@
+libusermetrics (1.0.5-0ubuntu1) saucy; urgency=low
+
+  * Fix no data on first load bug.
+
+ -- Pete Woods <pete.woods@canonical.com>  Mon, 08 Jul 2013 16:30:48 +0100
+
 libusermetrics (1.0.4+13.10.20130709-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]

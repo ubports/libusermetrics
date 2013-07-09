@@ -11,17 +11,12 @@ int main(int argc, char *argv[]) {
 
 	// You can hold onto this shared pointer for as long as you want
 	MetricPtr metric(
-			manager->add("twitter", "<b>%1</b> tweets received today",
-					"No tweets today", "myapptextdomain"));
+			manager->add("photo-app-photos", "<b>%1</b> photos taken today",
+					"No photos taken today", APP_ID));
 
-	// The update is sent when the update object is destroyed
-	MetricUpdatePtr update(metric->update());
-
-	// Get our data from somewhere
-	TwitterService twitterService;
-
-	// In this example we just set today's data
-	update->addData(twitterService.getTweetCount());
+	// The default parameters for increment cause it to be incremented by 1.0,
+	// for the current user.
+	metric->increment();
 
 	return 0;
 }

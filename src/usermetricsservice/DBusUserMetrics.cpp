@@ -42,11 +42,9 @@ DBusUserMetrics::DBusUserMetrics(QDBusConnection &dbusConnection,
 				new UserMetricsAdaptor(this)), m_dateFactory(dateFactory) {
 
 	// Database setup
-	QDjango::registerModel<DataSource>();
-	QDjango::registerModel<UserData>();
-	QDjango::registerModel<DataSet>();
-
-	QDjango::createTables();
+	QDjango::registerModel<DataSource>().createTable();
+	QDjango::registerModel<UserData>().createTable();
+	QDjango::registerModel<DataSet>().createTable();
 
 	// DBus setup
 
