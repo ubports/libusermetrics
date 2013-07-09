@@ -25,176 +25,220 @@
 
 #include <libusermetricsoutput/ColorTheme.h>
 
-/*@{*/
+/**
+ * @{
+ **/
 
+/**
+ * @brief The user metrics output library namespace
+ **/
 namespace UserMetricsOutput {
 
 /**
- * @brief Anonymous User Metrics
+ * @brief Presentation API for user metrics.
+ *
+ * This class breaks down the various user metric sources
+ * registered against different users into a presentable
+ * format.
+ *
+ * The data is split into two "months" - "first" and "second".
+ * The months always have a length equal to the size of
+ * the month they represent - unset values are padded with
+ * null data.
+ *
+ * The property currentDay indicates the current day's value
+ * in the "first month" data.
+ *
+ * Given a username, the class then provides an API to
+ * cycle through that user's data. The signal #nextDataSource
+ * should be used for this.
  **/
 class Q_DECL_EXPORT UserMetrics: public QObject {
 Q_OBJECT
 
-	/**
-	 * @brief Insert documentation here.
-	 */
+/**
+ * @brief Represents a textual version of the current metric.
+ *
+ * e.g. "3 messages received today"
+ */
 Q_PROPERTY(QString label READ label NOTIFY labelChanged FINAL)
 
 /**
- * @brief Insert documentation here.
+ * @brief The current username selected.
  */
 Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged FINAL)
 
 /**
- * @brief Insert documentation here.
+ * @brief The ColorTheme for the first month.
  */
 Q_PROPERTY(UserMetricsOutput::ColorTheme* firstColor READ firstColor NOTIFY firstColorChanged FINAL)
 
 /**
- * @brief Insert documentation here.
+ * @brief The ColorTheme for the second month.
  */
 Q_PROPERTY(UserMetricsOutput::ColorTheme* secondColor READ secondColor NOTIFY secondColorChanged FINAL)
 
 /**
- * @brief Insert documentation here.
+ * @brief The data for the first month.
  */
 Q_PROPERTY(QAbstractItemModel *firstMonth READ firstMonth NOTIFY firstMonthChanged FINAL)
 
 /**
- * @brief Insert documentation here.
+ * @brief The data for the second month.
  */
 Q_PROPERTY(QAbstractItemModel *secondMonth READ secondMonth NOTIFY secondMonthChanged FINAL)
 
 /**
- * @brief Insert documentation here.
+ * @brief The current day of the calendar month.
+ *
+ * Zero-indexed.
  */
 Q_PROPERTY(int currentDay READ currentDay NOTIFY currentDayChanged FINAL)
 
 public:
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Get a new instance of UserMetrics.
 	 */
 	static UserMetrics *getInstance();
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Destructor.
 	 */
 	virtual ~UserMetrics();
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Represents a textual version of the current metric.
+	 *
+	 * e.g. "3 messages received today"
 	 */
 	virtual QString label() const = 0;
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The current username selected.
 	 */
 	virtual QString username() const = 0;
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Change the current username.
 	 *
-	 * @param username Foo
+	 * @param username
+	 *
+	 * The data source will change to the first one available
+	 * for the given username.
 	 */
 	virtual void setUsername(const QString &username) = 0;
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The ColorTheme for the first month.
 	 */
 	virtual ColorTheme * firstColor() const = 0;
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The data for the first month.
 	 */
 	virtual QAbstractItemModel *firstMonth() const = 0;
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The current day of the calendar month.
+	 *
+	 * Zero-indexed.
 	 */
 	virtual int currentDay() const = 0;
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The ColorTheme for the second month.
 	 */
 	virtual ColorTheme * secondColor() const = 0;
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The data for the second month.
 	 */
 	virtual QAbstractItemModel *secondMonth() const = 0;
 
 Q_SIGNALS:
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The label has changed
 	 *
-	 * @param label Foo
+	 * @param label
 	 */
 	void labelChanged(const QString &label);
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The username has changed
 	 *
-	 * @param username Foo
+	 * @param username
 	 */
 	void usernameChanged(const QString &username);
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The first month's ColorTheme has changed
 	 *
-	 * @param color Foo
+	 * @param color
 	 */
 	void firstColorChanged(ColorTheme *color);
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The first month's data has changed.
 	 *
-	 * @param firstMonth Foo
+	 * @param firstMonth
+	 *
+	 * More fine-grained changed notification also occurs
+	 * using the QAbstractItemModel signals.
 	 */
 	void firstMonthChanged(QAbstractItemModel *firstMonth);
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The current day of the month has changed.
 	 *
-	 * @param length Foo
+	 * @param currentDay
+	 *
+	 * Note: Zero-indexed.
 	 */
-	void currentDayChanged(int length);
+	void currentDayChanged(int currentDay);
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The second month's ColorTheme has changed
 	 *
-	 * @param color Foo
+	 * @param color
 	 */
 	void secondColorChanged(ColorTheme *color);
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The second month's data has changed.
 	 *
-	 * @param secondMonth Foo
+	 * @param secondMonth
+	 *
+	 * More fine-grained changed notification also occurs
+	 * using the QAbstractItemModel signals.
 	 */
 	void secondMonthChanged(QAbstractItemModel *secondMonth);
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Request the current user's next data source.
 	 */
 	void nextDataSource();
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Inform the UserMetrics that you are ready for data change.
 	 */
 	void readyForDataChange();
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Data is about to appear.
+	 *
+	 * To continue, fire the #readyForDataChange signal.
 	 */
 	void dataAboutToAppear();
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Data has finished loading.
 	 */
 	void dataAppeared();
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Data is about to change from one set to another.
+	 *
+	 * To continue, fire the #readyForDataChange signal.
 	 */
 	void dataAboutToChange();
 
@@ -204,31 +248,33 @@ Q_SIGNALS:
 	void dataChanged();
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief About to change to a user with no data.
+	 *
+	 * To continue, fire the #readyForDataChange signal.
 	 */
 	void dataAboutToDisappear();
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The empty data has now been loaded.
 	 */
 	void dataDisappeared();
 
 public Q_SLOTS:
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Synchronous version of #nextDataSource
 	 */
 	virtual void nextDataSourceSlot() = 0;
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Synchronous version of #readyForDataChange
 	 */
 	virtual void readyForDataChangeSlot() = 0;
 
 protected:
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Unusable constructor - this class is pure-virtual.
 	 *
-	 * @param parent Foo
+	 * @param parent
 	 */
 	explicit UserMetrics(QObject *parent = 0);
 

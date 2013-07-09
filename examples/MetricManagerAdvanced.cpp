@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
 	// You can hold onto this shared pointer for as long as you want
 	MetricPtr metric(
 			manager->add("twitter", "<b>%1</b> tweets received today",
-					"No tweets today", "myapptextdomain"));
+					"No tweets today", APP_ID));
 
 	// The update is sent when the update object is destroyed
 	MetricUpdatePtr update(metric->update());
@@ -22,13 +22,7 @@ int main(int argc, char *argv[]) {
 
 	// The data is ordered starting from today, going backwards in time
 	for (const TwitterData &twitterData : twitterService.getTweetCounts()) {
-		if (twitterData.isNull()) {
-			// If there is no value for a day, that's okay
-			update->addNull();
-		} else {
-			// Metrics take only double valued data
-			update->addData(twitterData.toDouble());
-		}
+		update->addData(twitterData.toDouble());
 	}
 
 	return 0;

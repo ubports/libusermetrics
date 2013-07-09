@@ -64,6 +64,7 @@ add_definitions(
 )
 
 set(DOXYFILE_SOURCE_DIR "include")
+set(DOXYFILE_EXTRA_SOURCES "doc")
 include(UseDoxygen)
 if(DOXYGEN_FOUND AND BUILD_DOXYGEN)
 	install(

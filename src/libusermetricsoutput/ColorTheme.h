@@ -21,76 +21,84 @@
 
 #include <QtGui/QColor>
 
-/*@{*/
+/**
+ * @{
+ **/
 
 namespace UserMetricsOutput {
 
 /**
- * @brief Color theme for a particular user metric
+ * @brief ColorTheme for a particular user metric
+ *
+ * Each ColorTheme has a start, middle (main) and
+ * end QColor.
  **/
 class Q_DECL_EXPORT ColorTheme: public QObject {
 Q_OBJECT
 
-	/**
-	 * @brief Insert documentation here.
-	 */
+/**
+ * @brief First / start QColor in the ColorTheme.
+ */
 Q_PROPERTY(QColor start READ start NOTIFY startChanged FINAL)
 
 /**
- * @brief Insert documentation here.
+ * @brief Middle / main QColor in the ColorTheme.
  */
 Q_PROPERTY(QColor main READ main NOTIFY mainChanged FINAL)
 
 /**
- * @brief Insert documentation here.
+ * @brief Last / end QColor in the ColorTheme.
  */
 Q_PROPERTY(QColor end READ end NOTIFY endChanged FINAL)
 
 protected:
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Unusable constructor - class is pure-virtual.
 	 *
-	 * @param parent Foo
+	 * @param parent
 	 */
 	explicit ColorTheme(QObject *parent = 0);
 
 public:
+	/**
+	 * @brief Destructor
+	 */
 	virtual ~ColorTheme();
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief First / start QColor in the ColorTheme.
 	 */
 	virtual QColor start() const = 0;
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Middle / main QColor in the ColorTheme.
 	 */
 	virtual QColor main() const = 0;
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief Last / end QColor in the ColorTheme.
 	 */
 	virtual QColor end() const = 0;
 
 Q_SIGNALS:
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The first / start QColor has changed.
 	 *
-	 * @param color Foo
+	 * @param color
 	 */
 	void startChanged(const QColor &color);
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The middle / main QColor has changed.
 	 *
-	 * @param color Foo
+	 * @param color
 	 */
 	void mainChanged(const QColor &color);
 
 	/**
-	 * @brief Insert documentation here.
+	 * @brief The first / end QColor has changed.
 	 *
-	 * @param color Foo
+	 * @param color
 	 */
 	void endChanged(const QColor &color);
 

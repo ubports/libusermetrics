@@ -44,10 +44,7 @@ protected:
 	}
 };
 
-TEST_F(TestUserMetricInputCAPI, TestNothingYet) {
-	QByteArray byteArray(bus.toUtf8());
-	setenv("DBUS_SYSTEM_BUS_ADDRESS", byteArray.data(), true);
-
+TEST_F(TestUserMetricInputCAPI, TestBasicFunctionality) {
 	UserMetricsInputMetricManager metricManager =
 			usermetricsinput_metricmanager_new();
 
@@ -61,8 +58,6 @@ TEST_F(TestUserMetricInputCAPI, TestNothingYet) {
 	usermetricsinput_metricupdate_add_null(metricUpdate);
 	usermetricsinput_metricupdate_add_data(metricUpdate, 0.1);
 	usermetricsinput_metricupdate_delete(metricUpdate);
-
-	usermetricsinput_metricmanager_delete(metricManager);
 
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
 			DBusPaths::userMetrics(), *connection);
@@ -88,11 +83,26 @@ TEST_F(TestUserMetricInputCAPI, TestNothingYet) {
 
 	com::canonical::usermetrics::DataSet dataSetInterface(
 			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
-	QVariantList data(dataSetInterface.data());
-	ASSERT_EQ(3, data.size());
-	EXPECT_FLOAT_EQ(1.0, data.at(0).toDouble());
-	EXPECT_EQ(QString(""), data.at(1).toString());
-	EXPECT_FLOAT_EQ(0.1, data.at(2).toDouble());
+
+	{
+		QVariantList data(dataSetInterface.data());
+		ASSERT_EQ(3, data.size());
+		EXPECT_FLOAT_EQ(1.0, data.at(0).toDouble());
+		EXPECT_EQ(QString(""), data.at(1).toString());
+		EXPECT_FLOAT_EQ(0.1, data.at(2).toDouble());
+	}
+
+	usermetricsinput_metric_increment(metric, 4.5, "username_capi");
+
+	{
+		QVariantList data(dataSetInterface.data());
+		ASSERT_EQ(3, data.size());
+		EXPECT_FLOAT_EQ(5.5, data.at(0).toDouble());
+		EXPECT_EQ(QString(""), data.at(1).toString());
+		EXPECT_FLOAT_EQ(0.1, data.at(2).toDouble());
+	}
+
+	usermetricsinput_metricmanager_delete(metricManager);
 }
 
 } // namespace

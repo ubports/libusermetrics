@@ -44,7 +44,7 @@ void usermetricsinput_metricmanager_delete(
 	try {
 		delete reinterpret_cast<MetricManager*>(metricManager);
 	} catch (exception &e) {
-		fprintf(stderr, "Error deleting Word: %s\n", e.what());
+		fprintf(stderr, "Error deleting MetricManager: %s\n", e.what());
 	}
 }
 
@@ -59,9 +59,19 @@ UserMetricsInputMetric usermetricsinput_metricmanager_add(
 						textDomain));
 		return reinterpret_cast<UserMetricsInputMetric>(metric.data());
 	} catch (exception &e) {
-		fprintf(stderr, "Error adding metric: %s\n", e.what());
+		fprintf(stderr, "Error adding Metric: %s\n", e.what());
 	}
 	return nullptr;
+}
+
+void usermetricsinput_metric_increment(UserMetricsInputMetric m, double amount,
+		const char *username) {
+	try {
+		Metric *metric(reinterpret_cast<Metric*>(m));
+		metric->increment(amount, username);
+	} catch (exception &e) {
+		fprintf(stderr, "Error incrementing Metric: %s\n", e.what());
+	}
 }
 
 UserMetricsInputMetricUpdate usermetricsinput_metric_update(
@@ -72,7 +82,7 @@ UserMetricsInputMetricUpdate usermetricsinput_metric_update(
 				metric->update(QString::fromUtf8(username)));
 		return reinterpret_cast<UserMetricsInputMetric>(metricUpdate.take());
 	} catch (exception &e) {
-		fprintf(stderr, "Error adding metric: %s\n", e.what());
+		fprintf(stderr, "Error creating MetricUpdate: %s\n", e.what());
 	}
 	return nullptr;
 }
@@ -87,7 +97,7 @@ void usermetricsinput_metricupdate_delete(
 }
 
 void usermetricsinput_metricupdate_add_data(UserMetricsInputMetricUpdate u,
-		float data) {
+		double data) {
 	try {
 		MetricUpdate *metricUpdate = reinterpret_cast<MetricUpdate*>(u);
 		metricUpdate->addData(data);
