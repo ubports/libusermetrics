@@ -1,3 +1,9 @@
+libusermetrics (1.0.6-0ubuntu1) saucy; urgency=low
+
+  * Add new simple "update today" input method.
+
+ -- Pete Woods <pete.woods@canonical.com>  Wed, 10 Jul 2013 16:22:58 +0100
+
 libusermetrics (1.0.5+13.10.20130710-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]

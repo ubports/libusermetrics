@@ -102,6 +102,16 @@ TEST_F(TestUserMetricInputCAPI, TestBasicFunctionality) {
 		EXPECT_FLOAT_EQ(0.1, data.at(2).toDouble());
 	}
 
+	usermetricsinput_metric_update_today(metric, -3.5, "username_capi");
+
+	{
+		QVariantList data(dataSetInterface.data());
+		ASSERT_EQ(3, data.size());
+		EXPECT_FLOAT_EQ(-3.5, data.at(0).toDouble());
+		EXPECT_EQ(QString(""), data.at(1).toString());
+		EXPECT_FLOAT_EQ(0.1, data.at(2).toDouble());
+	}
+
 	usermetricsinput_metricmanager_delete(metricManager);
 }
 

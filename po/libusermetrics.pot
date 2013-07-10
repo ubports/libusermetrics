@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-08 12:33+0100\n"
+"POT-Creation-Date: 2013-07-10 15:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,38 +17,38 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/usermetricsservice/main.cpp:53
+#: src/usermetricsservice/main.cpp:58
 msgid "Could not open database"
 msgstr ""
 
-#: src/usermetricsservice/main.cpp:65
+#: src/usermetricsservice/main.cpp:70
 msgid "Unable to register user metrics service on DBus"
 msgstr ""
 
-#: src/usermetricsservice/main.cpp:75
+#: src/usermetricsservice/main.cpp:80
 msgid "Unable to unregister user metrics service on DBus"
 msgstr ""
 
 #: src/usermetricsservice/DBusDataSource.cpp:68
 #: src/usermetricsservice/DBusDataSource.cpp:86
 #: src/usermetricsservice/DBusDataSource.cpp:104
-#: src/usermetricsservice/DBusUserMetrics.cpp:148
+#: src/usermetricsservice/DBusUserMetrics.cpp:146
 msgid "Could not save data source"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:54
+#: src/usermetricsservice/DBusUserMetrics.cpp:52
 msgid "Unable to register user metrics object on DBus"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:136
+#: src/usermetricsservice/DBusUserMetrics.cpp:134
 msgid "Data source query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:184
+#: src/usermetricsservice/DBusUserMetrics.cpp:182
 msgid "User data query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:193
+#: src/usermetricsservice/DBusUserMetrics.cpp:191
 msgid "Could not save user data"
 msgstr ""
 
@@ -81,14 +81,14 @@ msgstr ""
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 msgstr ""
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:166
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:170
 msgid "No data sources available"
 msgstr ""
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:200
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:204
 msgid "Data source not found"
 msgstr ""
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:207
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:211
 msgid "No data for today"
 msgstr ""

@@ -99,6 +99,17 @@ void usermetricsinput_metric_increment(UserMetricsInputMetric metric,
 		double amount, const char *username);
 
 /**
+ * @brief Update the "today" value for a simple user metric
+ *
+ * @param metric
+ * @param value Today's value
+ * @param username The user to update the data for. If blank ("") then the current user is used.
+ */
+USERMETRICSINPUT_EXPORT
+void usermetricsinput_metric_update_today(UserMetricsInputMetric metric,
+		double value, const char *username);
+
+/**
  * @brief Create an update to a particular metric
  *
  * @param metric

@@ -67,6 +67,15 @@ public:
 	virtual MetricUpdate * update(const QString &username = "") = 0;
 
 	/**
+	 * @brief Update the "today" value for a simple user metric
+	 *
+	 * @param value Today's value
+	 * @param username The user to update the data for. If blank ("")
+	 *     or omitted then the current user is used.
+	 */
+	virtual void update(double value, const QString &username = "") = 0;
+
+	/**
 	 * @brief Increment the "today" value for a simple user metric
 	 *
 	 * @param amount How much to increase the metric by - defaults to 1.
