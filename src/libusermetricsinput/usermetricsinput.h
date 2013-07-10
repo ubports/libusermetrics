@@ -159,10 +159,19 @@ void usermetricsinput_metricupdate_add_null(
 		UserMetricsInputMetricUpdate metricUpdate);
 
 /**
- * @example MetricManagerTodayCAPI.c
+ * @example MetricManagerIncrementTodayCAPI.c
  *   A simple example of a metric that doesn't worry about updating
  *   history, and just increments a single value in response to an
- *   action.
+ *   action. This is for apps that do not already have a way of
+ *   knowing the current value.
+ **/
+
+/**
+ * @example MetricManagerUpdateTodayCAPI.c
+ *   A simple example of a metric that doesn't worry about updating
+ *   history, and just updates a single value in response to an
+ *   action. This is for apps that cannot simply just increment
+ *   the current value.
  **/
 
 /**

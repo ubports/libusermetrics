@@ -80,10 +80,19 @@ public:
 };
 
 /**
- * @example MetricManagerToday.cpp
+ * @example MetricManagerIncrementToday.cpp
  *   A simple example of a metric that doesn't worry about updating
  *   history, and just increments a single value in response to an
- *   action.
+ *   action. This is for apps that can simply increment by a fixed
+ *   amount.
+ **/
+
+/**
+ * @example MetricManagerUpdateToday.cpp
+ *   A simple example of a metric that doesn't worry about updating
+ *   history, and just updates a single value in response to an
+ *   action. This is for apps that cannot simply increment by a fixed
+ *   amount.
  **/
 
 /**

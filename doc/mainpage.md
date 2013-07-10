@@ -37,16 +37,22 @@ Writing metric data sources
 
  - \ref UserMetricsInput "Libusermetrics Input API Documentation"
  
- For simple metrics which only want to increment a counter, see the following examples:
+For simple metrics which only want to increment a counter, see the following examples:
  
- - \subpage MetricManagerToday.cpp "MetricManagerToday.cpp: A simple Qt-based metric"
- - \subpage MetricManagerTodayCAPI.c "MetricManagerTodayCAPI.c: A simple C-based metric"
+ - \subpage MetricManagerIncrementToday.cpp "MetricManagerIncrementToday.cpp: A simple Qt-based metric"
+ - \subpage MetricManagerIncrementTodayCAPI.c "MetricManagerIncrementTodayCAPI.c: A simple C-based metric"
+ 
+For simple metrics which only want to update today's value, but cannot simply increment it,
+see the following examples:
+
+ - \subpage MetricManagerUpdateToday.cpp "MetricManagerUpdateToday.cpp: A simple Qt-based metric"
+ - \subpage MetricManagerUpdateTodayCAPI.c "MetricManagerUpdateTodayCAPI.c: A simple C-based metric"
 
 For more sophisticated metrics, which wish to update the history of the metric, for
 example if the user has been offline for a week. Please see the following examples:
 
- - \subpage MetricManagerToday.cpp "MetricManagerAdvanced.cpp: A Qt-based metric"
- - \subpage MetricManagerTodayCAPI.c "MetricManagerAdvancedCAPI.c: A C-based metric"
+ - \subpage MetricManagerAdvanced.cpp "MetricManagerAdvanced.cpp: A Qt-based metric"
+ - \subpage MetricManagerAdvancedCAPI.c "MetricManagerAdvancedCAPI.c: A C-based metric"
 
 Writing a presentation application
 ----------------------------------

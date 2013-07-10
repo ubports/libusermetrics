@@ -10,7 +10,6 @@ int main(int argc, char *argv[]) {
 			metricManager, "photo-app-photos", "<b>%1</b> photos taken today",
 			"No photos today", APP_ID);
 
-	// The update is sent when the update object is destroyed.
 	// Providing a blank username string will use the current
 	// user according to the USER environment variable.
 	usermetricsinput_metric_increment(metric, 1, "");
