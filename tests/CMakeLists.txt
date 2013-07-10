@@ -2,7 +2,10 @@ include(FindGMock)
 
 find_package("Valgrind" REQUIRED)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${GMOCK_INCLUDE_DIR}
+                    ${GTEST_INCLUDE_DIR}
+)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
