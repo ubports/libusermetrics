@@ -26,6 +26,7 @@ libusermetricsinput.so.1 libusermetricsinput1 #MINVER#
  (c++)"vtable for UserMetricsInput::Metric@Base" 1.0.1
  usermetricsinput_metric_increment@Base 1.0.5
  usermetricsinput_metric_update@Base 1.0.1
+ usermetricsinput_metric_update_today@Base 1.0.6
  usermetricsinput_metricmanager_add@Base 1.0.1
  usermetricsinput_metricmanager_delete@Base 1.0.1
  usermetricsinput_metricmanager_new@Base 1.0.1

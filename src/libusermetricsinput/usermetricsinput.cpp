@@ -74,6 +74,16 @@ void usermetricsinput_metric_increment(UserMetricsInputMetric m, double amount,
 	}
 }
 
+void usermetricsinput_metric_update_today(UserMetricsInputMetric m,
+		double value, const char *username) {
+	try {
+		Metric *metric(reinterpret_cast<Metric*>(m));
+		metric->update(value, username);
+	} catch (exception &e) {
+		fprintf(stderr, "Error incrementing Metric: %s\n", e.what());
+	}
+}
+
 UserMetricsInputMetricUpdate usermetricsinput_metric_update(
 		UserMetricsInputMetric m, const char *username) {
 	try {

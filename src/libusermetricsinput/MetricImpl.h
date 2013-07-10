@@ -38,6 +38,8 @@ public:
 
 	virtual MetricUpdate * update(const QString &username = "");
 
+	virtual void update(double value, const QString &username = "");
+
 	virtual void increment(double amount = 1.0f, const QString &username = "");
 
 protected:

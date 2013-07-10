@@ -99,6 +99,17 @@ void usermetricsinput_metric_increment(UserMetricsInputMetric metric,
 		double amount, const char *username);
 
 /**
+ * @brief Update the "today" value for a simple user metric
+ *
+ * @param metric
+ * @param value Today's value
+ * @param username The user to update the data for. If blank ("") then the current user is used.
+ */
+USERMETRICSINPUT_EXPORT
+void usermetricsinput_metric_update_today(UserMetricsInputMetric metric,
+		double value, const char *username);
+
+/**
  * @brief Create an update to a particular metric
  *
  * @param metric
@@ -148,10 +159,19 @@ void usermetricsinput_metricupdate_add_null(
 		UserMetricsInputMetricUpdate metricUpdate);
 
 /**
- * @example MetricManagerTodayCAPI.c
+ * @example MetricManagerIncrementTodayCAPI.c
  *   A simple example of a metric that doesn't worry about updating
  *   history, and just increments a single value in response to an
- *   action.
+ *   action. This is for apps that do not already have a way of
+ *   knowing the current value.
+ **/
+
+/**
+ * @example MetricManagerUpdateTodayCAPI.c
+ *   A simple example of a metric that doesn't worry about updating
+ *   history, and just updates a single value in response to an
+ *   action. This is for apps that cannot simply just increment
+ *   the current value.
  **/
 
 /**

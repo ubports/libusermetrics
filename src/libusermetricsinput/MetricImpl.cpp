@@ -68,6 +68,15 @@ MetricUpdate * MetricImpl::update(const QString &username) {
 	return new MetricUpdateImpl(dataSetPath.path(), m_dbusConnection);
 }
 
+void MetricImpl::update(double value, const QString &username) {
+	QDBusObjectPath dataSetPath(createDataSet(username));
+
+	com::canonical::usermetrics::DataSet dataSetInterface(
+			DBusPaths::serviceName(), dataSetPath.path(), m_dbusConnection);
+
+	dataSetInterface.update(QVariantList() << value);
+}
+
 void MetricImpl::increment(double amount, const QString &username) {
 	QDBusObjectPath dataSetPath(createDataSet(username));
 
