@@ -1,3 +1,13 @@
+libusermetrics (1.0.5+13.10.20130710-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * New symbol for increment method
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 101
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 10 Jul 2013 06:44:10 +0000
+
 libusermetrics (1.0.5-0ubuntu1) saucy; urgency=low
 
   * Fix no data on first load bug.
