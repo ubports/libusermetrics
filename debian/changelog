@@ -1,3 +1,9 @@
+libusermetrics (1.0.6+13.10.20130711-0ubuntu2) saucy; urgency=low
+
+  * Add missing examples for docs
+
+ -- Pete Woods <pete.woods@canonical.com>  Thu, 11 Jul 2013 18:14:52 +0100
+
 libusermetrics (1.0.6+13.10.20130711-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]
