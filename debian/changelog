@@ -1,3 +1,13 @@
+libusermetrics (1.0.6+13.10.20130711-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Merge didrocks' google-mock fix
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 104
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 11 Jul 2013 02:03:59 +0000
+
 libusermetrics (1.0.6-0ubuntu1) saucy; urgency=low
 
   * Add new simple "update today" input method.
