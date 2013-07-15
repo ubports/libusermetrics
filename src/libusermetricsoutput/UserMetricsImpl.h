@@ -67,6 +67,9 @@ public Q_SLOTS:
 
 	virtual void readyForDataChangeSlot();
 
+protected Q_SLOTS:
+	virtual void updateCurrentDataSet(const QVariantList *data);
+
 protected:
 	virtual void prepareToLoadDataSource();
 
