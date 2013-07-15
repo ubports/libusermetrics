@@ -1,9 +1,17 @@
 Welcome to Libusermetrics {#mainpage}
-==============
+=========================
 
-Libusermetrics is a set of libraries
-and a storage service designed to collect aggregated numerical data about
-users. 
+Libusermetrics enables apps to locally store interesting numerical data
+for later presentation.  For example in the Ubuntu Greeter "flower"
+infographic. 
+
+ - All data is stored locally in /var/usermetrics/.
+ - No data is centrally collected via a web-serivice or otherwise, and
+   no data is sent over the internet.
+
+The only data that can be stored is numerical, for example "number of
+e-mails" or "number of pictures taken". No personally identifying
+information is stored using this library.
 
 Getting and installing libusermetrics
 -------------------------------------
