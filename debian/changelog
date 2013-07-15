@@ -1,3 +1,10 @@
+libusermetrics (1.0.8-0ubuntu1) saucy; urgency=low
+
+  * Update docs
+  * Make current data set response to changes in source.
+
+ -- Pete Woods <pete.woods@canonical.com>  Mon, 15 Jul 2013 22:16:14 +0100
+
 libusermetrics (1.0.7+13.10.20130712-0ubuntu1) saucy; urgency=low
 
   * Automatic snapshot from revision 107
