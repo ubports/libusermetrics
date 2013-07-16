@@ -5,6 +5,17 @@ libusermetrics (1.0.8-0ubuntu1) saucy; urgency=low
 
  -- Pete Woods <pete.woods@canonical.com>  Mon, 15 Jul 2013 22:16:14 +0100
 
+libusermetrics (1.0.7+13.10.20130716-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Make the currently visible data set respond to data changes
+  * Update docs
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 110
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 16 Jul 2013 02:02:53 +0000
+
 libusermetrics (1.0.7+13.10.20130712-0ubuntu1) saucy; urgency=low
 
   * Automatic snapshot from revision 107
