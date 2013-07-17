@@ -29,7 +29,7 @@ Q_OBJECT
 
 public:
 	explicit SyncedUserMetricsStore(const QDBusConnection &dbusConnection,
-			QObject *parent = 0);
+			const QString &localeDir = LOCALEDIR, QObject *parent = 0);
 
 	virtual ~SyncedUserMetricsStore();
 
@@ -49,6 +49,8 @@ public Q_SLOTS:
 
 protected:
 	com::canonical::UserMetrics m_interface;
+
+	QString m_localeDir;
 };
 
 }

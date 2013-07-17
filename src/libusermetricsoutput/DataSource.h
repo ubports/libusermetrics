@@ -39,7 +39,8 @@ Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString
 Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain NOTIFY textDomainChanged FINAL)
 
 public:
-	explicit DataSource(QObject *parent = 0);
+	explicit DataSource(const QString &localeDir = LOCALEDIR, QObject *parent =
+			0);
 
 	virtual ~DataSource();
 
@@ -64,11 +65,21 @@ Q_SIGNALS:
 	void textDomainChanged(const QString &textDomain);
 
 protected:
+	void updateFormatStringTranslation();
+
+	void updateEmptyDataStringTranslation();
+
 	QString m_formatString;
+
+	QString m_formatStringTr;
 
 	QString m_emptyDataString;
 
+	QString m_emptyDataStringTr;
+
 	QString m_textDomain;
+
+	QString m_localeDir;
 };
 
 }

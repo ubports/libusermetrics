@@ -3,6 +3,7 @@ set(USERMETRICS_COMMON_SOURCES
 	DateFactory.cpp
 	DateFactoryImpl.cpp
 	DBusPaths.cpp
+	Localisation.cpp
 )
 
 set(USERMETRICS_COMMON_DEPENDENCIES

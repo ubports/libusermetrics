@@ -29,9 +29,11 @@ using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
 
 SyncedUserMetricsStore::SyncedUserMetricsStore(
-		const QDBusConnection &dbusConnection, QObject *parent) :
+		const QDBusConnection &dbusConnection, const QString &localeDir,
+		QObject *parent) :
 		UserMetricsStore(parent), m_interface(DBusPaths::serviceName(),
-				DBusPaths::userMetrics(), dbusConnection) {
+				DBusPaths::userMetrics(), dbusConnection), m_localeDir(
+				localeDir) {
 	// FIXME Figure out the initialisation issues so we can make this async again
 	// QTimer::singleShot(0, this, SLOT(sync()));
 	sync();
@@ -73,7 +75,8 @@ void SyncedUserMetricsStore::sync() {
 						path.path(), m_interface.connection()));
 
 		QString name(dataSource->name());
-		insert(name, DataSourcePtr(new SyncedDataSource(dataSource)));
+		insert(name,
+				DataSourcePtr(new SyncedDataSource(dataSource, m_localeDir)));
 	}
 
 	for (const QDBusObjectPath &path : m_interface.userDatas()) {
@@ -111,7 +114,7 @@ void SyncedUserMetricsStore::addDataSource(const QString &name,
 			new canonical::usermetrics::DataSource(DBusPaths::serviceName(),
 					path.path(), m_interface.connection()));
 
-	insert(name, DataSourcePtr(new SyncedDataSource(dataSource)));
+	insert(name, DataSourcePtr(new SyncedDataSource(dataSource, m_localeDir)));
 }
 
 void SyncedUserMetricsStore::removeDataSource(const QString &name,

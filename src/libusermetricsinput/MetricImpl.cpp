@@ -26,8 +26,6 @@
 
 #include <QtDBus/QtDBus>
 
-#include <cstdlib>
-
 using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
@@ -46,7 +44,7 @@ MetricImpl::~MetricImpl() {
 QDBusObjectPath MetricImpl::createDataSet(const QString &usernameIn) {
 	QString username;
 	if (usernameIn.isEmpty()) {
-		username = QString::fromUtf8(getenv("USER"));
+		username = QString::fromUtf8(qgetenv("USER"));
 	} else {
 		username = usernameIn;
 	}

@@ -28,8 +28,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include <cstdlib>
-
 using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
@@ -38,13 +36,12 @@ using namespace UserMetricsTestUtils;
 
 namespace {
 
-static QString get_language() {
-	return getenv("LANGUAGE");
+static QString getLanguage() {
+	return qgetenv("LANGUAGE");
 }
 
 static void setLanguage(const QString &language) {
-	QByteArray ba(language.toUtf8());
-	setenv("LANGUAGE", ba.data(), true);
+	qputenv("LANGUAGE", language.toUtf8());
 }
 
 class MockDateFactory: public DateFactory {
@@ -71,7 +68,7 @@ protected:
 
 		model.reset(
 				new UserMetricsImpl(dateFactory, userDataStore,
-						colorThemeProvider, TEST_LOCALEDIR));
+						colorThemeProvider));
 	}
 
 	virtual ~UserMetricsImplTest() {
@@ -413,7 +410,10 @@ TEST_F(UserMetricsImplTest, AddTranslatedData) {
 	QVariantList data;
 	data << 100.0;
 
-	DataSourcePtr dataSource(new DataSource());
+	QString language(getLanguage());
+	setLanguage("en_FAKELANG");
+
+	DataSourcePtr dataSource(new DataSource(TEST_LOCALEDIR));
 	dataSource->setFormatString("%1 untranslated messages received");
 	dataSource->setTextDomain("foo");
 	userDataStore->insert("data-source-id", dataSource);
@@ -436,8 +436,6 @@ TEST_F(UserMetricsImplTest, AddTranslatedData) {
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
-	QString language(get_language());
-	setLanguage("en_FAKELANG");
 
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
@@ -452,7 +450,10 @@ TEST_F(UserMetricsImplTest, AddTranslatedEmptyData) {
 	QVariantList data;
 	data << "";
 
-	DataSourcePtr dataSource(new DataSource());
+	QString language(getLanguage());
+	setLanguage("en_FAKELANG");
+
+	DataSourcePtr dataSource(new DataSource(TEST_LOCALEDIR));
 	dataSource->setFormatString("%1 untranslated messages received");
 	dataSource->setEmptyDataString("no untranslated messages today");
 	dataSource->setTextDomain("foo");
@@ -476,8 +477,6 @@ TEST_F(UserMetricsImplTest, AddTranslatedEmptyData) {
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
-	QString language(get_language());
-	setLanguage("en_FAKELANG");
 
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
