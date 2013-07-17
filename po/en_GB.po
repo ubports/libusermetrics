@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-10 15:55+0100\n"
+"POT-Creation-Date: 2013-07-17 10:26+0100\n"
 "PO-Revision-Date: 2013-07-05 15:09+0100\n"
 "Last-Translator: Pete Woods <pete.woods@canonical.com>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -49,7 +49,7 @@ msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 msgid "Data set query failed"
 msgstr "Data set query failed"
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:204
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:232
 msgid "Data source not found"
 msgstr "Data source not found"
 
@@ -61,7 +61,7 @@ msgstr "Data source query failed"
 msgid "New data set could not be found"
 msgstr "New data set couldn't be found"
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:211
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:238
 msgid "No data for today"
 msgstr "No data for today"
 

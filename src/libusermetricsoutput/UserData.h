@@ -47,7 +47,10 @@ public:
 
 	virtual const_iterator constEnd() const;
 
-	virtual iterator insert(const QString &dataSetId, DataSetPtr dataSet);
+	virtual iterator insert(const QString &dataSourceName, DataSetPtr dataSet);
+
+Q_SIGNALS:
+	void dataSetAdded(const QString &dataSourceName);
 
 protected:
 	DataSetMap m_dataSets;

@@ -29,9 +29,12 @@ Q_OBJECT
 
 public:
 	explicit SyncedUserMetricsStore(const QDBusConnection &dbusConnection,
-			QObject *parent = 0);
+			const QString &localeDir = LOCALEDIR, QObject *parent = 0);
 
 	virtual ~SyncedUserMetricsStore();
+
+Q_SIGNALS:
+	void connectionEstablished();
 
 public Q_SLOTS:
 	void addUserData(const QString &username, const QDBusObjectPath &path);
@@ -42,8 +45,12 @@ public Q_SLOTS:
 
 	void removeDataSource(const QString &username, const QDBusObjectPath &path);
 
+	void sync();
+
 protected:
 	com::canonical::UserMetrics m_interface;
+
+	QString m_localeDir;
 };
 
 }

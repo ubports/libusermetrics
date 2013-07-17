@@ -30,7 +30,7 @@ Q_OBJECT
 public:
 	SyncedDataSource(
 			QSharedPointer<com::canonical::usermetrics::DataSource> interface,
-			QObject *parent = 0);
+			const QString &localeDir = LOCALEDIR, QObject *parent = 0);
 
 	virtual ~SyncedDataSource();
 

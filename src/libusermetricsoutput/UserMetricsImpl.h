@@ -38,7 +38,7 @@ public:
 	UserMetricsImpl(QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
 			QSharedPointer<UserMetricsStore> dataSetStore,
 			QSharedPointer<ColorThemeProvider> colorThemeProvider,
-			const QString &localeDir, QObject *parent = 0);
+			QObject *parent = 0);
 
 	virtual ~UserMetricsImpl();
 
@@ -81,9 +81,6 @@ protected:
 			const int daysInMonth, QVariantList::const_iterator& index,
 			const QVariantList::const_iterator& end);
 
-	virtual QString trExternal(const QString &input, const QString &textDomain,
-			const QVariant &count);
-
 	virtual void checkForUserData();
 
 	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
@@ -91,8 +88,6 @@ protected:
 	QSharedPointer<UserMetricsStore> m_userMetricsStore;
 
 	QSharedPointer<ColorThemeProvider> m_colorThemeProvider;
-
-	QString m_localeDir;
 
 	QString m_label;
 

@@ -31,11 +31,10 @@ using namespace UserMetricsCommon;
 
 UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
 		QSharedPointer<UserMetricsStore> userDataStore,
-		QSharedPointer<ColorThemeProvider> colorThemeProvider,
-		const QString &localeDir, QObject *parent) :
+		QSharedPointer<ColorThemeProvider> colorThemeProvider, QObject *parent) :
 		UserMetrics(parent), m_dateFactory(dateFactory), m_userMetricsStore(
-				userDataStore), m_colorThemeProvider(colorThemeProvider), m_localeDir(
-				localeDir), m_firstColor(new ColorThemeImpl(this)), m_firstMonth(
+				userDataStore), m_colorThemeProvider(colorThemeProvider), m_firstColor(
+				new ColorThemeImpl(this)), m_firstMonth(
 				new QVariantListModel(this)), m_secondColor(
 				new ColorThemeImpl(this)), m_secondMonth(
 				new QVariantListModel(this)), m_currentDay(), m_noDataForUser(
@@ -107,16 +106,16 @@ void UserMetricsImpl::setUsernameInternal(const QString &username) {
 }
 
 void UserMetricsImpl::prepareToLoadDataSource() {
+	if (m_dataSet.data()) {
+		disconnect(m_dataSet.data(), SIGNAL(dataChanged(const QVariantList *)),
+				this, SLOT(updateCurrentDataSet(const QVariantList *)));
+	}
 	if (m_oldNoDataForUser && !m_noDataForUser) {
 		dataAboutToAppear();
 		finishLoadingDataSource();
 	} else if (!m_oldNoDataForUser && m_noDataForUser) {
-		disconnect(m_dataSet.data(), SIGNAL(dataChanged(const QVariantList *)),
-				this, SLOT(updateCurrentDataSet(const QVariantList *)));
 		dataAboutToDisappear();
 	} else if (!m_oldNoDataForUser && !m_noDataForUser) {
-		disconnect(m_dataSet.data(), SIGNAL(dataChanged(const QVariantList *)),
-				this, SLOT(updateCurrentDataSet(const QVariantList *)));
 		dataAboutToChange();
 	}
 	// we emit no signal if the data has stayed empty
@@ -241,44 +240,14 @@ void UserMetricsImpl::updateCurrentDataSet(const QVariantList *newData) {
 				empty.append(")");
 				setLabel(empty);
 			} else {
-				setLabel(
-						trExternal(emptyDataString, dataSource->textDomain(),
-								QVariant()));
+				setLabel(emptyDataString);
 			}
 		} else {
 			setLabel(
-					trExternal(dataSource->formatString(),
-							dataSource->textDomain(), m_dataSet->head()));
+					dataSource->formatString().arg(
+							m_dataSet->head().toString()));
 		}
 	}
-}
-
-QString UserMetricsImpl::trExternal(const QString &input,
-		const QString &textDomain, const QVariant &count) {
-	// Set the textdomain to match the program we're translating
-	if (!textDomain.isEmpty()) {
-		QByteArray textDomainBa(textDomain.toUtf8());
-		QByteArray localeDirBa(m_localeDir.toUtf8());
-		bindtextdomain((const char *) textDomainBa.data(),
-				(const char *) localeDirBa.data());
-		textdomain((const char *) textDomainBa.data());
-	}
-
-	QString result;
-
-	QByteArray inputBa(input.toUtf8());
-	if (count.isNull()) {
-		result = _(inputBa.data());
-	} else {
-		result = QString(_(inputBa.data())).arg(count.toString());
-	}
-
-	// Restore the original textdomain
-	if (!textDomain.isEmpty()) {
-		textdomain(GETTEXT_PACKAGE);
-	}
-
-	return result;
 }
 
 QString UserMetricsImpl::label() const {
