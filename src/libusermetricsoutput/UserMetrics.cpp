@@ -35,12 +35,6 @@ UserMetrics::~UserMetrics() {
 UserMetrics * UserMetrics::getInstance() {
 	QDBusConnection dbusConnection(QDBusConnection::systemBus());
 
-	QDBusConnectionInterface* interface = dbusConnection.interface();
-	if (!interface->isServiceRegistered(DBusPaths::serviceName())) {
-		QDBusReply<void> reply(
-				interface->startService(DBusPaths::serviceName()));
-	}
-
 	return new UserMetricsImpl(
 			QSharedPointer<DateFactory>(new DateFactoryImpl()),
 			QSharedPointer<UserMetricsStore>(

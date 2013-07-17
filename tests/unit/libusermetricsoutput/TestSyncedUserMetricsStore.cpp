@@ -17,6 +17,7 @@
  */
 
 #include <libusermetricsoutput/SyncedUserMetricsStore.h>
+#include <libusermetricsoutput/SyncedUserData.h>
 #include <libusermetricscommon/UserMetricsInterface.h>
 #include <libusermetricscommon/UserDataInterface.h>
 #include <libusermetricscommon/DataSetInterface.h>
@@ -65,6 +66,9 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 	ASSERT_EQ(DBusPaths::dataSource(2), dataSourcePath2.path());
 
 	SyncedUserMetricsStore store(*connection);
+//	QSignalSpy connectionEstablishedSpy(&store,
+//			SIGNAL(connectionEstablished()));
+//	connectionEstablishedSpy.wait();
 
 	{
 		DataSourcePtr dataSource(store.dataSource("data-source-one"));
@@ -94,6 +98,9 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	ASSERT_EQ(DBusPaths::dataSource(1), dataSourcePath1.path());
 
 	SyncedUserMetricsStore store(*connection);
+//	QSignalSpy connectionEstablishedSpy(&store,
+//			SIGNAL(connectionEstablished()));
+//	connectionEstablishedSpy.wait();
 
 	{
 		DataSourcePtr dataSource(store.dataSource("data-source-one"));
@@ -150,6 +157,9 @@ TEST_F(TestSyncedUserMetricsStore, LoadsUserDataAtStartup) {
 	ASSERT_EQ(DBusPaths::userData(2), userDataPath2.path());
 
 	SyncedUserMetricsStore store(*connection);
+//	QSignalSpy connectionEstablishedSpy(&store,
+//			SIGNAL(connectionEstablished()));
+//	connectionEstablishedSpy.wait();
 
 	{
 		UserMetricsStore::const_iterator it(store.constFind("username1"));
@@ -173,6 +183,9 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewUserData) {
 	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
 
 	SyncedUserMetricsStore store(*connection);
+//	QSignalSpy connectionEstablishedSpy(&store,
+//			SIGNAL(connectionEstablished()));
+//	connectionEstablishedSpy.wait();
 
 	{
 		UserMetricsStore::const_iterator it(store.constFind("username1"));
@@ -233,6 +246,9 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	dataSetInterface.update(data);
 
 	SyncedUserMetricsStore store(*connection);
+//	QSignalSpy connectionEstablishedSpy(&store,
+//			SIGNAL(connectionEstablished()));
+//	connectionEstablishedSpy.wait();
 
 	UserMetricsStore::const_iterator userDataIterator(
 			store.constFind("username"));
@@ -273,14 +289,17 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
 
 	SyncedUserMetricsStore store(*connection);
+//	QSignalSpy connectionEstablishedSpy(&store,
+//			SIGNAL(connectionEstablished()));
+//	connectionEstablishedSpy.wait();
+
+	UserMetricsStore::const_iterator userDataIterator(
+			store.constFind("username"));
+	ASSERT_NE(userDataIterator, store.constEnd());
+	EXPECT_EQ(QString("username"), userDataIterator.key());
+	UserDataPtr userData(*userDataIterator);
 
 	{
-		UserMetricsStore::const_iterator userDataIterator(
-				store.constFind("username"));
-		ASSERT_NE(userDataIterator, store.constEnd());
-		EXPECT_EQ(QString("username"), userDataIterator.key());
-		UserDataPtr userData(*userDataIterator);
-
 		UserData::const_iterator dataSetIterator(userData->constBegin());
 		ASSERT_NE(dataSetIterator, userData->constEnd());
 		EXPECT_EQ(QString("twitter"), dataSetIterator.key());
@@ -289,26 +308,22 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 		ASSERT_EQ(dataSetIterator, userData->constEnd());
 	}
 
-	QSignalSpy spy(&userDataInterface,
-			SIGNAL(dataSetAdded(const QString &, const QDBusObjectPath &)));
+	QSignalSpy spy(static_cast<SyncedUserData *>(userData.data()),
+			SIGNAL(dataSetAdded(const QString &)));
 
 	QDBusObjectPath facebookDataPath(
 			userDataInterface.createDataSet("facebook"));
 	ASSERT_EQ(DBusPaths::dataSet(2), facebookDataPath.path());
 
 	spy.wait();
+	ASSERT_FALSE(spy.empty());
 
 	{
-		UserMetricsStore::const_iterator userDataIterator(
-				store.constFind("username"));
-		ASSERT_NE(userDataIterator, store.constEnd());
-		EXPECT_EQ(QString("username"), userDataIterator.key());
-		UserDataPtr userData(*userDataIterator);
-
 		UserData::const_iterator dataSetIterator(userData->constBegin());
 
 		ASSERT_NE(dataSetIterator, userData->constEnd());
-		EXPECT_EQ(QString("facebook"), dataSetIterator.key());
+		EXPECT_EQ(QString("facebook").toStdString(),
+				dataSetIterator.key().toStdString());
 
 		++dataSetIterator;
 		ASSERT_NE(dataSetIterator, userData->constEnd());

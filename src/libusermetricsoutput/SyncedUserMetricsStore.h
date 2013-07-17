@@ -33,6 +33,9 @@ public:
 
 	virtual ~SyncedUserMetricsStore();
 
+Q_SIGNALS:
+	void connectionEstablished();
+
 public Q_SLOTS:
 	void addUserData(const QString &username, const QDBusObjectPath &path);
 
@@ -41,6 +44,8 @@ public Q_SLOTS:
 	void addDataSource(const QString &username, const QDBusObjectPath &path);
 
 	void removeDataSource(const QString &username, const QDBusObjectPath &path);
+
+	void sync();
 
 protected:
 	com::canonical::UserMetrics m_interface;

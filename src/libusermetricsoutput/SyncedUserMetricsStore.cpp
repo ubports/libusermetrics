@@ -32,6 +32,20 @@ SyncedUserMetricsStore::SyncedUserMetricsStore(
 		const QDBusConnection &dbusConnection, QObject *parent) :
 		UserMetricsStore(parent), m_interface(DBusPaths::serviceName(),
 				DBusPaths::userMetrics(), dbusConnection) {
+	// FIXME Figure out the initialisation issues so we can make this async again
+	// QTimer::singleShot(0, this, SLOT(sync()));
+	sync();
+}
+
+SyncedUserMetricsStore::~SyncedUserMetricsStore() {
+}
+
+void SyncedUserMetricsStore::sync() {
+	QDBusConnectionInterface* interface = m_interface.connection().interface();
+	if (!interface->isServiceRegistered(DBusPaths::serviceName())) {
+		QDBusReply<void> reply(
+				interface->startService(DBusPaths::serviceName()));
+	}
 
 	connect(&m_interface,
 			SIGNAL(dataSourceAdded(const QString &, const QDBusObjectPath &)),
@@ -71,9 +85,8 @@ SyncedUserMetricsStore::SyncedUserMetricsStore(
 		QString username(userData->username());
 		insert(username, UserDataPtr(new SyncedUserData(userData)));
 	}
-}
 
-SyncedUserMetricsStore::~SyncedUserMetricsStore() {
+	connectionEstablished();
 }
 
 void SyncedUserMetricsStore::addUserData(const QString &username,
