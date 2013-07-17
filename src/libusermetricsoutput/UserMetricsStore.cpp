@@ -38,7 +38,9 @@ UserMetricsStore::const_iterator UserMetricsStore::constEnd() const {
 
 UserMetricsStore::iterator UserMetricsStore::insert(const QString &username,
 		UserDataPtr userData) {
-	return m_userData.insert(username, userData);
+	auto it(m_userData.insert(username, userData));
+	userDataAdded(username, userData);
+	return it;
 }
 
 DataSourcePtr UserMetricsStore::dataSource(const QString &name) {

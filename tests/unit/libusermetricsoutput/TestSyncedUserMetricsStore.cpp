@@ -66,9 +66,9 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 	ASSERT_EQ(DBusPaths::dataSource(2), dataSourcePath2.path());
 
 	SyncedUserMetricsStore store(*connection);
-//	QSignalSpy connectionEstablishedSpy(&store,
-//			SIGNAL(connectionEstablished()));
-//	connectionEstablishedSpy.wait();
+	QSignalSpy connectionEstablishedSpy(&store,
+			SIGNAL(connectionEstablished()));
+	connectionEstablishedSpy.wait();
 
 	{
 		DataSourcePtr dataSource(store.dataSource("data-source-one"));
@@ -98,9 +98,9 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	ASSERT_EQ(DBusPaths::dataSource(1), dataSourcePath1.path());
 
 	SyncedUserMetricsStore store(*connection);
-//	QSignalSpy connectionEstablishedSpy(&store,
-//			SIGNAL(connectionEstablished()));
-//	connectionEstablishedSpy.wait();
+	QSignalSpy connectionEstablishedSpy(&store,
+			SIGNAL(connectionEstablished()));
+	connectionEstablishedSpy.wait();
 
 	{
 		DataSourcePtr dataSource(store.dataSource("data-source-one"));
@@ -157,9 +157,9 @@ TEST_F(TestSyncedUserMetricsStore, LoadsUserDataAtStartup) {
 	ASSERT_EQ(DBusPaths::userData(2), userDataPath2.path());
 
 	SyncedUserMetricsStore store(*connection);
-//	QSignalSpy connectionEstablishedSpy(&store,
-//			SIGNAL(connectionEstablished()));
-//	connectionEstablishedSpy.wait();
+	QSignalSpy connectionEstablishedSpy(&store,
+			SIGNAL(connectionEstablished()));
+	connectionEstablishedSpy.wait();
 
 	{
 		UserMetricsStore::const_iterator it(store.constFind("username1"));
@@ -183,9 +183,9 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewUserData) {
 	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
 
 	SyncedUserMetricsStore store(*connection);
-//	QSignalSpy connectionEstablishedSpy(&store,
-//			SIGNAL(connectionEstablished()));
-//	connectionEstablishedSpy.wait();
+	QSignalSpy connectionEstablishedSpy(&store,
+			SIGNAL(connectionEstablished()));
+	connectionEstablishedSpy.wait();
 
 	{
 		UserMetricsStore::const_iterator it(store.constFind("username1"));
@@ -246,9 +246,9 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	dataSetInterface.update(data);
 
 	SyncedUserMetricsStore store(*connection);
-//	QSignalSpy connectionEstablishedSpy(&store,
-//			SIGNAL(connectionEstablished()));
-//	connectionEstablishedSpy.wait();
+	QSignalSpy connectionEstablishedSpy(&store,
+			SIGNAL(connectionEstablished()));
+	connectionEstablishedSpy.wait();
 
 	UserMetricsStore::const_iterator userDataIterator(
 			store.constFind("username"));
@@ -289,9 +289,9 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
 
 	SyncedUserMetricsStore store(*connection);
-//	QSignalSpy connectionEstablishedSpy(&store,
-//			SIGNAL(connectionEstablished()));
-//	connectionEstablishedSpy.wait();
+	QSignalSpy connectionEstablishedSpy(&store,
+			SIGNAL(connectionEstablished()));
+	connectionEstablishedSpy.wait();
 
 	UserMetricsStore::const_iterator userDataIterator(
 			store.constFind("username"));

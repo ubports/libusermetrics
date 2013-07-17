@@ -34,9 +34,7 @@ SyncedUserMetricsStore::SyncedUserMetricsStore(
 		UserMetricsStore(parent), m_interface(DBusPaths::serviceName(),
 				DBusPaths::userMetrics(), dbusConnection), m_localeDir(
 				localeDir) {
-	// FIXME Figure out the initialisation issues so we can make this async again
-	// QTimer::singleShot(0, this, SLOT(sync()));
-	sync();
+	QTimer::singleShot(0, this, SLOT(sync()));
 }
 
 SyncedUserMetricsStore::~SyncedUserMetricsStore() {

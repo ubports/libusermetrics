@@ -44,6 +44,11 @@ UserMetricsImpl::UserMetricsImpl(QSharedPointer<DateFactory> dateFactory,
 	connect(this, SIGNAL(readyForDataChange()), this, SLOT(
 			readyForDataChangeSlot()), Qt::QueuedConnection);
 
+	// set up a watch for new user data appearing
+	connect(m_userMetricsStore.data(),
+			SIGNAL(userDataAdded(const QString &, UserDataPtr)), this,
+			SLOT(userDataAdded(const QString &, UserDataPtr)));
+
 	setCurrentDay(m_dateFactory->currentDate().day() - 1);
 	setUsernameInternal("");
 }
@@ -75,6 +80,20 @@ void UserMetricsImpl::setUsername(const QString &username) {
 	setUsernameInternal(username);
 }
 
+void UserMetricsImpl::userDataAdded(const QString &username,
+		UserDataPtr userData) {
+	Q_UNUSED(userData);
+	if (m_noDataForUser && m_username == username) {
+		nextDataSourceSlot();
+	}
+}
+
+void UserMetricsImpl::dataSetAdded(const QString &dataSourceName) {
+	if (m_noDataForUser) {
+		nextDataSourceSlot();
+	}
+}
+
 void UserMetricsImpl::checkForUserData() {
 	m_oldNoDataForUser = m_noDataForUser;
 
@@ -89,7 +108,12 @@ void UserMetricsImpl::checkForUserData() {
 
 		// now check to see if that container has any data in
 		m_noDataForUser = m_dataSetIterator == m_userData->constEnd();
-		if (!m_noDataForUser) {
+		if (m_noDataForUser) {
+			m_watchUser = m_username;
+			// set up a watch in-case some data sets are added
+			connect(m_userData.data(), SIGNAL(dataSetAdded(const QString &)),
+					this, SLOT(dataSetAdded(const QString &)));
+		} else {
 			m_dataSet = *m_dataSetIterator;
 		}
 	}
@@ -106,9 +130,13 @@ void UserMetricsImpl::setUsernameInternal(const QString &username) {
 }
 
 void UserMetricsImpl::prepareToLoadDataSource() {
-	if (m_dataSet.data()) {
+	if (!m_dataSet.isNull()) {
 		disconnect(m_dataSet.data(), SIGNAL(dataChanged(const QVariantList *)),
 				this, SLOT(updateCurrentDataSet(const QVariantList *)));
+	}
+	if (!m_userData.isNull() && m_watchUser != m_username) {
+		disconnect(m_userData.data(), SIGNAL(dataSetAdded(const QString &)),
+				this, SLOT(dataSetAdded(const QString &)));
 	}
 	if (m_oldNoDataForUser && !m_noDataForUser) {
 		dataAboutToAppear();

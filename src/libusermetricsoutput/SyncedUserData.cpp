@@ -61,8 +61,6 @@ void SyncedUserData::addDataSet(const QString &dataSourceName,
 					path.path(), m_interface->connection()));
 
 	insert(dataSourceName, DataSetPtr(new SyncedDataSet(dataSet)));
-
-	dataSetAdded(dataSourceName);
 }
 
 void SyncedUserData::removeDataSet(const QString &dataSetName,

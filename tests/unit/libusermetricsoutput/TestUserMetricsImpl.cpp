@@ -198,6 +198,12 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUserThenAppearsWhenAdded) 
 					UserDataPtr(new UserData())));
 	UserDataPtr userData(*userDataIterator);
 
+	ColorThemePtr blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
+			Return(emptyPair));
+
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
 			DataSetPtr(new DataSet()));
 	DataSetPtr dataSet(*dataSetIterator);
@@ -208,15 +214,6 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUserThenAppearsWhenAdded) 
 	// The data starts today
 	dataSet->setLastUpdated(QDate(2001, 01, 07));
 	dataSet->setData(data);
-
-	ColorThemePtr blankColorTheme(
-			new ColorThemeImpl(QColor(), QColor(), QColor()));
-	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
-	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
-			Return(emptyPair));
-
-	model->nextDataSourceSlot();
-	model->readyForDataChangeSlot();
 
 	EXPECT_EQ(QString("test format string 1").toStdString(),
 			model->label().toStdString());
@@ -436,7 +433,6 @@ TEST_F(UserMetricsImplTest, AddTranslatedData) {
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
 
-
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
@@ -476,7 +472,6 @@ TEST_F(UserMetricsImplTest, AddTranslatedEmptyData) {
 	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
 	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
 			Return(emptyPair));
-
 
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
