@@ -52,6 +52,9 @@ public:
 
 	virtual DataSourcePtr dataSource(const QString &name);
 
+Q_SIGNALS:
+	void userDataAdded(const QString &username, UserDataPtr userData);
+
 protected:
 	UserDataMap m_userData;
 

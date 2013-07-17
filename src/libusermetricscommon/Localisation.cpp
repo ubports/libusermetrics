@@ -16,31 +16,27 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserData.h>
+#include <libusermetricscommon/Localisation.h>
+#include <QtCore/QProcess>
 
-using namespace UserMetricsOutput;
+QString gettextExternal(const QString &textDomain, const QString &messageId,
+		const QString &localeDir) {
+	QProcess gettext;
 
-UserData::UserData(QObject *parent) :
-		QObject(parent) {
+	if (!localeDir.isEmpty()) {
+		QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
+		env.insert("TEXTDOMAINDIR", localeDir);
+		gettext.setProcessEnvironment(env);
+	}
+
+	gettext.start("gettext", QStringList() << textDomain << messageId);
+
+	gettext.waitForStarted();
+	gettext.waitForReadyRead();
+
+	QByteArray ba(gettext.readAll());
+
+	gettext.waitForFinished();
+
+	return QString::fromUtf8(ba);
 }
-
-UserData::~UserData() {
-}
-
-UserData::const_iterator UserData::constBegin() const {
-	return m_dataSets.constBegin();
-}
-
-UserData::const_iterator UserData::constEnd() const {
-	return m_dataSets.constEnd();
-}
-
-UserData::iterator UserData::insert(const QString &dataSourceName,
-		DataSetPtr dataSet) {
-	auto it(m_dataSets.insert(dataSourceName, dataSet));
-
-	dataSetAdded(dataSourceName);
-
-	return it;
-}
-

@@ -70,6 +70,10 @@ public Q_SLOTS:
 protected Q_SLOTS:
 	virtual void updateCurrentDataSet(const QVariantList *data);
 
+	virtual void userDataAdded(const QString &username, UserDataPtr userData);
+
+	virtual void dataSetAdded(const QString &dataSourceName);
+
 protected:
 	virtual void prepareToLoadDataSource();
 
@@ -106,6 +110,8 @@ protected:
 	bool m_oldNoDataForUser;
 
 	QString m_username;
+
+	QString m_watchUser;
 
 	UserMetricsStore::const_iterator m_userDataIterator;
 
