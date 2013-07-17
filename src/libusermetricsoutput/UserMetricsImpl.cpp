@@ -107,16 +107,16 @@ void UserMetricsImpl::setUsernameInternal(const QString &username) {
 }
 
 void UserMetricsImpl::prepareToLoadDataSource() {
+	if (m_dataSet.data()) {
+		disconnect(m_dataSet.data(), SIGNAL(dataChanged(const QVariantList *)),
+				this, SLOT(updateCurrentDataSet(const QVariantList *)));
+	}
 	if (m_oldNoDataForUser && !m_noDataForUser) {
 		dataAboutToAppear();
 		finishLoadingDataSource();
 	} else if (!m_oldNoDataForUser && m_noDataForUser) {
-		disconnect(m_dataSet.data(), SIGNAL(dataChanged(const QVariantList *)),
-				this, SLOT(updateCurrentDataSet(const QVariantList *)));
 		dataAboutToDisappear();
 	} else if (!m_oldNoDataForUser && !m_noDataForUser) {
-		disconnect(m_dataSet.data(), SIGNAL(dataChanged(const QVariantList *)),
-				this, SLOT(updateCurrentDataSet(const QVariantList *)));
 		dataAboutToChange();
 	}
 	// we emit no signal if the data has stayed empty
