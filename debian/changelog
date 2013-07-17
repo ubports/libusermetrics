@@ -1,3 +1,9 @@
+libusermetrics (1.0.8+13.10.20130717-0ubuntu1) saucy; urgency=low
+
+  * Automatic snapshot from revision 112
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 17 Jul 2013 02:03:37 +0000
+
 libusermetrics (1.0.8-0ubuntu1) saucy; urgency=low
 
   * Update docs
