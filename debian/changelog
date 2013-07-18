@@ -1,3 +1,14 @@
+libusermetrics (1.0.9+13.10.20130718-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Now will switch to user data for users that acquire data while
+    visible
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 115
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 18 Jul 2013 02:04:24 +0000
+
 libusermetrics (1.0.9-0ubuntu1) saucy; urgency=low
 
   * Perform gettext translations in an external process.
