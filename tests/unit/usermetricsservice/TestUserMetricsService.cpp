@@ -23,6 +23,7 @@
 #include <usermetricsservice/DBusUserData.h>
 #include <usermetricsservice/DBusDataSet.h>
 #include <libusermetricscommon/DateFactory.h>
+#include <libusermetricscommon/DBusPaths.h>
 
 #include <testutils/DBusTest.h>
 #include <testutils/QStringPrinter.h>
@@ -64,7 +65,7 @@ protected:
 		ON_CALL(*dateFactory, currentDate()).WillByDefault(
 				Return(QDate(2001, 01, 07)));
 
-//		QDjango::setDebugEnabled(true);
+		QDjango::setDebugEnabled(true);
 		QDjango::setDatabase(db);
 	}
 
@@ -382,6 +383,34 @@ TEST_F(TestUserMetricsService, UpdateDataTotallyOverwrite) {
 	twitter->update(second);
 	EXPECT_EQ(expected, twitter->data());
 	EXPECT_EQ(QDate(2001, 01, 7), twitter->lastUpdatedDate());
+}
+
+TEST_F(TestUserMetricsService, MultipleUsers) {
+	DBusUserMetrics userMetrics(*connection, dateFactory);
+	userMetrics.createDataSource("twitter", "foo", "", "");
+
+	userMetrics.createUserData("alice");
+	DBusUserDataPtr alice(userMetrics.userData("alice"));
+
+	userMetrics.createUserData("bob");
+	DBusUserDataPtr bob(userMetrics.userData("bob"));
+
+	alice->createDataSet("twitter");
+	DBusDataSetPtr aliceTwitter(alice->dataSet("twitter"));
+
+	bob->createDataSet("twitter");
+	DBusDataSetPtr bobTwitter(bob->dataSet("twitter"));
+
+	QVariantList aliceData( { 1.0 });
+	QVariantList bobData( { 2.0 });
+
+	QList<QDBusObjectPath> aliceDataSets(alice->dataSets());
+	ASSERT_EQ(1, aliceDataSets.size());
+	EXPECT_EQ(DBusPaths::dataSet(1), aliceDataSets.first().path());
+
+	QList<QDBusObjectPath> bobDataSets(bob->dataSets());
+	ASSERT_EQ(1, bobDataSets.size());
+	EXPECT_EQ(DBusPaths::dataSet(2), bobDataSets.first().path());
 }
 
 } // namespace

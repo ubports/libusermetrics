@@ -118,7 +118,10 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 
 void DBusUserData::syncDatabase() {
 	QSet<int> dataSetIds;
-	QDjangoQuerySet<DataSet> query;
+	QDjangoQuerySet<DataSet> dataSets;
+	QDjangoQuerySet<DataSet> query(
+			dataSets.filter(
+					QDjangoWhere("userData__id", QDjangoWhere::Equals, m_id)));
 	for (const DataSet &dataSet : query.selectRelated()) {
 		const int id(dataSet.id());
 		dataSetIds << id;
