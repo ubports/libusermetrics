@@ -401,9 +401,6 @@ TEST_F(TestUserMetricsService, MultipleUsers) {
 	bob->createDataSet("twitter");
 	DBusDataSetPtr bobTwitter(bob->dataSet("twitter"));
 
-	QVariantList aliceData( { 1.0 });
-	QVariantList bobData( { 2.0 });
-
 	QList<QDBusObjectPath> aliceDataSets(alice->dataSets());
 	ASSERT_EQ(1, aliceDataSets.size());
 	EXPECT_EQ(DBusPaths::dataSet(1), aliceDataSets.first().path());
