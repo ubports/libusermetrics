@@ -81,7 +81,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 
 	QDjangoQuerySet<DataSet> dataSets;
 	QDjangoQuerySet<DataSet> query = dataSets.filter(
-			QDjangoWhere("userData__id", QDjangoWhere::Equals, m_id)).filter(
+			QDjangoWhere("userData_id", QDjangoWhere::Equals, m_id)).filter(
 			QDjangoWhere("dataSource__name", QDjangoWhere::Equals,
 					dataSourceName));
 
@@ -121,7 +121,7 @@ void DBusUserData::syncDatabase() {
 	QDjangoQuerySet<DataSet> dataSets;
 	QDjangoQuerySet<DataSet> query(
 			dataSets.filter(
-					QDjangoWhere("userData__id", QDjangoWhere::Equals, m_id)));
+					QDjangoWhere("userData_id", QDjangoWhere::Equals, m_id)));
 	for (const DataSet &dataSet : query.selectRelated()) {
 		const int id(dataSet.id());
 		dataSetIds << id;
@@ -149,7 +149,7 @@ DBusDataSetPtr DBusUserData::dataSet(const QString &dataSource) const {
 	QDjangoQuerySet<DataSet> dataSets;
 	QScopedPointer<DataSet> dataSet(
 			dataSets.filter(
-					QDjangoWhere("userData__id", QDjangoWhere::Equals, m_id)).get(
+					QDjangoWhere("userData_id", QDjangoWhere::Equals, m_id)).get(
 					QDjangoWhere("dataSource__name", QDjangoWhere::Equals,
 							dataSource)));
 
