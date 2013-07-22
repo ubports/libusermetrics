@@ -410,4 +410,40 @@ TEST_F(TestUserMetricsService, MultipleUsers) {
 	EXPECT_EQ(DBusPaths::dataSet(2), bobDataSets.first().path());
 }
 
+TEST_F(TestUserMetricsService, IncrementOverSeveralDays) {
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 03, 1)));
+
+	DBusUserMetrics userMetrics(*connection, dateFactory);
+	userMetrics.createDataSource("twitter", "foo", "", "");
+
+	userMetrics.createUserData("bob");
+	DBusUserDataPtr bob(userMetrics.userData("bob"));
+
+	bob->createDataSet("twitter");
+	DBusDataSetPtr twitter(bob->dataSet("twitter"));
+
+	QVariantList expected1( { 1.0 });
+	QVariantList expected2( { 1.0, 1.0 });
+	QVariantList expected3( { 1.0, 1.0, 1.0 });
+
+	twitter->increment(1.0);
+	EXPECT_EQ(expected1, twitter->data());
+	EXPECT_EQ(QDate(2001, 03, 1), twitter->lastUpdatedDate());
+
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 03, 2)));
+
+	twitter->increment(1.0);
+	EXPECT_EQ(expected2, twitter->data());
+	EXPECT_EQ(QDate(2001, 03, 2), twitter->lastUpdatedDate());
+
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 03, 3)));
+
+	twitter->increment(1.0);
+	EXPECT_EQ(expected3, twitter->data());
+	EXPECT_EQ(QDate(2001, 03, 3), twitter->lastUpdatedDate());
+}
+
 } // namespace

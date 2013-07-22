@@ -133,3 +133,28 @@ target_link_libraries(
 	usermetricsinput-bin
 	usermetricsinput
 )
+
+##########################
+# Increment CLI
+##########################
+
+add_executable(
+	usermetricsinput-increment
+	main-increment.cpp
+)
+
+install(
+  TARGETS usermetricsinput-increment
+  RUNTIME DESTINATION bin
+)
+
+qt5_use_modules(
+	usermetricsinput-increment
+	Core
+)
+
+target_link_libraries(
+	usermetricsinput-increment
+	usermetricsinput
+)
+

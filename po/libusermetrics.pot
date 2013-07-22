@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-17 10:26+0100\n"
+"POT-Creation-Date: 2013-07-22 10:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,22 +73,27 @@ msgstr ""
 msgid "New data set could not be found"
 msgstr ""
 
+#: src/libusermetricsinput/main-increment.cpp:35
 #: src/libusermetricsinput/main.cpp:35
 msgid "Usage: "
+msgstr ""
+
+#: src/libusermetricsinput/main-increment.cpp:37
+msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME AMOUNT"
 msgstr ""
 
 #: src/libusermetricsinput/main.cpp:37
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 msgstr ""
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:170
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:197
 msgid "No data sources available"
 msgstr ""
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:232
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:259
 msgid "Data source not found"
 msgstr ""
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:238
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:265
 msgid "No data for today"
 msgstr ""
