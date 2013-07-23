@@ -1,3 +1,15 @@
+libusermetrics (1.1.0+13.10.20130723-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Fix incorrect query for user data ownership
+  * Additional command line interface for incrementing
+  * Trim a few unnecessary joins off user data queries
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 120
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 23 Jul 2013 02:02:57 +0000
+
 libusermetrics (1.1.0-0ubuntu1) saucy; urgency=low
 
   * New release.
