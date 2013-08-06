@@ -16,6 +16,8 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
+#include <QSignalSpy>
+
 #include <libusermetricsoutput/ColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
 #include <libusermetricsoutput/DataSet.h>
@@ -23,7 +25,6 @@
 #include <testutils/QStringPrinter.h>
 #include <testutils/QVariantPrinter.h>
 #include <testutils/QVariantListPrinter.h>
-#include <testutils/MockSignalReceiver.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -32,7 +33,6 @@ using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
 using namespace testing;
-using namespace UserMetricsTestUtils;
 
 namespace {
 
@@ -94,12 +94,7 @@ TEST_F(UserMetricsImplTest, CurrentDateChangesWithDataSource) {
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
 			Return(QDate(2001, 01, 21))).WillOnce(Return(QDate(2001, 01, 27)));
 
-	StrictMock<MockSignalReceiverInt> signalReceiver;
-	EXPECT_CALL(signalReceiver, receivedSignal(20)).Times(1);
-	EXPECT_CALL(signalReceiver, receivedSignal(26)).Times(1);
-
-	QObject::connect(model.data(), SIGNAL(currentDayChanged(int)),
-			&signalReceiver, SLOT(receivedSignal(int)));
+	QSignalSpy signalReceiver(model.data(), SIGNAL(currentDayChanged(int)));
 
 	model->nextDataSourceSlot();
 	model->readyForDataChangeSlot();
@@ -108,6 +103,10 @@ TEST_F(UserMetricsImplTest, CurrentDateChangesWithDataSource) {
 	model->nextDataSourceSlot();
 	model->readyForDataChangeSlot();
 	EXPECT_EQ(26, model->currentDay());
+
+	ASSERT_EQ(2, signalReceiver.size());
+	EXPECT_EQ(QVariantList() << 20, signalReceiver.at(0));
+	EXPECT_EQ(QVariantList() << 26, signalReceiver.at(1));
 }
 
 TEST_F(UserMetricsImplTest, MonthLengthChangesWithDate) {
@@ -908,11 +907,13 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			Return(colorDataSourceTwo));
 
 	ColorThemePtrPair colorDataSourceThree(colorThemeThree, colorThemeFour);
-	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-three"))).WillRepeatedly(
+	EXPECT_CALL(*colorThemeProvider,
+			getColorTheme(QString("data-source-three"))).WillRepeatedly(
 			Return(colorDataSourceThree));
 
 	ColorThemePtrPair colorDataSourceFour(colorThemeFour, colorThemeFive);
-	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-xfour"))).WillRepeatedly(
+	EXPECT_CALL(*colorThemeProvider,
+			getColorTheme(QString("data-source-xfour"))).WillRepeatedly(
 			Return(colorDataSourceFour));
 
 	model->setUsername("first-user");

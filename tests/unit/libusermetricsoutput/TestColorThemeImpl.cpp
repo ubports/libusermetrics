@@ -19,14 +19,13 @@
 #include <libusermetricsoutput/ColorThemeImpl.h>
 
 #include <testutils/QColorPrinter.h>
-#include <testutils/MockSignalReceiver.h>
+#include <QSignalSpy>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 using namespace std;
 using namespace UserMetricsOutput;
 using namespace testing;
-using namespace UserMetricsTestUtils;
 
 namespace {
 
@@ -59,12 +58,7 @@ TEST_F(ColorThemeImplTest, AcceptsColorsAsConstructorArguments) {
 TEST_F(ColorThemeImplTest, MethodSetStartSendsSignal) {
 	ColorThemeImpl colorTheme;
 
-	StrictMock<MockSignalReceiverQColor> signalReceiver;
-	EXPECT_CALL(signalReceiver, receivedSignal(QColor(255, 255, 255))).Times(1);
-	EXPECT_CALL(signalReceiver, receivedSignal(QColor(255, 0, 255))).Times(1);
-
-	QObject::connect(&colorTheme, SIGNAL(startChanged(QColor)), &signalReceiver,
-			SLOT(receivedSignal(QColor)));
+	QSignalSpy signalReceiver(&colorTheme, SIGNAL(startChanged(QColor)));
 
 	colorTheme.setStart(QColor(255, 255, 255));
 	EXPECT_EQ(QColor(255, 255, 255), colorTheme.start());
@@ -77,17 +71,16 @@ TEST_F(ColorThemeImplTest, MethodSetStartSendsSignal) {
 
 	colorTheme.setStart(QColor(255, 0, 255));
 	EXPECT_EQ(QColor(255, 0, 255), colorTheme.start());
+
+	ASSERT_EQ(2, signalReceiver.size());
+	EXPECT_EQ(QVariantList() << QColor(255, 255, 255), signalReceiver.at(0));
+	EXPECT_EQ(QVariantList() << QColor(255, 0, 255), signalReceiver.at(1));
 }
 
 TEST_F(ColorThemeImplTest, MethodSetMainSendsSignal) {
 	ColorThemeImpl colorTheme;
 
-	StrictMock<MockSignalReceiverQColor> signalReceiver;
-	EXPECT_CALL(signalReceiver, receivedSignal(QColor(0, 255, 255))).Times(1);
-	EXPECT_CALL(signalReceiver, receivedSignal(QColor(0, 0, 255))).Times(1);
-
-	QObject::connect(&colorTheme, SIGNAL(mainChanged(QColor)), &signalReceiver,
-			SLOT(receivedSignal(QColor)));
+	QSignalSpy signalReceiver(&colorTheme, SIGNAL(mainChanged(QColor)));
 
 	colorTheme.setMain(QColor(0, 255, 255));
 	EXPECT_EQ(QColor(0, 255, 255), colorTheme.main());
@@ -100,17 +93,16 @@ TEST_F(ColorThemeImplTest, MethodSetMainSendsSignal) {
 
 	colorTheme.setMain(QColor(0, 0, 255));
 	EXPECT_EQ(QColor(0, 0, 255), colorTheme.main());
+
+	ASSERT_EQ(2, signalReceiver.size());
+	EXPECT_EQ(QVariantList() << QColor(0, 255, 255), signalReceiver.at(0));
+	EXPECT_EQ(QVariantList() << QColor(0, 0, 255), signalReceiver.at(1));
 }
 
 TEST_F(ColorThemeImplTest, MethodSetEndSendsSignal) {
 	ColorThemeImpl colorTheme;
 
-	StrictMock<MockSignalReceiverQColor> signalReceiver;
-	EXPECT_CALL(signalReceiver, receivedSignal(QColor(0, 255, 255))).Times(1);
-	EXPECT_CALL(signalReceiver, receivedSignal(QColor(0, 0, 255))).Times(1);
-
-	QObject::connect(&colorTheme, SIGNAL(endChanged(QColor)), &signalReceiver,
-			SLOT(receivedSignal(QColor)));
+	QSignalSpy signalReceiver(&colorTheme, SIGNAL(endChanged(QColor)));
 
 	colorTheme.setEnd(QColor(0, 255, 255));
 	EXPECT_EQ(QColor(0, 255, 255), colorTheme.end());
@@ -123,29 +115,18 @@ TEST_F(ColorThemeImplTest, MethodSetEndSendsSignal) {
 
 	colorTheme.setEnd(QColor(0, 0, 255));
 	EXPECT_EQ(QColor(0, 0, 255), colorTheme.end());
+
+	ASSERT_EQ(2, signalReceiver.size());
+	EXPECT_EQ(QVariantList() << QColor(0, 255, 255), signalReceiver.at(0));
+	EXPECT_EQ(QVariantList() << QColor(0, 0, 255), signalReceiver.at(1));
 }
 
 TEST_F(ColorThemeImplTest, MethodSetColorsSendsSignal) {
 	ColorThemeImpl colorTheme;
 
-	StrictMock<MockSignalReceiverQColor> startReceiver;
-	EXPECT_CALL(startReceiver, receivedSignal(QColor(0, 255, 255))).Times(1);
-	EXPECT_CALL(startReceiver, receivedSignal(QColor(1, 255, 255))).Times(1);
-
-	StrictMock<MockSignalReceiverQColor> mainReceiver;
-	EXPECT_CALL(mainReceiver, receivedSignal(QColor(255, 0, 255))).Times(1);
-	EXPECT_CALL(mainReceiver, receivedSignal(QColor(255, 1, 255))).Times(1);
-
-	StrictMock<MockSignalReceiverQColor> endReceiver;
-	EXPECT_CALL(endReceiver, receivedSignal(QColor(255, 255, 0))).Times(1);
-	EXPECT_CALL(endReceiver, receivedSignal(QColor(255, 255, 1))).Times(1);
-
-	QObject::connect(&colorTheme, SIGNAL(startChanged(QColor)), &startReceiver,
-			SLOT(receivedSignal(QColor)));
-	QObject::connect(&colorTheme, SIGNAL(mainChanged(QColor)), &mainReceiver,
-			SLOT(receivedSignal(QColor)));
-	QObject::connect(&colorTheme, SIGNAL(endChanged(QColor)), &endReceiver,
-			SLOT(receivedSignal(QColor)));
+	QSignalSpy startReceiver(&colorTheme, SIGNAL(startChanged(QColor)));
+	QSignalSpy mainReceiver(&colorTheme, SIGNAL(mainChanged(QColor)));
+	QSignalSpy endReceiver(&colorTheme, SIGNAL(endChanged(QColor)));
 
 	colorTheme.setColors(
 			ColorThemeImpl(QColor(0, 255, 255), QColor(255, 0, 255),
@@ -181,6 +162,18 @@ TEST_F(ColorThemeImplTest, MethodSetColorsSendsSignal) {
 	EXPECT_EQ(QColor(1, 255, 255), colorTheme.start());
 	EXPECT_EQ(QColor(255, 1, 255), colorTheme.main());
 	EXPECT_EQ(QColor(255, 255, 1), colorTheme.end());
+
+	ASSERT_EQ(2, startReceiver.size());
+	EXPECT_EQ(QVariantList() << QColor(0, 255, 255), startReceiver.at(0));
+	EXPECT_EQ(QVariantList() << QColor(1, 255, 255), startReceiver.at(1));
+
+	ASSERT_EQ(2, mainReceiver.size());
+	EXPECT_EQ(QVariantList() << QColor(255, 0, 255), mainReceiver.at(0));
+	EXPECT_EQ(QVariantList() << QColor(255, 1, 255), mainReceiver.at(1));
+
+	ASSERT_EQ(2, endReceiver.size());
+	EXPECT_EQ(QVariantList() << QColor(255, 255, 0), endReceiver.at(0));
+	EXPECT_EQ(QVariantList() << QColor(255, 255, 1), endReceiver.at(1));
 }
 
 } // namespace
