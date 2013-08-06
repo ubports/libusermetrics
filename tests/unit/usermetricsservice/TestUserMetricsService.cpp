@@ -65,7 +65,7 @@ protected:
 		ON_CALL(*dateFactory, currentDate()).WillByDefault(
 				Return(QDate(2001, 01, 07)));
 
-		QDjango::setDebugEnabled(true);
+//		QDjango::setDebugEnabled(true);
 		QDjango::setDatabase(db);
 	}
 
@@ -444,6 +444,35 @@ TEST_F(TestUserMetricsService, IncrementOverSeveralDays) {
 	twitter->increment(1.0);
 	EXPECT_EQ(expected3, twitter->data());
 	EXPECT_EQ(QDate(2001, 03, 3), twitter->lastUpdatedDate());
+}
+
+TEST_F(TestUserMetricsService, StoreMaximumOf62Days) {
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 3, 5)));
+
+	DBusUserMetrics userMetrics(*connection, dateFactory);
+	userMetrics.createDataSource("twitter", "foo", "", "");
+
+	userMetrics.createUserData("bob");
+	DBusUserDataPtr bob(userMetrics.userData("bob"));
+
+	bob->createDataSet("twitter");
+	DBusDataSetPtr twitter(bob->dataSet("twitter"));
+
+	// create some data that's way too big
+	QVariantList input;
+	for (int i(0); i < 100; ++i) {
+		input << 1.0;
+	}
+	twitter->update(input);
+
+	// create some data that's way too big
+	QVariantList expected;
+	for (int i(0); i < 62; ++i) {
+		expected << 1.0;
+	}
+
+	EXPECT_EQ(expected, twitter->data());
 }
 
 } // namespace

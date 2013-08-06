@@ -108,6 +108,10 @@ void DBusDataSet::internalUpdate(DataSet &dataSet, const QVariantList &oldData,
 		}
 	}
 
+	while (newData.size() > 62) {
+		newData.pop_back();
+	}
+
 	QByteArray byteArray;
 	{
 		QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
