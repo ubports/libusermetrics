@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-22 10:10+0100\n"
+"POT-Creation-Date: 2013-07-24 10:08+0100\n"
 "PO-Revision-Date: 2013-07-05 15:09+0100\n"
 "Last-Translator: Pete Woods <pete.woods@canonical.com>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -47,7 +47,7 @@ msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 
 #: src/libusermetricsinput/main-increment.cpp:37
 #, fuzzy
-msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME AMOUNT"
+msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 
 #: src/usermetricsservice/DBusUserData.cpp:89

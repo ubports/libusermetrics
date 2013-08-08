@@ -16,6 +16,8 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
+#include <QSignalSpy>
+
 #include <libusermetricsoutput/ColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
 #include <libusermetricsoutput/DataSet.h>
@@ -23,7 +25,6 @@
 #include <testutils/QStringPrinter.h>
 #include <testutils/QVariantPrinter.h>
 #include <testutils/QVariantListPrinter.h>
-#include <testutils/MockSignalReceiver.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -32,7 +33,6 @@ using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
 using namespace testing;
-using namespace UserMetricsTestUtils;
 
 namespace {
 
@@ -94,12 +94,7 @@ TEST_F(UserMetricsImplTest, CurrentDateChangesWithDataSource) {
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
 			Return(QDate(2001, 01, 21))).WillOnce(Return(QDate(2001, 01, 27)));
 
-	StrictMock<MockSignalReceiverInt> signalReceiver;
-	EXPECT_CALL(signalReceiver, receivedSignal(20)).Times(1);
-	EXPECT_CALL(signalReceiver, receivedSignal(26)).Times(1);
-
-	QObject::connect(model.data(), SIGNAL(currentDayChanged(int)),
-			&signalReceiver, SLOT(receivedSignal(int)));
+	QSignalSpy signalReceiver(model.data(), SIGNAL(currentDayChanged(int)));
 
 	model->nextDataSourceSlot();
 	model->readyForDataChangeSlot();
@@ -108,6 +103,10 @@ TEST_F(UserMetricsImplTest, CurrentDateChangesWithDataSource) {
 	model->nextDataSourceSlot();
 	model->readyForDataChangeSlot();
 	EXPECT_EQ(26, model->currentDay());
+
+	ASSERT_EQ(2, signalReceiver.size());
+	EXPECT_EQ(QVariantList() << 20, signalReceiver.at(0));
+	EXPECT_EQ(QVariantList() << 26, signalReceiver.at(1));
 }
 
 TEST_F(UserMetricsImplTest, MonthLengthChangesWithDate) {
@@ -908,11 +907,13 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			Return(colorDataSourceTwo));
 
 	ColorThemePtrPair colorDataSourceThree(colorThemeThree, colorThemeFour);
-	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-three"))).WillRepeatedly(
+	EXPECT_CALL(*colorThemeProvider,
+			getColorTheme(QString("data-source-three"))).WillRepeatedly(
 			Return(colorDataSourceThree));
 
 	ColorThemePtrPair colorDataSourceFour(colorThemeFour, colorThemeFive);
-	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-xfour"))).WillRepeatedly(
+	EXPECT_CALL(*colorThemeProvider,
+			getColorTheme(QString("data-source-xfour"))).WillRepeatedly(
 			Return(colorDataSourceFour));
 
 	model->setUsername("first-user");
@@ -1075,6 +1076,60 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 	EXPECT_EQ(colorThemeFive->start(), model->secondColor()->start());
 	EXPECT_EQ(colorThemeFive->main(), model->secondColor()->main());
 	EXPECT_EQ(colorThemeFive->end(), model->secondColor()->end());
+}
+
+TEST_F(UserMetricsImplTest, HandlesTooBigData) {
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 03, 10)));
+
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("%1");
+	userDataStore->insert("data", dataSource);
+
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username", UserDataPtr(new UserData())));
+	UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->insert("data",
+			DataSetPtr(new DataSet()));
+	DataSetPtr dataSet(*dataSetIterator);
+
+	dataSet->setLastUpdated(QDate(2001, 03, 07));
+	QVariantList data;
+	for (int i(0); i < 100; ++i) {
+		data << 0.5; //(1.0f * i);
+	}
+	dataSet->setData(data);
+
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data"))).WillRepeatedly(
+			Return(emptyPair));
+
+	model->setUsername("username");
+	model->readyForDataChangeSlot();
+
+	// assertions about first month's data
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		ASSERT_EQ(31, month->rowCount());
+		for (int i(0); i < 7; ++i) {
+			EXPECT_EQ(QVariant(0.5), month->data(month->index(i, 0)));
+		}
+		for (int i(7); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+
+	// assertions about second month's data
+	{
+		const QAbstractItemModel* month(model->secondMonth());
+		ASSERT_EQ(28, month->rowCount());
+		for (int i(0); i < 28; ++i) {
+			EXPECT_EQ(QVariant(0.5), month->data(month->index(i, 0)));
+		}
+	}
 }
 
 } // namespace

@@ -67,8 +67,8 @@ void DBusTest::TearDown() {
 	userMetricsService.terminate();
 	EXPECT_TRUE(userMetricsService.waitForFinished());
 
-	userMetricsService.waitForReadyRead(100);
-	qDebug() << userMetricsService.readAll();
+//	userMetricsService.waitForReadyRead(100);
+//	qDebug() << userMetricsService.readAll();
 
 	dbus.terminate();
 	EXPECT_TRUE(dbus.waitForFinished());

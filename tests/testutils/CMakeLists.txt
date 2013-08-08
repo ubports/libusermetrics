@@ -6,7 +6,6 @@ set(
 	QStringPrinter.cpp
 	QVariantPrinter.cpp
 	QVariantListPrinter.cpp
-	MockSignalReceiver.cpp
 	main.cpp
 )
 
