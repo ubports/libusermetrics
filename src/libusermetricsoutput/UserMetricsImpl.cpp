@@ -89,6 +89,7 @@ void UserMetricsImpl::userDataAdded(const QString &username,
 }
 
 void UserMetricsImpl::dataSetAdded(const QString &dataSourceName) {
+	Q_UNUSED(dataSourceName);
 	if (m_noDataForUser) {
 		nextDataSourceSlot();
 	}

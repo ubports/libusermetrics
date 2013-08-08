@@ -1078,4 +1078,58 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 	EXPECT_EQ(colorThemeFive->end(), model->secondColor()->end());
 }
 
+TEST_F(UserMetricsImplTest, HandlesTooBigData) {
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 03, 10)));
+
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("%1");
+	userDataStore->insert("data", dataSource);
+
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username", UserDataPtr(new UserData())));
+	UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->insert("data",
+			DataSetPtr(new DataSet()));
+	DataSetPtr dataSet(*dataSetIterator);
+
+	dataSet->setLastUpdated(QDate(2001, 03, 07));
+	QVariantList data;
+	for (int i(0); i < 100; ++i) {
+		data << 0.5; //(1.0f * i);
+	}
+	dataSet->setData(data);
+
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data"))).WillRepeatedly(
+			Return(emptyPair));
+
+	model->setUsername("username");
+	model->readyForDataChangeSlot();
+
+	// assertions about first month's data
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		ASSERT_EQ(31, month->rowCount());
+		for (int i(0); i < 7; ++i) {
+			EXPECT_EQ(QVariant(0.5), month->data(month->index(i, 0)));
+		}
+		for (int i(7); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+
+	// assertions about second month's data
+	{
+		const QAbstractItemModel* month(model->secondMonth());
+		ASSERT_EQ(28, month->rowCount());
+		for (int i(0); i < 28; ++i) {
+			EXPECT_EQ(QVariant(0.5), month->data(month->index(i, 0)));
+		}
+	}
+}
+
 } // namespace
