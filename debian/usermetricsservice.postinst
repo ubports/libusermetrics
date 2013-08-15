@@ -4,29 +4,11 @@ set -e
 
 . /usr/share/debconf/confmodule
 
-THIS_PACKAGE=usermetricsservice
-
-# creating usermetrics group if he isn't already there
-if ! getent group usermetrics >/dev/null; then
-        addgroup --system usermetrics
-fi
-
-# creating usermetrics user if he isn't already there
-if ! getent passwd usermetrics >/dev/null; then
-        adduser --system --ingroup usermetrics --home /var/lib/usermetrics usermetrics
-        usermod -c "User Metrics" usermetrics
-        usermod -d "/var/lib/usermetrics"  usermetrics
-        usermod -g "usermetrics"           usermetrics
-        usermod -s "/bin/false"            usermetrics
-fi
-
-if [ -d /var/lib/usermetrics ]; then
-  chown -R usermetrics:usermetrics /var/lib/usermetrics
-  chmod 0750 /var/lib/usermetrics
-fi
-
-# Force dbus to reload its configuration
-touch "/etc/dbus-1/system.d/com.canonical.UserMetrics.conf"
+dbus-send --system --print-reply                        \
+        --dest=org.freedesktop.DBus                     \
+        /org/freedesktop/DBus                           \
+        org.freedesktop.DBus.StartServiceByName         \
+        string:"com.canonical.UserMetrics" uint32:0
 
 #DEBHELPER#
 
