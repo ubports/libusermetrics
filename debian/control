@@ -2,19 +2,19 @@ Source: libusermetrics
 Priority: optional
 Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Build-Depends: cmake,
+               dbus,
                debhelper (>= 9),
                doxygen,
+               gettext,
                google-mock (>= 1.6.0+svn437),
                libgtest-dev,
-               qtbase5-dev,
                libqdjango-dev,
-               valgrind,
-               pkg-config,
                libqt5sql5-sqlite,
                libqtdbustest1-dev,
+               pkg-config,
+               qtbase5-dev,
                sqlite3,
-               dbus,
-               gettext,
+               valgrind,
 Standards-Version: 3.9.4
 Section: libs
 Homepage: http://launchpad.net/libusermetrics
@@ -23,25 +23,17 @@ Homepage: http://launchpad.net/libusermetrics
 Vcs-Bzr: http://bazaar.launchpad.net/~indicator-applet-developers/libusermetrics/trunk
 Vcs-Browser: https://code.launchpad.net/~indicator-applet-developers/libusermetrics/trunk
 
-Package: libusermetrics-tools
-Architecture: any
-Depends: libusermetricsinput1 (= ${binary:Version}),
-         ${misc:Depends},
-         ${shlibs:Depends}
-Description: library for exporting anonymous metrics about users
- This package contains command line tools to operate the library.
- 
 Package: usermetricsservice
 Architecture: any
-Multi-Arch: same
-Depends: dbus,
-         sqlite3,
+Depends: adduser,
+         dbus,
          libqt5sql5-sqlite,
-         adduser,
+         sqlite3,
          ${misc:Depends},
-         ${shlibs:Depends}
+         ${shlibs:Depends},
 Description: library for exporting anonymous metrics about users
  This package contains the service which stores the metrics.
+Multi-Arch: same
 
 Package: libusermetricsinput1-dev
 Section: libdevel
@@ -56,8 +48,8 @@ Package: libusermetricsinput1
 Section: libs
 Architecture: any
 Multi-Arch: same
-Depends: usermetricsservice (= ${binary:Version}),
-         gettext,
+Depends: gettext,
+         usermetricsservice (= ${binary:Version}),
          ${misc:Depends},
          ${shlibs:Depends},
 Pre-Depends: ${misc:Pre-Depends},
@@ -90,3 +82,12 @@ Architecture: all
 Depends: ${misc:Depends},
 Description: API documentation for libusermetrics
  This package installs the libusermetrics API documentation.
+
+Package: libusermetrics-tools
+Architecture: any
+Depends: libusermetricsinput1 (= ${binary:Version}),
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: library for exporting anonymous metrics about users
+ This package contains command line tools to operate the library.
+
