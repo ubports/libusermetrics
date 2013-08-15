@@ -31,6 +31,9 @@ include_directories(${Qt5Test_INCLUDE_DIRS})
 pkg_check_modules(QDJANGO_DB REQUIRED qdjango-db REQUIRED)
 include_directories(${QDJANGO_DB_INCLUDE_DIRS})
 
+pkg_check_modules(QTDBUSTEST REQUIRED libqtdbustest-1 REQUIRED)
+include_directories(${QTDBUSTEST_INCLUDE_DIRS})
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

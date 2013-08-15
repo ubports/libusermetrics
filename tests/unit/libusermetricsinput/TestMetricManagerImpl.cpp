@@ -50,19 +50,19 @@ protected:
 
 TEST_F(TestMetricManagerImpl, TestCanAddDataSourceMultipleTimes) {
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
-			DBusPaths::userMetrics(), *connection);
+			DBusPaths::userMetrics(), systemConnection());
 	{
 		QList<QDBusObjectPath> dataSources = userMetricsInterface.dataSources();
 		EXPECT_TRUE(dataSources.empty());
 	}
 
 	{
-		MetricManagerPtr manager(new MetricManagerImpl(*connection));
+		MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
 		MetricPtr metric(manager->add("data-source-id", "format string %1"));
 	}
 
 	{
-		MetricManagerPtr manager(new MetricManagerImpl(*connection));
+		MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
 		MetricPtr metric(manager->add("data-source-id", "format string %1"));
 	}
 
@@ -73,13 +73,14 @@ TEST_F(TestMetricManagerImpl, TestCanAddDataSourceMultipleTimes) {
 	}
 
 	com::canonical::usermetrics::DataSource dataSourceInterface(
-			DBusPaths::serviceName(), DBusPaths::dataSource(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSource(1),
+			systemConnection());
 	QString name(dataSourceInterface.name());
 	EXPECT_EQ(QString("data-source-id"), name);
 }
 
 TEST_F(TestMetricManagerImpl, TestCanAddDataAndUpdate) {
-	MetricManagerPtr manager(new MetricManagerImpl(*connection));
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
 
 	MetricPtr metric(manager->add("data-source-id", "format string %1"));
 
@@ -92,11 +93,13 @@ TEST_F(TestMetricManagerImpl, TestCanAddDataAndUpdate) {
 	}
 
 	com::canonical::usermetrics::UserData userDataInterface(
-			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::userData(1),
+			systemConnection());
 	EXPECT_EQ(QString("the-username"), userDataInterface.username());
 
 	com::canonical::usermetrics::DataSet dataSetInterface(
-			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSet(1),
+			systemConnection());
 	QVariantList data(dataSetInterface.data());
 	EXPECT_FLOAT_EQ(100.0, data.at(0).toDouble());
 	EXPECT_EQ(QString(""), data.at(1).toString());
@@ -108,7 +111,7 @@ TEST_F(TestMetricManagerImpl, TestCanAddDataAndUpdate) {
 }
 
 TEST_F(TestMetricManagerImpl, TestAddMultipleDataSourcesAndUsers) {
-	MetricManagerPtr manager(new MetricManagerImpl(*connection));
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
 
 	MetricPtr metricOne(
 			manager->add("data-source-one", "format string one %1"));
@@ -128,45 +131,53 @@ TEST_F(TestMetricManagerImpl, TestAddMultipleDataSourcesAndUsers) {
 	}
 
 	com::canonical::usermetrics::UserData userDataInterfaceOne(
-			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::userData(1),
+			systemConnection());
 	EXPECT_EQ(QString("the-username-one"), userDataInterfaceOne.username());
 	com::canonical::usermetrics::UserData userDataInterfaceTwo(
-			DBusPaths::serviceName(), DBusPaths::userData(2), *connection);
+			DBusPaths::serviceName(), DBusPaths::userData(2),
+			systemConnection());
 	EXPECT_EQ(QString("the-username-two"), userDataInterfaceTwo.username());
 
 	com::canonical::usermetrics::DataSet dataSetInterfaceOne(
-			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSet(1),
+			systemConnection());
 	QVariantList dataOne(dataSetInterfaceOne.data());
 	EXPECT_FLOAT_EQ(100.0, dataOne.first().toDouble());
 
 	com::canonical::usermetrics::DataSet dataSetInterfaceTwo(
-			DBusPaths::serviceName(), DBusPaths::dataSet(2), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSet(2),
+			systemConnection());
 	QVariantList dataTwo(dataSetInterfaceTwo.data());
 	EXPECT_FLOAT_EQ(75.0, dataTwo.first().toDouble());
 
 	com::canonical::usermetrics::DataSet dataSetInterfaceThree(
-			DBusPaths::serviceName(), DBusPaths::dataSet(3), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSet(3),
+			systemConnection());
 	QVariantList dataThree(dataSetInterfaceThree.data());
 	EXPECT_FLOAT_EQ(50.0, dataThree.first().toDouble());
 
 	com::canonical::usermetrics::DataSet dataSetInterfaceFour(
-			DBusPaths::serviceName(), DBusPaths::dataSet(4), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSet(4),
+			systemConnection());
 	QVariantList dataFour(dataSetInterfaceFour.data());
 	EXPECT_FLOAT_EQ(25.0, dataFour.first().toDouble());
 }
 
 TEST_F(TestMetricManagerImpl, TestCanAddDataAndUpdateToday) {
-	MetricManagerPtr manager(new MetricManagerImpl(*connection));
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
 
 	MetricPtr metric(manager->add("data-source-id", "format string %1"));
 	metric->update(2.5, "the-username");
 
 	com::canonical::usermetrics::UserData userDataInterface(
-			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::userData(1),
+			systemConnection());
 	EXPECT_EQ(QString("the-username"), userDataInterface.username());
 
 	com::canonical::usermetrics::DataSet dataSetInterface(
-			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSet(1),
+			systemConnection());
 	{
 		QVariantList data(dataSetInterface.data());
 		ASSERT_EQ(1, data.size());
@@ -185,17 +196,19 @@ TEST_F(TestMetricManagerImpl, TestCanAddDataAndUpdateToday) {
 }
 
 TEST_F(TestMetricManagerImpl, TestCanAddDataAndIncrement) {
-	MetricManagerPtr manager(new MetricManagerImpl(*connection));
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
 
 	MetricPtr metric(manager->add("data-source-id", "format string %1"));
 	metric->increment(1.0, "the-username");
 
 	com::canonical::usermetrics::UserData userDataInterface(
-			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::userData(1),
+			systemConnection());
 	EXPECT_EQ(QString("the-username"), userDataInterface.username());
 
 	com::canonical::usermetrics::DataSet dataSetInterface(
-			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSet(1),
+			systemConnection());
 	{
 		QVariantList data(dataSetInterface.data());
 		ASSERT_EQ(1, data.size());
@@ -214,7 +227,7 @@ TEST_F(TestMetricManagerImpl, TestCanAddDataAndIncrement) {
 }
 
 TEST_F(TestMetricManagerImpl, TestCanAddNullAndIncrement) {
-	MetricManagerPtr manager(new MetricManagerImpl(*connection));
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
 
 	MetricPtr metric(manager->add("data-source-id", "format string %1"));
 	{
@@ -223,11 +236,13 @@ TEST_F(TestMetricManagerImpl, TestCanAddNullAndIncrement) {
 	}
 
 	com::canonical::usermetrics::UserData userDataInterface(
-			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::userData(1),
+			systemConnection());
 	EXPECT_EQ(QString("the-username"), userDataInterface.username());
 
 	com::canonical::usermetrics::DataSet dataSetInterface(
-			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSet(1),
+			systemConnection());
 	{
 		QVariantList data(dataSetInterface.data());
 		ASSERT_EQ(1, data.size());

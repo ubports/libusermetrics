@@ -60,7 +60,7 @@ TEST_F(TestUserMetricInputCAPI, TestBasicFunctionality) {
 	usermetricsinput_metricupdate_delete(metricUpdate);
 
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
-			DBusPaths::userMetrics(), *connection);
+			DBusPaths::userMetrics(), systemConnection());
 
 	{
 		QList<QDBusObjectPath> dataSources = userMetricsInterface.dataSources();
@@ -69,7 +69,7 @@ TEST_F(TestUserMetricInputCAPI, TestBasicFunctionality) {
 	}
 
 	com::canonical::usermetrics::DataSource dataSourceInterface(
-			DBusPaths::serviceName(), DBusPaths::dataSource(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSource(1), systemConnection());
 	EXPECT_EQ(QString("data-source-id-capi"), dataSourceInterface.name());
 	EXPECT_EQ(QString("format string c-api %1"),
 			dataSourceInterface.formatString());
@@ -78,11 +78,12 @@ TEST_F(TestUserMetricInputCAPI, TestBasicFunctionality) {
 	EXPECT_EQ(QString("text domain"), dataSourceInterface.textDomain());
 
 	com::canonical::usermetrics::UserData userDataInterface(
-			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::userData(1), systemConnection());
 	EXPECT_EQ(QString("username_capi"), userDataInterface.username());
 
 	com::canonical::usermetrics::DataSet dataSetInterface(
-			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSet(1),
+			systemConnection());
 
 	{
 		QVariantList data(dataSetInterface.data());

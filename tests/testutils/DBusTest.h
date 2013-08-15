@@ -18,7 +18,10 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QProcess>
+
 #include <QtDBus/QtDBus>
+
+#include <libqtdbustest/DBusTestRunner.h>
 
 #include <gtest/gtest.h>
 
@@ -37,13 +40,9 @@ protected:
 
 	virtual void TearDown();
 
-	QString bus;
+	QtDBusTest::DBusTestRunner dbus;
 
-	QScopedPointer<QDBusConnection> connection;
-
-	QProcess dbus;
-
-	QProcess userMetricsService;
+	virtual const QDBusConnection & systemConnection() const;
 };
 
 }
