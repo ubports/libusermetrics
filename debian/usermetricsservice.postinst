@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+dbus-send --system --print-reply                        \
+        --dest=org.freedesktop.DBus                     \
+        /org/freedesktop/DBus                           \
+        org.freedesktop.DBus.StartServiceByName         \
+        string:"com.canonical.UserMetrics" uint32:0
+
+#DEBHELPER#
+
+exit 0
