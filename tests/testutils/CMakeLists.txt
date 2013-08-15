@@ -22,3 +22,8 @@ qt5_use_modules(
 	DBus
 	Test
 )
+
+target_link_libraries(
+	usermetrics-test-utils
+	${QTDBUSTEST_LIBRARIES}
+)

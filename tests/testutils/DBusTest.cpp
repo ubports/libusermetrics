@@ -18,58 +18,29 @@
 
 #include <testutils/DBusTest.h>
 #include <QtTest/QSignalSpy>
-#include <cstdlib>
+#include <libqtdbustest/QProcessDBusService.h>
 
 using namespace UserMetricsTestUtils;
+using namespace QtDBusTest;
 
 DBusTest::DBusTest() {
+	DBusServicePtr userMetricsService(
+			new QProcessDBusService("com.canonical.UserMetrics",
+					QDBusConnection::SystemBus, USERMETRICSSERVICE_BINARY,
+					QStringList() << ":memory:"));
+	dbus.registerService(userMetricsService);
 }
 
 DBusTest::~DBusTest() {
 }
 
 void DBusTest::SetUp() {
-	dbus.setProcessChannelMode(QProcess::MergedChannels);
-	QStringList params;
-	params << "--config-file" << DBUS_SYSTEM_CONFIG_FILE << "--print-address";
-	dbus.start("dbus-daemon", params);
-	EXPECT_TRUE(dbus.waitForStarted());
-
-	dbus.waitForReadyRead();
-	QByteArray readAll(dbus.readAll());
-	bus = readAll.trimmed();
-
-	QByteArray byteArray(bus.toUtf8());
-	setenv("DBUS_SYSTEM_BUS_ADDRESS", byteArray.data(), true);
-
-	connection.reset(
-			new QDBusConnection(QDBusConnection::connectToBus(bus, bus)));
-
-	QDBusServiceWatcher watcher("com.canonical.UserMetrics", *connection,
-			QDBusServiceWatcher::WatchForRegistration);
-	QSignalSpy spy(&watcher,
-			SIGNAL(serviceOwnerChanged(const QString &,const QString &,const QString &)));
-
-	QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
-	env.insert("DBUS_SYSTEM_BUS_ADDRESS", bus);
-	env.insert("DBUS_SESSION_BUS_ADDRESS", bus);
-	userMetricsService.setProcessChannelMode(QProcess::MergedChannels);
-	userMetricsService.setProcessEnvironment(env);
-	userMetricsService.start(USERMETRICSSERVICE_BINARY,
-			QStringList() << ":memory:");
-
-	spy.wait();
-	QVariantList arguments(spy.takeFirst());
-	EXPECT_EQ("com.canonical.UserMetrics", arguments.first().toString());
+	dbus.startServices();
 }
 
 void DBusTest::TearDown() {
-	userMetricsService.terminate();
-	EXPECT_TRUE(userMetricsService.waitForFinished());
+}
 
-//	userMetricsService.waitForReadyRead(100);
-//	qDebug() << userMetricsService.readAll();
-
-	dbus.terminate();
-	EXPECT_TRUE(dbus.waitForFinished());
+const QDBusConnection & DBusTest::systemConnection() const {
+	return dbus.systemConnection();
 }

@@ -38,9 +38,6 @@ protected:
 };
 
 TEST_F(TestUserMetrics, MethodBarDoesAbc) {
-	QByteArray byteArray(bus.toUtf8());
-	setenv("DBUS_SYSTEM_BUS_ADDRESS", byteArray.data(), true);
-
 	QScopedPointer<UserMetrics> model(UserMetrics::getInstance());
 	model->setUsername("guest");
 	EXPECT_EQ("guest", model->username());

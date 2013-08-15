@@ -51,7 +51,7 @@ protected:
 
 TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
-			DBusPaths::userMetrics(), *connection);
+			DBusPaths::userMetrics(), systemConnection());
 
 	QDBusObjectPath dataSourcePath1(
 			userMetricsInterface.createDataSource("data-source-one",
@@ -65,7 +65,7 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 					"text domain two"));
 	ASSERT_EQ(DBusPaths::dataSource(2), dataSourcePath2.path());
 
-	SyncedUserMetricsStore store(*connection);
+	SyncedUserMetricsStore store(systemConnection());
 	QSignalSpy connectionEstablishedSpy(&store,
 			SIGNAL(connectionEstablished()));
 	connectionEstablishedSpy.wait();
@@ -89,7 +89,7 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 
 TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
-			DBusPaths::userMetrics(), *connection);
+			DBusPaths::userMetrics(), systemConnection());
 
 	QDBusObjectPath dataSourcePath1(
 			userMetricsInterface.createDataSource("data-source-one",
@@ -97,7 +97,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 					"text-domain-one"));
 	ASSERT_EQ(DBusPaths::dataSource(1), dataSourcePath1.path());
 
-	SyncedUserMetricsStore store(*connection);
+	SyncedUserMetricsStore store(systemConnection());
 	QSignalSpy connectionEstablishedSpy(&store,
 			SIGNAL(connectionEstablished()));
 	connectionEstablishedSpy.wait();
@@ -146,7 +146,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 
 TEST_F(TestSyncedUserMetricsStore, LoadsUserDataAtStartup) {
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
-			DBusPaths::userMetrics(), *connection);
+			DBusPaths::userMetrics(), systemConnection());
 
 	QDBusObjectPath userDataPath(
 			userMetricsInterface.createUserData("username1"));
@@ -156,7 +156,7 @@ TEST_F(TestSyncedUserMetricsStore, LoadsUserDataAtStartup) {
 			userMetricsInterface.createUserData("username2"));
 	ASSERT_EQ(DBusPaths::userData(2), userDataPath2.path());
 
-	SyncedUserMetricsStore store(*connection);
+	SyncedUserMetricsStore store(systemConnection());
 	QSignalSpy connectionEstablishedSpy(&store,
 			SIGNAL(connectionEstablished()));
 	connectionEstablishedSpy.wait();
@@ -176,13 +176,13 @@ TEST_F(TestSyncedUserMetricsStore, LoadsUserDataAtStartup) {
 
 TEST_F(TestSyncedUserMetricsStore, SyncsNewUserData) {
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
-			DBusPaths::userMetrics(), *connection);
+			DBusPaths::userMetrics(), systemConnection());
 
 	QDBusObjectPath userDataPath(
 			userMetricsInterface.createUserData("username1"));
 	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
 
-	SyncedUserMetricsStore store(*connection);
+	SyncedUserMetricsStore store(systemConnection());
 	QSignalSpy connectionEstablishedSpy(&store,
 			SIGNAL(connectionEstablished()));
 	connectionEstablishedSpy.wait();
@@ -222,7 +222,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewUserData) {
 
 TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
-			DBusPaths::userMetrics(), *connection);
+			DBusPaths::userMetrics(), systemConnection());
 
 	QDBusObjectPath twitterPath(
 			userMetricsInterface.createDataSource("twitter",
@@ -234,7 +234,7 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
 
 	com::canonical::usermetrics::UserData userDataInterface(
-			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::userData(1), systemConnection());
 	QDBusObjectPath twitterDataPath(userDataInterface.createDataSet("twitter"));
 	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
 
@@ -242,10 +242,10 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	QVariantList expected( { 1.0, 0.75, QVariant(), 0.25, 0.0 });
 
 	com::canonical::usermetrics::DataSet dataSetInterface(
-			DBusPaths::serviceName(), DBusPaths::dataSet(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::dataSet(1), systemConnection());
 	dataSetInterface.update(data);
 
-	SyncedUserMetricsStore store(*connection);
+	SyncedUserMetricsStore store(systemConnection());
 	QSignalSpy connectionEstablishedSpy(&store,
 			SIGNAL(connectionEstablished()));
 	connectionEstablishedSpy.wait();
@@ -265,7 +265,7 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 
 TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
-			DBusPaths::userMetrics(), *connection);
+			DBusPaths::userMetrics(), systemConnection());
 
 	QDBusObjectPath twitterPath(
 			userMetricsInterface.createDataSource("twitter",
@@ -283,12 +283,12 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
 
 	com::canonical::usermetrics::UserData userDataInterface(
-			DBusPaths::serviceName(), DBusPaths::userData(1), *connection);
+			DBusPaths::serviceName(), DBusPaths::userData(1), systemConnection());
 
 	QDBusObjectPath twitterDataPath(userDataInterface.createDataSet("twitter"));
 	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
 
-	SyncedUserMetricsStore store(*connection);
+	SyncedUserMetricsStore store(systemConnection());
 	QSignalSpy connectionEstablishedSpy(&store,
 			SIGNAL(connectionEstablished()));
 	connectionEstablishedSpy.wait();

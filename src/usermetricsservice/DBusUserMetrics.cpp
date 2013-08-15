@@ -36,7 +36,7 @@ using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
-DBusUserMetrics::DBusUserMetrics(QDBusConnection &dbusConnection,
+DBusUserMetrics::DBusUserMetrics(const QDBusConnection &dbusConnection,
 		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new UserMetricsAdaptor(this)), m_dateFactory(dateFactory) {

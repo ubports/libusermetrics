@@ -44,7 +44,7 @@ Q_PROPERTY(QList<QDBusObjectPath> dataSources READ dataSources)
 Q_PROPERTY(QList<QDBusObjectPath> userDatas READ userDatas)
 
 public:
-	DBusUserMetrics(QDBusConnection &dbusConnection,
+	DBusUserMetrics(const QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
 			QObject *parent = 0);
 

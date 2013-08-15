@@ -13,6 +13,7 @@ target_link_libraries(
 	usermetricsservice-unit-tests
 	usermetricsservice
 	usermetrics-test-utils
+	${QTDBUSTEST_LIBRARIES}
 	${GTEST_LIBRARIES}
 	${GMOCK_LIBRARIES}
 )
