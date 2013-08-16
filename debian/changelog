@@ -1,3 +1,13 @@
+libusermetrics (1.1.1+13.10.20130816-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Resolve postinst script failing when dbus is not running.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 127
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 16 Aug 2013 09:12:11 +0000
+
 libusermetrics (1.1.1+13.10.20130815.2-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]
