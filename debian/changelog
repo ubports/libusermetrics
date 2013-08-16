@@ -1,3 +1,14 @@
+libusermetrics (1.1.1+13.10.20130815.2-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Switch to using libqtdbustest.
+  * Improve the packaging.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 125
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 15 Aug 2013 22:07:25 +0000
+
 libusermetrics (1.1.1+13.10.20130809-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]
