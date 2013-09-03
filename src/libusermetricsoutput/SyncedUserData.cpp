@@ -18,6 +18,7 @@
 
 #include <libusermetricsoutput/SyncedDataSet.h>
 #include <libusermetricsoutput/SyncedUserData.h>
+#include <libusermetricsoutput/UserMetricsStore.h>
 #include <libusermetricscommon/DataSetInterface.h>
 #include <libusermetricscommon/DBusPaths.h>
 
@@ -25,10 +26,10 @@ using namespace com;
 using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
 
-SyncedUserData::SyncedUserData(
+SyncedUserData::SyncedUserData(UserMetricsStore &userMetricsStore,
 		QSharedPointer<com::canonical::usermetrics::UserData> interface,
 		QObject *parent) :
-		UserData(parent), m_interface(interface) {
+		UserData(userMetricsStore, parent), m_interface(interface) {
 
 	connect(m_interface.data(),
 			SIGNAL(dataSetAdded(const QString &, const QDBusObjectPath &)),
@@ -45,8 +46,11 @@ SyncedUserData::SyncedUserData(
 				new canonical::usermetrics::DataSet(DBusPaths::serviceName(),
 						path.path(), m_interface->connection()));
 
-		QString dataSource(dataSet->dataSource());
-		insert(dataSource, DataSetPtr(new SyncedDataSet(dataSet)));
+		QString dataSourceId(dataSet->dataSource());
+		insert(dataSourceId,
+				DataSetPtr(
+						new SyncedDataSet(dataSet,
+								m_userMetricsStore.dataSource(dataSourceId))));
 	}
 
 }
@@ -60,7 +64,11 @@ void SyncedUserData::addDataSet(const QString &dataSourceName,
 			new canonical::usermetrics::DataSet(DBusPaths::serviceName(),
 					path.path(), m_interface->connection()));
 
-	insert(dataSourceName, DataSetPtr(new SyncedDataSet(dataSet)));
+	QString dataSourceId(dataSet->dataSource());
+	insert(dataSourceName,
+			DataSetPtr(
+					new SyncedDataSet(dataSet,
+							m_userMetricsStore.dataSource(dataSourceId))));
 }
 
 void SyncedUserData::removeDataSet(const QString &dataSetName,

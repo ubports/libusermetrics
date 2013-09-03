@@ -84,7 +84,7 @@ void SyncedUserMetricsStore::sync() {
 						path.path(), m_interface.connection()));
 
 		QString username(userData->username());
-		insert(username, UserDataPtr(new SyncedUserData(userData)));
+		insert(username, UserDataPtr(new SyncedUserData(*this, userData)));
 	}
 
 	connectionEstablished();
@@ -96,7 +96,7 @@ void SyncedUserMetricsStore::addUserData(const QString &username,
 	QSharedPointer<canonical::usermetrics::UserData> userData(
 			new canonical::usermetrics::UserData(DBusPaths::serviceName(),
 					path.path(), m_interface.connection()));
-	insert(username, UserDataPtr(new SyncedUserData(userData)));
+	insert(username, UserDataPtr(new SyncedUserData(*this, userData)));
 }
 
 void SyncedUserMetricsStore::removeUserData(const QString &username,

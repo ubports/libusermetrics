@@ -30,7 +30,7 @@ Q_OBJECT
 public:
 	explicit SyncedDataSet(
 			QSharedPointer<com::canonical::usermetrics::DataSet> interface,
-			QObject *parent = 0);
+			DataSourcePtr dataSource, QObject *parent = 0);
 
 	virtual ~SyncedDataSet();
 

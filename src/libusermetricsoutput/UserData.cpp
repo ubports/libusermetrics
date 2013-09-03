@@ -17,11 +17,12 @@
  */
 
 #include <libusermetricsoutput/UserData.h>
+#include <libusermetricsoutput/UserMetricsStore.h>
 
 using namespace UserMetricsOutput;
 
-UserData::UserData(QObject *parent) :
-		QObject(parent) {
+UserData::UserData(UserMetricsStore &userMetricsStore, QObject *parent) :
+		QObject(parent), m_userMetricsStore(userMetricsStore) {
 }
 
 UserData::~UserData() {

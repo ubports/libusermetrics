@@ -194,7 +194,7 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUserThenAppearsWhenAdded) 
 
 	UserMetricsStore::iterator userDataIterator(
 			userDataStore->insert("soon-to-exist-user",
-					UserDataPtr(new UserData())));
+					UserDataPtr(new UserData(*userDataStore))));
 	UserDataPtr userData(*userDataIterator);
 
 	ColorThemePtr blankColorTheme(
@@ -204,7 +204,7 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUserThenAppearsWhenAdded) 
 			Return(emptyPair));
 
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
-			DataSetPtr(new DataSet()));
+			DataSetPtr(new DataSet(dataSource)));
 	DataSetPtr dataSet(*dataSetIterator);
 
 	QVariantList data;
@@ -232,7 +232,8 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUserThenAppearsWhenAdded) 
 }
 
 TEST_F(UserMetricsImplTest, HasEmptyDataForKnownUserWithNoData) {
-	userDataStore->insert("existing-user", UserDataPtr(new UserData()));
+	userDataStore->insert("existing-user",
+			UserDataPtr(new UserData(*userDataStore)));
 
 	model->setUsername("existing-user");
 	model->readyForDataChangeSlot();
@@ -284,11 +285,12 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	userDataStore->insert("data-source-id", dataSource);
 
 	UserMetricsStore::iterator userDataIterator(
-			userDataStore->insert("username", UserDataPtr(new UserData())));
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
 	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
-			DataSetPtr(new DataSet()));
+			DataSetPtr(new DataSet(dataSource)));
 	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts today
@@ -343,11 +345,12 @@ TEST_F(UserMetricsImplTest, FollowsCurrentDataSource) {
 	userDataStore->insert("data-source-id", dataSource);
 
 	UserMetricsStore::iterator userDataIterator(
-			userDataStore->insert("username", UserDataPtr(new UserData())));
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
 	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
-			DataSetPtr(new DataSet()));
+			DataSetPtr(new DataSet(dataSource)));
 	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts today
@@ -415,11 +418,12 @@ TEST_F(UserMetricsImplTest, AddTranslatedData) {
 	userDataStore->insert("data-source-id", dataSource);
 
 	UserMetricsStore::iterator userDataIterator(
-			userDataStore->insert("username", UserDataPtr(new UserData())));
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
 	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
-			DataSetPtr(new DataSet()));
+			DataSetPtr(new DataSet(dataSource)));
 	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts today
@@ -455,11 +459,12 @@ TEST_F(UserMetricsImplTest, AddTranslatedEmptyData) {
 	userDataStore->insert("data-source-id", dataSource);
 
 	UserMetricsStore::iterator userDataIterator(
-			userDataStore->insert("username", UserDataPtr(new UserData())));
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
 	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
-			DataSetPtr(new DataSet()));
+			DataSetPtr(new DataSet(dataSource)));
 	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts today
@@ -503,11 +508,12 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	userDataStore->insert("data-source-id2", dataSource);
 
 	UserMetricsStore::iterator userDataIterator(
-			userDataStore->insert("username", UserDataPtr(new UserData())));
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
 	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->insert("data-source-id2",
-			DataSetPtr(new DataSet()));
+			DataSetPtr(new DataSet(dataSource)));
 	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts 3 days ago
@@ -571,11 +577,12 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	userDataStore->insert("data-source-id", dataSource);
 
 	UserMetricsStore::iterator userDataIterator(
-			userDataStore->insert("username", UserDataPtr(new UserData())));
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
 	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
-			DataSetPtr(new DataSet()));
+			DataSetPtr(new DataSet(dataSource)));
 	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts 3 days ago
@@ -634,11 +641,12 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	userDataStore->insert("data-source-id", dataSource);
 
 	UserMetricsStore::iterator userDataIterator(
-			userDataStore->insert("username", UserDataPtr(new UserData())));
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
 	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->insert("data-source-id",
-			DataSetPtr(new DataSet()));
+			DataSetPtr(new DataSet(dataSource)));
 	DataSetPtr dataSet(*dataSetIterator);
 
 	// The data starts 2 days ago
@@ -686,7 +694,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 	// the fake date provider says the date is 2001/01/07
 
 	UserMetricsStore::iterator userDataIterator(
-			userDataStore->insert("username", UserDataPtr(new UserData())));
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
 	UserDataPtr userData(*userDataIterator);
 
 	// first data set
@@ -699,7 +708,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 		QVariantList data;
 		data << 100.0 << 95.0 << 0.0 << 0.0 << 0.0 << 0.0 << 90.0 << 85.0;
 		UserData::iterator dataSetIterator = userData->insert("data-source-one",
-				DataSetPtr(new DataSet()));
+				DataSetPtr(new DataSet(dataSource)));
 		DataSetPtr dataSet(*dataSetIterator);
 		dataSet->setLastUpdated(QDate(2001, 1, 4));
 		dataSet->setData(data);
@@ -716,7 +725,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 		data << 50.0 << 65.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 				<< 75.0 << 100.0;
 		UserData::iterator dataSetIterator = userData->insert("data-source-two",
-				DataSetPtr(new DataSet()));
+				DataSetPtr(new DataSet(dataSource)));
 		DataSetPtr dataSet(*dataSetIterator);
 		dataSet->setLastUpdated(QDate(2001, 1, 7));
 		dataSet->setData(data);
@@ -804,7 +813,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 	{
 		UserMetricsStore::iterator userDataIterator(
 				userDataStore->insert("first-user",
-						UserDataPtr(new UserData())));
+						UserDataPtr(new UserData(*userDataStore))));
 		UserDataPtr userData(*userDataIterator);
 
 		// first data set
@@ -816,7 +825,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			QVariantList data;
 			data << 100.0 << 95.0 << 0.0 << 0.0 << 0.0 << 0.0 << 90.0 << 85.0;
 			UserData::iterator dataSetIterator = userData->insert(
-					"data-source-one", DataSetPtr(new DataSet()));
+					"data-source-one", DataSetPtr(new DataSet(dataSource)));
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
@@ -833,7 +842,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			data << 50.0 << 65.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 					<< 0.0 << 75.0 << 100.0;
 			UserData::iterator dataSetIterator = userData->insert(
-					"data-source-two", DataSetPtr(new DataSet()));
+					"data-source-two", DataSetPtr(new DataSet(dataSource)));
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
@@ -844,7 +853,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 	{
 		UserMetricsStore::iterator userDataIterator(
 				userDataStore->insert("second-user",
-						UserDataPtr(new UserData())));
+						UserDataPtr(new UserData(*userDataStore))));
 		UserDataPtr userData(*userDataIterator);
 		DataSourcePtr foo;
 
@@ -858,7 +867,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			data << 15.0 << 100.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 					<< 0.0 << 5.0 << 10.0;
 			UserData::iterator dataSetIterator = userData->insert(
-					"data-source-three", DataSetPtr(new DataSet()));
+					"data-source-three", DataSetPtr(new DataSet(dataSource)));
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
@@ -875,7 +884,7 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			data << 25.0 << 30.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 0.0
 					<< 0.0 << 0.0 << 0.0 << 0.0 << 0.0 << 100.0 << 35.0;
 			UserData::iterator dataSetIterator = userData->insert(
-					"data-source-xfour", DataSetPtr(new DataSet()));
+					"data-source-xfour", DataSetPtr(new DataSet(dataSource)));
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
@@ -1087,11 +1096,12 @@ TEST_F(UserMetricsImplTest, HandlesTooBigData) {
 	userDataStore->insert("data", dataSource);
 
 	UserMetricsStore::iterator userDataIterator(
-			userDataStore->insert("username", UserDataPtr(new UserData())));
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
 	UserDataPtr userData(*userDataIterator);
 
 	UserData::iterator dataSetIterator = userData->insert("data",
-			DataSetPtr(new DataSet()));
+			DataSetPtr(new DataSet(dataSource)));
 	DataSetPtr dataSet(*dataSetIterator);
 
 	dataSet->setLastUpdated(QDate(2001, 03, 07));

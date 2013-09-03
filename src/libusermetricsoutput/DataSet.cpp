@@ -21,8 +21,11 @@
 using namespace std;
 using namespace UserMetricsOutput;
 
-DataSet::DataSet(QObject* parent) :
-		QObject(parent) {
+DataSet::DataSet(DataSourcePtr dataSource, QObject* parent) :
+		QObject(parent), m_dataSource(dataSource) {
+
+	connect(m_dataSource.data(), SIGNAL(optionsChanged(const QVariantMap &)),
+			this, SLOT(optionsChanged(const QVariantMap &)));
 }
 
 DataSet::~DataSet() {
@@ -41,21 +44,41 @@ const QVariant & DataSet::head() const {
 }
 
 void DataSet::setData(const QVariantList &data) {
-	m_data = data;
+	m_originalData = data;
+	scaleData();
+}
+
+void DataSet::scaleData() {
+	m_data = m_originalData;
+
+	const QVariantMap &options(m_dataSource->options());
+
+	bool hasMinimum(options.contains("minimum"));
+	bool hasMaximum(options.contains("maximum"));
 
 	double min(numeric_limits<double>::max());
 	double max(numeric_limits<double>::min());
 
-	for (QVariant &variant : m_data) {
-		if (variant.type() == QVariant::String) {
-			variant = QVariant();
-		} else if (variant.type() == QVariant::Double) {
-			double value(variant.toDouble());
-			if (value < min) {
-				min = value;
-			}
-			if (value > max) {
-				max = value;
+	if (hasMinimum) {
+		min = options["minimum"].toDouble();
+	}
+	if (hasMaximum) {
+		max = options["maximum"].toDouble();
+	}
+
+	// if we need to find either the max or the min
+	if (!hasMinimum && !hasMaximum) {
+		for (QVariant &variant : m_data) {
+			if (variant.type() == QVariant::String) {
+				variant = QVariant();
+			} else if (variant.type() == QVariant::Double) {
+				double value(variant.toDouble());
+				if (!hasMinimum && value < min) {
+					min = value;
+				}
+				if (!hasMaximum && value > max) {
+					max = value;
+				}
 			}
 		}
 	}
@@ -95,4 +118,9 @@ void DataSet::setLastUpdated(const QDate &lastUpdated) {
 void DataSet::update(const uint lastUpdated, const QVariantList &data) {
 	setLastUpdated(QDateTime::fromTime_t(lastUpdated).date());
 	setData(data);
+}
+
+void DataSet::optionsChanged(const QVariantMap &options) {
+	Q_UNUSED(options);
+	scaleData();
 }

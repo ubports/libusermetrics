@@ -24,11 +24,13 @@
 
 namespace UserMetricsOutput {
 
+class UserMetricsStore;
+
 class SyncedUserData: public UserData {
 Q_OBJECT
 
 public:
-	explicit SyncedUserData(
+	explicit SyncedUserData(UserMetricsStore &userMetricsStore,
 			QSharedPointer<com::canonical::usermetrics::UserData> interface,
 			QObject *parent = 0);
 

@@ -22,8 +22,8 @@ using namespace UserMetricsOutput;
 
 SyncedDataSet::SyncedDataSet(
 		QSharedPointer<com::canonical::usermetrics::DataSet> interface,
-		QObject *parent) :
-		DataSet(parent), m_interface(interface) {
+		DataSourcePtr dataSource, QObject *parent) :
+		DataSet(dataSource, parent), m_interface(interface) {
 
 	connect(m_interface.data(), SIGNAL(updated(uint, const QVariantList &)),
 			this, SLOT(update(uint, const QVariantList &)));

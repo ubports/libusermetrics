@@ -22,6 +22,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QSharedPointer>
+#include <QtCore/QVariantMap>
 
 namespace UserMetricsOutput {
 
@@ -42,6 +43,8 @@ Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString
 
 Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain NOTIFY textDomainChanged FINAL)
 
+Q_PROPERTY(QVariantMap options READ options NOTIFY optionsChanged)
+
 public:
 	explicit DataSource(const QString &localeDir = LOCALEDIR, QObject *parent =
 			0);
@@ -54,6 +57,8 @@ public:
 
 	const QString & textDomain() const;
 
+	const QVariantMap & options() const;
+
 public Q_SLOTS:
 	void setFormatString(const QString &formatString);
 
@@ -61,12 +66,16 @@ public Q_SLOTS:
 
 	void setTextDomain(const QString &textDomain);
 
+	void setOptions(const QVariantMap &options);
+
 Q_SIGNALS:
 	void formatStringChanged(const QString &formatString);
 
 	void emptyDataStringChanged(const QString &emptyDataString);
 
 	void textDomainChanged(const QString &textDomain);
+
+	void optionsChanged(const QVariantMap &options);
 
 protected:
 	void updateFormatStringTranslation();
@@ -84,6 +93,8 @@ protected:
 	QString m_textDomain;
 
 	QString m_localeDir;
+
+	QVariantMap m_options;
 };
 
 }

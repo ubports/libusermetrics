@@ -83,3 +83,14 @@ void DataSource::setTextDomain(const QString &textDomain) {
 		textDomainChanged(m_textDomain);
 	}
 }
+
+const QVariantMap & DataSource::options() const {
+	return m_options;
+}
+
+void DataSource::setOptions(const QVariantMap &options) {
+	if (options != m_options) {
+		m_options = options;
+		optionsChanged(m_options);
+	}
+}

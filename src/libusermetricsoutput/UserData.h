@@ -26,6 +26,7 @@
 namespace UserMetricsOutput {
 
 class UserData;
+class UserMetricsStore;
 
 typedef QSharedPointer<UserData> UserDataPtr;
 
@@ -39,7 +40,7 @@ public:
 
 	typedef DataSetMap::const_iterator const_iterator;
 
-	explicit UserData(QObject *parent = 0);
+	explicit UserData(UserMetricsStore &userMetricsStore, QObject *parent = 0);
 
 	virtual ~UserData();
 
@@ -54,6 +55,8 @@ Q_SIGNALS:
 
 protected:
 	DataSetMap m_dataSets;
+
+	UserMetricsStore &m_userMetricsStore;
 };
 
 }
