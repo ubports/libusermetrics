@@ -35,6 +35,10 @@ class Metric;
  */
 typedef QSharedPointer<Metric> MetricPtr;
 
+enum MetricType {
+	USER, SYSTEM,
+};
+
 /**
  * @brief This class represents a single user metric
  *

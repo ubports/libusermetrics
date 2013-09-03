@@ -88,7 +88,8 @@ TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 
 		EXPECT_EQ(QString("/com/canonical/UserMetrics/DataSource/1"),
 				userMetrics.createDataSource("facebook", "%1 messages received",
-						"no facebook data", "facebook text domain").path());
+						"no facebook data", "facebook text domain", 0,
+						QVariantMap()).path());
 
 		DBusDataSourcePtr facebook(userMetrics.dataSource("facebook"));
 		EXPECT_EQ(QString("facebook"), facebook->name());
@@ -120,7 +121,8 @@ TEST_F(TestUserMetricsService, UpdatesFormatString) {
 	{
 		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
 
-		userMetrics.createDataSource("twitter", "%1 tweets received", "", "");
+		userMetrics.createDataSource("twitter", "%1 tweets received", "", "", 0,
+				QVariantMap());
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("%1 tweets received"), twitter->formatString());
@@ -142,7 +144,7 @@ TEST_F(TestUserMetricsService, UpdatesEmptyDataString) {
 		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received",
-				"no tweets today", "");
+				"no tweets today", "", 0, QVariantMap());
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("no tweets today"), twitter->emptyDataString());
@@ -164,7 +166,7 @@ TEST_F(TestUserMetricsService, UpdatesTextDomain) {
 		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received", "",
-				"start text domain");
+				"start text domain", 0, QVariantMap());
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("start text domain"), twitter->textDomain());
@@ -185,13 +187,15 @@ TEST_F(TestUserMetricsService, UpdatesFormatStringOnCreate) {
 	{
 		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
 
-		userMetrics.createDataSource("twitter", "%1 tweets received", "", "");
+		userMetrics.createDataSource("twitter", "%1 tweets received", "", "", 0,
+				QVariantMap());
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("twitter"), twitter->name());
 		EXPECT_EQ(QString("%1 tweets received"), twitter->formatString());
 
-		userMetrics.createDataSource("twitter", "%1 new format string", "", "");
+		userMetrics.createDataSource("twitter", "%1 new format string", "", "",
+				0, QVariantMap());
 
 		EXPECT_EQ(QString("twitter"), twitter->name());
 		EXPECT_EQ(QString("%1 new format string"), twitter->formatString());
@@ -242,7 +246,8 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 	{
 		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
 
-		userMetrics.createDataSource("twitter", "%1 tweets received", "", "");
+		userMetrics.createDataSource("twitter", "%1 tweets received", "", "", 0,
+				QVariantMap());
 		userMetrics.createUserData("alice");
 
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
@@ -298,7 +303,7 @@ TEST_F(TestUserMetricsService, UpdateData) {
 			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 8)));
 
 	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
-	userMetrics.createDataSource("twitter", "foo", "", "");
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("bob");
 	DBusUserDataPtr bob(userMetrics.userData("bob"));
@@ -327,7 +332,7 @@ TEST_F(TestUserMetricsService, UpdateDataWithGap) {
 			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 15)));
 
 	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
-	userMetrics.createDataSource("twitter", "foo", "", "");
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("bob");
 	DBusUserDataPtr bob(userMetrics.userData("bob"));
@@ -361,7 +366,7 @@ TEST_F(TestUserMetricsService, UpdateDataTotallyOverwrite) {
 			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 7)));
 
 	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
-	userMetrics.createDataSource("twitter", "foo", "", "");
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("bob");
 	DBusUserDataPtr bob(userMetrics.userData("bob"));
@@ -387,7 +392,7 @@ TEST_F(TestUserMetricsService, UpdateDataTotallyOverwrite) {
 
 TEST_F(TestUserMetricsService, MultipleUsers) {
 	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
-	userMetrics.createDataSource("twitter", "foo", "", "");
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("alice");
 	DBusUserDataPtr alice(userMetrics.userData("alice"));
@@ -415,7 +420,7 @@ TEST_F(TestUserMetricsService, IncrementOverSeveralDays) {
 			Return(QDate(2001, 03, 1)));
 
 	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
-	userMetrics.createDataSource("twitter", "foo", "", "");
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("bob");
 	DBusUserDataPtr bob(userMetrics.userData("bob"));
@@ -451,7 +456,7 @@ TEST_F(TestUserMetricsService, StoreMaximumOf62Days) {
 			Return(QDate(2001, 3, 5)));
 
 	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
-	userMetrics.createDataSource("twitter", "foo", "", "");
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("bob");
 	DBusUserDataPtr bob(userMetrics.userData("bob"));

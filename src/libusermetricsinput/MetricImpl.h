@@ -21,6 +21,7 @@
 
 #include <libusermetricsinput/Metric.h>
 #include <libusermetricscommon/UserMetricsInterface.h>
+#include <libusermetricscommon/DataSourceInterface.h>
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -31,8 +32,8 @@ namespace UserMetricsInput {
 class MetricImpl: public Metric {
 public:
 	explicit MetricImpl(const QString &dataSourceId,
-			const QString &formatString, const QDBusConnection &dbusConnection,
-			QObject *parent = 0);
+			const QString &formatString, const QString &dataSourcePath,
+			const QDBusConnection &dbusConnection, QObject *parent = 0);
 
 	virtual ~MetricImpl();
 
@@ -47,7 +48,9 @@ protected:
 
 	QDBusConnection m_dbusConnection;
 
-	com::canonical::UserMetrics m_interface;
+	com::canonical::UserMetrics m_userMetrics;
+
+	com::canonical::usermetrics::DataSource m_dataSource;
 
 	QString m_dataSourceId;
 

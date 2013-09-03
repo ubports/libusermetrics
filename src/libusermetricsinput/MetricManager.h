@@ -31,11 +31,34 @@
 namespace UserMetricsInput {
 
 class MetricManager;
+class MetricParametersPrivate;
 
 /**
  * @brief Shared pointer for the MetricManager
  **/
 typedef QScopedPointer<MetricManager> MetricManagerPtr;
+
+class Q_DECL_EXPORT MetricParameters {
+public:
+
+	explicit MetricParameters(const QString &dataSourceId);
+
+	MetricParameters & formatString(const QString &formatString);
+
+	MetricParameters & emptyDataString(const QString &emptyDataString);
+
+	MetricParameters & textDomain(const QString &textDomain);
+
+	MetricParameters & minimum(double minimum);
+
+	MetricParameters & maximum(double maximum);
+
+	MetricParameters & type(MetricType type);
+
+	virtual ~MetricParameters();
+
+	QScopedPointer<MetricParametersPrivate> p;
+};
 
 /**
  * @brief Central place for registering and updating user metrics.
@@ -70,13 +93,24 @@ public:
 	 * @param emptyDataString The string to print in the case of no data, e.g. "No messages received today"
 	 * @param textDomain The translation domain
 	 *
-	 * This will register a new user Metric with the above paramters. It is
+	 * This will register a new user Metric with the above parameters. It is
 	 * acceptable to call this method more than once. The same Metric instance
 	 * will be returned.
 	 */
 	virtual MetricPtr add(const QString &dataSourceId,
 			const QString &formatString, const QString &emptyDataString = "",
 			const QString &textDomain = "") = 0;
+
+	/**
+	 * @brief Register a new Metric.
+	 *
+	 * @param parameters The parameters of the Metric to register
+	 *
+	 * This will register a new user Metric with the above parameters. It is
+	 * acceptable to call this method more than once. The same Metric instance
+	 * will be returned.
+	 */
+	virtual MetricPtr add(const MetricParameters &parameters) = 0;
 };
 
 /**

@@ -29,6 +29,10 @@ class DataSource;
 
 typedef QSharedPointer<DataSource> DataSourcePtr;
 
+enum MetricType {
+	USER, SYSTEM
+};
+
 class DataSource: public QObject {
 Q_OBJECT
 

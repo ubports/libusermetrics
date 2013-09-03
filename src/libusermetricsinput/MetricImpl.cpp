@@ -31,10 +31,12 @@ using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
 MetricImpl::MetricImpl(const QString &dataSourceId, const QString &formatString,
-		const QDBusConnection &dbusConnection, QObject *parent) :
-		Metric(parent), m_dbusConnection(dbusConnection), m_interface(
+		const QString &dataSourcePath, const QDBusConnection &dbusConnection,
+		QObject *parent) :
+		Metric(parent), m_dbusConnection(dbusConnection), m_userMetrics(
 				DBusPaths::serviceName(), DBusPaths::userMetrics(),
-				dbusConnection), m_dataSourceId(dataSourceId), m_formatString(
+				dbusConnection), m_dataSource(DBusPaths::serviceName(),
+				dataSourcePath, dbusConnection), m_dataSourceId(dataSourceId), m_formatString(
 				formatString) {
 }
 
@@ -43,13 +45,15 @@ MetricImpl::~MetricImpl() {
 
 QDBusObjectPath MetricImpl::createDataSet(const QString &usernameIn) {
 	QString username;
-	if (usernameIn.isEmpty()) {
+	if (m_dataSource.metricType() == MetricType::SYSTEM) {
+		username = "";
+	} else if (usernameIn.isEmpty()) {
 		username = QString::fromUtf8(qgetenv("USER"));
 	} else {
 		username = usernameIn;
 	}
 
-	QDBusObjectPath userDataPath(m_interface.createUserData(username));
+	QDBusObjectPath userDataPath(m_userMetrics.createUserData(username));
 
 	com::canonical::usermetrics::UserData userDataInterface(
 			DBusPaths::serviceName(), userDataPath.path(), m_dbusConnection);

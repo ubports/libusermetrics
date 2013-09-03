@@ -29,6 +29,70 @@ using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
+class UserMetricsInput::MetricParametersPrivate {
+	friend class MetricManagerImpl;
+	friend class MetricParameters;
+
+public:
+	explicit MetricParametersPrivate(const QString &dataSourceId) :
+			m_dataSourceId(dataSourceId), m_type(MetricType::USER) {
+	}
+
+	~MetricParametersPrivate() {
+	}
+
+protected:
+	QString m_dataSourceId;
+
+	QString m_formatString;
+
+	QString m_emptyDataString;
+
+	QString m_textDomain;
+
+	MetricType m_type;
+
+	QVariantMap m_options;
+};
+
+MetricParameters::MetricParameters(const QString &dataSourceId) :
+		p(new MetricParametersPrivate(dataSourceId)) {
+}
+
+MetricParameters::~MetricParameters() {
+}
+
+MetricParameters & MetricParameters::formatString(const QString &formatString) {
+	p->m_formatString = formatString;
+	return *this;
+}
+
+MetricParameters & MetricParameters::emptyDataString(
+		const QString &emptyDataString) {
+	p->m_emptyDataString = emptyDataString;
+	return *this;
+}
+
+MetricParameters & MetricParameters::textDomain(const QString &textDomain) {
+	p->m_textDomain = textDomain;
+	return *this;
+}
+
+MetricParameters & MetricParameters::minimum(double minimum) {
+	p->m_options["minimum"] = minimum;
+	return *this;
+}
+
+MetricParameters & MetricParameters::maximum(double maximum) {
+	p->m_options["maximum"] = maximum;
+	return *this;
+}
+
+MetricParameters & MetricParameters::type(MetricType type) {
+	p->m_type = type;
+	return *this;
+}
+
 MetricManagerImpl::MetricManagerImpl(const QDBusConnection &dbusConnection,
 		QObject *parent) :
 		MetricManager(parent), m_dbusConnection(dbusConnection), m_interface(
@@ -42,9 +106,17 @@ MetricManagerImpl::~MetricManagerImpl() {
 MetricPtr MetricManagerImpl::add(const QString &dataSourceId,
 		const QString &formatString, const QString &emptyDataString,
 		const QString &textDomain) {
+	return add(
+			MetricParameters(dataSourceId).formatString(formatString).emptyDataString(
+					emptyDataString).textDomain(textDomain));
+}
+
+MetricPtr MetricManagerImpl::add(const MetricParameters &parameters) {
 	QDBusPendingReply<QDBusObjectPath> reply(
-			m_interface.createDataSource(dataSourceId, formatString,
-					emptyDataString, textDomain));
+			m_interface.createDataSource(parameters.p->m_dataSourceId,
+					parameters.p->m_formatString,
+					parameters.p->m_emptyDataString, parameters.p->m_textDomain,
+					parameters.p->m_type, parameters.p->m_options));
 
 	reply.waitForFinished();
 
@@ -54,11 +126,13 @@ MetricPtr MetricManagerImpl::add(const QString &dataSourceId,
 
 	QDBusObjectPath path(reply.value());
 
-	auto metric(m_metrics.find(dataSourceId));
+	auto metric(m_metrics.find(parameters.p->m_dataSourceId));
 	if (metric == m_metrics.end()) {
 		MetricPtr newMetric(
-				new MetricImpl(dataSourceId, formatString, m_dbusConnection));
-		metric = m_metrics.insert(dataSourceId, newMetric);
+				new MetricImpl(parameters.p->m_dataSourceId,
+						parameters.p->m_formatString, path.path(),
+						m_dbusConnection));
+		metric = m_metrics.insert(parameters.p->m_dataSourceId, newMetric);
 	}
 	return *metric;
 }

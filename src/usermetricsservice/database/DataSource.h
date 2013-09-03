@@ -36,6 +36,16 @@ Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString
 
 Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain)
 
+Q_PROPERTY(int metricType READ type WRITE setType)
+
+Q_PROPERTY(bool hasMinimum READ hasMinimum WRITE setHasMinimum)
+
+Q_PROPERTY(double minimum READ minimum WRITE setMinimum)
+
+Q_PROPERTY(bool hasMaximum READ hasMaximum WRITE setHasMaximum)
+
+Q_PROPERTY(double maximum READ maximum WRITE setMaximum)
+
 Q_CLASSINFO("id", "primary_key=true auto_increment=true")
 
 Q_CLASSINFO("name", "unique=true")
@@ -71,6 +81,26 @@ public:
 
 	void setTextDomain(const QString &textDomain);
 
+	int type() const;
+
+	void setType(int type);
+
+	bool hasMinimum() const;
+
+	void setHasMinimum(bool hasMinimum);
+
+	double minimum() const;
+
+	void setMinimum(double minimum);
+
+	bool hasMaximum() const;
+
+	void setHasMaximum(bool hasMaximum);
+
+	double maximum() const;
+
+	void setMaximum(double maximum);
+
 protected:
 	int m_id;
 
@@ -81,6 +111,16 @@ protected:
 	QString m_emptyDataString;
 
 	QString m_textDomain;
+
+	int m_type;
+
+	bool m_hasMinimum;
+
+	double m_minimum;
+
+	bool m_hasMaximum;
+
+	double m_maximum;
 };
 
 }

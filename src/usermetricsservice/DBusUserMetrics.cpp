@@ -40,7 +40,6 @@ DBusUserMetrics::DBusUserMetrics(const QDBusConnection &dbusConnection,
 		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new UserMetricsAdaptor(this)), m_dateFactory(dateFactory) {
-
 	// Database setup
 	QDjango::registerModel<DataSource>().createTable();
 	QDjango::registerModel<UserData>().createTable();
@@ -124,7 +123,7 @@ void DBusUserMetrics::syncDatabase() {
 
 QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		const QString &formatString, const QString &emptyDataString,
-		const QString &textDomain) {
+		const QString &textDomain, int type, const QVariantMap &options) {
 	QDjangoQuerySet<DataSource> dataSourcesQuery;
 	QDjangoQuerySet<DataSource> query(
 			dataSourcesQuery.filter(
@@ -136,11 +135,32 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 
 	DataSource dataSource;
 
+	bool hasMinimum(options.contains("minimum"));
+	bool hasMaximum(options.contains("maximum"));
+
+	double minimum(0);
+	if (hasMinimum) {
+		minimum = options["minimum"].toDouble();
+	}
+	double maximum(0);
+	if (hasMaximum) {
+		maximum = options["maximum"].toDouble();
+	}
+
 	if (query.size() == 0) {
 		dataSource.setName(name);
 		dataSource.setFormatString(formatString);
 		dataSource.setEmptyDataString(emptyDataString);
 		dataSource.setTextDomain(textDomain);
+		dataSource.setType(type);
+		if (hasMinimum) {
+			dataSource.setMinimum(minimum);
+			dataSource.setHasMinimum(true);
+		}
+		if (hasMaximum) {
+			dataSource.setMaximum(maximum);
+			dataSource.setHasMaximum(true);
+		}
 
 		if (!dataSource.save()) {
 			throw logic_error(_("Could not save data source"));
@@ -159,6 +179,25 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		}
 		if (dataSource.textDomain() != textDomain) {
 			dbusDataSource->setTextDomain(textDomain);
+		}
+		if (dataSource.type() != type) {
+			dbusDataSource->setMetricType(type);
+		}
+		if (dataSource.hasMinimum() != hasMinimum
+				|| dataSource.minimum() != minimum) {
+			if (hasMinimum) {
+				dbusDataSource->setMinimum(minimum);
+			} else {
+				dbusDataSource->noMinimum();
+			}
+		}
+		if (dataSource.hasMaximum() != hasMaximum
+				|| dataSource.maximum() != maximum) {
+			if (hasMaximum) {
+				dbusDataSource->setMaximum(maximum);
+			} else {
+				dbusDataSource->noMaximum();
+			}
 		}
 	}
 

@@ -106,3 +106,127 @@ void DBusDataSource::setTextDomain(const QString &textDomain) {
 		m_adaptor->textDomainChanged(textDomain);
 	}
 }
+
+unsigned int DBusDataSource::metricType() const {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	return dataSource.type();
+}
+
+void DBusDataSource::setMetricType(unsigned int type) {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	if (type != dataSource.type()) {
+		dataSource.setType(type);
+		if (!dataSource.save()) {
+			throw logic_error(_("Could not save data source"));
+		}
+		m_adaptor->metricTypeChanged(type);
+	}
+}
+
+QVariantMap DBusDataSource::generateOptions(
+		const DataSource &dataSource) const {
+	QVariantMap options;
+	if (dataSource.hasMinimum()) {
+		options["minimum"] = dataSource.minimum();
+	}
+	if (dataSource.hasMaximum()) {
+		options["maximum"] = dataSource.maximum();
+	}
+	return options;
+}
+
+bool DBusDataSource::hasMinimum() const {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	return dataSource.hasMinimum();
+}
+
+void DBusDataSource::setMinimum(double minimum) {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	bool changed(false);
+	if (!dataSource.hasMinimum()) {
+		dataSource.setHasMinimum(true);
+		changed = true;
+	}
+	if (dataSource.minimum() != minimum) {
+		dataSource.setMinimum(minimum);
+		changed = true;
+	}
+	if (changed) {
+		if (!dataSource.save()) {
+			throw logic_error(_("Could not save data source"));
+		}
+		m_adaptor->optionsChanged(generateOptions(dataSource));
+	}
+}
+
+double DBusDataSource::minimum() const {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	return dataSource.minimum();
+}
+
+void DBusDataSource::noMinimum() {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	if (dataSource.hasMinimum()) {
+		dataSource.setHasMinimum(false);
+		if (!dataSource.save()) {
+			throw logic_error(_("Could not save data source"));
+		}
+		m_adaptor->optionsChanged(generateOptions(dataSource));
+	}
+}
+
+bool DBusDataSource::hasMaximum() const {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	return dataSource.hasMaximum();
+}
+
+void DBusDataSource::setMaximum(double maximum) {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	bool changed(false);
+	if (!dataSource.hasMaximum()) {
+		dataSource.setHasMaximum(true);
+		changed = true;
+	}
+	if (dataSource.maximum() != maximum) {
+		dataSource.setMaximum(maximum);
+		changed = true;
+	}
+	if (changed) {
+		if (!dataSource.save()) {
+			throw logic_error(_("Could not save data source"));
+		}
+		m_adaptor->optionsChanged(generateOptions(dataSource));
+	}
+}
+
+double DBusDataSource::maximum() const {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	return dataSource.maximum();
+}
+
+void DBusDataSource::noMaximum() {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	if (dataSource.hasMaximum()) {
+		dataSource.setHasMaximum(false);
+		if (!dataSource.save()) {
+			throw logic_error(_("Could not save data source"));
+		}
+		m_adaptor->optionsChanged(generateOptions(dataSource));
+	}
+}
+
+QVariantMap DBusDataSource::options() const {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	return generateOptions(dataSource);
+}

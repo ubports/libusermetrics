@@ -260,4 +260,101 @@ TEST_F(TestMetricManagerImpl, TestCanAddNullAndIncrement) {
 	EXPECT_EQ(QDate::currentDate(), dateTime.date());
 }
 
+TEST_F(TestMetricManagerImpl, TestMinimum) {
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
+
+	MetricPtr metric(
+			manager->add(
+					MetricParameters("data-source-id").formatString(
+							"format string %1").minimum(-5.0)));
+
+	com::canonical::usermetrics::DataSource dataSourceInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSource(1),
+			systemConnection());
+
+	QVariantMap expected;
+	expected["minimum"] = -5.0;
+	EXPECT_EQ(expected, dataSourceInterface.options());
+}
+
+TEST_F(TestMetricManagerImpl, TestMaximum) {
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
+
+	MetricPtr metric(
+			manager->add(
+					MetricParameters("data-source-id").formatString(
+							"format string %1").maximum(4.0)));
+
+	com::canonical::usermetrics::DataSource dataSourceInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSource(1),
+			systemConnection());
+
+	QVariantMap expected;
+	expected["maximum"] = 4.0;
+	EXPECT_EQ(expected, dataSourceInterface.options());
+}
+
+TEST_F(TestMetricManagerImpl, TestMiniumMaximum) {
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
+
+	MetricPtr metric(
+			manager->add(
+					MetricParameters("data-source-id").formatString(
+							"format string %1").minimum(1.0).maximum(5.0)));
+
+	com::canonical::usermetrics::DataSource dataSourceInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSource(1),
+			systemConnection());
+
+	QVariantMap expected;
+	expected["minimum"] = 1.0;
+	expected["maximum"] = 5.0;
+	EXPECT_EQ(expected, dataSourceInterface.options());
+}
+
+TEST_F(TestMetricManagerImpl, TestDefaultType) {
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
+
+	MetricPtr metric(
+			manager->add(
+					MetricParameters("data-source-id").formatString(
+							"format string %1")));
+
+	com::canonical::usermetrics::DataSource dataSourceInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSource(1),
+			systemConnection());
+
+	EXPECT_EQ(MetricType::USER, dataSourceInterface.metricType());
+}
+
+TEST_F(TestMetricManagerImpl, TestUserType) {
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
+
+	MetricPtr metric(
+			manager->add(
+					MetricParameters("data-source-id").formatString(
+							"format string %1").type(MetricType::USER)));
+
+	com::canonical::usermetrics::DataSource dataSourceInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSource(1),
+			systemConnection());
+
+	EXPECT_EQ(MetricType::USER, dataSourceInterface.metricType());
+}
+
+TEST_F(TestMetricManagerImpl, TestSystemType) {
+	MetricManagerPtr manager(new MetricManagerImpl(systemConnection()));
+
+	MetricPtr metric(
+			manager->add(
+					MetricParameters("data-source-id").formatString(
+							"format string %1").type(MetricType::SYSTEM)));
+
+	com::canonical::usermetrics::DataSource dataSourceInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSource(1),
+			systemConnection());
+
+	EXPECT_EQ(MetricType::SYSTEM, dataSourceInterface.metricType());
+}
+
 } // namespace

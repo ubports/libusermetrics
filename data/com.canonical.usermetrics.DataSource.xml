@@ -6,6 +6,7 @@
 		
 		<property name="formatString" type="s" access="readwrite"/>
 		
+		
 		<signal name="formatStringChanged">
 			<arg name="formatString" type="s" direction="out"/>
 		</signal>
@@ -20,7 +21,22 @@
 			
 		<signal name="textDomainChanged">
 			<arg name="textDomain" type="s" direction="out"/>
-		</signal>	
+		</signal>
+			
+		<property name="metricType" type="u" access="readwrite"/>
+		
+		<signal name="metricTypeChanged">
+			<arg name="metricType" type="u" direction="out"/>
+		</signal>
+		
+		<property name="options" type="a{sv}" access="readwrite">
+			<annotation name="org.qtproject.QtDBus.QtTypeName" value="QVariantMap"/>
+		</property>
+		
+		<signal name="optionsChanged">
+			<annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+			<arg name="options" type="a{sv}" direction="out"/>
+		</signal>
 		
 	</interface>
 </node>
