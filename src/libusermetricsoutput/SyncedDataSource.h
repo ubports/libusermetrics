@@ -34,6 +34,9 @@ public:
 
 	virtual ~SyncedDataSource();
 
+protected Q_SLOTS:
+	void setTypeUint(uint type);
+
 protected:
 	QSharedPointer<com::canonical::usermetrics::DataSource> m_interface;
 };

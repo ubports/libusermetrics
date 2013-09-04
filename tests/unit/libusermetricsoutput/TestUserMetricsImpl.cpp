@@ -17,6 +17,7 @@
  */
 
 #include <QSignalSpy>
+#include <QDebug>
 
 #include <libusermetricsoutput/ColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
@@ -1138,6 +1139,108 @@ TEST_F(UserMetricsImplTest, HandlesTooBigData) {
 		ASSERT_EQ(28, month->rowCount());
 		for (int i(0); i < 28; ++i) {
 			EXPECT_EQ(QVariant(0.5), month->data(month->index(i, 0)));
+		}
+	}
+}
+
+TEST_F(UserMetricsImplTest, AddSourceWithMinimum) {
+	QVariantList data;
+	data << 100.0 << 95.0 << -100.0;
+
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("test format string %1");
+	QVariantMap options;
+	options["minimum"] = 0.0;
+	dataSource->setOptions(options);
+	userDataStore->insert("data-source-id", dataSource);
+
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
+	UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->insert("data-source-id",
+			DataSetPtr(new DataSet(dataSource)));
+	DataSetPtr dataSet(*dataSetIterator);
+
+	// The data starts today
+	dataSet->setLastUpdated(QDate(2001, 01, 07));
+	dataSet->setData(data);
+
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
+			Return(emptyPair));
+
+	model->setUsername("username");
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ(QString("test format string 100"), model->label());
+
+	// assertions about first month's data
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		EXPECT_EQ(31, month->rowCount());
+		for (int i(0); i < 4; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(0.0), month->data(month->index(4, 0)));
+		EXPECT_EQ(QVariant(0.95), month->data(month->index(5, 0)));
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(6, 0)));
+		for (int i(7); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+	}
+}
+
+TEST_F(UserMetricsImplTest, AddSourceWithMaximum) {
+	QVariantList data;
+	data << 0.0 << 5.0 << 200.0;
+
+	DataSourcePtr dataSource(new DataSource());
+	dataSource->setFormatString("test format string %1");
+	QVariantMap options;
+	options["maximum"] = 100.0;
+	dataSource->setOptions(options);
+	userDataStore->insert("data-source-id", dataSource);
+
+	UserMetricsStore::iterator userDataIterator(
+			userDataStore->insert("username",
+					UserDataPtr(new UserData(*userDataStore))));
+	UserDataPtr userData(*userDataIterator);
+
+	UserData::iterator dataSetIterator = userData->insert("data-source-id",
+			DataSetPtr(new DataSet(dataSource)));
+	DataSetPtr dataSet(*dataSetIterator);
+
+	// The data starts today
+	dataSet->setLastUpdated(QDate(2001, 01, 07));
+	dataSet->setData(data);
+
+	QSharedPointer<ColorTheme> blankColorTheme(
+			new ColorThemeImpl(QColor(), QColor(), QColor()));
+	ColorThemePtrPair emptyPair(blankColorTheme, blankColorTheme);
+	EXPECT_CALL(*colorThemeProvider, getColorTheme(QString("data-source-id"))).WillRepeatedly(
+			Return(emptyPair));
+
+	model->setUsername("username");
+	model->readyForDataChangeSlot();
+
+	EXPECT_EQ(QString("test format string 0"), model->label());
+
+	// assertions about first month's data
+	{
+		const QAbstractItemModel* month(model->firstMonth());
+		EXPECT_EQ(31, month->rowCount());
+		for (int i(0); i < 4; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
+		}
+		EXPECT_EQ(QVariant(1.0), month->data(month->index(4, 0)));
+		EXPECT_EQ(QVariant(0.05), month->data(month->index(5, 0)));
+		EXPECT_EQ(QVariant(0.0), month->data(month->index(6, 0)));
+		for (int i(7); i < 31; ++i) {
+			EXPECT_EQ(QVariant(), month->data(month->index(i, 0)));
 		}
 	}
 }

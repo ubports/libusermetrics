@@ -43,7 +43,9 @@ Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString
 
 Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain NOTIFY textDomainChanged FINAL)
 
-Q_PROPERTY(QVariantMap options READ options NOTIFY optionsChanged)
+Q_PROPERTY(MetricType type READ type WRITE setType NOTIFY typeChanged FINAL)
+
+Q_PROPERTY(QVariantMap options READ options WRITE setOptions NOTIFY optionsChanged)
 
 public:
 	explicit DataSource(const QString &localeDir = LOCALEDIR, QObject *parent =
@@ -57,6 +59,8 @@ public:
 
 	const QString & textDomain() const;
 
+	MetricType type() const;
+
 	const QVariantMap & options() const;
 
 public Q_SLOTS:
@@ -66,6 +70,8 @@ public Q_SLOTS:
 
 	void setTextDomain(const QString &textDomain);
 
+	void setType(const MetricType type);
+
 	void setOptions(const QVariantMap &options);
 
 Q_SIGNALS:
@@ -74,6 +80,8 @@ Q_SIGNALS:
 	void emptyDataStringChanged(const QString &emptyDataString);
 
 	void textDomainChanged(const QString &textDomain);
+
+	void typeChanged(const MetricType type);
 
 	void optionsChanged(const QVariantMap &options);
 
@@ -93,6 +101,8 @@ protected:
 	QString m_textDomain;
 
 	QString m_localeDir;
+
+	MetricType m_type;
 
 	QVariantMap m_options;
 };

@@ -67,7 +67,7 @@ void DataSet::scaleData() {
 	}
 
 	// if we need to find either the max or the min
-	if (!hasMinimum && !hasMaximum) {
+	if (!hasMinimum || !hasMaximum) {
 		for (QVariant &variant : m_data) {
 			if (variant.type() == QVariant::String) {
 				variant = QVariant();
@@ -98,6 +98,12 @@ void DataSet::scaleData() {
 		if (variant.type() == QVariant::Double) {
 			if (min != max) {
 				double value(variant.toDouble());
+				if (hasMaximum && value > max) {
+					value = max;
+				}
+				if (hasMinimum && value < min) {
+					value = min;
+				}
 				variant = (value - min) / (max - min);
 			} else {
 				variant = 0.5;
