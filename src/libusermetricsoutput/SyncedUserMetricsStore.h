@@ -21,6 +21,7 @@
 
 #include <libusermetricsoutput/UserMetricsStore.h>
 #include <libusermetricscommon/UserMetricsInterface.h>
+#include <libusermetricscommon/UserDataInterface.h>
 
 namespace UserMetricsOutput {
 
@@ -48,10 +49,14 @@ public Q_SLOTS:
 	void sync();
 
 protected:
+	void attachSystemData(
+			QSharedPointer<com::canonical::usermetrics::UserData> systemData);
+
 	com::canonical::UserMetrics m_interface;
 
 	QString m_localeDir;
-};
+}
+;
 
 }
 

@@ -19,6 +19,7 @@
 #ifndef USERMETRICSOUTPUT_SYNCEDUSERDATA_H_
 #define USERMETRICSOUTPUT_SYNCEDUSERDATA_H_
 
+#include <QSet>
 #include <libusermetricsoutput/UserData.h>
 #include <libusermetricscommon/UserDataInterface.h>
 
@@ -36,6 +37,9 @@ public:
 
 	virtual ~SyncedUserData();
 
+	void attachUserData(
+			QSharedPointer<com::canonical::usermetrics::UserData> interface);
+
 public Q_SLOTS:
 	void addDataSet(const QString &dataSourceName, const QDBusObjectPath &path);
 
@@ -43,7 +47,7 @@ public Q_SLOTS:
 			const QDBusObjectPath &path);
 
 protected:
-	QSharedPointer<com::canonical::usermetrics::UserData> m_interface;
+	QSet<QSharedPointer<com::canonical::usermetrics::UserData>> m_userDatas;
 };
 
 }

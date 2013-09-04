@@ -10,6 +10,17 @@ libusermetricsinput.so.1 libusermetricsinput1 #MINVER#
  (c++)"UserMetricsInput::MetricManager::~MetricManager()@Base" 1.0.1
  (c++)"UserMetricsInput::MetricManager::~MetricManager()@Base" 1.0.1
  (c++)"UserMetricsInput::MetricManager::~MetricManager()@Base" 1.0.1
+ (c++)"UserMetricsInput::MetricParameters::textDomain(QString const&)@Base" 1.1.1
+ (c++)"UserMetricsInput::MetricParameters::formatString(QString const&)@Base" 1.1.1
+ (c++)"UserMetricsInput::MetricParameters::emptyDataString(QString const&)@Base" 1.1.1
+ (c++)"UserMetricsInput::MetricParameters::type(UserMetricsInput::MetricType)@Base" 1.1.1
+ (c++)"UserMetricsInput::MetricParameters::maximum(double)@Base" 1.1.1
+ (c++)"UserMetricsInput::MetricParameters::minimum(double)@Base" 1.1.1
+ (c++)"UserMetricsInput::MetricParameters::MetricParameters(QString const&)@Base" 1.1.1
+ (c++)"UserMetricsInput::MetricParameters::MetricParameters(QString const&)@Base" 1.1.1
+ (c++)"UserMetricsInput::MetricParameters::~MetricParameters()@Base" 1.1.1
+ (c++)"UserMetricsInput::MetricParameters::~MetricParameters()@Base" 1.1.1
+ (c++)"UserMetricsInput::MetricParameters::~MetricParameters()@Base" 1.1.1
  (c++)"UserMetricsInput::Metric::Metric(QObject*)@Base" 1.0.1
  (c++)"UserMetricsInput::Metric::Metric(QObject*)@Base" 1.0.1
  (c++)"UserMetricsInput::Metric::~Metric()@Base" 1.0.1
@@ -17,12 +28,15 @@ libusermetricsinput.so.1 libusermetricsinput1 #MINVER#
  (c++)"UserMetricsInput::Metric::~Metric()@Base" 1.0.1
  (c++)"typeinfo for UserMetricsInput::MetricUpdate@Base" 1.0.1
  (c++)"typeinfo for UserMetricsInput::MetricManager@Base" 1.0.1
+ (c++)"typeinfo for UserMetricsInput::MetricParameters@Base" 1.1.1
  (c++)"typeinfo for UserMetricsInput::Metric@Base" 1.0.1
  (c++)"typeinfo name for UserMetricsInput::MetricUpdate@Base" 1.0.1
  (c++)"typeinfo name for UserMetricsInput::MetricManager@Base" 1.0.1
+ (c++)"typeinfo name for UserMetricsInput::MetricParameters@Base" 1.1.1
  (c++)"typeinfo name for UserMetricsInput::Metric@Base" 1.0.1
  (c++)"vtable for UserMetricsInput::MetricUpdate@Base" 1.0.1
  (c++)"vtable for UserMetricsInput::MetricManager@Base" 1.0.1
+ (c++)"vtable for UserMetricsInput::MetricParameters@Base" 1.1.1
  (c++)"vtable for UserMetricsInput::Metric@Base" 1.0.1
  usermetricsinput_metric_increment@Base 1.0.5
  usermetricsinput_metric_update@Base 1.0.1
@@ -30,6 +44,14 @@ libusermetricsinput.so.1 libusermetricsinput1 #MINVER#
  usermetricsinput_metricmanager_add@Base 1.0.1
  usermetricsinput_metricmanager_delete@Base 1.0.1
  usermetricsinput_metricmanager_new@Base 1.0.1
+ usermetricsinput_metricparameters_delete@Base 1.1.1
+ usermetricsinput_metricparameters_new@Base 1.1.1
+ usermetricsinput_metricparameters_set_empty_data_string@Base 1.1.1
+ usermetricsinput_metricparameters_set_format_string@Base 1.1.1
+ usermetricsinput_metricparameters_set_maximum@Base 1.1.1
+ usermetricsinput_metricparameters_set_minimum@Base 1.1.1
+ usermetricsinput_metricparameters_set_text_domain@Base 1.1.1
+ usermetricsinput_metricparameters_set_type@Base 1.1.1
  usermetricsinput_metricupdate_add_data@Base 1.0.1
  usermetricsinput_metricupdate_add_null@Base 1.0.1
  usermetricsinput_metricupdate_delete@Base 1.0.1

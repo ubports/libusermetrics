@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-24 10:08+0100\n"
+"POT-Creation-Date: 2013-09-02 13:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,7 +52,7 @@ msgstr ""
 msgid "Could not save user data"
 msgstr ""
 
-#: src/usermetricsservice/DBusDataSet.cpp:120
+#: src/usermetricsservice/DBusDataSet.cpp:124
 #: src/usermetricsservice/DBusUserData.cpp:104
 msgid "Could not save data set"
 msgstr ""
@@ -86,14 +86,14 @@ msgstr ""
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 msgstr ""
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:197
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:198
 msgid "No data sources available"
 msgstr ""
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:259
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:260
 msgid "Data source not found"
 msgstr ""
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:265
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:266
 msgid "No data for today"
 msgstr ""
