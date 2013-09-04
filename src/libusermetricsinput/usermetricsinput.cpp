@@ -48,15 +48,103 @@ void usermetricsinput_metricmanager_delete(
 	}
 }
 
+UserMetricsInputMetricParameters usermetricsinput_metricparameters_new(
+		const char *dataSourceId) {
+	try {
+		return reinterpret_cast<UserMetricsInputMetricParameters>(new MetricParameters(
+				dataSourceId));
+	} catch (exception &e) {
+		fprintf(stderr, "Error creating MetricParameters: %s\n", e.what());
+	}
+	return nullptr;
+}
+
+void usermetricsinput_metricparameters_set_format_string(
+		UserMetricsInputMetricParameters p, const char *formatString) {
+	try {
+		MetricParameters *metricParameters(
+				reinterpret_cast<MetricParameters*>(p));
+		metricParameters->formatString(formatString);
+	} catch (exception &e) {
+		fprintf(stderr, "Error setting format string: %s\n", e.what());
+	}
+}
+
+void usermetricsinput_metricparameters_set_empty_data_string(
+		UserMetricsInputMetricParameters p, const char *emptyDataString) {
+	try {
+		MetricParameters *metricParameters(
+				reinterpret_cast<MetricParameters*>(p));
+		metricParameters->emptyDataString(emptyDataString);
+	} catch (exception &e) {
+		fprintf(stderr, "Error setting empty data string: %s\n", e.what());
+	}
+}
+
+void usermetricsinput_metricparameters_set_text_domain(
+		UserMetricsInputMetricParameters p, const char *textDomain) {
+	try {
+		MetricParameters *metricParameters(
+				reinterpret_cast<MetricParameters*>(p));
+		metricParameters->textDomain(textDomain);
+	} catch (exception &e) {
+		fprintf(stderr, "Error setting empty data string: %s\n", e.what());
+	}
+}
+
+void usermetricsinput_metricparameters_set_minimum(
+		UserMetricsInputMetricParameters p, double minimum) {
+	try {
+		MetricParameters *metricParameters(
+				reinterpret_cast<MetricParameters*>(p));
+		metricParameters->minimum(minimum);
+	} catch (exception &e) {
+		fprintf(stderr, "Error setting minimum: %s\n", e.what());
+	}
+}
+
+void usermetricsinput_metricparameters_set_maximum(
+		UserMetricsInputMetricParameters p, double maximum) {
+	try {
+		MetricParameters *metricParameters(
+				reinterpret_cast<MetricParameters*>(p));
+		metricParameters->maximum(maximum);
+	} catch (exception &e) {
+		fprintf(stderr, "Error setting maximum: %s\n", e.what());
+	}
+}
+
+void usermetricsinput_metricparameters_set_type(
+		UserMetricsInputMetricParameters p, USERMETRICSINPUT_METRICTYPE t) {
+	try {
+		MetricParameters *metricParameters(
+				reinterpret_cast<MetricParameters*>(p));
+		MetricType type(USER);
+		if (t == METRIC_TYPE_SYSTEM) {
+			type = SYSTEM;
+		}
+		metricParameters->type(type);
+	} catch (exception &e) {
+		fprintf(stderr, "Error setting maximum: %s\n", e.what());
+	}
+}
+
+void usermetricsinput_metricparameters_delete(
+		UserMetricsInputMetricParameters metricParameters) {
+	try {
+		delete reinterpret_cast<MetricParameters*>(metricParameters);
+	} catch (exception &e) {
+		fprintf(stderr, "Error deleting MetricParameters: %s\n", e.what());
+	}
+}
+
 UserMetricsInputMetric usermetricsinput_metricmanager_add(
-		UserMetricsInputMetricManager m, const char *dataSourceId,
-		const char *formatString, const char *emptyDataString,
-		const char *textDomain) {
+		UserMetricsInputMetricManager m, UserMetricsInputMetricParameters p) {
 	try {
 		MetricManager *metricManager(reinterpret_cast<MetricManager*>(m));
-		MetricPtr metric(
-				metricManager->add(dataSourceId, formatString, emptyDataString,
-						textDomain));
+		MetricParameters *metricParameters(
+				reinterpret_cast<MetricParameters*>(p));
+		MetricPtr metric(metricManager->add(*metricParameters));
 		return reinterpret_cast<UserMetricsInputMetric>(metric.data());
 	} catch (exception &e) {
 		fprintf(stderr, "Error adding Metric: %s\n", e.what());

@@ -56,13 +56,13 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 	QDBusObjectPath dataSourcePath1(
 			userMetricsInterface.createDataSource("data-source-one",
 					"format string one %1", "empty data string one",
-					"text domain one"));
+					"text domain one", MetricType::USER, QVariantMap()));
 	ASSERT_EQ(DBusPaths::dataSource(1), dataSourcePath1.path());
 
 	QDBusObjectPath dataSourcePath2(
 			userMetricsInterface.createDataSource("data-source-two",
 					"format string two %1", "empty data string two",
-					"text domain two"));
+					"text domain two", MetricType::USER, QVariantMap()));
 	ASSERT_EQ(DBusPaths::dataSource(2), dataSourcePath2.path());
 
 	SyncedUserMetricsStore store(systemConnection());
@@ -94,7 +94,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	QDBusObjectPath dataSourcePath1(
 			userMetricsInterface.createDataSource("data-source-one",
 					"format string one %1", "no data source ones",
-					"text-domain-one"));
+					"text-domain-one", MetricType::USER, QVariantMap()));
 	ASSERT_EQ(DBusPaths::dataSource(1), dataSourcePath1.path());
 
 	SyncedUserMetricsStore store(systemConnection());
@@ -120,7 +120,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	QDBusObjectPath dataSourcePath2(
 			userMetricsInterface.createDataSource("data-source-two",
 					"format string two %1", "no data source twos",
-					"text-domain-two"));
+					"text-domain-two", MetricType::USER, QVariantMap()));
 	ASSERT_EQ(DBusPaths::dataSource(2), dataSourcePath2.path());
 
 	spy.wait();
@@ -226,7 +226,8 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 
 	QDBusObjectPath twitterPath(
 			userMetricsInterface.createDataSource("twitter",
-					"twitter format string", "", ""));
+					"twitter format string", "", "", MetricType::USER,
+					QVariantMap()));
 	ASSERT_EQ(DBusPaths::dataSource(1), twitterPath.path());
 
 	QDBusObjectPath userDataPath(
@@ -234,7 +235,8 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
 
 	com::canonical::usermetrics::UserData userDataInterface(
-			DBusPaths::serviceName(), DBusPaths::userData(1), systemConnection());
+			DBusPaths::serviceName(), DBusPaths::userData(1),
+			systemConnection());
 	QDBusObjectPath twitterDataPath(userDataInterface.createDataSet("twitter"));
 	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
 
@@ -242,7 +244,8 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSetsAtStartup) {
 	QVariantList expected( { 1.0, 0.75, QVariant(), 0.25, 0.0 });
 
 	com::canonical::usermetrics::DataSet dataSetInterface(
-			DBusPaths::serviceName(), DBusPaths::dataSet(1), systemConnection());
+			DBusPaths::serviceName(), DBusPaths::dataSet(1),
+			systemConnection());
 	dataSetInterface.update(data);
 
 	SyncedUserMetricsStore store(systemConnection());
@@ -269,13 +272,14 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 
 	QDBusObjectPath twitterPath(
 			userMetricsInterface.createDataSource("twitter",
-					"twitter format string", "no tweets today", ""));
+					"twitter format string", "no tweets today", "",
+					MetricType::USER, QVariantMap()));
 	ASSERT_EQ(DBusPaths::dataSource(1), twitterPath.path());
 
 	QDBusObjectPath facebookPath(
 			userMetricsInterface.createDataSource("facebook",
-					"facebook format string", "no facebook messages today",
-					""));
+					"facebook format string", "no facebook messages today", "",
+					MetricType::USER, QVariantMap()));
 	ASSERT_EQ(DBusPaths::dataSource(2), facebookPath.path());
 
 	QDBusObjectPath userDataPath(
@@ -283,7 +287,8 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
 
 	com::canonical::usermetrics::UserData userDataInterface(
-			DBusPaths::serviceName(), DBusPaths::userData(1), systemConnection());
+			DBusPaths::serviceName(), DBusPaths::userData(1),
+			systemConnection());
 
 	QDBusObjectPath twitterDataPath(userDataInterface.createDataSet("twitter"));
 	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
@@ -331,6 +336,88 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 
 		++dataSetIterator;
 		ASSERT_EQ(dataSetIterator, userData->constEnd());
+	}
+}
+
+TEST_F(TestSyncedUserMetricsStore, MergesSystemDataAtStartup) {
+	com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
+			DBusPaths::userMetrics(), systemConnection());
+
+	QDBusObjectPath twitterPath(
+			userMetricsInterface.createDataSource("twitter",
+					"twitter format string", "", "", MetricType::USER,
+					QVariantMap()));
+	ASSERT_EQ(DBusPaths::dataSource(1), twitterPath.path());
+
+	QDBusObjectPath batteryPath(
+			userMetricsInterface.createDataSource("battery",
+					"battery level format string", "", "", MetricType::SYSTEM,
+					QVariantMap()));
+	ASSERT_EQ(DBusPaths::dataSource(2), batteryPath.path());
+
+	QDBusObjectPath userDataPath(
+			userMetricsInterface.createUserData("username"));
+	ASSERT_EQ(DBusPaths::userData(1), userDataPath.path());
+
+	QDBusObjectPath systemDataPath(userMetricsInterface.createUserData(""));
+	ASSERT_EQ(DBusPaths::userData(2), systemDataPath.path());
+
+	com::canonical::usermetrics::UserData userDataInterface(
+			DBusPaths::serviceName(), DBusPaths::userData(1),
+			systemConnection());
+	QDBusObjectPath twitterDataPath(userDataInterface.createDataSet("twitter"));
+	ASSERT_EQ(DBusPaths::dataSet(1), twitterDataPath.path());
+
+	QVariantList twitterData( { 100.0, 50.0, "", -50.0, -100.0 });
+	QVariantList twitterExpected( { 1.0, 0.75, QVariant(), 0.25, 0.0 });
+
+	com::canonical::usermetrics::DataSet twitterDataSetInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSet(1),
+			systemConnection());
+	twitterDataSetInterface.update(twitterData);
+
+	com::canonical::usermetrics::UserData systemDataInterface(
+			DBusPaths::serviceName(), DBusPaths::userData(2),
+			systemConnection());
+	QDBusObjectPath batteryDataPath(
+			systemDataInterface.createDataSet("battery"));
+	ASSERT_EQ(DBusPaths::dataSet(2), batteryDataPath.path());
+
+	QVariantList batteryData( { -100.0, -50.0, "", 50.0, 100.0 });
+	QVariantList batteryExpected( { 0.0, 0.25, QVariant(), 0.75, 1.0 });
+
+	com::canonical::usermetrics::DataSet batteryDataSetInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSet(2),
+			systemConnection());
+	batteryDataSetInterface.update(batteryData);
+
+	SyncedUserMetricsStore store(systemConnection());
+	QSignalSpy connectionEstablishedSpy(&store,
+			SIGNAL(connectionEstablished()));
+	connectionEstablishedSpy.wait();
+
+	UserMetricsStore::const_iterator userDataIterator(
+			store.constFind("username"));
+	ASSERT_NE(userDataIterator, store.constEnd());
+	EXPECT_EQ(QString("username"), userDataIterator.key());
+	UserDataPtr userData(*userDataIterator);
+
+	UserData::const_iterator dataSetIterator(userData->constBegin());
+	ASSERT_NE(dataSetIterator, userData->constEnd());
+	// battery data set
+	{
+		DataSetPtr dataSet(*dataSetIterator);
+		EXPECT_EQ(batteryExpected, dataSet->data());
+		EXPECT_EQ(QDate::currentDate(), dataSet->lastUpdated());
+	}
+
+	++dataSetIterator;
+	ASSERT_NE(dataSetIterator, userData->constEnd());
+	// twitter data set
+	{
+		DataSetPtr dataSet(*dataSetIterator);
+		EXPECT_EQ(twitterExpected, dataSet->data());
+		EXPECT_EQ(QDate::currentDate(), dataSet->lastUpdated());
 	}
 }
 

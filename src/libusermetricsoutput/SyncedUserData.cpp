@@ -18,6 +18,7 @@
 
 #include <libusermetricsoutput/SyncedDataSet.h>
 #include <libusermetricsoutput/SyncedUserData.h>
+#include <libusermetricsoutput/UserMetricsStore.h>
 #include <libusermetricscommon/DataSetInterface.h>
 #include <libusermetricscommon/DBusPaths.h>
 
@@ -25,42 +26,58 @@ using namespace com;
 using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
 
-SyncedUserData::SyncedUserData(
+SyncedUserData::SyncedUserData(UserMetricsStore &userMetricsStore,
 		QSharedPointer<com::canonical::usermetrics::UserData> interface,
 		QObject *parent) :
-		UserData(parent), m_interface(interface) {
+		UserData(userMetricsStore, parent) {
+	attachUserData(interface);
+}
 
-	connect(m_interface.data(),
+SyncedUserData::~SyncedUserData() {
+}
+
+void SyncedUserData::attachUserData(
+		QSharedPointer<com::canonical::usermetrics::UserData> interface) {
+	if (m_userDatas.contains(interface)) {
+		return;
+	}
+
+	m_userDatas.insert(interface);
+
+	connect(interface.data(),
 			SIGNAL(dataSetAdded(const QString &, const QDBusObjectPath &)),
 			this, SLOT(addDataSet(const QString &, const QDBusObjectPath &)));
 
-	connect(m_interface.data(),
+	connect(interface.data(),
 			SIGNAL(dataSetRemoved(const QString &, const QDBusObjectPath &)),
 			this,
 			SLOT(removeDataSet(const QString &, const QDBusObjectPath &)));
 
-	for (const QDBusObjectPath &path : m_interface->dataSets()) {
+	for (const QDBusObjectPath &path : interface->dataSets()) {
 
 		QSharedPointer<canonical::usermetrics::DataSet> dataSet(
 				new canonical::usermetrics::DataSet(DBusPaths::serviceName(),
-						path.path(), m_interface->connection()));
+						path.path(), interface->connection()));
 
-		QString dataSource(dataSet->dataSource());
-		insert(dataSource, DataSetPtr(new SyncedDataSet(dataSet)));
+		QString dataSourceId(dataSet->dataSource());
+		insert(dataSourceId,
+				DataSetPtr(
+						new SyncedDataSet(dataSet,
+								m_userMetricsStore.dataSource(dataSourceId))));
 	}
-
-}
-
-SyncedUserData::~SyncedUserData() {
 }
 
 void SyncedUserData::addDataSet(const QString &dataSourceName,
 		const QDBusObjectPath &path) {
 	QSharedPointer<canonical::usermetrics::DataSet> dataSet(
 			new canonical::usermetrics::DataSet(DBusPaths::serviceName(),
-					path.path(), m_interface->connection()));
+					path.path(), (*m_userDatas.begin())->connection()));
 
-	insert(dataSourceName, DataSetPtr(new SyncedDataSet(dataSet)));
+	QString dataSourceId(dataSet->dataSource());
+	insert(dataSourceName,
+			DataSetPtr(
+					new SyncedDataSet(dataSet,
+							m_userMetricsStore.dataSource(dataSourceId))));
 }
 
 void SyncedUserData::removeDataSet(const QString &dataSetName,

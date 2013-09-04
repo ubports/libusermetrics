@@ -44,7 +44,11 @@ int main(int argc, char *argv[]) {
 	QString username(QString::fromUtf8(argv[4]));
 
 	MetricManagerPtr manager(MetricManager::getInstance());
-	MetricPtr metric(manager->add(dataSourceId, formatString, emptyDataString));
+	MetricPtr metric(
+			manager->add(
+					MetricParameters(dataSourceId).formatString(formatString).emptyDataString(
+							emptyDataString).type(
+							username.isEmpty() ? SYSTEM : USER)));
 
 	if (argc == 6) {
 		metric->increment(stod(argv[5]), username);

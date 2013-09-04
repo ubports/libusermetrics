@@ -11,8 +11,10 @@ int main(int argc, char *argv[]) {
 
 	// You can hold onto this shared pointer for as long as you want
 	MetricPtr metric(
-			manager->add("photo-app-photos", "<b>%1</b> photos taken today",
-					"No photos taken today", APP_ID));
+			manager->add(
+					MetricParameters("photo-app-photos").formatString(
+							"<b>%1</b> photos taken today").emptyDataString(
+							"No photos taken today").textDomain(APP_ID)));
 
 	// Get the data from somewhere
 	PhotoLibrary photoLibrary;

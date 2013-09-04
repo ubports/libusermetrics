@@ -31,10 +31,24 @@ SyncedDataSource::SyncedDataSource(
 			this, SLOT(setEmptyDataString(const QString &)));
 	connect(m_interface.data(), SIGNAL(textDomainChanged(const QString &)),
 			this, SLOT(setTextDomain(const QString &)));
+	connect(m_interface.data(), SIGNAL(metricTypeChanged(uint)), this,
+			SLOT(setTypeUint(uint)));
+	connect(m_interface.data(), SIGNAL(optionsChanged(const QVariantMap &)),
+			this, SLOT(setOptions(const QVariantMap &)));
 	setFormatString(m_interface->formatString());
 	setEmptyDataString(m_interface->emptyDataString());
 	setTextDomain(m_interface->textDomain());
+	setTypeUint(m_interface->metricType());
+	setOptions(m_interface->options());
 }
 
 SyncedDataSource::~SyncedDataSource() {
+}
+
+void SyncedDataSource::setTypeUint(uint t) {
+	MetricType type(USER);
+	if (t == SYSTEM) {
+		type = SYSTEM;
+	}
+	setType(type);
 }

@@ -23,7 +23,7 @@
 #include <QtDBus/QtDBus>
 #include <QtCore/QScopedPointer>
 #include <QtCore/QSharedPointer>
-#include <QtCore/QHash>
+#include <QtCore/QMap>
 
 class UserMetricsAdaptor;
 
@@ -50,11 +50,12 @@ public:
 
 	virtual ~DBusUserMetrics();
 
+public Q_SLOTS:
 	QList<QDBusObjectPath> dataSources() const;
 
 	QDBusObjectPath createDataSource(const QString &name,
 			const QString &formatString, const QString &emptyDataString,
-			const QString &textDomain);
+			const QString &textDomain, int type, const QVariantMap &options);
 
 	QSharedPointer<DBusDataSource> dataSource(const QString &name) const;
 
@@ -63,10 +64,6 @@ public:
 	QDBusObjectPath createUserData(const QString &username);
 
 	QSharedPointer<DBusUserData> userData(const QString &username) const;
-
-public Q_SLOTS:
-
-Q_SIGNALS:
 
 protected:
 	void syncDatabase();
@@ -77,9 +74,9 @@ protected:
 
 	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
 
-	QHash<int, QSharedPointer<DBusDataSource>> m_dataSources;
+	QMap<int, QSharedPointer<DBusDataSource>> m_dataSources;
 
-	QHash<int, QSharedPointer<DBusUserData>> m_userData;
+	QMap<int, QSharedPointer<DBusUserData>> m_userData;
 };
 
 }

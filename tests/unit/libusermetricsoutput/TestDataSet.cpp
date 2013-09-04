@@ -69,7 +69,9 @@ protected:
 TEST_P(TestDataSet, SetData) {
 	TestDataSetParamData testData(GetParam());
 
-	DataSet dataSet;
+	DataSourcePtr dataSource(new DataSource());
+
+	DataSet dataSet(dataSource);
 	dataSet.setData(testData.m_input);
 
 	EXPECT_EQ(testData.m_expectedData, dataSet.data());
@@ -79,33 +81,33 @@ TEST_P(TestDataSet, SetData) {
 INSTANTIATE_TEST_CASE_P(ScalesData, TestDataSet,
 		Values(
 				TestDataSetParamData(
-						QVariantList( { -10.0, -5.0, 0.0, 5.0, 10.0 }),
-						QVariantList( { 0.0, 0.25, 0.5, 0.75, 1.0 }),
+						QVariantList( {-10.0, -5.0, 0.0, 5.0, 10.0}),
+						QVariantList( {0.0, 0.25, 0.5, 0.75, 1.0}),
 						QVariant(-10.0))));
 
 INSTANTIATE_TEST_CASE_P(TurnsBlankStringIntoNull, TestDataSet,
-		Values(TestDataSetParamData(QVariantList( { "" }), QVariantList( {
-				QVariant() }), QVariant())));
+		Values(TestDataSetParamData(QVariantList( {""}), QVariantList( {
+									QVariant()}), QVariant())));
 
 INSTANTIATE_TEST_CASE_P(TurnsBlankStringIntoNullWithOtherData, TestDataSet,
 		Values(
-				TestDataSetParamData(QVariantList( { 100.0, "", 50.0, 0.0 }),
-						QVariantList( { 1.0, QVariant(), 0.5, 0.0 }),
+				TestDataSetParamData(QVariantList( {100.0, "", 50.0, 0.0}),
+						QVariantList( {1.0, QVariant(), 0.5, 0.0}),
 						QVariant(100.0))));
 
 INSTANTIATE_TEST_CASE_P(TurnsSingleValueInto0Point5, TestDataSet,
-		Values(TestDataSetParamData(QVariantList( { 127.0 }), QVariantList( {
-				0.5 }), QVariant(127.0))));
+		Values(TestDataSetParamData(QVariantList( {127.0}), QVariantList( {
+									0.5}), QVariant(127.0))));
 
 INSTANTIATE_TEST_CASE_P(TurnsZeroRangeInto0Point5s, TestDataSet,
 		Values(
-				TestDataSetParamData(QVariantList( { 27.0, 27.0 }),
-						QVariantList( { 0.5, 0.5 }), QVariant(27.0))));
+				TestDataSetParamData(QVariantList( {27.0, 27.0}),
+						QVariantList( {0.5, 0.5}), QVariant(27.0))));
 
 INSTANTIATE_TEST_CASE_P(TurnsZeroRangeInto0Point5sMoreValues, TestDataSet,
 		Values(
-				TestDataSetParamData(QVariantList( { 150.0, 150.0, 150.0 }),
-						QVariantList( { 0.5, 0.5, 0.5 }), QVariant(150.0))));
+				TestDataSetParamData(QVariantList( {150.0, 150.0, 150.0}),
+						QVariantList( {0.5, 0.5, 0.5}), QVariant(150.0))));
 
 }
 // namespace

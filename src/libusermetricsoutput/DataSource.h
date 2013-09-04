@@ -22,12 +22,17 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QSharedPointer>
+#include <QtCore/QVariantMap>
 
 namespace UserMetricsOutput {
 
 class DataSource;
 
 typedef QSharedPointer<DataSource> DataSourcePtr;
+
+enum MetricType {
+	USER, SYSTEM
+};
 
 class DataSource: public QObject {
 Q_OBJECT
@@ -37,6 +42,10 @@ Q_PROPERTY(QString formatString READ formatString WRITE setFormatString NOTIFY f
 Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString NOTIFY emptyDataStringChanged FINAL)
 
 Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain NOTIFY textDomainChanged FINAL)
+
+Q_PROPERTY(MetricType type READ type WRITE setType NOTIFY typeChanged FINAL)
+
+Q_PROPERTY(QVariantMap options READ options WRITE setOptions NOTIFY optionsChanged)
 
 public:
 	explicit DataSource(const QString &localeDir = LOCALEDIR, QObject *parent =
@@ -50,6 +59,10 @@ public:
 
 	const QString & textDomain() const;
 
+	MetricType type() const;
+
+	const QVariantMap & options() const;
+
 public Q_SLOTS:
 	void setFormatString(const QString &formatString);
 
@@ -57,12 +70,20 @@ public Q_SLOTS:
 
 	void setTextDomain(const QString &textDomain);
 
+	void setType(const MetricType type);
+
+	void setOptions(const QVariantMap &options);
+
 Q_SIGNALS:
 	void formatStringChanged(const QString &formatString);
 
 	void emptyDataStringChanged(const QString &emptyDataString);
 
 	void textDomainChanged(const QString &textDomain);
+
+	void typeChanged(const MetricType type);
+
+	void optionsChanged(const QVariantMap &options);
 
 protected:
 	void updateFormatStringTranslation();
@@ -80,6 +101,10 @@ protected:
 	QString m_textDomain;
 
 	QString m_localeDir;
+
+	MetricType m_type;
+
+	QVariantMap m_options;
 };
 
 }

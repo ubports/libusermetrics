@@ -11,8 +11,10 @@ int main(int argc, char *argv[]) {
 
 	// You can hold onto this shared pointer for as long as you want
 	MetricPtr metric(
-			manager->add("twitter", "<b>%1</b> tweets received today",
-					"No tweets today", APP_ID));
+			manager->add(
+					MetricParameters("twitter").formatString(
+							"<b>%1</b> tweets received today").emptyDataString(
+							"No tweets today").textDomain(APP_ID)));
 
 	// The update is sent when the update object is destroyed
 	MetricUpdatePtr update(metric->update());

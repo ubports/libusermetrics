@@ -24,7 +24,7 @@ using namespace UserMetricsOutput;
 DataSource::DataSource(const QString &localeDir, QObject *parent) :
 		QObject(parent), m_formatString(""), m_formatStringTr(""), m_emptyDataString(
 				""), m_emptyDataStringTr(""), m_textDomain(""), m_localeDir(
-				localeDir) {
+				localeDir), m_type(USER) {
 
 }
 
@@ -81,5 +81,27 @@ void DataSource::setTextDomain(const QString &textDomain) {
 		updateFormatStringTranslation();
 		updateEmptyDataStringTranslation();
 		textDomainChanged(m_textDomain);
+	}
+}
+
+MetricType DataSource::type() const {
+	return m_type;
+}
+
+void DataSource::setType(const MetricType type) {
+	if (type != m_type) {
+		m_type = type;
+		typeChanged(m_type);
+	}
+}
+
+const QVariantMap & DataSource::options() const {
+	return m_options;
+}
+
+void DataSource::setOptions(const QVariantMap &options) {
+	if (options != m_options) {
+		m_options = options;
+		optionsChanged(m_options);
 	}
 }

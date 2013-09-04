@@ -37,6 +37,8 @@ public:
 			const QString &formatString, const QString &emptyDataString = "",
 			const QString &textDomain = "");
 
+	virtual MetricPtr add(const MetricParameters &parameters);
+
 protected:
 	QDBusConnection m_dbusConnection;
 

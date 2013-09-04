@@ -37,10 +37,19 @@
 extern "C" {
 #endif
 
+enum USERMETRICSINPUT_METRICTYPE {
+	METRIC_TYPE_USER, METRIC_TYPE_SYSTEM
+};
+
 /**
  * @brief A central place for registering user metrics.
  */
 typedef void* UserMetricsInputMetricManager;
+
+/**
+ * @brief Parameters for constructing a metric.
+ */
+typedef void* UserMetricsInputMetricParameters;
 
 /**
  * @brief A single user metric, e.g. "number of e-mails today" or "photos taken today".
@@ -51,7 +60,6 @@ typedef void* UserMetricsInputMetric;
  * @brief A update to a user metric for a particular user.
  */
 typedef void* UserMetricsInputMetricUpdate;
-
 
 /**
  * @brief Construct a new UserMetricsInputMetricManager
@@ -65,27 +73,105 @@ UserMetricsInputMetricManager usermetricsinput_metricmanager_new();
  * @brief Free a UserMetricsInputMetricManager
  *
  * @param metricManager The UserMetricsInputMetricManager to free
- */
-USERMETRICSINPUT_EXPORT
+ */USERMETRICSINPUT_EXPORT
 void usermetricsinput_metricmanager_delete(
 		UserMetricsInputMetricManager metricManager);
+/**
+ * @brief Construct a new UserMetricsInputMetricParameters
+ *
+ * @param dataSourceId The unique ID of the data source, e.g. "facebook"
+ *
+ * Must be freed with #usermetricsinput_metricparameters_delete
+ */
+USERMETRICSINPUT_EXPORT
+UserMetricsInputMetricParameters usermetricsinput_metricparameters_new(
+		const char *dataSourceId);
+
+ /**
+  * @brief Set the string to print in the output API, e.g. "<b>%1</b> messages received today"
+  *
+  * @param metricParameter
+  * @param formatString
+  */
+USERMETRICSINPUT_EXPORT
+void usermetricsinput_metricparameters_set_format_string(
+		UserMetricsInputMetricParameters metricParameter,
+		const char *formatString);
+
+/**
+ * @brief set the string to print in the case of no data, e.g. "No messages received today"
+ *
+ * @param metricParameter
+ * @param emptyDataString
+ */
+USERMETRICSINPUT_EXPORT
+void usermetricsinput_metricparameters_set_empty_data_string(
+		UserMetricsInputMetricParameters metricParameter,
+		const char *emptyDataString);
+
+/**
+ * @brief Set the translation domain
+ *
+ * @param metricParameter
+ * @param textDomain
+ */
+USERMETRICSINPUT_EXPORT
+void usermetricsinput_metricparameters_set_text_domain(
+		UserMetricsInputMetricParameters metricParameter,
+		const char *textDomain);
+
+/**
+ * @brief Set the minimum display value for this metric
+ *
+ * @param metricParameter
+ * @param minimum
+ */
+USERMETRICSINPUT_EXPORT
+void usermetricsinput_metricparameters_set_minimum(
+		UserMetricsInputMetricParameters metricParameter, double minimum);
+
+/**
+ * @brief Set the maximum display value for this metric
+ *
+ * @param metricParameter
+ * @param maximum
+ */
+USERMETRICSINPUT_EXPORT
+void usermetricsinput_metricparameters_set_maximum(
+		UserMetricsInputMetricParameters metricParameter, double maximum);
+
+/**
+ * @brief Set the type of metric this is (user owned or system owned)
+ *
+ * @param metricParameter
+ * @param metricType
+ */
+USERMETRICSINPUT_EXPORT
+void usermetricsinput_metricparameters_set_type(
+		UserMetricsInputMetricParameters metricParameter,
+		USERMETRICSINPUT_METRICTYPE metricType);
+
+/**
+ * @brief Free a UserMetricsInputMetricParameters
+ *
+ * @param metricParameters The UserMetricsInputMetricManager to free
+ */
+USERMETRICSINPUT_EXPORT
+void usermetricsinput_metricparameters_delete(
+		UserMetricsInputMetricParameters metricParameters);
 
 /**
  * @brief Register a new UserMetricsInputMetric
  *
  * @param metricManager
- * @param dataSourceId The unique ID of the data source, e.g. "facebook"
- * @param formatString The string to print in the output API, e.g. "<b>%1</b> messages received today"
- * @param emptyDataString The string to print in the case of no data, e.g. "No messages received today"
- * @param textDomain The translation domain
+ * @param metricParameters The parameters of the metric to create
  *
  * Do not attempt to delete this object.
  */
 USERMETRICSINPUT_EXPORT
 UserMetricsInputMetric usermetricsinput_metricmanager_add(
-		UserMetricsInputMetricManager metricManager, const char *dataSourceId,
-		const char *formatString, const char *emptyDataString,
-		const char *textDomain);
+		UserMetricsInputMetricManager metricManager,
+		UserMetricsInputMetricParameters metricParameters);
 
 /**
  * @brief Increment the "today" value for a simple user metric
@@ -108,7 +194,6 @@ void usermetricsinput_metric_increment(UserMetricsInputMetric metric,
 USERMETRICSINPUT_EXPORT
 void usermetricsinput_metric_update_today(UserMetricsInputMetric metric,
 		double value, const char *username);
-
 /**
  * @brief Create an update to a particular metric
  *

@@ -21,7 +21,6 @@
 #include <libusermetricsoutput/SyncedDataSource.h>
 
 #include <libusermetricscommon/DataSourceInterface.h>
-#include <libusermetricscommon/UserDataInterface.h>
 #include <libusermetricscommon/DBusPaths.h>
 
 using namespace com;
@@ -77,6 +76,8 @@ void SyncedUserMetricsStore::sync() {
 				DataSourcePtr(new SyncedDataSource(dataSource, m_localeDir)));
 	}
 
+	QSharedPointer<canonical::usermetrics::UserData> systemData;
+
 	for (const QDBusObjectPath &path : m_interface.userDatas()) {
 
 		QSharedPointer<canonical::usermetrics::UserData> userData(
@@ -84,10 +85,28 @@ void SyncedUserMetricsStore::sync() {
 						path.path(), m_interface.connection()));
 
 		QString username(userData->username());
-		insert(username, UserDataPtr(new SyncedUserData(userData)));
+		if (username == "") {
+			systemData = userData;
+			continue;
+		}
+		insert(username, UserDataPtr(new SyncedUserData(*this, userData)));
+	}
+
+	// if we have system data we must attach it to each of the user datas
+	if (!systemData.isNull()) {
+		attachSystemData(systemData);
 	}
 
 	connectionEstablished();
+}
+
+void SyncedUserMetricsStore::attachSystemData(
+		QSharedPointer<canonical::usermetrics::UserData> systemData) {
+	for (UserDataPtr userData : m_userData.values()) {
+		SyncedUserData *syncedData = qobject_cast<SyncedUserData *>(
+				userData.data());
+		syncedData->attachUserData(systemData);
+	}
 }
 
 void SyncedUserMetricsStore::addUserData(const QString &username,
@@ -96,12 +115,25 @@ void SyncedUserMetricsStore::addUserData(const QString &username,
 	QSharedPointer<canonical::usermetrics::UserData> userData(
 			new canonical::usermetrics::UserData(DBusPaths::serviceName(),
 					path.path(), m_interface.connection()));
-	insert(username, UserDataPtr(new SyncedUserData(userData)));
+
+	// if we're adding system data for the first time, we must attach it
+	// to all of the user datas
+	if (username == "") {
+		attachSystemData(userData);
+	} else {
+		insert(username, UserDataPtr(new SyncedUserData(*this, userData)));
+	}
 }
 
 void SyncedUserMetricsStore::removeUserData(const QString &username,
 		const QDBusObjectPath &path) {
 	Q_UNUSED(path);
+
+	//FIXME Handle system user data being removed
+	if (username == "") {
+		return;
+	}
+
 	m_dataSources.remove(username);
 }
 

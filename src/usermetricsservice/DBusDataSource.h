@@ -44,6 +44,10 @@ Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString
 
 Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain)
 
+Q_PROPERTY(unsigned int metricType READ metricType WRITE setMetricType)
+
+Q_PROPERTY(QVariantMap options READ options)
+
 public:
 	DBusDataSource(int id, const QString &name, QDBusConnection &dbusConnection,
 			QObject *parent = 0);
@@ -66,8 +70,32 @@ public:
 
 	void setTextDomain(const QString &textDomain);
 
+	unsigned int metricType() const;
+
+	void setMetricType(unsigned int type);
+
+	bool hasMinimum() const;
+
+	void noMinimum();
+
+	double minimum() const;
+
+	void setMinimum(double minimum);
+
+	bool hasMaximum() const;
+
+	void noMaximum();
+
+	double maximum() const;
+
+	void setMaximum(double maximum);
+
+	QVariantMap options() const;
+
 protected:
 	void lookupDataSource(DataSource *dataSource) const;
+
+	QVariantMap generateOptions(const DataSource &dataSource) const;
 
 	QDBusConnection m_dbusConnection;
 

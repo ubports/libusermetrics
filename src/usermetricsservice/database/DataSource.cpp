@@ -23,7 +23,8 @@
 using namespace UserMetricsService;
 
 DataSource::DataSource(QObject *parent) :
-		QDjangoModel(parent), m_id(0) {
+		QDjangoModel(parent), m_id(0), m_type(0), m_hasMinimum(false), m_minimum(
+				0), m_hasMaximum(false), m_maximum(0) {
 }
 
 DataSource::~DataSource() {
@@ -67,6 +68,46 @@ const QString & DataSource::textDomain() const {
 
 void DataSource::setTextDomain(const QString &textDomain) {
 	m_textDomain = textDomain;
+}
+
+int DataSource::type() const {
+	return m_type;
+}
+
+void DataSource::setType(int type) {
+	m_type = type;
+}
+
+bool DataSource::hasMinimum() const {
+	return m_hasMinimum;
+}
+
+void DataSource::setHasMinimum(bool hasMinimum) {
+	m_hasMinimum = hasMinimum;
+}
+
+double DataSource::minimum() const {
+	return m_minimum;
+}
+
+void DataSource::setMinimum(double minimum) {
+	m_minimum = minimum;
+}
+
+bool DataSource::hasMaximum() const {
+	return m_hasMaximum;
+}
+
+void DataSource::setHasMaximum(bool hasMaximum) {
+	m_hasMaximum = hasMaximum;
+}
+
+double DataSource::maximum() const {
+	return m_maximum;
+}
+
+void DataSource::setMaximum(double maximum) {
+	m_maximum = maximum;
 }
 
 void DataSource::findById(int id, DataSource *dataSource) {

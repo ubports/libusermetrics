@@ -20,6 +20,7 @@
 #define USERMETRICSOUTPUT_DATASET_H_
 
 #include <libusermetricsoutput/ColorThemeImpl.h>
+#include <libusermetricsoutput/DataSource.h>
 
 #include <QtCore/QSharedPointer>
 #include <QtCore/QVariantList>
@@ -41,7 +42,7 @@ Q_PROPERTY(const QVariantList data READ data NOTIFY dataChanged FINAL)
 Q_PROPERTY(const QVariant head READ head NOTIFY headChanged FINAL)
 
 public:
-	explicit DataSet(QObject* parent = 0);
+	explicit DataSet(DataSourcePtr dataSource, QObject* parent = 0);
 
 	virtual ~DataSet();
 
@@ -58,6 +59,8 @@ public Q_SLOTS:
 
 	void setLastUpdated(const QDate &lastUpdated);
 
+	void optionsChanged(const QVariantMap &options);
+
 Q_SIGNALS:
 	void lastUpdatedChanged(const QDate &lastUpdated);
 
@@ -66,11 +69,18 @@ Q_SIGNALS:
 	void headChanged(const QVariant &head);
 
 protected:
+	void scaleData();
+
+	DataSourcePtr m_dataSource;
+
 	QDate m_lastUpdated;
 
 	QVariantList m_data;
 
+	QVariantList m_originalData;
+
 	QVariant m_head;
+
 };
 
 }
