@@ -13,6 +13,10 @@ The only data that can be stored is numerical, for example "number of
 e-mails" or "number of pictures taken". No personally identifying
 information is stored using this library.
 
+**WARNING:** This API should be considered private, and is only for use by
+first party applications at present. It may change or be removed at any
+time.
+
 Getting and installing libusermetrics
 -------------------------------------
 
