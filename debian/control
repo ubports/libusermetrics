@@ -15,6 +15,8 @@ Build-Depends: cmake,
                qtbase5-dev,
                sqlite3,
                valgrind,
+               qtdeclarative5-dev,
+               qtdeclarative5-qtquick2-plugin,
 Standards-Version: 3.9.4
 Section: libs
 Homepage: http://launchpad.net/libusermetrics
@@ -91,3 +93,11 @@ Depends: libusermetricsinput1 (= ${binary:Version}),
 Description: library for exporting anonymous metrics about users
  This package contains command line tools to operate the library.
 
+Package: qtdeclarative5-usermetrics0.1
+Architecture: any
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+         qtdeclarative5-qtquick2-plugin,
+         libusermetricsinput1 (= ${binary:Version}),
+Description: QML bindings for libusermetrics
+ A set of bindings allowing the use of libusermetrics from QML applications.
