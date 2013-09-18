@@ -39,3 +39,7 @@ set(PLUGIN_DIR ${QT_IMPORTS_DIR}/UserMetrics)
 install(TARGETS usermetrics-qml DESTINATION ${PLUGIN_DIR})
 install(FILES qmldir DESTINATION ${PLUGIN_DIR})
 
+# copy qmldir file to build dir so QML unit tests can use it to import the plugin
+file(COPY qmldir DESTINATION ${CMAKE_BINARY_DIR}/src/modules/UserMetrics)
+
+
