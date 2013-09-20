@@ -98,3 +98,25 @@
    fun:g_malloc0
    fun:g_type_class_ref
 }
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+}
