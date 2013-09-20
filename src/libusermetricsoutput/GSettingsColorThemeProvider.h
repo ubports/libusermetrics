@@ -24,13 +24,15 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QVector>
+#include <QtCore/QScopedPointer>
 #include <QtCore/QSharedPointer>
+#include <QGSettings/QGSettings>
 
 namespace UserMetricsOutput {
 
 class GSettingsColorThemeProvider: public ColorThemeProvider {
+Q_OBJECT
 public:
-
 	typedef QVector<ColorThemePtrPair> ColorThemeList;
 
 	typedef ColorThemeList::const_iterator const_interator;
@@ -45,12 +47,19 @@ public:
 
 	virtual ColorThemePtrPair getColorTheme(const QString& dataSetId);
 
+protected Q_SLOTS:
+	void changed(const QString &key);
+
 protected:
 	ColorThemeList m_colorThemes;
 
 	const_interator m_color;
 
+	QMap<QString, ColorThemePtr> m_colorUpdateMap;
+
 	ColorThemeMap m_colorThemeMap;
+
+	QScopedPointer<QGSettings> m_settings;
 };
 
 }

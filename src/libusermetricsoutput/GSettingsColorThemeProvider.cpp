@@ -21,7 +21,6 @@
 
 #include <QtCore/QString>
 #include <QtCore/QVariant>
-#include <QGSettings/QGSettings>
 
 using namespace std;
 using namespace UserMetricsOutput;
@@ -35,17 +34,21 @@ GSettingsColorThemeProvider::GSettingsColorThemeProvider(QObject *parent) :
 						new ColorThemeImpl(QColor(), QColor(), QColor())));
 		m_colorThemes << ColorThemePtrPair(blankTheme, blankTheme);
 	} else {
-		QGSettings settings("com.canonical.UserMetrics",
-				"/com/canonical/UserMetrics/");
+		this->m_settings.reset(
+				new QGSettings("com.canonical.UserMetrics",
+						"/com/canonical/UserMetrics/"));
 
-		QString foregroundKey("theme-%1-foreground");
-		QString backgroundKey("theme-%1-background");
+		QString foregroundKeyTemplate("theme%1foreground");
+		QString backgroundKeyTemplate("theme%1background");
 
 		for (uint id(1); id <= 20; ++id) {
+			QString foregroundKey(foregroundKeyTemplate.arg(id));
+			QString backgroundKey(backgroundKeyTemplate.arg(id));
+
 			QStringList foreground(
-					settings.get(foregroundKey.arg(id)).toStringList());
+					m_settings->get(foregroundKey).toStringList());
 			QStringList background(
-					settings.get(backgroundKey.arg(id)).toStringList());
+					m_settings->get(backgroundKey).toStringList());
 
 			// skip incorrectly sized arrays
 			if (foreground.size() != 3 || background.size() != 3) {
@@ -65,6 +68,12 @@ GSettingsColorThemeProvider::GSettingsColorThemeProvider(QObject *parent) :
 
 			m_colorThemes
 					<< ColorThemePtrPair(foregroundTheme, backgroundTheme);
+
+			m_colorUpdateMap[foregroundKey] = foregroundTheme;
+			m_colorUpdateMap[backgroundKey] = backgroundTheme;
+
+			connect(m_settings.data(), SIGNAL(changed(const QString &)), this,
+			SLOT(changed(const QString &)));
 		}
 	}
 
@@ -95,4 +104,22 @@ ColorThemePtrPair GSettingsColorThemeProvider::getColorTheme(
 	}
 
 	return result;
+}
+
+void GSettingsColorThemeProvider::changed(const QString &key) {
+	QStringList themeStrings(m_settings->get(key).toStringList());
+
+	// skip incorrectly sized arrays
+	if (themeStrings.size() != 3) {
+		return;
+	}
+
+	ColorThemePtr theme(m_colorUpdateMap[key]);
+	ColorThemeImpl *themeImpl(qobject_cast<ColorThemeImpl *>(theme.data()));
+
+	QColor start(themeStrings[0]);
+	QColor main(themeStrings[1]);
+	QColor end(themeStrings[2]);
+
+	themeImpl->setColors(ColorThemeImpl(start, main, end));
 }
