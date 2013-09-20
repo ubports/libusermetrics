@@ -18,7 +18,7 @@
 
 #include <libusermetricsoutput/SyncedUserMetricsStore.h>
 #include <libusermetricscommon/DateFactoryImpl.h>
-#include <libusermetricsoutput/HardCodedColorThemeProvider.h>
+#include <libusermetricsoutput/GSettingsColorThemeProvider.h>
 #include <libusermetricsoutput/UserMetricsImpl.h>
 #include <libusermetricscommon/DBusPaths.h>
 
@@ -40,5 +40,5 @@ UserMetrics * UserMetrics::getInstance() {
 			QSharedPointer<UserMetricsStore>(
 					new SyncedUserMetricsStore(dbusConnection)),
 			QSharedPointer<ColorThemeProvider>(
-					new HardCodedColorThemeProvider()));
+					new GSettingsColorThemeProvider()));
 }

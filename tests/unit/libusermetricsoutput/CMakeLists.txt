@@ -18,6 +18,7 @@ target_link_libraries(
 	usermetricsoutput-unit-tests
 	usermetricsoutput-static
 	usermetrics-test-utils
+	${GSETTINGS_QT_LIBRARIES}
 	${GTEST_LIBRARIES}
 	${GMOCK_LIBRARIES}
 )

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+	<schema path="/com/canonical/UserMetrics/" id="com.canonical.UserMetrics">
+		<key type="as" name="theme-1-foreground">
+			<default>["#e54c19", "#ff9900", "#e54c19"]</default>
+		</key>
+		<key type="as" name="theme-1-background">
+			<default>["#ff9900", "#e54c19", "#cc0000"]</default>
+		</key>
+		<key type="as" name="theme-2-foreground">
+			<default>["#cc19cc", "#bf21bf", "#7f334c"]</default>
+		</key>
+		<key type="as" name="theme-2-background">
+			<default>["#ff9900", "#e54c19", "#cc0000"]</default>
+		</key>
+		<key type="as" name="theme-3-foreground">
+			<default>["#cc19cc", "#7f334c", "#bf21bf"]</default>
+		</key>
+		<key type="as" name="theme-3-background">
+			<default>["#cc0000", "#cc0000", "#cc0000"]</default>
+		</key>
+		<key type="as" name="theme-4-foreground">
+			<default>["#cc19cc", "#cc19cc", "#cc19cc"]</default>
+		</key>
+		<key type="as" name="theme-4-background">
+			<default>["#cc19cc", "#7f334c", "#bf21bf"]</default>
+		</key>
+		
+		<key type="as" name="theme-5-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-5-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-6-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-6-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-7-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-7-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-8-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-8-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-9-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-9-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-10-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-10-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-11-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-11-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-12-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-12-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-13-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-13-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-14-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-14-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-15-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-15-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-16-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-16-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-17-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-17-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-18-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-18-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-19-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-19-background">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-20-foreground">
+			<default>[]</default>
+		</key>
+		<key type="as" name="theme-20-background">
+			<default>[]</default>
+		</key>
+	</schema>
+</schemalist>

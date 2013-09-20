@@ -1,3 +1,11 @@
+include("UseGSettings")
+
+###########################
+# Settings schema
+###########################
+
+add_schema("com.canonical.UserMetrics.gschema.xml")
+
 ###########################
 # Policy
 ###########################

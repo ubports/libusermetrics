@@ -9,7 +9,7 @@ set(USERMETRICSOUTPUT_SOURCES
 	ColorTheme.cpp
 	ColorThemeImpl.cpp
 	ColorThemeProvider.cpp
-	HardCodedColorThemeProvider.cpp
+	GSettingsColorThemeProvider.cpp
 	DataSet.cpp
 	DataSource.cpp
 	SyncedDataSet.cpp
@@ -69,6 +69,7 @@ qt5_use_modules(
 target_link_libraries(
 	usermetricsoutput
 	usermetricscommon
+	${GSETTINGS_QT_LIBRARIES}
 	${Gettext_LIBRARIES}
 )
 

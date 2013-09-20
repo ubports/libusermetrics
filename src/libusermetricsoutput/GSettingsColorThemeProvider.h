@@ -28,7 +28,7 @@
 
 namespace UserMetricsOutput {
 
-class HardCodedColorThemeProvider: public ColorThemeProvider {
+class GSettingsColorThemeProvider: public ColorThemeProvider {
 public:
 
 	typedef QVector<ColorThemePtrPair> ColorThemeList;
@@ -39,9 +39,9 @@ public:
 
 	typedef ColorThemeMap::const_iterator map_const_iterator;
 
-	HardCodedColorThemeProvider(QObject *parent = 0);
+	GSettingsColorThemeProvider(QObject *parent = 0);
 
-	virtual ~HardCodedColorThemeProvider();
+	virtual ~GSettingsColorThemeProvider();
 
 	virtual ColorThemePtrPair getColorTheme(const QString& dataSetId);
 

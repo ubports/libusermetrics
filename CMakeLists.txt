@@ -28,6 +28,9 @@ include_directories(${Qt5Sql_INCLUDE_DIRS})
 pkg_check_modules(APPARMOR REQUIRED libapparmor REQUIRED)
 include_directories(${APPARMOR_INCLUDE_DIRS})
 
+pkg_check_modules(GSETTINGS_QT REQUIRED gsettings-qt REQUIRED)
+include_directories(${GSETTINGS_QT_INCLUDE_DIRS})
+
 find_package(Qt5Test REQUIRED)
 include_directories(${Qt5Test_INCLUDE_DIRS})
 

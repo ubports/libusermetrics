@@ -26,6 +26,7 @@ using namespace QtDBusTest;
 
 DBusTest::DBusTest() {
 	qputenv("USERMETRICS_NO_AUTH", "1");
+	qputenv("USERMETRICS_NO_LOAD_COLORS", "1");
 	DBusServicePtr userMetricsService(
 			new QProcessDBusService("com.canonical.UserMetrics",
 					QDBusConnection::SystemBus, USERMETRICSSERVICE_BINARY,
