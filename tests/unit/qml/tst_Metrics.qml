@@ -17,8 +17,6 @@
 
 import QtQuick 2.0
 import QtTest 1.0
-import "../../"
-import "../../.." //Needed for out of source build
 import UserMetrics 0.1
 import UserMetricsTest 0.1
 
