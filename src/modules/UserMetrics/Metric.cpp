@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "metric.h"
+#include "Metric.h"
 
 #include <QDebug>
 #include <libusermetricsinput/MetricManager.h>

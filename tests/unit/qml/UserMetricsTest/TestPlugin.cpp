@@ -16,9 +16,9 @@
 
 #include <QtQuick/QtQuick>
 #include <QDebug>
-#include "testplugin.h"
-#include "dbusquery.h"
-#include "metricinfo.h"
+#include "TestPlugin.h"
+#include "DBusQuery.h"
+#include "MetricInfo.h"
 
 void Components::registerTypes(const char *uri)
 {

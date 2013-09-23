@@ -1,11 +1,11 @@
 set(plugin_SRCS
-    components.cpp
-    metric.cpp
+    Components.cpp
+    Metric.cpp
     )
 
 set(plugin_HDRS
-    components.h
-    metric.h
+    Components.h
+    Metric.h
     )
 
 include_directories(

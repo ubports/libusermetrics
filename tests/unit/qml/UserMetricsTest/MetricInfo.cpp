@@ -14,17 +14,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtQuick/QtQuick>
-#include <QDebug>
-#include "components.h"
-#include "metric.h"
+#include "MetricInfo.h"
 
-void Components::registerTypes(const char *uri)
+MetricInfo::MetricInfo(QString name, QString format, QString emptyFormat, QString domain, QObject *parent) :
+    QObject(parent),
+    m_name(name),
+    m_format(format),
+    m_emptyFormat(emptyFormat),
+    m_domain(domain)
 {
-    qmlRegisterType<Metric>(uri, 0, 1, "Metric");
 }
 
-void Components::initializeEngine(QQmlEngine *engine, const char *uri)
-{
-    QQmlExtensionPlugin::initializeEngine(engine, uri);
+QString MetricInfo::name() const {
+    return m_name;
+}
+
+QString MetricInfo::format() const {
+    return m_format;
+}
+
+QString MetricInfo::emptyFormat() const {
+    return m_emptyFormat;
+}
+
+QString MetricInfo::domain() const {
+    return m_domain;
 }
