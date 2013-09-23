@@ -2,7 +2,7 @@ import QtQuick 2.0
 import UserMetrics 0.1
 
 /**
-  To run this example with the package already installed in the system:
+  To run this example with the qtdeclarative5-usermetrics0.1 package already installed in the system:
   qmlscene examples/metrics_declarative.qml
   To run it after building te source but without the package installed:
   qmlscene -I src/modules examples/metrics_declarative.qml
