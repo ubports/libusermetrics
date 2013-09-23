@@ -40,7 +40,9 @@ void Metric::setName(QString &name)
     if (name != m_name) {
         m_name = name;
         Q_EMIT nameChanged();
-        registerMetric();
+        if (m_componentComplete) {
+            registerMetric();
+        }
     }
 }
 
@@ -54,7 +56,9 @@ void Metric::setFormat(QString &format)
     if (format != m_format) {
         m_format = format;
         Q_EMIT formatChanged();
-        registerMetric();
+        if (m_componentComplete) {
+            registerMetric();
+        }
     }
 }
 
@@ -68,7 +72,9 @@ void Metric::setEmptyFormat(QString &emptyFormat)
     if (emptyFormat != m_emptyFormat) {
         m_emptyFormat = emptyFormat;
         Q_EMIT emptyFormatChanged();
-        registerMetric();
+        if (m_componentComplete) {
+            registerMetric();
+        }
     }
 }
 
@@ -82,7 +88,9 @@ void Metric::setDomain(QString &domain)
     if (domain != m_domain) {
         m_domain = domain;
         Q_EMIT domainChanged();
-        registerMetric();
+        if (m_componentComplete) {
+            registerMetric();
+        }
     }
 }
 
@@ -91,7 +99,7 @@ void Metric::registerMetric()
     if (!m_name.isEmpty() && !m_format.isEmpty()) {
         if (m_metricManager) {
             UserMetricsInput::MetricPtr metric = m_metricManager->add(m_name, m_format, m_emptyFormat, m_domain);
-            if (metric->isEmpty()) {
+            if (metric.isNull()) {
                 qWarning() << "Failed to register user metric:" << m_name << "\"" << m_format << "\"";
             } else if (metric != m_metric) {
                 m_metric = metric;
@@ -112,4 +120,13 @@ void Metric::update(double value)
     if (m_metric) {
         m_metric->update(value);
     }
+}
+
+void Metric::classBegin() {
+
+}
+
+void Metric::componentComplete() {
+    m_componentComplete = true;
+    registerMetric();
 }

@@ -18,12 +18,14 @@
 #define MODULES_USERMETRICS_METRICSMANAGER_H
 
 #include <QObject>
+#include <QQmlParserStatus>
 #include <libusermetricsinput/Metric.h>
 #include <libusermetricsinput/MetricManager.h>
 
-class Metric : public QObject
+class Metric : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString format READ format WRITE setFormat NOTIFY formatChanged)
     Q_PROPERTY(QString emptyFormat READ emptyFormat WRITE setEmptyFormat NOTIFY emptyFormatChanged)
@@ -40,6 +42,9 @@ public:
     void setEmptyFormat(QString& emptyFormat);
     QString domain() const;
     void setDomain(QString& domain);
+
+    void classBegin();
+    void componentComplete();
 
 public Q_SLOTS:
     void increment(double amount = 1.0);
@@ -60,6 +65,7 @@ private:
     QString m_domain;
     UserMetricsInput::MetricManager* m_metricManager;
     UserMetricsInput::MetricPtr m_metric;
+    bool m_componentComplete;
 };
 
 #endif // MODULES_USERMETRICS_METRICSMANAGER_H
