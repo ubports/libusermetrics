@@ -15,35 +15,52 @@
  */
 
 #include "dbusquery.h"
+#include "metricinfo.h"
 
 #include <QDebug>
 #include <QtDBus/QtDBus>
 #include <libqtdbustest/QProcessDBusService.h>
 #include <libqtdbustest/DBusService.h>
 #include <libusermetricscommon/UserMetricsInterface.h>
+#include <libusermetricscommon/UserDataInterface.h>
+#include <libusermetricscommon/DataSetInterface.h>
+#include <libusermetricscommon/DataSourceInterface.h>
 #include <libusermetricscommon/DBusPaths.h>
 
 using namespace QtDBusTest;
 using namespace UserMetricsCommon;
 
 DBusQuery::DBusQuery(QObject *parent) :
-    QObject(parent)
+    QObject(parent), dbus(0)
 {
     DBusServicePtr userMetricsService(
             new QProcessDBusService("com.canonical.UserMetrics",
                     QDBusConnection::SystemBus, USERMETRICSSERVICE_BINARY,
                     QStringList() << ":memory:"));
     dbus.registerService(userMetricsService);
-}
-
-void DBusQuery::start() {
     dbus.startServices();
 }
 
-float DBusQuery::queryValue() {
-    com::canonical::UserMetrics userMetricsInterface(DBusPaths::serviceName(),
-            DBusPaths::userMetrics(), dbus.systemConnection());
+double DBusQuery::queryCurrentValue(int index) {
+    com::canonical::usermetrics::DataSet dataSetInterface(
+            DBusPaths::serviceName(), DBusPaths::dataSet(index),
+            dbus.systemConnection());
+    QVariantList data = dataSetInterface.data();
+    return data.at(0).toDouble();
+}
 
-    return 0.0f;
+MetricInfo* DBusQuery::queryMetricInfo(int index) {
+    com::canonical::usermetrics::DataSource dataSourceInterface(
+            DBusPaths::serviceName(), DBusPaths::dataSource(index),
+            dbus.systemConnection());
+    if (dataSourceInterface.name().isEmpty()) {
+        return 0;
+    } else {
+        return new MetricInfo(dataSourceInterface.name(),
+                              dataSourceInterface.formatString(),
+                              this);
+    }
+    //dataSourceInterface.emptyDataString());
+    //dataSourceInterface.textDomain());
 }
 

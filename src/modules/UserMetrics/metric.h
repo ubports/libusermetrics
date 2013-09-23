@@ -34,8 +34,8 @@ public:
     void setFormat(QString& format);
 
 public Q_SLOTS:
-    void increment(float amount = 1.0);
-    void update(float value);
+    void increment(double amount = 1.0);
+    void update(double value);
 
 Q_SIGNALS:
     void nameChanged();

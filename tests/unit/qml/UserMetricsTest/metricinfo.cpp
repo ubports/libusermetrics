@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Canonical Ltd.
+ * Copyright (C) 2013 Canonical, Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,27 +12,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-import QtQuick 2.0
-import QtTest 1.0
-import "../../"
-import "../../.." //Needed for out of source build
-import UserMetrics 0.1
-import UserMetricsTest 0.1
+#include "metricinfo.h"
 
-TestCase {
-    name: "StopWatch"
+MetricInfo::MetricInfo(QString name, QString format, QObject *parent) :
+    QObject(parent), m_name(name), m_format(format)
+{
+}
 
-    function test_time_format_calc() {
-        //compare(stopWatch.elapsed, "00:05", "Time not calculated correctly")
-        return true;
-    }
+QString MetricInfo::name() const {
+    return m_name;
+}
 
-    Metric {
-        id: metric
-        name: "test"
-        format: "Test metric"
-    }
+QString MetricInfo::format() const {
+    return m_format;
 }

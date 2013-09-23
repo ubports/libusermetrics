@@ -70,14 +70,14 @@ void Metric::registerMetric()
     }
 }
 
-void Metric::increment(float amount)
+void Metric::increment(double amount)
 {
     if (m_metric) {
         m_metric->increment(amount);
     }
 }
 
-void Metric::update(float value)
+void Metric::update(double value)
 {
     if (m_metric) {
         m_metric->update(value);

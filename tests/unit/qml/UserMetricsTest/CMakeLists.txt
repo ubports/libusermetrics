@@ -1,11 +1,13 @@
 set(testplugin_SRCS
     testplugin.cpp
     dbusquery.cpp
+    metricinfo.cpp
     )
 
 set(testplugin_HDRS
     testplugin.h
     dbusquery.h
+    metricinfo.h
     )
 
 add_library(usermetrics-qml-test SHARED ${testplugin_SRCS} ${testplugin_HDRS})

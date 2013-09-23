@@ -14,27 +14,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DBUSQUERY_H
-#define DBUSQUERY_H
+#ifndef METRICINFO_H
+#define METRICINFO_H
 
 #include <QObject>
-#include <libqtdbustest/DBusTestRunner.h>
 
-class MetricInfo;
-
-class DBusQuery : public QObject
+class MetricInfo : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(QString format READ format NOTIFY formatChanged)
 
 public:
-    explicit DBusQuery(QObject *parent = 0);
+    explicit MetricInfo(QString name, QString format, QObject *parent = 0);
 
-public Q_SLOTS:
-    double queryCurrentValue(int index);
-    MetricInfo* queryMetricInfo(int index);
+public:
+    QString name() const;
+    QString format() const;
+
+Q_SIGNALS:
+    void nameChanged();
+    void formatChanged();
 
 private:
-    QtDBusTest::DBusTestRunner dbus;
+    QString m_name;
+    QString m_format;
 };
 
-#endif // DBUSQUERY_H
+#endif // METRICINFO_H
