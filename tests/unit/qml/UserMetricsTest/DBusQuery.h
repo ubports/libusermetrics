@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DBUSQUERY_H
-#define DBUSQUERY_H
+#ifndef MODULES_USERMETRICSTEST_DBUSQUERY_H
+#define MODULES_USERMETRICSTEST_DBUSQUERY_H
 
 #include <QObject>
 #include <libqtdbustest/DBusTestRunner.h>
@@ -37,4 +37,4 @@ private:
     QtDBusTest::DBusTestRunner dbus;
 };
 
-#endif // DBUSQUERY_H
+#endif // MODULES_USERMETRICSTEST_DBUSQUERY_H

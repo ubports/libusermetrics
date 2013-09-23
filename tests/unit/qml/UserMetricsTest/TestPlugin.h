@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TESTPLUGIN_H
-#define TESTPLUGIN_H
+#ifndef MODULES_USERMETRICSTEST_TESTPLUGIN_H
+#define MODULES_USERMETRICSTEST_TESTPLUGIN_H
 
 #include <QtQml/QQmlExtensionPlugin>
 #include <QtQml/QQmlEngine>
@@ -30,4 +30,4 @@ public:
     void initializeEngine(QQmlEngine *engine, const char *uri);
 };
 
-#endif // TESTPLUGIN_H
+#endif // MODULES_USERMETRICSTEST_TESTPLUGIN_H

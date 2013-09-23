@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPONENTS_H
-#define COMPONENTS_H
+#ifndef MODULES_USERMETRICS_COMPONENTS_H
+#define MODULES_USERMETRICS_COMPONENTS_H
 
 #include <QtQml/QQmlExtensionPlugin>
 #include <QtQml/QQmlEngine>
@@ -30,4 +30,4 @@ public:
     void initializeEngine(QQmlEngine *engine, const char *uri);
 };
 
-#endif // COMPONENTS_H
+#endif // MODULES_USERMETRICS_COMPONENTS_H

@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef METRICSMANAGER_H
-#define METRICSMANAGER_H
+#ifndef MODULES_USERMETRICS_METRICSMANAGER_H
+#define MODULES_USERMETRICS_METRICSMANAGER_H
 
 #include <QObject>
 #include <libusermetricsinput/Metric.h>
@@ -59,4 +59,4 @@ private:
     UserMetricsInput::MetricPtr m_metric;
 };
 
-#endif // METRICSMANAGER_H
+#endif // MODULES_USERMETRICS_METRICSMANAGER_H

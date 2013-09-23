@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef METRICINFO_H
-#define METRICINFO_H
+#ifndef MODULES_USERMETRICSTEST_METRICINFO_H
+#define MODULES_USERMETRICSTEST_METRICINFO_H
 
 #include <QObject>
 
@@ -50,4 +50,4 @@ private:
 
 };
 
-#endif // METRICINFO_H
+#endif // MODULES_USERMETRICSTEST_METRICINFO_H
