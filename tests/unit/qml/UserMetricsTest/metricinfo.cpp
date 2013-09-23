@@ -16,8 +16,12 @@
 
 #include "metricinfo.h"
 
-MetricInfo::MetricInfo(QString name, QString format, QObject *parent) :
-    QObject(parent), m_name(name), m_format(format)
+MetricInfo::MetricInfo(QString name, QString format, QString emptyFormat, QString domain, QObject *parent) :
+    QObject(parent),
+    m_name(name),
+    m_format(format),
+    m_emptyFormat(emptyFormat),
+    m_domain(domain)
 {
 }
 
@@ -27,4 +31,12 @@ QString MetricInfo::name() const {
 
 QString MetricInfo::format() const {
     return m_format;
+}
+
+QString MetricInfo::emptyFormat() const {
+    return m_emptyFormat;
+}
+
+QString MetricInfo::domain() const {
+    return m_domain;
 }

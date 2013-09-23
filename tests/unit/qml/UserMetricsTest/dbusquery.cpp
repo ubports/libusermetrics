@@ -58,9 +58,9 @@ MetricInfo* DBusQuery::queryMetricInfo(int index) {
     } else {
         return new MetricInfo(dataSourceInterface.name(),
                               dataSourceInterface.formatString(),
+                              dataSourceInterface.emptyDataString(),
+                              dataSourceInterface.textDomain(),
                               this);
     }
-    //dataSourceInterface.emptyDataString());
-    //dataSourceInterface.textDomain());
 }
 

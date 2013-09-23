@@ -25,6 +25,8 @@ class Metric : public QObject
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString format READ format WRITE setFormat NOTIFY formatChanged)
+    Q_PROPERTY(QString emptyFormat READ emptyFormat WRITE setEmptyFormat NOTIFY emptyFormatChanged)
+    Q_PROPERTY(QString domain READ domain WRITE setDomain NOTIFY domainChanged)
 
 public:
     explicit Metric(QObject *parent = 0);
@@ -32,6 +34,10 @@ public:
     void setName(QString& name);
     QString format() const;
     void setFormat(QString& format);
+    QString emptyFormat() const;
+    void setEmptyFormat(QString& emptyFormat);
+    QString domain() const;
+    void setDomain(QString& domain);
 
 public Q_SLOTS:
     void increment(double amount = 1.0);
@@ -40,12 +46,16 @@ public Q_SLOTS:
 Q_SIGNALS:
     void nameChanged();
     void formatChanged();
+    void emptyFormatChanged();
+    void domainChanged();
 
 private:
     void registerMetric();
 
     QString m_name;
     QString m_format;
+    QString m_emptyFormat;
+    QString m_domain;
     UserMetricsInput::MetricPtr m_metric;
 };
 

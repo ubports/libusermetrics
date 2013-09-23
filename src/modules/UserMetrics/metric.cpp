@@ -54,13 +54,41 @@ void Metric::setFormat(QString &format)
     }
 }
 
+QString Metric::emptyFormat() const
+{
+    return m_emptyFormat;
+}
+
+void Metric::setEmptyFormat(QString &emptyFormat)
+{
+    if (emptyFormat != m_emptyFormat) {
+        m_emptyFormat = emptyFormat;
+        Q_EMIT emptyFormatChanged();
+        registerMetric();
+    }
+}
+
+QString Metric::domain() const
+{
+    return m_domain;
+}
+
+void Metric::setDomain(QString &domain)
+{
+    if (domain != m_domain) {
+        m_domain = domain;
+        Q_EMIT domainChanged();
+        registerMetric();
+    }
+}
+
 void Metric::registerMetric()
 {
     if (!m_name.isEmpty() && !m_format.isEmpty()) {
         UserMetricsInput::MetricManager* manager;
         manager = UserMetricsInput::MetricManager::getInstance();
         if (manager) {
-            UserMetricsInput::MetricPtr metric = manager->add(m_name, m_format);
+            UserMetricsInput::MetricPtr metric = manager->add(m_name, m_format, m_emptyFormat, m_domain);
             if (metric == 0) {
                 qWarning() << "Failed to register user metric:" << m_name << "\"" << m_format << "\"";
             } else if (metric != m_metric) {

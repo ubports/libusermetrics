@@ -26,11 +26,15 @@ TestCase {
     name: "Increment"
     property string originalName: "test"
     property string originalFormat: "Test Metric"
+    property string originalEmptyFormat: "Nope, no data"
+    property string originalDomain: "test-domain"
 
     Metric {
         id: metric
         name: originalName
         format: originalFormat
+        emptyFormat: originalEmptyFormat
+        domain: originalDomain
     }
 
     function test_metric() {
@@ -38,6 +42,8 @@ TestCase {
         var info = dbusQuery.queryMetricInfo(1);
         compare(info.name, originalName, "Metric name was not set properly");
         compare(info.format, originalFormat, "Metric format was not set properly");
+        compare(info.emptyFormat, originalEmptyFormat, "Metric emptyFormat was not set properly");
+        compare(info.domain, originalDomain, "Metric domain was not set properly");
 
         // Test update and increment with integers and floating point data
         metric.update(0);
@@ -51,12 +57,19 @@ TestCase {
         metric.update(5.5);
         compare(dbusQuery.queryCurrentValue(1), 5.5, "Data not updated successfully")
 
-        // Check that when changing the metric format nothing else changes and no new metrics are created
+        // Check that when changing the metric format or emptyFormat nothing else changes and
+        // no new metrics are created
         var newFormat = "Something else";
+        var newEmptyFormat = "Still no data";
+        var newDomain = "test-new-domain";
         metric.format = newFormat;
+        metric.emptyFormat = newEmptyFormat;
+        metric.domain = newDomain;
         info = dbusQuery.queryMetricInfo(1);
         compare(info.name, originalName, "Metric name was changed without requesting it");
         compare(info.format, newFormat, "Metric format was not changed properly");
+        compare(info.emptyFormat, newEmptyFormat, "Metric emptyFormat was not changed properly");
+        compare(info.domain, newDomain, "Metric domain was not changed properly");
         info = dbusQuery.queryMetricInfo(2);
         compare(info, null, "A new metric shouldn't have been created when just changing format");
 
