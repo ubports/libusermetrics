@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "MetricInfo.h"
+#include <MetricInfo.h>
 
 MetricInfo::MetricInfo(QString name, QString format, QString emptyFormat, QString domain, QObject *parent) :
     QObject(parent),
