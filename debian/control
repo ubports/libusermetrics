@@ -17,6 +17,7 @@ Build-Depends: cmake,
                valgrind,
                qtdeclarative5-dev,
                qtdeclarative5-qtquick2-plugin,
+               qtdeclarative5-test-plugin,
 Standards-Version: 3.9.4
 Section: libs
 Homepage: http://launchpad.net/libusermetrics
