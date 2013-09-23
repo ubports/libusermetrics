@@ -19,6 +19,7 @@
 
 #include <QObject>
 #include <libusermetricsinput/Metric.h>
+#include <libusermetricsinput/MetricManager.h>
 
 class Metric : public QObject
 {
@@ -30,6 +31,7 @@ class Metric : public QObject
 
 public:
     explicit Metric(QObject *parent = 0);
+    ~Metric();
     QString name() const;
     void setName(QString& name);
     QString format() const;
@@ -56,6 +58,7 @@ private:
     QString m_format;
     QString m_emptyFormat;
     QString m_domain;
+    UserMetricsInput::MetricManager* m_metricManager;
     UserMetricsInput::MetricPtr m_metric;
 };
 

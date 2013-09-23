@@ -17,13 +17,17 @@
 #include <Metric.h>
 
 #include <QDebug>
-#include <libusermetricsinput/MetricManager.h>
 
 Metric::Metric(QObject *parent) :
     QObject(parent),
-    m_metric(0)
+    m_metricManager(0)
 {
+    m_metricManager = UserMetricsInput::MetricManager::getInstance();
+}
 
+Metric::~Metric()
+{
+    delete m_metricManager;
 }
 
 QString Metric::name() const
@@ -85,11 +89,9 @@ void Metric::setDomain(QString &domain)
 void Metric::registerMetric()
 {
     if (!m_name.isEmpty() && !m_format.isEmpty()) {
-        UserMetricsInput::MetricManager* manager;
-        manager = UserMetricsInput::MetricManager::getInstance();
-        if (manager) {
-            UserMetricsInput::MetricPtr metric = manager->add(m_name, m_format, m_emptyFormat, m_domain);
-            if (metric == 0) {
+        if (m_metricManager) {
+            UserMetricsInput::MetricPtr metric = m_metricManager->add(m_name, m_format, m_emptyFormat, m_domain);
+            if (metric->isEmpty()) {
                 qWarning() << "Failed to register user metric:" << m_name << "\"" << m_format << "\"";
             } else if (metric != m_metric) {
                 m_metric = metric;
