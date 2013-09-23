@@ -16,8 +16,8 @@
 
 #include <QtQuick/QtQuick>
 #include <QDebug>
-#include "Components.h"
-#include "Metric.h"
+#include <Components.h>
+#include <Metric.h>
 
 void Components::registerTypes(const char *uri)
 {

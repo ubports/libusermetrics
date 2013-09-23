@@ -14,8 +14,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "DBusQuery.h"
-#include "MetricInfo.h"
+#include <DBusQuery.h>
+#include <MetricInfo.h>
 
 #include <QDebug>
 #include <QtDBus/QtDBus>

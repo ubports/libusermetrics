@@ -9,8 +9,6 @@ set(plugin_HDRS
     )
 
 include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
     ${Qt5Core_INCLUDE_DIRS}
     ${Qt5Quick_INCLUDE_DIRS}
     )
