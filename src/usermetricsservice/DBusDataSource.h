@@ -21,8 +21,8 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QScopedPointer>
-
-#include <QDBusConnection>
+#include <QtDBus/QDBusContext>
+#include <QtDBus/QDBusConnection>
 
 class DataSourceAdaptor;
 
@@ -33,7 +33,7 @@ class DBusDataSource;
 
 typedef QSharedPointer<DBusDataSource> DBusDataSourcePtr;
 
-class DBusDataSource: public QObject {
+class DBusDataSource: public QObject, protected QDBusContext {
 Q_OBJECT
 
 Q_PROPERTY(QString name READ name)

@@ -18,6 +18,7 @@
 
 #include <stdexcept>
 
+#include <usermetricsservice/Authentication.h>
 #include <usermetricsservice/DBusUserMetrics.h>
 #include <usermetricsservice/DBusDataSource.h>
 #include <usermetricsservice/DBusUserData.h>
@@ -45,6 +46,15 @@ using namespace UserMetricsTestUtils;
 
 namespace {
 
+class MockAuthentication: public Authentication {
+public:
+	MOCK_CONST_METHOD2(getConfinementContext, QString(const QDBusConnection&,
+					const QDBusContext&));
+
+	MOCK_CONST_METHOD2(getUsername, QString(const QDBusConnection&,
+					const QDBusContext&));
+};
+
 class MockDateFactory: public DateFactory {
 public:
 	MOCK_CONST_METHOD0(currentDate, QDate());
@@ -56,7 +66,8 @@ protected:
 			db(
 					QSqlDatabase::addDatabase("QSQLITE",
 							"test-user-metrics-service")), dateFactory(
-					new NiceMock<MockDateFactory>()) {
+					new NiceMock<MockDateFactory>()), authentication(
+					new NiceMock<MockAuthentication>()) {
 		db.setDatabaseName(":memory:");
 		if (!db.open()) {
 			throw logic_error("Could not open memory database");
@@ -64,6 +75,9 @@ protected:
 
 		ON_CALL(*dateFactory, currentDate()).WillByDefault(
 				Return(QDate(2001, 01, 07)));
+
+		ON_CALL(*authentication, getConfinementContext(_,
+						_)).WillByDefault(Return(QString("unconfined")));
 
 //		QDjango::setDebugEnabled(true);
 		QDjango::setDatabase(db);
@@ -78,11 +92,14 @@ protected:
 	QSqlDatabase db;
 
 	QSharedPointer<MockDateFactory> dateFactory;
+
+	QSharedPointer<MockAuthentication> authentication;
 };
 
 TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		EXPECT_TRUE(userMetrics.dataSources().empty());
 
@@ -102,7 +119,8 @@ TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		QList<QDBusObjectPath> dataSources(userMetrics.dataSources());
 		EXPECT_EQ(1, dataSources.size());
@@ -119,7 +137,8 @@ TEST_F(TestUserMetricsService, PersistsDataSourcesBetweenRestart) {
 
 TEST_F(TestUserMetricsService, UpdatesFormatString) {
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received", "", "", 0,
 				QVariantMap());
@@ -132,7 +151,8 @@ TEST_F(TestUserMetricsService, UpdatesFormatString) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("%1 new format string"), twitter->formatString());
@@ -141,7 +161,8 @@ TEST_F(TestUserMetricsService, UpdatesFormatString) {
 
 TEST_F(TestUserMetricsService, UpdatesEmptyDataString) {
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received",
 				"no tweets today", "", 0, QVariantMap());
@@ -154,7 +175,8 @@ TEST_F(TestUserMetricsService, UpdatesEmptyDataString) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("no tweeties today"), twitter->emptyDataString());
@@ -163,7 +185,8 @@ TEST_F(TestUserMetricsService, UpdatesEmptyDataString) {
 
 TEST_F(TestUserMetricsService, UpdatesTextDomain) {
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received", "",
 				"start text domain", 0, QVariantMap());
@@ -176,7 +199,8 @@ TEST_F(TestUserMetricsService, UpdatesTextDomain) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("changed text domain"), twitter->textDomain());
@@ -185,7 +209,8 @@ TEST_F(TestUserMetricsService, UpdatesTextDomain) {
 
 TEST_F(TestUserMetricsService, UpdatesFormatStringOnCreate) {
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received", "", "", 0,
 				QVariantMap());
@@ -202,7 +227,8 @@ TEST_F(TestUserMetricsService, UpdatesFormatStringOnCreate) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		DBusDataSourcePtr twitter(userMetrics.dataSource("twitter"));
 		EXPECT_EQ(QString("%1 new format string"), twitter->formatString());
@@ -210,8 +236,12 @@ TEST_F(TestUserMetricsService, UpdatesFormatStringOnCreate) {
 }
 
 TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("alice")));
+
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		EXPECT_TRUE(userMetrics.dataSources().empty());
 
@@ -228,7 +258,8 @@ TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		QList<QDBusObjectPath> userData(userMetrics.userDatas());
 		EXPECT_EQ(1, userData.size());
@@ -241,10 +272,14 @@ TEST_F(TestUserMetricsService, PersistsUserDataBetweenRestart) {
 }
 
 TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("alice")));
+
 	QVariantList data( { 100.0, 50.0, 0.0, -50.0, -100.0 });
 
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		userMetrics.createDataSource("twitter", "%1 tweets received", "", "", 0,
 				QVariantMap());
@@ -272,7 +307,8 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 	}
 
 	{
-		DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+		DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+				authentication);
 
 		DBusUserDataPtr alice(userMetrics.userData("alice"));
 		EXPECT_EQ(QString("alice"), alice->username());
@@ -290,7 +326,11 @@ TEST_F(TestUserMetricsService, PersistsDataSetsBetweenRestart) {
 }
 
 TEST_F(TestUserMetricsService, CreateDataSetsWithUnknownSourceFailsGracefully) {
-	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("bob")));
+
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
 
 	userMetrics.createUserData("bob");
 	DBusUserDataPtr bob(userMetrics.userData("bob"));
@@ -299,10 +339,14 @@ TEST_F(TestUserMetricsService, CreateDataSetsWithUnknownSourceFailsGracefully) {
 }
 
 TEST_F(TestUserMetricsService, UpdateData) {
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("bob")));
+
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
 			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 8)));
 
-	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
 	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("bob");
@@ -328,10 +372,14 @@ TEST_F(TestUserMetricsService, UpdateData) {
 }
 
 TEST_F(TestUserMetricsService, UpdateDataWithGap) {
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("bob")));
+
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
 			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 15)));
 
-	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
 	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("bob");
@@ -362,10 +410,14 @@ TEST_F(TestUserMetricsService, UpdateDataWithGap) {
 }
 
 TEST_F(TestUserMetricsService, UpdateDataTotallyOverwrite) {
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("bob")));
+
 	EXPECT_CALL(*dateFactory, currentDate()).Times(2).WillOnce(
 			Return(QDate(2001, 01, 5))).WillOnce(Return(QDate(2001, 01, 7)));
 
-	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
 	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("bob");
@@ -391,18 +443,27 @@ TEST_F(TestUserMetricsService, UpdateDataTotallyOverwrite) {
 }
 
 TEST_F(TestUserMetricsService, MultipleUsers) {
-	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
 	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("alice")));
 	userMetrics.createUserData("alice");
 	DBusUserDataPtr alice(userMetrics.userData("alice"));
 
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("bob")));
 	userMetrics.createUserData("bob");
 	DBusUserDataPtr bob(userMetrics.userData("bob"));
 
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("alice")));
 	alice->createDataSet("twitter");
 	DBusDataSetPtr aliceTwitter(alice->dataSet("twitter"));
 
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("bob")));
 	bob->createDataSet("twitter");
 	DBusDataSetPtr bobTwitter(bob->dataSet("twitter"));
 
@@ -416,10 +477,14 @@ TEST_F(TestUserMetricsService, MultipleUsers) {
 }
 
 TEST_F(TestUserMetricsService, IncrementOverSeveralDays) {
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("bob")));
+
 	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
 			Return(QDate(2001, 03, 1)));
 
-	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
 	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("bob");
@@ -452,10 +517,14 @@ TEST_F(TestUserMetricsService, IncrementOverSeveralDays) {
 }
 
 TEST_F(TestUserMetricsService, StoreMaximumOf62Days) {
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("bob")));
+
 	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
 			Return(QDate(2001, 3, 5)));
 
-	DBusUserMetrics userMetrics(systemConnection(), dateFactory);
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
 	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	userMetrics.createUserData("bob");
@@ -478,6 +547,173 @@ TEST_F(TestUserMetricsService, StoreMaximumOf62Days) {
 	}
 
 	EXPECT_EQ(expected, twitter->data());
+}
+
+TEST_F(TestUserMetricsService, CantCreateSomeoneElsesData) {
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("alice")));
+
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 3, 5)));
+
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
+
+	ASSERT_EQ(QDBusObjectPath(), userMetrics.createUserData("bob"));
+
+	DBusUserDataPtr bob(userMetrics.userData("bob"));
+	ASSERT_TRUE(bob.isNull());
+}
+
+TEST_F(TestUserMetricsService, CantCreateSomeoneElsesDataSet) {
+	ON_CALL(*authentication, getConfinementContext(_,
+					_)).WillByDefault(Return(QString("/bin/twitter")));
+
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("alice")));
+
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 3, 5)));
+
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
+
+	ASSERT_NE(QDBusObjectPath(), userMetrics.createUserData("alice"));
+
+	DBusUserDataPtr alice(userMetrics.userData("alice"));
+	ASSERT_FALSE(alice.isNull());
+
+	ASSERT_NE(QDBusObjectPath(), alice->createDataSet("twitter"));
+
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("bob")));
+
+	EXPECT_EQ(QDBusObjectPath(), alice->createDataSet("twitter"));
+}
+
+TEST_F(TestUserMetricsService, CantCreateAnotherAppsDataSet) {
+	ON_CALL(*authentication, getConfinementContext(_,
+					_)).WillByDefault(Return(QString("/bin/twitter")));
+
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("alice")));
+
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 3, 5)));
+
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
+
+	ASSERT_NE(QDBusObjectPath(), userMetrics.createUserData("alice"));
+
+	DBusUserDataPtr alice(userMetrics.userData("alice"));
+	ASSERT_FALSE(alice.isNull());
+
+	ASSERT_NE(QDBusObjectPath(), alice->createDataSet("twitter"));
+
+	ON_CALL(*authentication, getConfinementContext(_,
+					_)).WillByDefault(Return(QString("/bin/facebook")));
+
+	EXPECT_EQ(QDBusObjectPath(), alice->createDataSet("twitter"));
+}
+
+TEST_F(TestUserMetricsService, CantCreateAnotherAppsData) {
+	ON_CALL(*authentication, getConfinementContext(_,
+					_)).WillByDefault(Return(QString("/bin/twitter")));
+
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("alice")));
+
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 3, 5)));
+
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
+
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(1)),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+
+	ON_CALL(*authentication, getConfinementContext(_,
+					_)).WillByDefault(Return(QString("/bin/facebook")));
+
+	ASSERT_EQ(QDBusObjectPath(),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+}
+
+TEST_F(TestUserMetricsService, CantUpdateSomeoneElsesData) {
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("alice")));
+
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 3, 5)));
+
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
+
+	ASSERT_NE(QDBusObjectPath(), userMetrics.createUserData("alice"));
+
+	DBusUserDataPtr alice(userMetrics.userData("alice"));
+	ASSERT_FALSE(alice.isNull());
+
+	ASSERT_NE(QDBusObjectPath(), alice->createDataSet("twitter"));
+	DBusDataSetPtr twitter(alice->dataSet("twitter"));
+
+	twitter->update(QVariantList() << 1.0 << 0.0);
+	EXPECT_EQ(QVariantList() << 1.0 << 0.0, twitter->data());
+
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("bob")));
+
+	// This update should be ignored
+	twitter->update(QVariantList() << 0.0 << 1.0);
+	EXPECT_EQ(QVariantList() << 1.0 << 0.0, twitter->data());
+
+	// This update should be ignored
+	twitter->increment(1.0);
+	EXPECT_EQ(QVariantList() << 1.0 << 0.0, twitter->data());
+}
+
+TEST_F(TestUserMetricsService, CantUpdateAnotherAppsData) {
+	ON_CALL(*authentication, getConfinementContext(_,
+					_)).WillByDefault(Return(QString("/bin/twitter")));
+
+	ON_CALL(*authentication, getUsername(_,
+					_)).WillByDefault(Return(QString("alice")));
+
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 3, 5)));
+
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
+	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
+
+	ASSERT_NE(QDBusObjectPath(), userMetrics.createUserData("alice"));
+
+	DBusUserDataPtr alice(userMetrics.userData("alice"));
+	ASSERT_FALSE(alice.isNull());
+
+	ASSERT_NE(QDBusObjectPath(), alice->createDataSet("twitter"));
+	DBusDataSetPtr twitter(alice->dataSet("twitter"));
+
+	twitter->update(QVariantList() << 1.0 << 0.0);
+	EXPECT_EQ(QVariantList() << 1.0 << 0.0, twitter->data());
+
+	ON_CALL(*authentication, getConfinementContext(_,
+					_)).WillByDefault(Return(QString("/bin/facebook")));
+
+	// This update should be ignored
+	twitter->update(QVariantList() << 0.0 << 1.0);
+	EXPECT_EQ(QVariantList() << 1.0 << 0.0, twitter->data());
+
+	// This update should be ignored
+	twitter->increment(1.0);
+	EXPECT_EQ(QVariantList() << 1.0 << 0.0, twitter->data());
 }
 
 } // namespace

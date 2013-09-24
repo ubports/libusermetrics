@@ -23,8 +23,8 @@
 using namespace UserMetricsService;
 
 DataSource::DataSource(QObject *parent) :
-		QDjangoModel(parent), m_id(0), m_type(0), m_hasMinimum(false), m_minimum(
-				0), m_hasMaximum(false), m_maximum(0) {
+		QDjangoModel(parent), m_id(0), m_secret(), m_type(0), m_hasMinimum(
+				false), m_minimum(0), m_hasMaximum(false), m_maximum(0) {
 }
 
 DataSource::~DataSource() {
@@ -44,6 +44,14 @@ const QString & DataSource::name() const {
 
 void DataSource::setName(const QString &name) {
 	m_name = name;
+}
+
+const QString & DataSource::secret() const {
+	return m_secret;
+}
+
+void DataSource::setSecret(const QString &secret) {
+	m_secret = secret;
 }
 
 const QString & DataSource::formatString() const {

@@ -20,9 +20,12 @@
 #define USERMETRICSSERVICE_DBUSUSERDATA_H_
 
 #include <QtCore/QObject>
-#include <QtDBus/QtDBus>
-#include <QtCore/QScopedPointer>
 #include <QtCore/QHash>
+#include <QtCore/QScopedPointer>
+#include <QtCore/QSharedPointer>
+#include <QtDBus/QDBusConnection>
+#include <QtDBus/QDBusContext>
+#include <QtDBus/QDBusObjectPath>
 
 class UserDataAdaptor;
 
@@ -32,6 +35,7 @@ class DateFactory;
 
 namespace UserMetricsService {
 
+class Authentication;
 class UserData;
 class DBusDataSet;
 class DBusUserData;
@@ -39,7 +43,7 @@ class DBusUserMetrics;
 
 typedef QSharedPointer<DBusUserData> DBusUserDataPtr;
 
-class DBusUserData: public QObject {
+class DBusUserData: public QObject, protected QDBusContext {
 Q_OBJECT
 
 Q_PROPERTY(QString username READ username)
@@ -50,7 +54,7 @@ public:
 	DBusUserData(int id, const QString &username, DBusUserMetrics &userMetrics,
 			QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
-			QObject *parent = 0);
+			QSharedPointer<Authentication> authentication, QObject *parent = 0);
 
 	virtual ~DBusUserData();
 
@@ -72,6 +76,8 @@ protected:
 	QScopedPointer<UserDataAdaptor> m_adaptor;
 
 	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
+
+	QSharedPointer<Authentication> m_authentication;
 
 	DBusUserMetrics &m_userMetrics;
 

@@ -116,7 +116,8 @@ unsigned int DBusDataSource::metricType() const {
 void DBusDataSource::setMetricType(unsigned int type) {
 	DataSource dataSource;
 	DataSource::findById(m_id, &dataSource);
-	if (type != dataSource.type()) {
+	unsigned int t(dataSource.type());
+	if (type != t) {
 		dataSource.setType(type);
 		if (!dataSource.save()) {
 			throw logic_error(_("Could not save data source"));
