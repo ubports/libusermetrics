@@ -1,3 +1,18 @@
+libusermetrics (1.1.1+13.10.20130924-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Add QML bindings to be able to set user metrics from declarative
+    code. For now only part of the input API is supported.
+
+  [ Ugo Riboni ]
+  * Add QML bindings to be able to set user metrics from declarative
+    code. For now only part of the input API is supported.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 132
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Tue, 24 Sep 2013 22:45:08 +0000
+
 libusermetrics (1.1.1+13.10.20130913-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]
