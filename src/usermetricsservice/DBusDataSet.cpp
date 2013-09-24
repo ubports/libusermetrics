@@ -135,20 +135,20 @@ void DBusDataSet::update(const QVariantList &data) {
 	DataSet dataSet;
 	DataSet::findByIdRelated(m_id, &dataSet);
 
-	QString dbusUsername(
-			m_authentication->getUsername(m_dbusConnection, *this));
+	QString dbusUsername(m_authentication->getUsername(*this));
 	const QString &username(dataSet.userData()->username());
 	if (!dbusUsername.isEmpty() && !username.isEmpty()
 			&& dbusUsername != username) {
-		//FIXME Signal error about data owner
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				"Attempt to update data owned by another user");
 		return;
 	}
 
-	QString confinementContext(
-			m_authentication->getConfinementContext(m_dbusConnection, *this));
+	QString confinementContext(m_authentication->getConfinementContext(*this));
 	const QString &secret(dataSet.dataSource()->secret());
 	if (secret != "unconfined" && secret != confinementContext) {
-		//FIXME Signal error about data source owner
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				"Attempt to update data owned by another application");
 		return;
 	}
 
@@ -162,20 +162,20 @@ void DBusDataSet::increment(double amount) {
 	DataSet dataSet;
 	DataSet::findByIdRelated(m_id, &dataSet);
 
-	QString dbusUsername(
-			m_authentication->getUsername(m_dbusConnection, *this));
+	QString dbusUsername(m_authentication->getUsername(*this));
 	const QString &username(dataSet.userData()->username());
 	if (!dbusUsername.isEmpty() && !username.isEmpty()
 			&& dbusUsername != username) {
-		//FIXME Signal error about data owner
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				"Attempt to increment data owned by another user");
 		return;
 	}
 
-	QString confinementContext(
-			m_authentication->getConfinementContext(m_dbusConnection, *this));
+	QString confinementContext(m_authentication->getConfinementContext(*this));
 	const QString &secret(dataSet.dataSource()->secret());
 	if (secret != "unconfined" && secret != confinementContext) {
-		//FIXME Signal error about data source owner
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				"Attempt to increment data owned by another application");
 		return;
 	}
 

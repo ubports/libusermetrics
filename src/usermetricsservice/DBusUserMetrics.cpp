@@ -129,8 +129,7 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		const QString &formatString, const QString &emptyDataString,
 		const QString &textDomain, int type, const QVariantMap &options) {
 
-	QString confinementContext(
-			m_authentication->getConfinementContext(m_dbusConnection, *this));
+	QString confinementContext(m_authentication->getConfinementContext(*this));
 
 	QDjangoQuerySet<DataSource> dataSourcesQuery;
 	QDjangoQuerySet<DataSource> query(
@@ -187,7 +186,8 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 //				dbusDataSource->setSecret(confinementContext);
 			}
 		} else if (dataSource.secret() != confinementContext) {
-			// FIXME return error
+			m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+					"Attempt to create data source owned by another application");
 			return QDBusObjectPath();
 		}
 
@@ -233,12 +233,12 @@ QList<QDBusObjectPath> DBusUserMetrics::userDatas() const {
 }
 
 QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
-	QString dbusUsername(
-			m_authentication->getUsername(m_dbusConnection, *this));
+	QString dbusUsername(m_authentication->getUsername(*this));
 
 	if (!dbusUsername.isEmpty() && !username.isEmpty()
 			&& dbusUsername != username) {
-		//FIXME Signal error about data owner
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				"Attempt to create data source owned by another user");
 		return QDBusObjectPath();
 	}
 

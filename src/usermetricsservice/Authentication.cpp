@@ -32,14 +32,15 @@ Authentication::Authentication() {
 Authentication::~Authentication() {
 }
 
-QString Authentication::getConfinementContext(const QDBusConnection& connection,
+QString Authentication::getConfinementContext(
 		const QDBusContext& context) const {
 	if (!context.calledFromDBus()
 			|| qEnvironmentVariableIsSet("USERMETRICS_NO_AUTH")) {
 		return "unconfined";
 	}
 
-	const QDBusConnectionInterface &interface(*connection.interface());
+	const QDBusConnectionInterface &interface(
+			*context.connection().interface());
 	unsigned int servicePid = interface.servicePid(context.message().service());
 
 	char *con(0);
@@ -50,14 +51,14 @@ QString Authentication::getConfinementContext(const QDBusConnection& connection,
 	return confinementContext;
 }
 
-QString Authentication::getUsername(const QDBusConnection& connection,
-		const QDBusContext& context) const {
+QString Authentication::getUsername(const QDBusContext& context) const {
 	if (!context.calledFromDBus()
 			|| qEnvironmentVariableIsSet("USERMETRICS_NO_AUTH")) {
 		return "";
 	}
 
-	const QDBusConnectionInterface &interface(*connection.interface());
+	const QDBusConnectionInterface &interface(
+			*context.connection().interface());
 	unsigned int serviceUid = interface.serviceUid(context.message().service());
 
 	struct passwd* pwd;
@@ -79,6 +80,13 @@ QString Authentication::getUsername(const QDBusConnection& connection,
 	}
 
 	return username;
+}
+
+void Authentication::sendErrorReply(const QDBusContext &context,
+		QDBusError::ErrorType type, const QString &msg) const {
+	if (context.calledFromDBus()) {
+		context.sendErrorReply(type, msg);
+	}
 }
 
 } /* namespace UserMetricsService */

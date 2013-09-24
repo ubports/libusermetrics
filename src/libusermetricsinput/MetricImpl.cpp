@@ -53,7 +53,15 @@ QDBusObjectPath MetricImpl::createDataSet(const QString &usernameIn) {
 		username = usernameIn;
 	}
 
-	QDBusObjectPath userDataPath(m_userMetrics.createUserData(username));
+	QDBusPendingReply<QDBusObjectPath> userDataReply(
+			m_userMetrics.createUserData(username));
+
+	userDataReply.waitForFinished();
+	if (userDataReply.isError()) {
+		throw logic_error(userDataReply.error().message().toStdString());
+	}
+
+	QDBusObjectPath userDataPath(userDataReply);
 
 	com::canonical::usermetrics::UserData userDataInterface(
 			DBusPaths::serviceName(), userDataPath.path(), m_dbusConnection);
@@ -61,7 +69,15 @@ QDBusObjectPath MetricImpl::createDataSet(const QString &usernameIn) {
 		throw logic_error("user data interface invalid");
 	}
 
-	return userDataInterface.createDataSet(m_dataSourceId);
+	QDBusPendingReply<QDBusObjectPath> dataSetReply(
+			userDataInterface.createDataSet(m_dataSourceId));
+
+	dataSetReply.waitForFinished();
+	if (dataSetReply.isError()) {
+		throw logic_error(dataSetReply.error().message().toStdString());
+	}
+
+	return dataSetReply;
 }
 
 MetricUpdate * MetricImpl::update(const QString &username) {
@@ -76,7 +92,12 @@ void MetricImpl::update(double value, const QString &username) {
 	com::canonical::usermetrics::DataSet dataSetInterface(
 			DBusPaths::serviceName(), dataSetPath.path(), m_dbusConnection);
 
-	dataSetInterface.update(QVariantList() << value);
+	QDBusPendingReply<> reply(dataSetInterface.update(QVariantList() << value));
+
+	reply.waitForFinished();
+	if (reply.isError()) {
+		throw logic_error(reply.error().message().toStdString());
+	}
 }
 
 void MetricImpl::increment(double amount, const QString &username) {
@@ -85,5 +106,10 @@ void MetricImpl::increment(double amount, const QString &username) {
 	com::canonical::usermetrics::DataSet dataSetInterface(
 			DBusPaths::serviceName(), dataSetPath.path(), m_dbusConnection);
 
-	dataSetInterface.increment(amount);
+	QDBusPendingReply<> reply(dataSetInterface.increment(amount));
+
+	reply.waitForFinished();
+	if (reply.isError()) {
+		throw logic_error(reply.error().message().toStdString());
+	}
 }

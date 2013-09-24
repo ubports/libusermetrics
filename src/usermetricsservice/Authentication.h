@@ -20,6 +20,7 @@
 #define USERMETRICSSERVICE_AUTHENTICATION_H_
 
 #include <QtCore/QString>
+#include <QtDBus/QDBusError>
 
 QT_BEGIN_NAMESPACE
 class QDBusConnection;
@@ -34,11 +35,12 @@ public:
 
 	virtual ~Authentication();
 
-	virtual QString getConfinementContext(const QDBusConnection& connection,
-			const QDBusContext& context) const;
+	virtual QString getConfinementContext(const QDBusContext &context) const;
 
-	virtual QString getUsername(const QDBusConnection& connection,
-			const QDBusContext& context) const;
+	virtual QString getUsername(const QDBusContext &context) const;
+
+	virtual void sendErrorReply(const QDBusContext &context,
+			QDBusError::ErrorType type, const QString &msg = QString()) const;
 };
 
 }

@@ -81,21 +81,21 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 		return QDBusObjectPath();
 	}
 
-	QString dbusUsername(
-			m_authentication->getUsername(m_dbusConnection, *this));
+	QString dbusUsername(m_authentication->getUsername(*this));
 	if (!dbusUsername.isEmpty() && !m_username.isEmpty()
 			&& dbusUsername != m_username) {
-		//FIXME Signal error about data owner
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				"Attempt to create data set owned by another user");
 		return QDBusObjectPath();
 	}
 
-	QString confinementContext(
-			m_authentication->getConfinementContext(m_dbusConnection, *this));
+	QString confinementContext(m_authentication->getConfinementContext(*this));
 	DataSource dataSource;
 	DataSource::findByName(dataSourceName, &dataSource);
 	if (dataSource.secret() != "unconfined"
 			&& dataSource.secret() != confinementContext) {
-		//FIXME Signal error about data source owner
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				"Attempt to create data set owned by another application");
 		return QDBusObjectPath();
 	}
 
