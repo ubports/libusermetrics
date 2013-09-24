@@ -19,6 +19,7 @@
 #include <testutils/DBusTest.h>
 #include <QtTest/QSignalSpy>
 #include <libqtdbustest/QProcessDBusService.h>
+#include <QtDBus/QtDBus>
 
 using namespace UserMetricsTestUtils;
 using namespace QtDBusTest;

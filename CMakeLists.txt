@@ -28,6 +28,9 @@ include_directories(${Qt5Sql_INCLUDE_DIRS})
 find_package(Qt5Test REQUIRED)
 include_directories(${Qt5Test_INCLUDE_DIRS})
 
+find_package(Qt5Qml REQUIRED)
+include_directories(${Qt5Qml_INCLUDE_DIRS})
+
 pkg_check_modules(QDJANGO_DB REQUIRED qdjango-db REQUIRED)
 include_directories(${QDJANGO_DB_INCLUDE_DIRS})
 
