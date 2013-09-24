@@ -561,7 +561,7 @@ TEST_F(TestUserMetricsService, CantCreateSomeoneElsesData) {
 	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	EXPECT_CALL(*authentication,
-			sendErrorReply(_, _, QString("Attempt to create data source owned by another user")));
+			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to create data source owned by another user")));
 
 	ASSERT_EQ(QDBusObjectPath(), userMetrics.createUserData("bob"));
 
@@ -594,7 +594,7 @@ TEST_F(TestUserMetricsService, CantCreateSomeoneElsesDataSet) {
 					_)).WillByDefault(Return(QString("bob")));
 
 	EXPECT_CALL(*authentication,
-			sendErrorReply(_, _, QString("Attempt to create data set owned by another user")));
+			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to create data set owned by another user")));
 
 	EXPECT_EQ(QDBusObjectPath(), alice->createDataSet("twitter"));
 }
@@ -624,7 +624,7 @@ TEST_F(TestUserMetricsService, CantCreateAnotherAppsDataSet) {
 					_)).WillByDefault(Return(QString("/bin/facebook")));
 
 	EXPECT_CALL(*authentication,
-			sendErrorReply(_, _, QString("Attempt to create data set owned by another application")));
+			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to create data set owned by another application")));
 
 	EXPECT_EQ(QDBusObjectPath(), alice->createDataSet("twitter"));
 }
@@ -650,7 +650,7 @@ TEST_F(TestUserMetricsService, CantCreateAnotherAppsData) {
 					_)).WillByDefault(Return(QString("/bin/facebook")));
 
 	EXPECT_CALL(*authentication,
-			sendErrorReply(_, _, QString("Attempt to create data source owned by another application")));
+			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to create data source owned by another application")));
 
 	ASSERT_EQ(QDBusObjectPath(),
 			userMetrics.createDataSource("twitter", "foo", "", "", 0,
@@ -683,14 +683,14 @@ TEST_F(TestUserMetricsService, CantUpdateSomeoneElsesData) {
 					_)).WillByDefault(Return(QString("bob")));
 
 	EXPECT_CALL(*authentication,
-			sendErrorReply(_, _, QString("Attempt to update data owned by another user")));
+			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to update data owned by another user")));
 
 	// This update should be ignored
 	twitter->update(QVariantList() << 0.0 << 1.0);
 	EXPECT_EQ(QVariantList() << 1.0 << 0.0, twitter->data());
 
 	EXPECT_CALL(*authentication,
-			sendErrorReply(_, _, QString("Attempt to increment data owned by another user")));
+			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to increment data owned by another user")));
 
 	// This update should be ignored
 	twitter->increment(1.0);
@@ -726,14 +726,14 @@ TEST_F(TestUserMetricsService, CantUpdateAnotherAppsData) {
 					_)).WillByDefault(Return(QString("/bin/facebook")));
 
 	EXPECT_CALL(*authentication,
-			sendErrorReply(_, _, QString("Attempt to update data owned by another application")));
+			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to update data owned by another application")));
 
 	// This update should be ignored
 	twitter->update(QVariantList() << 0.0 << 1.0);
 	EXPECT_EQ(QVariantList() << 1.0 << 0.0, twitter->data());
 
 	EXPECT_CALL(*authentication,
-			sendErrorReply(_, _, QString("Attempt to increment data owned by another application")));
+			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to increment data owned by another application")));
 
 	// This update should be ignored
 	twitter->increment(1.0);
