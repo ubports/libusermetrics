@@ -85,7 +85,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 	if (!dbusUsername.isEmpty() && !m_username.isEmpty()
 			&& dbusUsername != m_username) {
 		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
-				"Attempt to create data set owned by another user");
+				_("Attempt to create data set owned by another user"));
 		return QDBusObjectPath();
 	}
 
@@ -95,7 +95,7 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 	if (dataSource.secret() != "unconfined"
 			&& dataSource.secret() != confinementContext) {
 		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
-				"Attempt to create data set owned by another application");
+				_("Attempt to create data set owned by another application"));
 		return QDBusObjectPath();
 	}
 

@@ -140,7 +140,7 @@ void DBusDataSet::update(const QVariantList &data) {
 	if (!dbusUsername.isEmpty() && !username.isEmpty()
 			&& dbusUsername != username) {
 		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
-				"Attempt to update data owned by another user");
+				_("Attempt to update data owned by another user"));
 		return;
 	}
 
@@ -148,7 +148,7 @@ void DBusDataSet::update(const QVariantList &data) {
 	const QString &secret(dataSet.dataSource()->secret());
 	if (secret != "unconfined" && secret != confinementContext) {
 		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
-				"Attempt to update data owned by another application");
+				_("Attempt to update data owned by another application"));
 		return;
 	}
 
@@ -167,7 +167,7 @@ void DBusDataSet::increment(double amount) {
 	if (!dbusUsername.isEmpty() && !username.isEmpty()
 			&& dbusUsername != username) {
 		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
-				"Attempt to increment data owned by another user");
+				_("Attempt to increment data owned by another user"));
 		return;
 	}
 
@@ -175,7 +175,7 @@ void DBusDataSet::increment(double amount) {
 	const QString &secret(dataSet.dataSource()->secret());
 	if (secret != "unconfined" && secret != confinementContext) {
 		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
-				"Attempt to increment data owned by another application");
+				_("Attempt to increment data owned by another application"));
 		return;
 	}
 

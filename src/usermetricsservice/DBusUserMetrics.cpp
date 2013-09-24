@@ -187,7 +187,8 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 			}
 		} else if (dataSource.secret() != confinementContext) {
 			m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
-					"Attempt to create data source owned by another application");
+					_(
+							"Attempt to create data source owned by another application"));
 			return QDBusObjectPath();
 		}
 
@@ -238,7 +239,7 @@ QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
 	if (!dbusUsername.isEmpty() && !username.isEmpty()
 			&& dbusUsername != username) {
 		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
-				"Attempt to create data source owned by another user");
+				_("Attempt to create data source owned by another user"));
 		return QDBusObjectPath();
 	}
 
