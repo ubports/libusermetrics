@@ -19,34 +19,46 @@
 
 #include <QObject>
 
-class MetricInfo : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString format READ format NOTIFY formatChanged)
-    Q_PROPERTY(QString emptyFormat READ emptyFormat NOTIFY emptyFormatChanged)
-    Q_PROPERTY(QString domain READ domain NOTIFY domainChanged)
+class MetricInfo: public QObject {
+Q_OBJECT
+
+Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+Q_PROPERTY(QString format READ format NOTIFY formatChanged)
+Q_PROPERTY(QString emptyFormat READ emptyFormat NOTIFY emptyFormatChanged)
+Q_PROPERTY(QString domain READ domain NOTIFY domainChanged)
 
 public:
-    explicit MetricInfo(QString name, QString format, QString emptyFormat, QString domain, QObject *parent = 0);
+	explicit MetricInfo(QString name, QString format, QString emptyFormat,
+			QString domain, QObject *parent = 0);
+
+	virtual ~MetricInfo();
 
 public:
-    QString name() const;
-    QString format() const;
-    QString emptyFormat() const;
-    QString domain() const;
+	QString name() const;
+
+	QString format() const;
+
+	QString emptyFormat() const;
+
+	QString domain() const;
 
 Q_SIGNALS:
-    void nameChanged();
-    void formatChanged();
-    void emptyFormatChanged();
-    void domainChanged();
+	void nameChanged();
+
+	void formatChanged();
+
+	void emptyFormatChanged();
+
+	void domainChanged();
 
 private:
-    QString m_name;
-    QString m_format;
-    QString m_emptyFormat;
-    QString m_domain;
+	QString m_name;
+
+	QString m_format;
+
+	QString m_emptyFormat;
+
+	QString m_domain;
 
 };
 

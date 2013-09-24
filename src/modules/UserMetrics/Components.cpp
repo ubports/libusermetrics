@@ -15,16 +15,14 @@
  */
 
 #include <QtQuick/QtQuick>
-#include <QDebug>
-#include <Components.h>
-#include <Metric.h>
+#include <modules/UserMetrics/Components.h>
+#include <modules/UserMetrics/Metric.h>
 
-void Components::registerTypes(const char *uri)
-{
-    qmlRegisterType<Metric>(uri, 0, 1, "Metric");
+void Components::registerTypes(const char *uri) {
+	qmlRegisterType<Metric>(uri, 0, 1, "Metric");
 }
 
-void Components::initializeEngine(QQmlEngine *engine, const char *uri)
-{
-    QQmlExtensionPlugin::initializeEngine(engine, uri);
+void Components::initializeEngine(QQmlEngine *engine, const char *uri) {
+
+	QQmlExtensionPlugin::initializeEngine(engine, uri);
 }

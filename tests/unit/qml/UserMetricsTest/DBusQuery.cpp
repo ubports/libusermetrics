@@ -31,36 +31,34 @@ using namespace QtDBusTest;
 using namespace UserMetricsCommon;
 
 DBusQuery::DBusQuery(QObject *parent) :
-    QObject(parent), dbus(0)
-{
-    DBusServicePtr userMetricsService(
-            new QProcessDBusService("com.canonical.UserMetrics",
-                    QDBusConnection::SystemBus, USERMETRICSSERVICE_BINARY,
-                    QStringList() << ":memory:"));
-    dbus.registerService(userMetricsService);
-    dbus.startServices();
+		QObject(parent), dbus(0) {
+	DBusServicePtr userMetricsService(
+			new QProcessDBusService("com.canonical.UserMetrics",
+					QDBusConnection::SystemBus, USERMETRICSSERVICE_BINARY,
+					QStringList() << ":memory:"));
+	dbus.registerService(userMetricsService);
+	dbus.startServices();
 }
 
 double DBusQuery::queryCurrentValue(int index) {
-    com::canonical::usermetrics::DataSet dataSetInterface(
-            DBusPaths::serviceName(), DBusPaths::dataSet(index),
-            dbus.systemConnection());
-    QVariantList data = dataSetInterface.data();
-    return data.at(0).toDouble();
+	com::canonical::usermetrics::DataSet dataSetInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSet(index),
+			dbus.systemConnection());
+	QVariantList data = dataSetInterface.data();
+	return data.at(0).toDouble();
 }
 
 MetricInfo* DBusQuery::queryMetricInfo(int index) {
-    com::canonical::usermetrics::DataSource dataSourceInterface(
-            DBusPaths::serviceName(), DBusPaths::dataSource(index),
-            dbus.systemConnection());
-    if (dataSourceInterface.name().isEmpty()) {
-        return 0;
-    } else {
-        return new MetricInfo(dataSourceInterface.name(),
-                              dataSourceInterface.formatString(),
-                              dataSourceInterface.emptyDataString(),
-                              dataSourceInterface.textDomain(),
-                              this);
-    }
+	com::canonical::usermetrics::DataSource dataSourceInterface(
+			DBusPaths::serviceName(), DBusPaths::dataSource(index),
+			dbus.systemConnection());
+	if (dataSourceInterface.name().isEmpty()) {
+		return 0;
+	} else {
+		return new MetricInfo(dataSourceInterface.name(),
+				dataSourceInterface.formatString(),
+				dataSourceInterface.emptyDataString(),
+				dataSourceInterface.textDomain(), this);
+	}
 }
 

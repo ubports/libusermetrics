@@ -22,19 +22,19 @@
 
 class MetricInfo;
 
-class DBusQuery : public QObject
-{
-    Q_OBJECT
+class DBusQuery: public QObject {
+Q_OBJECT
 
 public:
-    explicit DBusQuery(QObject *parent = 0);
+	explicit DBusQuery(QObject *parent = 0);
 
 public Q_SLOTS:
-    double queryCurrentValue(int index);
-    MetricInfo* queryMetricInfo(int index);
+	double queryCurrentValue(int index);
+
+	MetricInfo* queryMetricInfo(int index);
 
 private:
-    QtDBusTest::DBusTestRunner dbus;
+	QtDBusTest::DBusTestRunner dbus;
 };
 
 #endif // MODULES_USERMETRICSTEST_DBUSQUERY_H

@@ -14,119 +14,108 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Metric.h>
+#include <modules/UserMetrics/Metric.h>
 
 #include <QDebug>
 
 Metric::Metric(QObject *parent) :
-    QObject(parent),
-    m_metricManager(0)
-{
-    m_metricManager = UserMetricsInput::MetricManager::getInstance();
+		QObject(parent), m_metricManager(
+				UserMetricsInput::MetricManager::getInstance()), m_componentComplete(
+				false) {
 }
 
-Metric::~Metric()
-{
-    delete m_metricManager;
+Metric::~Metric() {
 }
 
-QString Metric::name() const
-{
-    return m_name;
+QString Metric::name() const {
+	return m_name;
 }
 
-void Metric::setName(QString &name)
-{
-    if (name != m_name) {
-        m_name = name;
-        Q_EMIT nameChanged();
-        if (m_componentComplete) {
-            registerMetric();
-        }
-    }
+void Metric::setName(const QString &name) {
+	if (name != m_name) {
+		m_name = name;
+		Q_EMIT nameChanged();
+		registerMetric();
+	}
 }
 
-QString Metric::format() const
-{
-    return m_format;
+QString Metric::format() const {
+	return m_format;
 }
 
-void Metric::setFormat(QString &format)
-{
-    if (format != m_format) {
-        m_format = format;
-        Q_EMIT formatChanged();
-        if (m_componentComplete) {
-            registerMetric();
-        }
-    }
+void Metric::setFormat(const QString &format) {
+	if (format != m_format) {
+		m_format = format;
+		Q_EMIT formatChanged();
+		registerMetric();
+	}
 }
 
-QString Metric::emptyFormat() const
-{
-    return m_emptyFormat;
+QString Metric::emptyFormat() const {
+	return m_emptyFormat;
 }
 
-void Metric::setEmptyFormat(QString &emptyFormat)
-{
-    if (emptyFormat != m_emptyFormat) {
-        m_emptyFormat = emptyFormat;
-        Q_EMIT emptyFormatChanged();
-        if (m_componentComplete) {
-            registerMetric();
-        }
-    }
+void Metric::setEmptyFormat(const QString &emptyFormat) {
+	if (emptyFormat != m_emptyFormat) {
+		m_emptyFormat = emptyFormat;
+		Q_EMIT emptyFormatChanged();
+		registerMetric();
+	}
 }
 
-QString Metric::domain() const
-{
-    return m_domain;
+QString Metric::domain() const {
+	return m_domain;
 }
 
-void Metric::setDomain(QString &domain)
-{
-    if (domain != m_domain) {
-        m_domain = domain;
-        Q_EMIT domainChanged();
-        if (m_componentComplete) {
-            registerMetric();
-        }
-    }
+void Metric::setDomain(const QString &domain) {
+	if (domain != m_domain) {
+		m_domain = domain;
+		Q_EMIT domainChanged();
+		registerMetric();
+	}
 }
 
-void Metric::registerMetric()
-{
-    if (!m_name.isEmpty() && !m_format.isEmpty()) {
-        if (m_metricManager) {
-            UserMetricsInput::MetricPtr metric = m_metricManager->add(m_name, m_format, m_emptyFormat, m_domain);
-            if (metric.isNull()) {
-                qWarning() << "Failed to register user metric:" << m_name << "\"" << m_format << "\"";
-            } else if (metric != m_metric) {
-                m_metric = metric;
-            }
-        }
-    }
+void Metric::registerMetric() {
+	if (!m_componentComplete) {
+		return;
+	}
+
+	if (m_name.isEmpty() || m_format.isEmpty()) {
+		return;
+	}
+
+	if (m_metricManager.isNull()) {
+		return;
+	}
+
+	m_metric =
+			m_metricManager->add(
+					UserMetricsInput::MetricParameters(m_name).formatString(
+							m_format).emptyDataString(m_emptyFormat).textDomain(
+							m_domain));
+
+	if (m_metric.isNull()) {
+		qWarning() << "Failed to register user metric:" << m_name << "\""
+				<< m_format << "\"";
+	}
 }
 
-void Metric::increment(double amount)
-{
-    if (m_metric) {
-        m_metric->increment(amount);
-    }
+void Metric::increment(double amount) {
+	if (!m_metric.isNull()) {
+		m_metric->increment(amount);
+	}
 }
 
-void Metric::update(double value)
-{
-    if (m_metric) {
-        m_metric->update(value);
-    }
+void Metric::update(double value) {
+	if (!m_metric.isNull()) {
+		m_metric->update(value);
+	}
 }
 
 void Metric::classBegin() {
-
 }
 
 void Metric::componentComplete() {
-    m_componentComplete = true;
-    registerMetric();
+	m_componentComplete = true;
+	registerMetric();
 }

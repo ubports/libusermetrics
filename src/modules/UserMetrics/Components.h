@@ -20,14 +20,15 @@
 #include <QtQml/QQmlExtensionPlugin>
 #include <QtQml/QQmlEngine>
 
-class Components : public QQmlExtensionPlugin
-{
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
+class Components: public QQmlExtensionPlugin {
+Q_OBJECT
+
+Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
-    void registerTypes(const char *uri);
-    void initializeEngine(QQmlEngine *engine, const char *uri);
+	void registerTypes(const char *uri);
+
+	void initializeEngine(QQmlEngine *engine, const char *uri);
 };
 
 #endif // MODULES_USERMETRICS_COMPONENTS_H

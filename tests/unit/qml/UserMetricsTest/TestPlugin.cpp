@@ -15,21 +15,18 @@
  */
 
 #include <QtQuick/QtQuick>
-#include <QDebug>
 #include <TestPlugin.h>
 #include <DBusQuery.h>
 #include <MetricInfo.h>
 
-void Components::registerTypes(const char *uri)
-{
-    qmlRegisterUncreatableType<DBusQuery>(uri, 0, 1, "DBusQuery",
-                                          "Use context singleton dbusQuery instead.");
-    qmlRegisterUncreatableType<MetricInfo>(uri, 0, 1, "MetricInfo",
-                                          "Obtain instances from DBusQuery methods.");
+void Components::registerTypes(const char *uri) {
+	qmlRegisterUncreatableType<DBusQuery>(uri, 0, 1, "DBusQuery",
+			"Use context singleton dbusQuery instead.");
+	qmlRegisterUncreatableType<MetricInfo>(uri, 0, 1, "MetricInfo",
+			"Obtain instances from DBusQuery methods.");
 }
 
-void Components::initializeEngine(QQmlEngine *engine, const char *uri)
-{
-    QQmlExtensionPlugin::initializeEngine(engine, uri);
-    engine->rootContext()->setContextProperty("dbusQuery", new DBusQuery(this));
+void Components::initializeEngine(QQmlEngine *engine, const char *uri) {
+	QQmlExtensionPlugin::initializeEngine(engine, uri);
+	engine->rootContext()->setContextProperty("dbusQuery", new DBusQuery(this));
 }

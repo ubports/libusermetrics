@@ -19,53 +19,71 @@
 
 #include <QObject>
 #include <QQmlParserStatus>
-#include <libusermetricsinput/Metric.h>
 #include <libusermetricsinput/MetricManager.h>
 
-class Metric : public QObject, public QQmlParserStatus
-{
-    Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QString format READ format WRITE setFormat NOTIFY formatChanged)
-    Q_PROPERTY(QString emptyFormat READ emptyFormat WRITE setEmptyFormat NOTIFY emptyFormatChanged)
-    Q_PROPERTY(QString domain READ domain WRITE setDomain NOTIFY domainChanged)
+class Metric: public QObject, public QQmlParserStatus {
+Q_OBJECT
+
+Q_INTERFACES (QQmlParserStatus)Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+Q_PROPERTY(QString format READ format WRITE setFormat NOTIFY formatChanged)
+Q_PROPERTY(QString emptyFormat READ emptyFormat WRITE setEmptyFormat NOTIFY emptyFormatChanged)
+Q_PROPERTY(QString domain READ domain WRITE setDomain NOTIFY domainChanged)
 
 public:
-    explicit Metric(QObject *parent = 0);
-    ~Metric();
-    QString name() const;
-    void setName(QString& name);
-    QString format() const;
-    void setFormat(QString& format);
-    QString emptyFormat() const;
-    void setEmptyFormat(QString& emptyFormat);
-    QString domain() const;
-    void setDomain(QString& domain);
+	explicit Metric(QObject *parent = 0);
 
-    void classBegin();
-    void componentComplete();
+	virtual ~Metric();
+
+	QString name() const;
+
+	void setName(const QString &name);
+
+	QString format() const;
+
+	void setFormat(const QString &format);
+
+	QString emptyFormat() const;
+
+	void setEmptyFormat(const QString &emptyFormat);
+
+	QString domain() const;
+
+	void setDomain(const QString &domain);
+
+	void classBegin();
+
+	void componentComplete();
 
 public Q_SLOTS:
-    void increment(double amount = 1.0);
-    void update(double value);
+	void increment(double amount = 1.0);
+
+	void update(double value);
 
 Q_SIGNALS:
-    void nameChanged();
-    void formatChanged();
-    void emptyFormatChanged();
-    void domainChanged();
+	void nameChanged();
 
-private:
-    void registerMetric();
+	void formatChanged();
 
-    QString m_name;
-    QString m_format;
-    QString m_emptyFormat;
-    QString m_domain;
-    UserMetricsInput::MetricManager* m_metricManager;
-    UserMetricsInput::MetricPtr m_metric;
-    bool m_componentComplete;
+	void emptyFormatChanged();
+
+	void domainChanged();
+
+protected:
+	void registerMetric();
+
+	UserMetricsInput::MetricManagerPtr m_metricManager;
+
+	UserMetricsInput::MetricPtr m_metric;
+
+	bool m_componentComplete;
+
+	QString m_name;
+
+	QString m_format;
+
+	QString m_emptyFormat;
+
+	QString m_domain;
 };
 
 #endif // MODULES_USERMETRICS_METRICSMANAGER_H

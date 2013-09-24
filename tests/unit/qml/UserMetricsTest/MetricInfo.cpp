@@ -16,27 +16,27 @@
 
 #include <MetricInfo.h>
 
-MetricInfo::MetricInfo(QString name, QString format, QString emptyFormat, QString domain, QObject *parent) :
-    QObject(parent),
-    m_name(name),
-    m_format(format),
-    m_emptyFormat(emptyFormat),
-    m_domain(domain)
-{
+MetricInfo::MetricInfo(QString name, QString format, QString emptyFormat,
+		QString domain, QObject *parent) :
+		QObject(parent), m_name(name), m_format(format), m_emptyFormat(
+				emptyFormat), m_domain(domain) {
+}
+
+MetricInfo::~MetricInfo() {
 }
 
 QString MetricInfo::name() const {
-    return m_name;
+	return m_name;
 }
 
 QString MetricInfo::format() const {
-    return m_format;
+	return m_format;
 }
 
 QString MetricInfo::emptyFormat() const {
-    return m_emptyFormat;
+	return m_emptyFormat;
 }
 
 QString MetricInfo::domain() const {
-    return m_domain;
+	return m_domain;
 }
