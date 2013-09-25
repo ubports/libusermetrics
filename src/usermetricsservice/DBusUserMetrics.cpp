@@ -182,8 +182,7 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 
 		if (dataSource.secret() == "unconfined") {
 			if (confinementContext != "unconfined") {
-				// FIXME Take ownership of data source
-//				dbusDataSource->setSecret(confinementContext);
+				dbusDataSource->setSecret(confinementContext);
 			}
 		} else if (dataSource.secret() != confinementContext) {
 			m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,

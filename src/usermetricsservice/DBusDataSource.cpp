@@ -107,6 +107,17 @@ void DBusDataSource::setTextDomain(const QString &textDomain) {
 	}
 }
 
+void DBusDataSource::setSecret(const QString &secret) {
+	DataSource dataSource;
+	DataSource::findById(m_id, &dataSource);
+	if (secret != dataSource.secret()) {
+		dataSource.setSecret(secret);
+		if (!dataSource.save()) {
+			throw logic_error(_("Could not save data source"));
+		}
+	}
+}
+
 unsigned int DBusDataSource::metricType() const {
 	DataSource dataSource;
 	DataSource::findById(m_id, &dataSource);

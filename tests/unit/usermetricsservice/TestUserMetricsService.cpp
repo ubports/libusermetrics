@@ -740,4 +740,33 @@ TEST_F(TestUserMetricsService, CantUpdateAnotherAppsData) {
 	EXPECT_EQ(QVariantList() << 1.0 << 0.0, twitter->data());
 }
 
+TEST_F(TestUserMetricsService, TakeDataOwnership) {
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 3, 5)));
+
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
+
+	ASSERT_NE(QDBusObjectPath(),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+
+	ON_CALL(*authentication, getConfinementContext(
+					_)).WillByDefault(Return(QString("/bin/twitter")));
+
+	ASSERT_NE(QDBusObjectPath(),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+
+	ON_CALL(*authentication, getConfinementContext(
+					_)).WillByDefault(Return(QString("/bin/facebook")));
+
+	EXPECT_CALL(*authentication,
+			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to create data source owned by another application")));
+
+	ASSERT_EQ(QDBusObjectPath(),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+}
+
 } // namespace

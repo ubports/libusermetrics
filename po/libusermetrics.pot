@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-24 17:27+0100\n"
+"POT-Creation-Date: 2013-09-25 10:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,11 +32,12 @@ msgstr ""
 #: src/usermetricsservice/DBusDataSource.cpp:68
 #: src/usermetricsservice/DBusDataSource.cpp:86
 #: src/usermetricsservice/DBusDataSource.cpp:104
-#: src/usermetricsservice/DBusDataSource.cpp:123
-#: src/usermetricsservice/DBusDataSource.cpp:161
-#: src/usermetricsservice/DBusDataSource.cpp:179
-#: src/usermetricsservice/DBusDataSource.cpp:205
-#: src/usermetricsservice/DBusDataSource.cpp:223
+#: src/usermetricsservice/DBusDataSource.cpp:116
+#: src/usermetricsservice/DBusDataSource.cpp:134
+#: src/usermetricsservice/DBusDataSource.cpp:172
+#: src/usermetricsservice/DBusDataSource.cpp:190
+#: src/usermetricsservice/DBusDataSource.cpp:216
+#: src/usermetricsservice/DBusDataSource.cpp:234
 #: src/usermetricsservice/DBusUserMetrics.cpp:174
 msgid "Could not save data source"
 msgstr ""
@@ -49,19 +50,19 @@ msgstr ""
 msgid "Data source query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:191
+#: src/usermetricsservice/DBusUserMetrics.cpp:190
 msgid "Attempt to create data source owned by another application"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:242
+#: src/usermetricsservice/DBusUserMetrics.cpp:241
 msgid "Attempt to create data source owned by another user"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:251
+#: src/usermetricsservice/DBusUserMetrics.cpp:250
 msgid "User data query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:260
+#: src/usermetricsservice/DBusUserMetrics.cpp:259
 msgid "Could not save user data"
 msgstr ""
 

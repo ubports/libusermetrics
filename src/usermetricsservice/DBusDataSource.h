@@ -70,6 +70,8 @@ public:
 
 	void setTextDomain(const QString &textDomain);
 
+	void setSecret(const QString &secret);
+
 	unsigned int metricType() const;
 
 	void setMetricType(unsigned int type);
