@@ -561,7 +561,7 @@ TEST_F(TestUserMetricsService, CantCreateSomeoneElsesData) {
 	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
 	EXPECT_CALL(*authentication,
-			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to create data source owned by another user")));
+			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to create user data owned by another user")));
 
 	ASSERT_EQ(QDBusObjectPath(), userMetrics.createUserData("bob"));
 

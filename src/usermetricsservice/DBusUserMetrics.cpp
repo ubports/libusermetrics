@@ -238,7 +238,7 @@ QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
 	if (!dbusUsername.isEmpty() && !username.isEmpty()
 			&& dbusUsername != username) {
 		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
-				_("Attempt to create data source owned by another user"));
+				_("Attempt to create user data owned by another user"));
 		return QDBusObjectPath();
 	}
 
