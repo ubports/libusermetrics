@@ -76,3 +76,8 @@ void DataSet::findById(int id, DataSet *dataSet) {
 	QDjangoQuerySet<DataSet>().get(QDjangoWhere("id", QDjangoWhere::Equals, id),
 			dataSet);
 }
+
+void DataSet::findByIdRelated(int id, DataSet *dataSet) {
+	QDjangoQuerySet<DataSet>().selectRelated().get(
+			QDjangoWhere("id", QDjangoWhere::Equals, id), dataSet);
+}

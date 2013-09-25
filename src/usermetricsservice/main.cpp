@@ -16,6 +16,7 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
+#include <usermetricsservice/Authentication.h>
 #include <usermetricsservice/DBusUserMetrics.h>
 #include <libusermetricscommon/DateFactoryImpl.h>
 #include <libusermetricscommon/DBusPaths.h>
@@ -45,7 +46,7 @@ int main(int argc, char *argv[]) {
 	bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
 	textdomain(GETTEXT_PACKAGE);
 
-	QString databaseName("/var/lib/usermetrics/usermetrics4.db");
+	QString databaseName("/var/lib/usermetrics/usermetrics5.db");
 	QStringList arguments(application.arguments());
 	if (arguments.size() == 2) {
 		databaseName = arguments.at(1);
@@ -65,12 +66,13 @@ int main(int argc, char *argv[]) {
 	QDBusConnection connection(QDBusConnection::systemBus());
 
 	QSharedPointer<DateFactory> dateFactory(new DateFactoryImpl());
+	QSharedPointer<Authentication> authentication(new Authentication());
 
 	if (!connection.registerService(DBusPaths::serviceName())) {
 		qWarning() << _("Unable to register user metrics service on DBus");
 		return 1;
 	}
-	DBusUserMetrics userMetrics(connection, dateFactory);
+	DBusUserMetrics userMetrics(connection, dateFactory, authentication);
 
 	signal(SIGINT, &exitQt);
 	signal(SIGTERM, &exitQt);

@@ -30,6 +30,8 @@ Q_PROPERTY(int id READ id WRITE setId)
 
 Q_PROPERTY(QString name READ name WRITE setName)
 
+Q_PROPERTY(QString secret READ secret WRITE setSecret)
+
 Q_PROPERTY(QString formatString READ formatString WRITE setFormatString)
 
 Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString)
@@ -69,6 +71,10 @@ public:
 
 	void setName(const QString &name);
 
+	const QString & secret() const;
+
+	void setSecret(const QString &secret);
+
 	const QString & formatString() const;
 
 	void setFormatString(const QString &formatString);
@@ -105,6 +111,8 @@ protected:
 	int m_id;
 
 	QString m_name;
+
+	QString m_secret;
 
 	QString m_formatString;
 

@@ -19,7 +19,7 @@
 #ifndef USERMETRICSCOMMON_DBUSPATHS_H_
 #define USERMETRICSCOMMON_DBUSPATHS_H_
 
-#include "QtCore/QString"
+#include <QtCore/QString>
 
 namespace UserMetricsCommon {
 

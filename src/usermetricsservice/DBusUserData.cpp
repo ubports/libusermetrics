@@ -18,6 +18,7 @@
 
 #include <stdexcept>
 
+#include <usermetricsservice/Authentication.h>
 #include <usermetricsservice/DBusUserData.h>
 #include <usermetricsservice/DBusDataSet.h>
 #include <usermetricsservice/UserDataAdaptor.h>
@@ -36,11 +37,12 @@ using namespace UserMetricsService;
 
 DBusUserData::DBusUserData(int id, const QString &username,
 		DBusUserMetrics &userMetrics, QDBusConnection &dbusConnection,
-		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
+		QSharedPointer<DateFactory> dateFactory,
+		QSharedPointer<Authentication> authentication, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
-				new UserDataAdaptor(this)), m_dateFactory(dateFactory), m_userMetrics(
-				userMetrics), m_id(id), m_path(DBusPaths::userData(m_id)), m_username(
-				username) {
+				new UserDataAdaptor(this)), m_dateFactory(dateFactory), m_authentication(
+				authentication), m_userMetrics(userMetrics), m_id(id), m_path(
+				DBusPaths::userData(m_id)), m_username(username) {
 
 	// DBus setup
 	if (!m_dbusConnection.registerObject(m_path, this)) {
@@ -79,6 +81,24 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 		return QDBusObjectPath();
 	}
 
+	QString dbusUsername(m_authentication->getUsername(*this));
+	if (!dbusUsername.isEmpty() && !m_username.isEmpty()
+			&& dbusUsername != m_username) {
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				_("Attempt to create data set owned by another user"));
+		return QDBusObjectPath();
+	}
+
+	QString confinementContext(m_authentication->getConfinementContext(*this));
+	DataSource dataSource;
+	DataSource::findByName(dataSourceName, &dataSource);
+	if (dataSource.secret() != "unconfined"
+			&& dataSource.secret() != confinementContext) {
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				_("Attempt to create data set owned by another application"));
+		return QDBusObjectPath();
+	}
+
 	QDjangoQuerySet<DataSet> dataSets;
 	QDjangoQuerySet<DataSet> query = dataSets.filter(
 			QDjangoWhere("userData_id", QDjangoWhere::Equals, m_id)).filter(
@@ -96,8 +116,6 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 		UserData::findById(m_id, &userData);
 		dataSet.setUserData(&userData);
 
-		DataSource dataSource;
-		DataSource::findByName(dataSourceName, &dataSource);
 		dataSet.setDataSource(&dataSource);
 
 		if (!dataSet.save()) {
@@ -129,7 +147,7 @@ void DBusUserData::syncDatabase() {
 		if (!m_dataSets.contains(id)) {
 			DBusDataSetPtr dbusDataSet(
 					new DBusDataSet(id, dataSet.dataSource()->name(),
-							m_dbusConnection, m_dateFactory));
+							m_dbusConnection, m_dateFactory, m_authentication));
 			m_dataSets.insert(id, dbusDataSet);
 			m_adaptor->dataSetAdded(dbusDataSet->dataSource(),
 					QDBusObjectPath(dbusDataSet->path()));

@@ -20,10 +20,12 @@
 #define USERMETRICSSERVICE_DBUSUSERMETRICS_H_
 
 #include <QtCore/QObject>
-#include <QtDBus/QtDBus>
+#include <QtCore/QMap>
 #include <QtCore/QScopedPointer>
 #include <QtCore/QSharedPointer>
-#include <QtCore/QMap>
+#include <QtDBus/QDBusConnection>
+#include <QtDBus/QDBusContext>
+#include <QtDBus/QDBusObjectPath>
 
 class UserMetricsAdaptor;
 
@@ -35,8 +37,9 @@ namespace UserMetricsService {
 
 class DBusDataSource;
 class DBusUserData;
+class Authentication;
 
-class DBusUserMetrics: public QObject {
+class DBusUserMetrics: public QObject, protected QDBusContext {
 Q_OBJECT
 
 Q_PROPERTY(QList<QDBusObjectPath> dataSources READ dataSources)
@@ -46,7 +49,7 @@ Q_PROPERTY(QList<QDBusObjectPath> userDatas READ userDatas)
 public:
 	DBusUserMetrics(const QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
-			QObject *parent = 0);
+			QSharedPointer<Authentication> authentication, QObject *parent = 0);
 
 	virtual ~DBusUserMetrics();
 
@@ -73,6 +76,8 @@ protected:
 	QScopedPointer<UserMetricsAdaptor> m_adaptor;
 
 	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
+
+	QSharedPointer<Authentication> m_authentication;
 
 	QMap<int, QSharedPointer<DBusDataSource>> m_dataSources;
 

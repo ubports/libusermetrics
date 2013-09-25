@@ -18,6 +18,7 @@
 
 #include <stdexcept>
 
+#include <usermetricsservice/Authentication.h>
 #include <usermetricsservice/DBusDataSource.h>
 #include <usermetricsservice/DBusUserMetrics.h>
 #include <usermetricsservice/DBusUserData.h>
@@ -37,9 +38,11 @@ using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
 DBusUserMetrics::DBusUserMetrics(const QDBusConnection &dbusConnection,
-		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
+		QSharedPointer<DateFactory> dateFactory,
+		QSharedPointer<Authentication> authentication, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
-				new UserMetricsAdaptor(this)), m_dateFactory(dateFactory) {
+				new UserMetricsAdaptor(this)), m_dateFactory(dateFactory), m_authentication(
+				authentication) {
 	// Database setup
 	QDjango::registerModel<DataSource>().createTable();
 	QDjango::registerModel<UserData>().createTable();
@@ -104,7 +107,8 @@ void DBusUserMetrics::syncDatabase() {
 			if (!m_userData.contains(id)) {
 				DBusUserDataPtr dbusUserData(
 						new DBusUserData(id, userData.username(), *this,
-								m_dbusConnection, m_dateFactory));
+								m_dbusConnection, m_dateFactory,
+								m_authentication));
 				m_userData.insert(id, dbusUserData);
 				m_adaptor->userDataAdded(dbusUserData->username(),
 						QDBusObjectPath(dbusUserData->path()));
@@ -124,6 +128,9 @@ void DBusUserMetrics::syncDatabase() {
 QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		const QString &formatString, const QString &emptyDataString,
 		const QString &textDomain, int type, const QVariantMap &options) {
+
+	QString confinementContext(m_authentication->getConfinementContext(*this));
+
 	QDjangoQuerySet<DataSource> dataSourcesQuery;
 	QDjangoQuerySet<DataSource> query(
 			dataSourcesQuery.filter(
@@ -153,6 +160,7 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		dataSource.setEmptyDataString(emptyDataString);
 		dataSource.setTextDomain(textDomain);
 		dataSource.setType(type);
+		dataSource.setSecret(confinementContext);
 		if (hasMinimum) {
 			dataSource.setMinimum(minimum);
 			dataSource.setHasMinimum(true);
@@ -171,6 +179,18 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 		query.at(0, &dataSource);
 		const DBusDataSourcePtr dbusDataSource(
 				*m_dataSources.constFind(dataSource.id()));
+
+		if (dataSource.secret() == "unconfined") {
+			if (confinementContext != "unconfined") {
+				dbusDataSource->setSecret(confinementContext);
+			}
+		} else if (dataSource.secret() != confinementContext) {
+			m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+					_(
+							"Attempt to create data source owned by another application"));
+			return QDBusObjectPath();
+		}
+
 		if (dataSource.formatString() != formatString) {
 			dbusDataSource->setFormatString(formatString);
 		}
@@ -213,6 +233,15 @@ QList<QDBusObjectPath> DBusUserMetrics::userDatas() const {
 }
 
 QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
+	QString dbusUsername(m_authentication->getUsername(*this));
+
+	if (!dbusUsername.isEmpty() && !username.isEmpty()
+			&& dbusUsername != username) {
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				_("Attempt to create user data owned by another user"));
+		return QDBusObjectPath();
+	}
+
 	QDjangoQuerySet<UserData> query(
 			QDjangoQuerySet<UserData>().filter(
 					QDjangoWhere("username", QDjangoWhere::Equals, username)));

@@ -19,6 +19,9 @@
 #include <libusermetricsinput/MetricUpdateImpl.h>
 #include <libusermetricscommon/DBusPaths.h>
 
+#include <stdexcept>
+
+using namespace std;
 using namespace UserMetricsCommon;
 using namespace UserMetricsInput;
 
@@ -31,6 +34,10 @@ MetricUpdateImpl::MetricUpdateImpl(const QString &path,
 MetricUpdateImpl::~MetricUpdateImpl() {
 	QDBusPendingReply<void> reply(m_interface.update(m_data));
 	reply.waitForFinished();
+
+	if (reply.isError()) {
+		throw logic_error(reply.error().message().toStdString());
+	}
 }
 
 void MetricUpdateImpl::addData(double data) {

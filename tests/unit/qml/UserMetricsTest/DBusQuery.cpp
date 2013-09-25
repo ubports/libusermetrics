@@ -32,6 +32,7 @@ using namespace UserMetricsCommon;
 
 DBusQuery::DBusQuery(QObject *parent) :
 		QObject(parent), dbus(0) {
+	qputenv("USERMETRICS_NO_AUTH", "1");
 	DBusServicePtr userMetricsService(
 			new QProcessDBusService("com.canonical.UserMetrics",
 					QDBusConnection::SystemBus, USERMETRICSSERVICE_BINARY,

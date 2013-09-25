@@ -19,6 +19,7 @@
 #include <stdexcept>
 
 #include <usermetricsservice/database/DataSet.h>
+#include <usermetricsservice/Authentication.h>
 #include <usermetricsservice/DBusDataSet.h>
 #include <usermetricsservice/DataSetAdaptor.h>
 #include <libusermetricscommon/DateFactory.h>
@@ -36,10 +37,12 @@ using namespace UserMetricsService;
 
 DBusDataSet::DBusDataSet(int id, const QString &dataSource,
 		QDBusConnection &dbusConnection,
-		QSharedPointer<DateFactory> dateFactory, QObject *parent) :
+		QSharedPointer<DateFactory> dateFactory,
+		QSharedPointer<Authentication> authentication, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
-				new DataSetAdaptor(this)), m_dateFactory(dateFactory), m_id(id), m_path(
-				DBusPaths::dataSet(m_id)), m_dataSource(dataSource) {
+				new DataSetAdaptor(this)), m_dateFactory(dateFactory), m_authentication(
+				authentication), m_id(id), m_path(DBusPaths::dataSet(m_id)), m_dataSource(
+				dataSource) {
 
 	// DBus setup
 	m_dbusConnection.registerObject(m_path, this);
@@ -130,7 +133,24 @@ void DBusDataSet::internalUpdate(DataSet &dataSet, const QVariantList &oldData,
 
 void DBusDataSet::update(const QVariantList &data) {
 	DataSet dataSet;
-	DataSet::findById(m_id, &dataSet);
+	DataSet::findByIdRelated(m_id, &dataSet);
+
+	QString dbusUsername(m_authentication->getUsername(*this));
+	const QString &username(dataSet.userData()->username());
+	if (!dbusUsername.isEmpty() && !username.isEmpty()
+			&& dbusUsername != username) {
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				_("Attempt to update data owned by another user"));
+		return;
+	}
+
+	QString confinementContext(m_authentication->getConfinementContext(*this));
+	const QString &secret(dataSet.dataSource()->secret());
+	if (secret != "unconfined" && secret != confinementContext) {
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				_("Attempt to update data owned by another application"));
+		return;
+	}
 
 	QVariantList oldData;
 	getData(dataSet, oldData);
@@ -140,7 +160,24 @@ void DBusDataSet::update(const QVariantList &data) {
 
 void DBusDataSet::increment(double amount) {
 	DataSet dataSet;
-	DataSet::findById(m_id, &dataSet);
+	DataSet::findByIdRelated(m_id, &dataSet);
+
+	QString dbusUsername(m_authentication->getUsername(*this));
+	const QString &username(dataSet.userData()->username());
+	if (!dbusUsername.isEmpty() && !username.isEmpty()
+			&& dbusUsername != username) {
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				_("Attempt to increment data owned by another user"));
+		return;
+	}
+
+	QString confinementContext(m_authentication->getConfinementContext(*this));
+	const QString &secret(dataSet.dataSource()->secret());
+	if (secret != "unconfined" && secret != confinementContext) {
+		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
+				_("Attempt to increment data owned by another application"));
+		return;
+	}
 
 	QVariantList oldData;
 	getData(dataSet, oldData);

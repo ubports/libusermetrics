@@ -58,6 +58,8 @@ public:
 
 	static void findById(int id, DataSet *dataSet);
 
+	static void findByIdRelated(int id, DataSet *dataSet);
+
 	int id() const;
 
 	void setId(int id);

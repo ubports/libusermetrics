@@ -22,7 +22,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QDate>
 #include <QtCore/QScopedPointer>
-#include <QtDBus/QtDBus>
+#include <QtDBus/QDBusContext>
+#include <QtDBus/QDBusConnection>
 
 class DataSetAdaptor;
 
@@ -32,12 +33,13 @@ class DateFactory;
 
 namespace UserMetricsService {
 
+class Authentication;
 class DataSet;
 class DBusDataSet;
 
 typedef QSharedPointer<DBusDataSet> DBusDataSetPtr;
 
-class DBusDataSet: public QObject {
+class DBusDataSet: public QObject, protected QDBusContext {
 Q_OBJECT
 
 Q_PROPERTY(QVariantList data READ data)
@@ -50,7 +52,7 @@ public:
 	DBusDataSet(int id, const QString &dataSource,
 			QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
-			QObject *parent = 0);
+			QSharedPointer<Authentication> authentication, QObject *parent = 0);
 
 	virtual ~DBusDataSet();
 
@@ -82,6 +84,8 @@ protected:
 	QScopedPointer<DataSetAdaptor> m_adaptor;
 
 	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
+
+	QSharedPointer<Authentication> m_authentication;
 
 	int m_id;
 

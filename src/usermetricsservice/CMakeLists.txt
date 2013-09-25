@@ -3,6 +3,7 @@ set(USERMETRICSSERVICE_SOURCES
 	database/DataSet.cpp
 	database/DataSource.cpp
 	database/UserData.cpp
+	Authentication.cpp
 	DBusDataSet.cpp
 	DBusDataSource.cpp
 	DBusUserData.cpp
@@ -58,6 +59,7 @@ target_link_libraries(
 	usermetricsservice
 	usermetricscommon
 	${QDJANGO_DB_LIBRARIES}
+	${APPARMOR_LIBRARIES}
 )
 
 ############################
