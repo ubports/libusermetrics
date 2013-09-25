@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-25 10:25+0100\n"
+"POT-Creation-Date: 2013-09-25 11:09+0100\n"
 "PO-Revision-Date: 2013-07-05 15:09+0100\n"
 "Last-Translator: Pete Woods <pete.woods@canonical.com>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -30,8 +30,9 @@ msgid "Attempt to create data source owned by another application"
 msgstr "Attempt to create data source owned by another application"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:241
-msgid "Attempt to create data source owned by another user"
-msgstr "Attempt to create data source owned by another user"
+#, fuzzy
+msgid "Attempt to create user data owned by another user"
+msgstr "Attempt to create user data owned by another user"
 
 #: src/usermetricsservice/DBusDataSet.cpp:178
 msgid "Attempt to increment data owned by another application"
