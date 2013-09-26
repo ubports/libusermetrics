@@ -15,13 +15,18 @@
  */
 
 #include <modules/UserMetrics/Metric.h>
+#include <libusermetricscommon/Localisation.h>
 
+#include <stdexcept>
 #include <QDebug>
 
 Metric::Metric(QObject *parent) :
-		QObject(parent), m_metricManager(
-				UserMetricsInput::MetricManager::getInstance()), m_componentComplete(
-				false) {
+		QObject(parent), m_componentComplete(false) {
+	try {
+		m_metricManager.reset(UserMetricsInput::MetricManager::getInstance());
+	} catch (std::exception &e) {
+		qWarning() << _("Failed to connect to metrics service:") << e.what();
+	}
 }
 
 Metric::~Metric() {
@@ -88,27 +93,38 @@ void Metric::registerMetric() {
 		return;
 	}
 
-	m_metric =
-			m_metricManager->add(
-					UserMetricsInput::MetricParameters(m_name).formatString(
-							m_format).emptyDataString(m_emptyFormat).textDomain(
-							m_domain));
-
-	if (m_metric.isNull()) {
-		qWarning() << "Failed to register user metric:" << m_name << "\""
-				<< m_format << "\"";
+	try {
+		m_metric = m_metricManager->add(
+				UserMetricsInput::MetricParameters(m_name).formatString(
+						m_format).emptyDataString(m_emptyFormat).textDomain(
+						m_domain));
+	} catch (std::exception &e) {
+		qWarning() << _("Failed to register user metric:") << m_name << "\""
+				<< m_format << "\": " << e.what();
 	}
 }
 
 void Metric::increment(double amount) {
-	if (!m_metric.isNull()) {
+	if (m_metric.isNull()) {
+		return;
+	}
+
+	try {
 		m_metric->increment(amount);
+	} catch (std::exception &e) {
+		qWarning() << _("Failed to increment metric:") << e.what();
 	}
 }
 
 void Metric::update(double value) {
-	if (!m_metric.isNull()) {
+	if (m_metric.isNull()) {
+		return;
+	}
+
+	try {
 		m_metric->update(value);
+	} catch (std::exception &e) {
+		qWarning() << _("Failed to update metric:") << e.what();
 	}
 }
 
