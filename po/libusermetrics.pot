@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-25 11:09+0100\n"
+"POT-Creation-Date: 2013-09-26 16:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,6 +109,22 @@ msgstr ""
 
 #: src/usermetricsservice/DBusUserData.cpp:132
 msgid "New data set could not be found"
+msgstr ""
+
+#: src/modules/UserMetrics/Metric.cpp:28
+msgid "Failed to connect to metrics service:"
+msgstr ""
+
+#: src/modules/UserMetrics/Metric.cpp:102
+msgid "Failed to register user metric:"
+msgstr ""
+
+#: src/modules/UserMetrics/Metric.cpp:115
+msgid "Failed to increment metric:"
+msgstr ""
+
+#: src/modules/UserMetrics/Metric.cpp:127
+msgid "Failed to update metric:"
 msgstr ""
 
 #: src/libusermetricsinput/main-increment.cpp:35

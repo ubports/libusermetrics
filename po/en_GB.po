@@ -2,12 +2,11 @@
 # This file is distributed under the same license as the libusermetrics package.
 # Pete Woods <pete.woods@canonical.com>, 2013.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-25 11:09+0100\n"
+"POT-Creation-Date: 2013-09-26 16:22+0100\n"
 "PO-Revision-Date: 2013-07-05 15:09+0100\n"
 "Last-Translator: Pete Woods <pete.woods@canonical.com>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -30,7 +29,6 @@ msgid "Attempt to create data source owned by another application"
 msgstr "Attempt to create data source owned by another application"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:241
-#, fuzzy
 msgid "Attempt to create user data owned by another user"
 msgstr "Attempt to create user data owned by another user"
 
@@ -85,7 +83,6 @@ msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 
 #: src/libusermetricsinput/main-increment.cpp:37
-#, fuzzy
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 
@@ -100,6 +97,22 @@ msgstr "Data source not found"
 #: src/usermetricsservice/DBusUserMetrics.cpp:140
 msgid "Data source query failed"
 msgstr "Data source query failed"
+
+#: src/modules/UserMetrics/Metric.cpp:28
+msgid "Failed to connect to metrics service:"
+msgstr "Failed to connect to metrics service:"
+
+#: src/modules/UserMetrics/Metric.cpp:115
+msgid "Failed to increment metric:"
+msgstr ""
+
+#: src/modules/UserMetrics/Metric.cpp:102
+msgid "Failed to register user metric:"
+msgstr "Failed to register user metric:"
+
+#: src/modules/UserMetrics/Metric.cpp:127
+msgid "Failed to update metric:"
+msgstr "Failed to update metric:"
 
 #: src/usermetricsservice/DBusUserData.cpp:132
 msgid "New data set could not be found"
