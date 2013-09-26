@@ -31,7 +31,7 @@
 using namespace std;
 using namespace UserMetricsOutput;
 
-static const QString COLOR_BASEDIR("/usr/share/libusermetrics/");
+static const QString COLOR_BASEDIR("/usr/share/libusermetrics/themes/");
 
 GSettingsColorThemeProvider::GSettingsColorThemeProvider(QObject *parent) :
 		ColorThemeProvider(parent), m_baseDir(COLOR_BASEDIR) {

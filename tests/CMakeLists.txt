@@ -14,7 +14,7 @@ add_definitions(-DUSERMETRICSSERVICE_BINARY="${SOURCE_BINARY_DIR}/usermetricsser
 
 add_definitions(-DTEST_LOCALEDIR="${CMAKE_CURRENT_BINARY_DIR}/data")
 
-add_definitions(-DUSERMETRICS_TEST_COLOR_BASEDIR="${DATA_DIR}")
+add_definitions(-DUSERMETRICS_TEST_COLOR_BASEDIR="${DATA_DIR}/themes")
 
 add_subdirectory(data)
 add_subdirectory(integration)

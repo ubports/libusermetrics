@@ -7,9 +7,8 @@ include("UseGSettings")
 add_schema("com.canonical.UserMetrics.gschema.xml")
 
 install(
-	FILES
-		color-theme.xsd
-		default.xml
+	DIRECTORY
+		themes
 	DESTINATION
 		"${CMAKE_INSTALL_DATADIR}/libusermetrics"
 )

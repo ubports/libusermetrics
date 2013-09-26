@@ -151,3 +151,8 @@ msgstr ""
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:266
 msgid "No data for today"
 msgstr ""
+
+#: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:79
+#, qt-format
+msgid "Cannot open XML file '%1' for reading"
+msgstr ""
