@@ -106,13 +106,12 @@ void GSettingsColorThemeProvider::loadXmlColors(const QString &theme) {
 			continue;
 		}
 
-		/* If token is StartElement, we'll see if we can read it.*/
 		if (token == QXmlStreamReader::StartElement) {
 			/* If it's named themes, we'll go to the next.*/
 			if (xml.name() == "themes") {
 				continue;
 			}
-			/* If it's named person, we'll dig the information from there.*/
+
 			if (xml.name() == "theme") {
 				parseTheme(xml);
 			}
