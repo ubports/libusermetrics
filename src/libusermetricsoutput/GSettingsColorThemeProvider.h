@@ -59,6 +59,8 @@ protected:
 
 	void parseTheme(QXmlStreamReader & xml);
 
+	QString convertPath(const QString &base, const QString& theme);
+
 	QString m_baseDir;
 
 	QXmlSchema m_schema;

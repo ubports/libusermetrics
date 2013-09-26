@@ -32,6 +32,8 @@ using namespace std;
 using namespace UserMetricsOutput;
 
 static const QString COLOR_BASEDIR("/usr/share/libusermetrics/themes/");
+static const QString CUSTOM_COLOR_BASEDIR(
+		"/custom/usr/share/libusermetrics/themes/");
 
 GSettingsColorThemeProvider::GSettingsColorThemeProvider(QObject *parent) :
 		ColorThemeProvider(parent), m_baseDir(COLOR_BASEDIR) {
@@ -77,10 +79,20 @@ void GSettingsColorThemeProvider::loadBlankColors() {
 	m_color = m_colorThemes.begin();
 }
 
+QString GSettingsColorThemeProvider::convertPath(const QString &base,
+		const QString& theme) {
+	return QDir(base).filePath(QString(theme).append(".xml"));
+}
+
 void GSettingsColorThemeProvider::loadXmlColors(const QString &theme) {
 	QXmlSchemaValidator validator(m_schema);
 
-	QFile file(QDir(m_baseDir).filePath(QString(theme).append(".xml")));
+	QFile file;
+
+	file.setFileName(convertPath(m_baseDir, theme));
+	if (!file.exists()) {
+		file.setFileName(convertPath(CUSTOM_COLOR_BASEDIR, theme));
+	}
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		qWarning()
