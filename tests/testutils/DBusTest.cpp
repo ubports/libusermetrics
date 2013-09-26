@@ -27,7 +27,8 @@ using namespace QtDBusTest;
 DBusTest::DBusTest() {
 	qputenv("USERMETRICS_NO_AUTH", "1");
 	qputenv("USERMETRICS_NO_COLOR_SETTINGS", "1");
-	qputenv("USERMETRICS_COLOR_BASEDIR", USERMETRICS_TEST_COLOR_BASEDIR);
+	qputenv("USERMETRICS_COLOR_SCHEMA_BASEDIR", USERMETRICS_TEST_COLOR_BASEDIR);
+	qputenv("USERMETRICS_COLOR_THEME_BASEDIR", USERMETRICS_TEST_COLOR_BASEDIR);
 	DBusServicePtr userMetricsService(
 			new QProcessDBusService("com.canonical.UserMetrics",
 					QDBusConnection::SystemBus, USERMETRICSSERVICE_BINARY,

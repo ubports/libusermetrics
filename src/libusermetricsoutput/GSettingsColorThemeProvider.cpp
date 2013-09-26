@@ -35,12 +35,20 @@ static const QString COLOR_BASEDIR("/usr/share/libusermetrics/themes/");
 
 GSettingsColorThemeProvider::GSettingsColorThemeProvider(QObject *parent) :
 		ColorThemeProvider(parent), m_baseDir(COLOR_BASEDIR) {
-	if (qEnvironmentVariableIsSet("USERMETRICS_COLOR_BASEDIR")) {
-		m_baseDir = QString::fromUtf8(qgetenv("USERMETRICS_COLOR_BASEDIR"));
+	if (qEnvironmentVariableIsSet("USERMETRICS_COLOR_THEME_BASEDIR")) {
+		m_baseDir = QString::fromUtf8(
+				qgetenv("USERMETRICS_COLOR_THEME_BASEDIR"));
+	}
+
+	QString schemaBaseDir(COLOR_BASEDIR);
+	if (qEnvironmentVariableIsSet("USERMETRICS_COLOR_SCHEMA_BASEDIR")) {
+		schemaBaseDir = QString::fromUtf8(
+				qgetenv("USERMETRICS_COLOR_SCHEMA_BASEDIR"));
 	}
 
 	m_schema.load(
-			QUrl::fromLocalFile(QDir(m_baseDir).filePath("color-theme.xsd")));
+			QUrl::fromLocalFile(
+					QDir(schemaBaseDir).filePath("color-theme.xsd")));
 
 	if (m_schema.isValid()) {
 		if (qEnvironmentVariableIsSet("USERMETRICS_NO_COLOR_SETTINGS")) {

@@ -18,6 +18,8 @@
 
 #include <libusermetricsoutput/GSettingsColorThemeProvider.h>
 
+#include <QtCore/QDir>
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
@@ -30,8 +32,9 @@ namespace {
 class TestGSettingsColorThemeProvider: public Test {
 protected:
 	TestGSettingsColorThemeProvider() {
+		qputenv("USERMETRICS_COLOR_SCHEMA_BASEDIR",
+		USERMETRICS_TEST_COLOR_BASEDIR);
 		qputenv("USERMETRICS_NO_COLOR_SETTINGS", "1");
-		qputenv("USERMETRICS_COLOR_BASEDIR", USERMETRICS_TEST_COLOR_BASEDIR);
 	}
 
 	virtual ~TestGSettingsColorThemeProvider() {
@@ -39,6 +42,8 @@ protected:
 };
 
 TEST_F(TestGSettingsColorThemeProvider, ReadsThemes) {
+	qputenv("USERMETRICS_COLOR_THEME_BASEDIR", USERMETRICS_TEST_COLOR_BASEDIR);
+
 	GSettingsColorThemeProvider provider;
 
 	ColorThemePtrPair themeA(provider.getColorTheme("a"));
@@ -81,6 +86,39 @@ TEST_F(TestGSettingsColorThemeProvider, ReadsThemes) {
 	EXPECT_EQ(QColor("#ff9900"), themeE.second->start());
 	EXPECT_EQ(QColor("#e54c19"), themeE.second->main());
 	EXPECT_EQ(QColor("#cc0000"), themeE.second->end());
+}
+
+TEST_F(TestGSettingsColorThemeProvider, HandlesMissingXml) {
+	qputenv("USERMETRICS_COLOR_THEME_BASEDIR", "/does/not/exist");
+
+	GSettingsColorThemeProvider provider;
+
+	ColorThemePtrPair themeA(provider.getColorTheme("a"));
+	EXPECT_EQ(QColor(), themeA.first->start());
+	EXPECT_EQ(QColor(), themeA.first->main());
+	EXPECT_EQ(QColor(), themeA.first->end());
+	EXPECT_EQ(QColor(), themeA.second->start());
+	EXPECT_EQ(QColor(), themeA.second->main());
+	EXPECT_EQ(QColor(), themeA.second->end());
+
+	EXPECT_EQ(themeA, provider.getColorTheme("b"));
+}
+
+TEST_F(TestGSettingsColorThemeProvider, HandlesInvalidXml) {
+	qputenv("USERMETRICS_COLOR_THEME_BASEDIR",
+			QDir(TEST_DATADIR).filePath("broken-theme").toUtf8());
+
+	GSettingsColorThemeProvider provider;
+
+	ColorThemePtrPair themeA(provider.getColorTheme("a"));
+	EXPECT_EQ(QColor(), themeA.first->start());
+	EXPECT_EQ(QColor(), themeA.first->main());
+	EXPECT_EQ(QColor(), themeA.first->end());
+	EXPECT_EQ(QColor(), themeA.second->start());
+	EXPECT_EQ(QColor(), themeA.second->main());
+	EXPECT_EQ(QColor(), themeA.second->end());
+
+	EXPECT_EQ(themeA, provider.getColorTheme("b"));
 }
 
 } // namespace
