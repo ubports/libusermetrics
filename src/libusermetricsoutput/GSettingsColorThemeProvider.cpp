@@ -16,71 +16,149 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
+#include <libusermetricscommon/Localisation.h>
 #include <libusermetricsoutput/GSettingsColorThemeProvider.h>
 #include <libusermetricsoutput/ColorThemeImpl.h>
 
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QVariant>
+
+#include <QtXmlPatterns/QXmlSchemaValidator>
 
 using namespace std;
 using namespace UserMetricsOutput;
 
+static const QString COLOR_BASEDIR("/usr/share/libusermetrics/");
+
 GSettingsColorThemeProvider::GSettingsColorThemeProvider(QObject *parent) :
-		ColorThemeProvider(parent) {
+		ColorThemeProvider(parent), m_baseDir(COLOR_BASEDIR) {
+	if (qEnvironmentVariableIsSet("USERMETRICS_COLOR_BASEDIR")) {
+		m_baseDir = QString::fromUtf8(qgetenv("USERMETRICS_COLOR_BASEDIR"));
+	}
 
-	if (qEnvironmentVariableIsSet("USERMETRICS_NO_LOAD_COLORS")) {
-		ColorThemePtr blankTheme(
-				ColorThemePtr(
-						new ColorThemeImpl(QColor(), QColor(), QColor())));
-		m_colorThemes << ColorThemePtrPair(blankTheme, blankTheme);
-	} else {
-		this->m_settings.reset(
-				new QGSettings("com.canonical.UserMetrics",
-						"/com/canonical/UserMetrics/"));
+	m_schema.load(
+			QUrl::fromLocalFile(QDir(m_baseDir).filePath("color-theme.xsd")));
 
-		QString foregroundKeyTemplate("theme%1foreground");
-		QString backgroundKeyTemplate("theme%1background");
-
-		for (uint id(1); id <= 20; ++id) {
-			QString foregroundKey(foregroundKeyTemplate.arg(id));
-			QString backgroundKey(backgroundKeyTemplate.arg(id));
-
-			QStringList foreground(
-					m_settings->get(foregroundKey).toStringList());
-			QStringList background(
-					m_settings->get(backgroundKey).toStringList());
-
-			// skip incorrectly sized arrays
-			if (foreground.size() != 3 || background.size() != 3) {
-				continue;
-			}
-
-			ColorThemePtr foregroundTheme(
-					ColorThemePtr(
-							new ColorThemeImpl(QColor(foreground[0]),
-									QColor(foreground[1]),
-									QColor(foreground[2]))));
-			ColorThemePtr backgroundTheme(
-					ColorThemePtr(
-							new ColorThemeImpl(QColor(background[0]),
-									QColor(background[1]),
-									QColor(background[2]))));
-
-			m_colorThemes
-					<< ColorThemePtrPair(foregroundTheme, backgroundTheme);
-
-			m_colorUpdateMap[foregroundKey] = foregroundTheme;
-			m_colorUpdateMap[backgroundKey] = backgroundTheme;
-
+	if (m_schema.isValid()) {
+		if (qEnvironmentVariableIsSet("USERMETRICS_NO_COLOR_SETTINGS")) {
+			loadXmlColors("default");
+		} else {
+			this->m_settings.reset(
+					new QGSettings("com.canonical.UserMetrics",
+							"/com/canonical/UserMetrics/"));
+			loadXmlColors(m_settings->get("theme").toString());
 			connect(m_settings.data(), SIGNAL(changed(const QString &)), this,
 			SLOT(changed(const QString &)));
+		}
+
+	} else {
+		loadBlankColors();
+	}
+}
+
+GSettingsColorThemeProvider::~GSettingsColorThemeProvider() {
+}
+
+void GSettingsColorThemeProvider::loadBlankColors() {
+	ColorThemePtr blankTheme(
+			ColorThemePtr(new ColorThemeImpl(QColor(), QColor(), QColor())));
+	m_colorThemes << ColorThemePtrPair(blankTheme, blankTheme);
+	m_color = m_colorThemes.begin();
+}
+
+void GSettingsColorThemeProvider::loadXmlColors(const QString &theme) {
+	QXmlSchemaValidator validator(m_schema);
+
+	QFile file(QDir(m_baseDir).filePath(QString(theme).append(".xml")));
+
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		qWarning()
+				<< QString(_("Cannot open XML file '%1' for reading")).arg(
+						file.fileName());
+		loadBlankColors();
+		return;
+	}
+
+	if (!validator.validate(&file, QUrl::fromLocalFile(file.fileName()))) {
+		loadBlankColors();
+		return;
+	}
+
+	file.reset();
+	QXmlStreamReader xml(&file);
+
+	while (!xml.atEnd() && !xml.hasError()) {
+		QXmlStreamReader::TokenType token = xml.readNext();
+
+		/* If token is just StartDocument, we'll go to next.*/
+		if (token == QXmlStreamReader::StartDocument) {
+			continue;
+		}
+
+		/* If token is StartElement, we'll see if we can read it.*/
+		if (token == QXmlStreamReader::StartElement) {
+			/* If it's named themes, we'll go to the next.*/
+			if (xml.name() == "themes") {
+				continue;
+			}
+			/* If it's named person, we'll dig the information from there.*/
+			if (xml.name() == "theme") {
+				parseTheme(xml);
+			}
 		}
 	}
 
 	m_color = m_colorThemes.begin();
 }
 
-GSettingsColorThemeProvider::~GSettingsColorThemeProvider() {
+void GSettingsColorThemeProvider::parseTheme(QXmlStreamReader & xml) {
+	/* Let's check that we're really getting a theme. */
+	if (xml.tokenType() != QXmlStreamReader::StartElement
+			&& xml.name() == "theme") {
+		return;
+	}
+
+	ColorThemePtr foregroundTheme;
+	ColorThemePtr backgroundTheme;
+
+	xml.readNext();
+
+	/*
+	 * We're going to loop over the things because the order might change.
+	 * We'll continue the loop until we hit an EndElement named theme.
+	 */
+	while (!(xml.tokenType() == QXmlStreamReader::EndElement
+			&& xml.name() == "theme")) {
+		if (xml.tokenType() == QXmlStreamReader::StartElement) {
+			QXmlStreamAttributes attributes = xml.attributes();
+
+			if (attributes.hasAttribute("start")
+					&& attributes.hasAttribute("main")
+					&& attributes.hasAttribute("end")) {
+
+				ColorThemePtr theme(
+						new ColorThemeImpl(
+								QColor(attributes.value("start").toString()),
+								QColor(attributes.value("main").toString()),
+								QColor(attributes.value("end").toString())));
+
+				if (xml.name() == "foreground") {
+					foregroundTheme = theme;
+				} else if (xml.name() == "background") {
+					backgroundTheme = theme;
+				}
+			}
+
+		}
+		xml.readNext();
+	}
+
+	if (!foregroundTheme.isNull() && !backgroundTheme.isNull()) {
+		m_colorThemes << ColorThemePtrPair(foregroundTheme, backgroundTheme);
+	}
 }
 
 ColorThemePtrPair GSettingsColorThemeProvider::getColorTheme(
@@ -107,19 +185,11 @@ ColorThemePtrPair GSettingsColorThemeProvider::getColorTheme(
 }
 
 void GSettingsColorThemeProvider::changed(const QString &key) {
-	QStringList themeStrings(m_settings->get(key).toStringList());
-
-	// skip incorrectly sized arrays
-	if (themeStrings.size() != 3) {
+	if (key != "theme") {
 		return;
 	}
-
-	ColorThemePtr theme(m_colorUpdateMap[key]);
-	ColorThemeImpl *themeImpl(qobject_cast<ColorThemeImpl *>(theme.data()));
-
-	QColor start(themeStrings[0]);
-	QColor main(themeStrings[1]);
-	QColor end(themeStrings[2]);
-
-	themeImpl->setColors(ColorThemeImpl(start, main, end));
+	QString theme(m_settings->get(key).toString());
+	m_colorThemes.clear();
+	m_colorThemeMap.clear();
+	loadXmlColors(theme);
 }

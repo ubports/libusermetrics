@@ -4,6 +4,7 @@ set(
 	QModelListener.cpp
 	TestColorThemeImpl.cpp
 	TestDataSet.cpp
+	TestGSettingsColorThemeProvider.cpp
 	TestQVariantListModel.cpp
 	TestUserMetricsImpl.cpp
 	TestSyncedUserMetricsStore.cpp

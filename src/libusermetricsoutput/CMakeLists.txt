@@ -27,6 +27,7 @@ set(USERMETRICS_OUTPUT_DEPENDENCIES
 	Core
 	Gui
 	DBus
+	XmlPatterns
 )
 
 # Static library version of libusermetricsoutput

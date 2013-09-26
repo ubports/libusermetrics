@@ -1,10 +1,18 @@
 include("UseGSettings")
 
 ###########################
-# Settings schema
+# Settings
 ###########################
 
 add_schema("com.canonical.UserMetrics.gschema.xml")
+
+install(
+	FILES
+		color-theme.xsd
+		default.xml
+	DESTINATION
+		"${CMAKE_INSTALL_DATADIR}/libusermetrics"
+)
 
 ###########################
 # Policy

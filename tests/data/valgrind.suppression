@@ -1,5 +1,25 @@
 
 ###################
+# Leaks in Qt!
+###################
+
+{
+   See bug report <https://bugreports.qt-project.org/browse/QTBUG-33677>
+   Memcheck:Leak
+   fun:_Znwm
+   ...
+   fun:_ZN10QXmlSchema4loadERK4QUrl
+}
+
+{
+   See bug report <https://bugreports.qt-project.org/browse/QTBUG-33677>
+   Memcheck:Leak
+   fun:_Znwm
+   ...
+   fun:_ZNK19QXmlSchemaValidator8validateEP9QIODeviceRK4QUrl
+}
+
+###################
 # Qt's use of glib
 ###################
 

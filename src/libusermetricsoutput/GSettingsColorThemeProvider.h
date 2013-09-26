@@ -26,7 +26,9 @@
 #include <QtCore/QVector>
 #include <QtCore/QScopedPointer>
 #include <QtCore/QSharedPointer>
+#include <QtCore/QXmlStreamReader>
 #include <QGSettings/QGSettings>
+#include <QtXmlPatterns/QXmlSchema>
 
 namespace UserMetricsOutput {
 
@@ -51,11 +53,19 @@ protected Q_SLOTS:
 	void changed(const QString &key);
 
 protected:
+	void loadXmlColors(const QString &theme);
+
+	void loadBlankColors();
+
+	void parseTheme(QXmlStreamReader & xml);
+
+	QString m_baseDir;
+
+	QXmlSchema m_schema;
+
 	ColorThemeList m_colorThemes;
 
 	const_interator m_color;
-
-	QMap<QString, ColorThemePtr> m_colorUpdateMap;
 
 	ColorThemeMap m_colorThemeMap;
 
