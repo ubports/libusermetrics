@@ -31,6 +31,7 @@ typedef QSharedPointer<ColorTheme> ColorThemePtr;
 typedef std::pair<ColorThemePtr, ColorThemePtr> ColorThemePtrPair;
 
 class ColorThemeProvider: public QObject {
+Q_OBJECT
 protected:
 	ColorThemeProvider(QObject *parent = 0);
 

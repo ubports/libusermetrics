@@ -24,13 +24,17 @@
 
 #include <QtCore/QMap>
 #include <QtCore/QVector>
+#include <QtCore/QScopedPointer>
 #include <QtCore/QSharedPointer>
+#include <QtCore/QXmlStreamReader>
+#include <QGSettings/QGSettings>
+#include <QtXmlPatterns/QXmlSchema>
 
 namespace UserMetricsOutput {
 
-class HardCodedColorThemeProvider: public ColorThemeProvider {
+class GSettingsColorThemeProvider: public ColorThemeProvider {
+Q_OBJECT
 public:
-
 	typedef QVector<ColorThemePtrPair> ColorThemeList;
 
 	typedef ColorThemeList::const_iterator const_interator;
@@ -39,18 +43,35 @@ public:
 
 	typedef ColorThemeMap::const_iterator map_const_iterator;
 
-	HardCodedColorThemeProvider(QObject *parent = 0);
+	GSettingsColorThemeProvider(QObject *parent = 0);
 
-	virtual ~HardCodedColorThemeProvider();
+	virtual ~GSettingsColorThemeProvider();
 
 	virtual ColorThemePtrPair getColorTheme(const QString& dataSetId);
 
+protected Q_SLOTS:
+	void changed(const QString &key);
+
 protected:
+	void loadXmlColors(const QString &theme);
+
+	void loadBlankColors();
+
+	void parseTheme(QXmlStreamReader & xml);
+
+	QString convertPath(const QString &base, const QString& theme);
+
+	QString m_baseDir;
+
+	QXmlSchema m_schema;
+
 	ColorThemeList m_colorThemes;
 
 	const_interator m_color;
 
 	ColorThemeMap m_colorThemeMap;
+
+	QScopedPointer<QGSettings> m_settings;
 };
 
 }

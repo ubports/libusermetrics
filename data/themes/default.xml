@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<themes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="color-theme.xsd">
+	<theme>
+		<foreground start="#e54c19" main="#ff9900" end="#e54c19" />
+		<background start="#ff9900" main="#e54c19" end="#cc0000" />
+	</theme>
+	<theme>
+		<foreground start="#cc19cc" main="#bf21bf" end="#7f334c" />
+		<background start="#ff9900" main="#e54c19" end="#cc0000" />
+	</theme>
+	<theme>
+		<foreground start="#cc19cc" main="#7f334c" end="#bf21bf" />
+		<background start="#cc0000" main="#cc0000" end="#cc0000" />
+	</theme>
+	<theme>
+		<foreground start="#cc19cc" main="#cc19cc" end="#cc19cc" />
+		<background start="#cc19cc" main="#7f334c" end="#bf21bf" />
+	</theme>
+</themes>

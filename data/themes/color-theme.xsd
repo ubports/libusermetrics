@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<xs:element name="themes" type="ThemeList"></xs:element>
+
+	<xs:complexType name="ThemeList">
+		<xs:sequence maxOccurs="unbounded" minOccurs="1">
+			<xs:element name="theme" type="Theme"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="Theme">
+		<xs:sequence>
+			<xs:element name="foreground" type="ColorSet"></xs:element>
+			<xs:element name="background" type="ColorSet"></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ColorSet">
+		<xs:attribute name="start" type="xs:string" use="required"></xs:attribute>
+		<xs:attribute name="main" type="xs:string" use="required"></xs:attribute>
+		<xs:attribute name="end" type="xs:string" use="required"></xs:attribute>
+	</xs:complexType>
+</xs:schema>

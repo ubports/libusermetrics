@@ -1,3 +1,35 @@
+
+###################
+# Leaks in Qt!
+###################
+
+{
+   See bug report <https://bugreports.qt-project.org/browse/QTBUG-33677>
+   Memcheck:Leak
+   fun:_Znwm
+   ...
+   fun:_ZN10QXmlSchema4loadERK4QUrl
+}
+
+{
+   See bug report <https://bugreports.qt-project.org/browse/QTBUG-33677>
+   Memcheck:Leak
+   fun:_Znwm
+   ...
+   fun:_ZNK19QXmlSchemaValidator8validateEP9QIODeviceRK4QUrl
+}
+
+{
+   See bug report <https://bugreports.qt-project.org/browse/QTBUG-33677>
+   Memcheck:Leak
+   fun:_Znwj
+   obj:/usr/lib/arm-linux-gnueabihf/libQt5XmlPatterns.so.*
+}
+
+###################
+# Qt's use of glib
+###################
+
 {
    Ignore pthreads
    Memcheck:Leak
@@ -24,4 +56,94 @@
    Memcheck:Leak
    ...
    fun:g_main_context_new
+}
+
+###############################
+# GObject rules
+###############################
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_type_register_static
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_type_register_fundamental
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:type_node_fundamental_new_W
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:type_data_make_W
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_type_add_interface_static
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:type_iface_vtable_base_init_Wm
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_dbus_interface_skeleton_class_intern_init
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_signal_type_cclosure_new
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:g_type_class_ref
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
 }

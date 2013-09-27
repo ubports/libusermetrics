@@ -9,7 +9,7 @@ set(USERMETRICSOUTPUT_SOURCES
 	ColorTheme.cpp
 	ColorThemeImpl.cpp
 	ColorThemeProvider.cpp
-	HardCodedColorThemeProvider.cpp
+	GSettingsColorThemeProvider.cpp
 	DataSet.cpp
 	DataSource.cpp
 	SyncedDataSet.cpp
@@ -27,6 +27,7 @@ set(USERMETRICS_OUTPUT_DEPENDENCIES
 	Core
 	Gui
 	DBus
+	XmlPatterns
 )
 
 # Static library version of libusermetricsoutput
@@ -69,6 +70,7 @@ qt5_use_modules(
 target_link_libraries(
 	usermetricsoutput
 	usermetricscommon
+	${GSETTINGS_QT_LIBRARIES}
 	${Gettext_LIBRARIES}
 )
 
