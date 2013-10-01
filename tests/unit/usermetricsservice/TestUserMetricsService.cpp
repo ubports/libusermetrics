@@ -629,7 +629,7 @@ TEST_F(TestUserMetricsService, CantCreateAnotherAppsDataSet) {
 	EXPECT_EQ(QDBusObjectPath(), alice->createDataSet("twitter"));
 }
 
-TEST_F(TestUserMetricsService, CantCreateAnotherAppsData) {
+TEST_F(TestUserMetricsService, AppsDataIsScopedBySecret) {
 	ON_CALL(*authentication, getConfinementContext(
 					_)).WillByDefault(Return(QString("/bin/twitter")));
 
@@ -649,10 +649,7 @@ TEST_F(TestUserMetricsService, CantCreateAnotherAppsData) {
 	ON_CALL(*authentication, getConfinementContext(
 					_)).WillByDefault(Return(QString("/bin/facebook")));
 
-	EXPECT_CALL(*authentication,
-			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to create data source owned by another application")));
-
-	ASSERT_EQ(QDBusObjectPath(),
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(2)),
 			userMetrics.createDataSource("twitter", "foo", "", "", 0,
 					QVariantMap()));
 }
@@ -711,12 +708,14 @@ TEST_F(TestUserMetricsService, CantUpdateAnotherAppsData) {
 			authentication);
 	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
 
-	ASSERT_NE(QDBusObjectPath(), userMetrics.createUserData("alice"));
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::userData(1)),
+			userMetrics.createUserData("alice"));
 
 	DBusUserDataPtr alice(userMetrics.userData("alice"));
 	ASSERT_FALSE(alice.isNull());
 
-	ASSERT_NE(QDBusObjectPath(), alice->createDataSet("twitter"));
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSet(1)),
+			alice->createDataSet("twitter"));
 	DBusDataSetPtr twitter(alice->dataSet("twitter"));
 
 	twitter->update(QVariantList() << 1.0 << 0.0);
@@ -747,24 +746,57 @@ TEST_F(TestUserMetricsService, TakeDataOwnership) {
 	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
 			authentication);
 
-	ASSERT_NE(QDBusObjectPath(),
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(1)),
 			userMetrics.createDataSource("twitter", "foo", "", "", 0,
 					QVariantMap()));
 
 	ON_CALL(*authentication, getConfinementContext(
 					_)).WillByDefault(Return(QString("/bin/twitter")));
 
-	ASSERT_NE(QDBusObjectPath(),
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(1)),
 			userMetrics.createDataSource("twitter", "foo", "", "", 0,
 					QVariantMap()));
 
 	ON_CALL(*authentication, getConfinementContext(
 					_)).WillByDefault(Return(QString("/bin/facebook")));
 
-	EXPECT_CALL(*authentication,
-			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to create data source owned by another application")));
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(2)),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+}
 
-	ASSERT_EQ(QDBusObjectPath(),
+TEST_F(TestUserMetricsService, SharedDataSourceIdWrangling) {
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 3, 5)));
+
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
+
+	ON_CALL(*authentication, getConfinementContext(
+					_)).WillByDefault(Return(QString("/bin/twitter")));
+
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(1)),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+
+	ON_CALL(*authentication, getConfinementContext(
+					_)).WillByDefault(Return(QString("unconfined")));
+
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(2)),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+
+	ON_CALL(*authentication, getConfinementContext(
+					_)).WillByDefault(Return(QString("/bin/twitter")));
+
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(1)),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+
+	ON_CALL(*authentication, getConfinementContext(
+					_)).WillByDefault(Return(QString("/bin/facebook")));
+
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(2)),
 			userMetrics.createDataSource("twitter", "foo", "", "", 0,
 					QVariantMap()));
 }

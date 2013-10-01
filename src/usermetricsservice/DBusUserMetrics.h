@@ -60,7 +60,8 @@ public Q_SLOTS:
 			const QString &formatString, const QString &emptyDataString,
 			const QString &textDomain, int type, const QVariantMap &options);
 
-	QSharedPointer<DBusDataSource> dataSource(const QString &name) const;
+	QSharedPointer<DBusDataSource> dataSource(const QString &name,
+			const QString &secret = QString("unconfined")) const;
 
 	QList<QDBusObjectPath> userDatas() const;
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-26 16:22+0100\n"
+"POT-Creation-Date: 2013-10-01 11:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr ""
 #: src/usermetricsservice/DBusDataSource.cpp:190
 #: src/usermetricsservice/DBusDataSource.cpp:216
 #: src/usermetricsservice/DBusDataSource.cpp:234
-#: src/usermetricsservice/DBusUserMetrics.cpp:174
+#: src/usermetricsservice/DBusUserMetrics.cpp:177
 msgid "Could not save data source"
 msgstr ""
 
@@ -46,28 +46,24 @@ msgstr ""
 msgid "Unable to register user metrics object on DBus"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:140
+#: src/usermetricsservice/DBusUserMetrics.cpp:143
 msgid "Data source query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:190
-msgid "Attempt to create data source owned by another application"
-msgstr ""
-
-#: src/usermetricsservice/DBusUserMetrics.cpp:241
+#: src/usermetricsservice/DBusUserMetrics.cpp:239
 msgid "Attempt to create user data owned by another user"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:250
+#: src/usermetricsservice/DBusUserMetrics.cpp:248
 msgid "User data query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:259
+#: src/usermetricsservice/DBusUserMetrics.cpp:257
 msgid "Could not save user data"
 msgstr ""
 
 #: src/usermetricsservice/DBusDataSet.cpp:127
-#: src/usermetricsservice/DBusUserData.cpp:122
+#: src/usermetricsservice/DBusUserData.cpp:123
 msgid "Could not save data set"
 msgstr ""
 
@@ -99,15 +95,15 @@ msgstr ""
 msgid "Attempt to create data set owned by another user"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserData.cpp:98
+#: src/usermetricsservice/DBusUserData.cpp:99
 msgid "Attempt to create data set owned by another application"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserData.cpp:109
+#: src/usermetricsservice/DBusUserData.cpp:110
 msgid "Data set query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserData.cpp:132
+#: src/usermetricsservice/DBusUserData.cpp:133
 msgid "New data set could not be found"
 msgstr ""
 
@@ -152,7 +148,7 @@ msgstr ""
 msgid "No data for today"
 msgstr ""
 
-#: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:79
+#: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:99
 #, qt-format
 msgid "Cannot open XML file '%1' for reading"
 msgstr ""

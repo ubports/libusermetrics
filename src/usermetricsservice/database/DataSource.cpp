@@ -123,9 +123,12 @@ void DataSource::findById(int id, DataSource *dataSource) {
 			QDjangoWhere("id", QDjangoWhere::Equals, id), dataSource);
 }
 
-void DataSource::findByName(const QString &name, DataSource *dataSource) {
+void DataSource::findByNameAndSecret(const QString &name, const QString &secret,
+		DataSource *dataSource) {
 	QDjangoQuerySet<DataSource>().get(
-			QDjangoWhere("name", QDjangoWhere::Equals, name), dataSource);
+			QDjangoWhere("name", QDjangoWhere::Equals, name)
+					&& QDjangoWhere("secret", QDjangoWhere::Equals, secret),
+			dataSource);
 }
 
 bool DataSource::exists(const QString &name) {

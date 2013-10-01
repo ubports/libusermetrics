@@ -134,7 +134,21 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 	QDjangoQuerySet<DataSource> dataSourcesQuery;
 	QDjangoQuerySet<DataSource> query(
 			dataSourcesQuery.filter(
-					QDjangoWhere("name", QDjangoWhere::Equals, name)));
+					QDjangoWhere("name", QDjangoWhere::Equals, name)
+							&& QDjangoWhere("secret", QDjangoWhere::Equals,
+									confinementContext)));
+
+	if (query.size() == -1) {
+		throw logic_error(_("Data source query failed"));
+	}
+
+	// If there is both an unconfined one and a confined one
+	if (query.size() == 0) {
+		query = dataSourcesQuery.filter(
+				QDjangoWhere("name", QDjangoWhere::Equals, name)
+						&& QDjangoWhere("secret", QDjangoWhere::Equals,
+								"unconfined"));
+	}
 
 	if (query.size() == -1) {
 		throw logic_error(_("Data source query failed"));
@@ -184,11 +198,6 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 			if (confinementContext != "unconfined") {
 				dbusDataSource->setSecret(confinementContext);
 			}
-		} else if (dataSource.secret() != confinementContext) {
-			m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,
-					_(
-							"Attempt to create data source owned by another application"));
-			return QDBusObjectPath();
 		}
 
 		if (dataSource.formatString() != formatString) {
@@ -267,9 +276,10 @@ QDBusObjectPath DBusUserMetrics::createUserData(const QString &username) {
 	return QDBusObjectPath((*m_userData.constFind(userData.id()))->path());
 }
 
-DBusDataSourcePtr DBusUserMetrics::dataSource(const QString &name) const {
+DBusDataSourcePtr DBusUserMetrics::dataSource(const QString &name,
+		const QString &secret) const {
 	DataSource dataSource;
-	DataSource::findByName(name, &dataSource);
+	DataSource::findByNameAndSecret(name, secret, &dataSource);
 
 	return m_dataSources.value(dataSource.id());
 }

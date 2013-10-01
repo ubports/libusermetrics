@@ -48,9 +48,9 @@ Q_PROPERTY(bool hasMaximum READ hasMaximum WRITE setHasMaximum)
 
 Q_PROPERTY(double maximum READ maximum WRITE setMaximum)
 
-Q_CLASSINFO("id", "primary_key=true auto_increment=true")
+Q_CLASSINFO("__meta__", "unique_together=name,secret")
 
-Q_CLASSINFO("name", "unique=true")
+Q_CLASSINFO("id", "primary_key=true auto_increment=true")
 
 public:
 	explicit DataSource(QObject *parent = 0);
@@ -59,7 +59,8 @@ public:
 
 	static void findById(int id, DataSource *dataSource);
 
-	static void findByName(const QString &name, DataSource *dataSource);
+	static void findByNameAndSecret(const QString &name, const QString &secret,
+			DataSource *dataSource);
 
 	static bool exists(const QString &name);
 

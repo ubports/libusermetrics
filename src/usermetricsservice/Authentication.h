@@ -20,6 +20,7 @@
 #define USERMETRICSSERVICE_AUTHENTICATION_H_
 
 #include <QtCore/QString>
+#include <QtCore/QRegExp>
 #include <QtDBus/QDBusError>
 
 QT_BEGIN_NAMESPACE
@@ -41,6 +42,12 @@ public:
 
 	virtual void sendErrorReply(const QDBusContext &context,
 			QDBusError::ErrorType type, const QString &msg = QString()) const;
+
+	virtual void canonicalizeConfinementContext(
+			QString &confinementContext) const;
+
+protected:
+	QRegExp m_clickRegex;
 };
 
 }

@@ -26,7 +26,9 @@
 
 namespace UserMetricsService {
 
-Authentication::Authentication() {
+Authentication::Authentication() :
+		m_clickRegex(
+				"[a-z0-9][a-z0-9+.-]+_[a-zA-Z0-9+.-]+_[0-9][a-zA-Z0-9.+:~-]*") {
 }
 
 Authentication::~Authentication() {
@@ -47,6 +49,8 @@ QString Authentication::getConfinementContext(
 	aa_gettaskcon(servicePid, &con, 0);
 	QString confinementContext(QString::fromUtf8(con));
 	free(con);
+
+	canonicalizeConfinementContext(confinementContext);
 
 	return confinementContext;
 }
@@ -86,6 +90,14 @@ void Authentication::sendErrorReply(const QDBusContext &context,
 		QDBusError::ErrorType type, const QString &msg) const {
 	if (context.calledFromDBus()) {
 		context.sendErrorReply(type, msg);
+	}
+}
+
+void Authentication::canonicalizeConfinementContext(
+		QString &confinementContext) const {
+	if (m_clickRegex.exactMatch(confinementContext)) {
+		QStringList split(confinementContext.split("_"));
+		confinementContext = split.first();
 	}
 }
 

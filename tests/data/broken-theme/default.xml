@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<themes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="color-theme.xsd">
+	<theme>
+		<foreground start="#e54c19" main="#ff9900" end="#e54c19" />
+	</theme>
+</themes>
