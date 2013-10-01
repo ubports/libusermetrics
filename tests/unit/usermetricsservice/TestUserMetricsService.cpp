@@ -765,4 +765,40 @@ TEST_F(TestUserMetricsService, TakeDataOwnership) {
 					QVariantMap()));
 }
 
+TEST_F(TestUserMetricsService, SharedDataSourceIdWrangling) {
+	EXPECT_CALL(*dateFactory, currentDate()).WillRepeatedly(
+			Return(QDate(2001, 3, 5)));
+
+	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
+			authentication);
+
+	ON_CALL(*authentication, getConfinementContext(
+					_)).WillByDefault(Return(QString("/bin/twitter")));
+
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(1)),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+
+	ON_CALL(*authentication, getConfinementContext(
+					_)).WillByDefault(Return(QString("unconfined")));
+
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(2)),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+
+	ON_CALL(*authentication, getConfinementContext(
+					_)).WillByDefault(Return(QString("/bin/twitter")));
+
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(1)),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+
+	ON_CALL(*authentication, getConfinementContext(
+					_)).WillByDefault(Return(QString("/bin/facebook")));
+
+	ASSERT_EQ(QDBusObjectPath(DBusPaths::dataSource(2)),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
+}
+
 } // namespace

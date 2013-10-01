@@ -135,9 +135,20 @@ QDBusObjectPath DBusUserMetrics::createDataSource(const QString &name,
 	QDjangoQuerySet<DataSource> query(
 			dataSourcesQuery.filter(
 					QDjangoWhere("name", QDjangoWhere::Equals, name)
-							&& QDjangoWhere("secret", QDjangoWhere::IsIn,
-									QVariantList() << confinementContext
-											<< "unconfined")));
+							&& QDjangoWhere("secret", QDjangoWhere::Equals,
+									confinementContext)));
+
+	if (query.size() == -1) {
+		throw logic_error(_("Data source query failed"));
+	}
+
+	// If there is both an unconfined one and a confined one
+	if (query.size() == 0) {
+		query = dataSourcesQuery.filter(
+				QDjangoWhere("name", QDjangoWhere::Equals, name)
+						&& QDjangoWhere("secret", QDjangoWhere::Equals,
+								"unconfined"));
+	}
 
 	if (query.size() == -1) {
 		throw logic_error(_("Data source query failed"));
