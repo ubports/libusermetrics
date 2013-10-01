@@ -91,7 +91,8 @@ QDBusObjectPath DBusUserData::createDataSet(const QString &dataSourceName) {
 
 	QString confinementContext(m_authentication->getConfinementContext(*this));
 	DataSource dataSource;
-	DataSource::findByName(dataSourceName, &dataSource);
+	DataSource::findByNameAndSecret(dataSourceName, confinementContext,
+			&dataSource);
 	if (dataSource.secret() != "unconfined"
 			&& dataSource.secret() != confinementContext) {
 		m_authentication->sendErrorReply(*this, QDBusError::AccessDenied,

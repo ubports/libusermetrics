@@ -1,6 +1,7 @@
 
 set(
 	USERMETRICSSERVICE_UNIT_TESTS_SRC
+	TestAuthentication.cpp
 	TestUserMetricsService.cpp
 )
 

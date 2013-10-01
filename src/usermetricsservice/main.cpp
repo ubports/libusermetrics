@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 	bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
 	textdomain(GETTEXT_PACKAGE);
 
-	QString databaseName("/var/lib/usermetrics/usermetrics5.db");
+	QString databaseName("/var/lib/usermetrics/usermetrics6.db");
 	QStringList arguments(application.arguments());
 	if (arguments.size() == 2) {
 		databaseName = arguments.at(1);
