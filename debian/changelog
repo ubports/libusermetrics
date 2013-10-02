@@ -1,3 +1,19 @@
+libusermetrics (1.1.1+13.10.20131002-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Prevent apps and users from modifying data they shouldn't be able to
+    modify.
+  * Handle exceptions in the QML API.
+  * Support reading colors from gconf.
+  * Ignore leak in QXmlPatterns on i386 (must be fixed at source)
+  * Add wildcards to suppress reported leak in Qt. (LP: #1233003)
+  * Repond to security team's review.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 139
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 02 Oct 2013 02:10:48 +0000
+
 libusermetrics (1.1.1+13.10.20130924-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]
