@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-01 11:14+0100\n"
+"POT-Creation-Date: 2013-10-02 10:29+0100\n"
 "PO-Revision-Date: 2013-07-05 15:09+0100\n"
 "Last-Translator: Pete Woods <pete.woods@canonical.com>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "Attempt to create data set owned by another application"
 msgid "Attempt to create data set owned by another user"
 msgstr "Attempt to create data set owned by another user"
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:239
+#: src/usermetricsservice/DBusUserMetrics.cpp:250
 #, fuzzy
 msgid "Attempt to create user data owned by another user"
 msgstr "Attempt to create user data owned by another user"
@@ -73,11 +73,11 @@ msgstr "Could not save data set"
 #: src/usermetricsservice/DBusDataSource.cpp:190
 #: src/usermetricsservice/DBusDataSource.cpp:216
 #: src/usermetricsservice/DBusDataSource.cpp:234
-#: src/usermetricsservice/DBusUserMetrics.cpp:177
+#: src/usermetricsservice/DBusUserMetrics.cpp:188
 msgid "Could not save data source"
 msgstr "Couldn't save data source"
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:257
+#: src/usermetricsservice/DBusUserMetrics.cpp:268
 msgid "Could not save user data"
 msgstr "Couldn't save user data"
 
@@ -98,23 +98,24 @@ msgstr "Data set query failed"
 msgid "Data source not found"
 msgstr "Data source not found"
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:143
+#: src/usermetricsservice/DBusUserMetrics.cpp:142
+#: src/usermetricsservice/DBusUserMetrics.cpp:154
 msgid "Data source query failed"
 msgstr "Data source query failed"
 
-#: src/modules/UserMetrics/Metric.cpp:28
+#: src/modules/UserMetrics/Metric.cpp:30
 msgid "Failed to connect to metrics service:"
 msgstr "Failed to connect to metrics service:"
 
-#: src/modules/UserMetrics/Metric.cpp:115
+#: src/modules/UserMetrics/Metric.cpp:154
 msgid "Failed to increment metric:"
 msgstr ""
 
-#: src/modules/UserMetrics/Metric.cpp:102
+#: src/modules/UserMetrics/Metric.cpp:141
 msgid "Failed to register user metric:"
 msgstr "Failed to register user metric:"
 
-#: src/modules/UserMetrics/Metric.cpp:127
+#: src/modules/UserMetrics/Metric.cpp:166
 msgid "Failed to update metric:"
 msgstr "Failed to update metric:"
 
@@ -151,7 +152,7 @@ msgstr "Unknown data source"
 msgid "Usage: "
 msgstr "Usage: "
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:248
+#: src/usermetricsservice/DBusUserMetrics.cpp:259
 msgid "User data query failed"
 msgstr "User data query failed"
 

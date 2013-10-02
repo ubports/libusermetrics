@@ -22,4 +22,7 @@ target_link_libraries(
         )
 
 # copy qmldir file to build dir
-file(COPY qmldir DESTINATION ${CMAKE_BINARY_DIR}/tests/unit/qml/UserMetricsTest)
+configure_file(
+	qmldir
+	qmldir
+)

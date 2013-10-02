@@ -26,6 +26,7 @@ TestCase {
     property string originalFormat: "Test Metric"
     property string originalEmptyFormat: "Nope, no data"
     property string originalDomain: "test-domain"
+    property double originalMinimum: 0.0
 
     Metric {
         id: metric
@@ -33,6 +34,7 @@ TestCase {
         format: originalFormat
         emptyFormat: originalEmptyFormat
         domain: originalDomain
+        minimum: originalMinimum
     }
 
     function test_metric() {
@@ -42,6 +44,14 @@ TestCase {
         compare(info.format, originalFormat, "Metric format was not set properly");
         compare(info.emptyFormat, originalEmptyFormat, "Metric emptyFormat was not set properly");
         compare(info.domain, originalDomain, "Metric domain was not set properly");
+        compare(info.minimum, originalMinimum, "Metric minimum was not set properly");
+        compare(info.maximum, NaN, "Metric maximum was not set properly");
+        
+        metric.minimum = 0.0
+        metric.maximum = 10.0
+        info = dbusQuery.queryMetricInfo(1);
+        compare(info.minimum, 0.0, "Metric minimum was not set properly");
+        compare(info.maximum, 10.0, "Metric maximum was not set properly");
 
         // Test update and increment with integers and floating point data
         metric.update(0);

@@ -26,10 +26,13 @@ Q_PROPERTY(QString name READ name NOTIFY nameChanged)
 Q_PROPERTY(QString format READ format NOTIFY formatChanged)
 Q_PROPERTY(QString emptyFormat READ emptyFormat NOTIFY emptyFormatChanged)
 Q_PROPERTY(QString domain READ domain NOTIFY domainChanged)
+Q_PROPERTY(double minimum READ minimum NOTIFY minimumChanged)
+Q_PROPERTY(double maximum READ maximum NOTIFY maximumChanged)
 
 public:
 	explicit MetricInfo(QString name, QString format, QString emptyFormat,
-			QString domain, QObject *parent = 0);
+			QString domain, double minimum, double maximum,
+			QObject *parent = 0);
 
 	virtual ~MetricInfo();
 
@@ -42,6 +45,10 @@ public:
 
 	QString domain() const;
 
+	double minimum() const;
+
+	double maximum() const;
+
 Q_SIGNALS:
 	void nameChanged();
 
@@ -51,6 +58,10 @@ Q_SIGNALS:
 
 	void domainChanged();
 
+	void minimumChanged();
+
+	void maximumChanged();
+
 private:
 	QString m_name;
 
@@ -59,6 +70,10 @@ private:
 	QString m_emptyFormat;
 
 	QString m_domain;
+
+	double m_minimum;
+
+	double m_maximum;
 
 };
 

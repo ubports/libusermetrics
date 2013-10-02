@@ -19,6 +19,7 @@
 
 #include <QtQml/QQmlExtensionPlugin>
 #include <QtQml/QQmlEngine>
+#include <DBusQuery.h>
 
 class Components : public QQmlExtensionPlugin
 {
@@ -28,6 +29,9 @@ class Components : public QQmlExtensionPlugin
 public:
     void registerTypes(const char *uri);
     void initializeEngine(QQmlEngine *engine, const char *uri);
+
+protected:
+    QScopedPointer<DBusQuery> m_dbusQuery;
 };
 
 #endif // MODULES_USERMETRICSTEST_TESTPLUGIN_H

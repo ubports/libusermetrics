@@ -18,10 +18,12 @@
 #include <libusermetricscommon/Localisation.h>
 
 #include <stdexcept>
+#include <cmath>
 #include <QDebug>
 
 Metric::Metric(QObject *parent) :
-		QObject(parent), m_componentComplete(false) {
+		QObject(parent), m_componentComplete(false), m_minimum(NAN), m_maximum(
+		NAN) {
 	try {
 		m_metricManager.reset(UserMetricsInput::MetricManager::getInstance());
 	} catch (std::exception &e) {
@@ -80,6 +82,30 @@ void Metric::setDomain(const QString &domain) {
 	}
 }
 
+double Metric::minimum() const {
+	return m_minimum;
+}
+
+void Metric::setMinimum(double minimum) {
+	if (m_minimum != minimum) {
+		m_minimum = minimum;
+		Q_EMIT minimumChanged();
+		registerMetric();
+	}
+}
+
+double Metric::maximum() const {
+	return m_maximum;
+}
+
+void Metric::setMaximum(double maximum) {
+	if (m_maximum != maximum) {
+		m_maximum = maximum;
+		Q_EMIT maximumChanged();
+		registerMetric();
+	}
+}
+
 void Metric::registerMetric() {
 	if (!m_componentComplete) {
 		return;
@@ -94,10 +120,23 @@ void Metric::registerMetric() {
 	}
 
 	try {
-		m_metric = m_metricManager->add(
-				UserMetricsInput::MetricParameters(m_name).formatString(
-						m_format).emptyDataString(m_emptyFormat).textDomain(
-						m_domain));
+		UserMetricsInput::MetricParameters parameters(m_name);
+		parameters.formatString(m_format);
+
+		if (!m_emptyFormat.isEmpty()) {
+			parameters.emptyDataString(m_emptyFormat);
+		}
+		if (!m_domain.isEmpty()) {
+			parameters.textDomain(m_domain);
+		}
+		if (!isnan(m_minimum)) {
+			parameters.minimum(m_minimum);
+		}
+		if (!isnan(m_maximum)) {
+			parameters.maximum(m_maximum);
+		}
+
+		m_metric = m_metricManager->add(parameters);
 	} catch (std::exception &e) {
 		qWarning() << _("Failed to register user metric:") << m_name << "\""
 				<< m_format << "\": " << e.what();

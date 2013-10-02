@@ -17,7 +17,7 @@
 #include <DBusQuery.h>
 #include <MetricInfo.h>
 
-#include <QDebug>
+#include <cmath>
 #include <QtDBus/QtDBus>
 #include <libqtdbustest/QProcessDBusService.h>
 #include <libqtdbustest/DBusService.h>
@@ -59,10 +59,20 @@ MetricInfo* DBusQuery::queryMetricInfo(int index) {
 	if (dataSourceInterface.name().isEmpty()) {
 		return 0;
 	} else {
+		double minimum(NAN);
+		double maximum(NAN);
+		QVariantMap options(dataSourceInterface.options());
+		if (options.contains("minimum")) {
+			minimum = options["minimum"].toDouble();
+		}
+		if (options.contains("maximum")) {
+			maximum = options["maximum"].toDouble();
+		}
+
 		return new MetricInfo(dataSourceInterface.name(),
 				dataSourceInterface.formatString(),
 				dataSourceInterface.emptyDataString(),
-				dataSourceInterface.textDomain(), this);
+				dataSourceInterface.textDomain(), minimum, maximum, this);
 	}
 }
 

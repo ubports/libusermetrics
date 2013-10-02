@@ -17,9 +17,10 @@
 #include <MetricInfo.h>
 
 MetricInfo::MetricInfo(QString name, QString format, QString emptyFormat,
-		QString domain, QObject *parent) :
+		QString domain, double minimum, double maximum, QObject *parent) :
 		QObject(parent), m_name(name), m_format(format), m_emptyFormat(
-				emptyFormat), m_domain(domain) {
+				emptyFormat), m_domain(domain), m_minimum(minimum), m_maximum(
+				maximum) {
 }
 
 MetricInfo::~MetricInfo() {
@@ -39,4 +40,12 @@ QString MetricInfo::emptyFormat() const {
 
 QString MetricInfo::domain() const {
 	return m_domain;
+}
+
+double MetricInfo::minimum() const {
+	return m_minimum;
+}
+
+double MetricInfo::maximum() const {
+	return m_maximum;
 }
