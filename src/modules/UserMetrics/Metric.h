@@ -24,10 +24,14 @@
 class Metric: public QObject, public QQmlParserStatus {
 Q_OBJECT
 
-Q_INTERFACES (QQmlParserStatus)Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+Q_INTERFACES (QQmlParserStatus)
+
+Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 Q_PROPERTY(QString format READ format WRITE setFormat NOTIFY formatChanged)
 Q_PROPERTY(QString emptyFormat READ emptyFormat WRITE setEmptyFormat NOTIFY emptyFormatChanged)
 Q_PROPERTY(QString domain READ domain WRITE setDomain NOTIFY domainChanged)
+Q_PROPERTY(double minimum READ minimum WRITE setMinimum NOTIFY minimumChanged)
+Q_PROPERTY(double maximum READ maximum WRITE setMaximum NOTIFY maximumChanged)
 
 public:
 	explicit Metric(QObject *parent = 0);
@@ -50,6 +54,14 @@ public:
 
 	void setDomain(const QString &domain);
 
+	double minimum() const;
+
+	void setMinimum(double minimum);
+
+	double maximum() const;
+
+	void setMaximum(double maximum);
+
 	void classBegin();
 
 	void componentComplete();
@@ -68,6 +80,10 @@ Q_SIGNALS:
 
 	void domainChanged();
 
+	void minimumChanged();
+
+	void maximumChanged();
+
 protected:
 	void registerMetric();
 
@@ -84,6 +100,10 @@ protected:
 	QString m_emptyFormat;
 
 	QString m_domain;
+
+	double m_minimum;
+
+	double m_maximum;
 };
 
 #endif // MODULES_USERMETRICS_METRICSMANAGER_H

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-01 11:16+0100\n"
+"POT-Creation-Date: 2013-10-02 10:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr ""
 #: src/usermetricsservice/DBusDataSource.cpp:190
 #: src/usermetricsservice/DBusDataSource.cpp:216
 #: src/usermetricsservice/DBusDataSource.cpp:234
-#: src/usermetricsservice/DBusUserMetrics.cpp:177
+#: src/usermetricsservice/DBusUserMetrics.cpp:188
 msgid "Could not save data source"
 msgstr ""
 
@@ -46,19 +46,20 @@ msgstr ""
 msgid "Unable to register user metrics object on DBus"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:143
+#: src/usermetricsservice/DBusUserMetrics.cpp:142
+#: src/usermetricsservice/DBusUserMetrics.cpp:154
 msgid "Data source query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:239
+#: src/usermetricsservice/DBusUserMetrics.cpp:250
 msgid "Attempt to create user data owned by another user"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:248
+#: src/usermetricsservice/DBusUserMetrics.cpp:259
 msgid "User data query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:257
+#: src/usermetricsservice/DBusUserMetrics.cpp:268
 msgid "Could not save user data"
 msgstr ""
 
@@ -107,19 +108,19 @@ msgstr ""
 msgid "New data set could not be found"
 msgstr ""
 
-#: src/modules/UserMetrics/Metric.cpp:28
+#: src/modules/UserMetrics/Metric.cpp:30
 msgid "Failed to connect to metrics service:"
 msgstr ""
 
-#: src/modules/UserMetrics/Metric.cpp:102
+#: src/modules/UserMetrics/Metric.cpp:141
 msgid "Failed to register user metric:"
 msgstr ""
 
-#: src/modules/UserMetrics/Metric.cpp:115
+#: src/modules/UserMetrics/Metric.cpp:154
 msgid "Failed to increment metric:"
 msgstr ""
 
-#: src/modules/UserMetrics/Metric.cpp:127
+#: src/modules/UserMetrics/Metric.cpp:166
 msgid "Failed to update metric:"
 msgstr ""
 

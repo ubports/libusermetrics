@@ -16,7 +16,6 @@
 
 #include <QtQuick/QtQuick>
 #include <TestPlugin.h>
-#include <DBusQuery.h>
 #include <MetricInfo.h>
 
 void Components::registerTypes(const char *uri) {
@@ -27,6 +26,7 @@ void Components::registerTypes(const char *uri) {
 }
 
 void Components::initializeEngine(QQmlEngine *engine, const char *uri) {
+	m_dbusQuery.reset(new DBusQuery());
 	QQmlExtensionPlugin::initializeEngine(engine, uri);
-	engine->rootContext()->setContextProperty("dbusQuery", new DBusQuery(this));
+	engine->rootContext()->setContextProperty("dbusQuery", m_dbusQuery.data());
 }
