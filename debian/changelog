@@ -1,3 +1,13 @@
+libusermetrics (1.1.1+13.10.20131003-0ubuntu1) saucy; urgency=low
+
+  [ Pete Woods ]
+  * Support minimum and maximum properties in the QML API.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 141
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Thu, 03 Oct 2013 02:44:48 +0000
+
 libusermetrics (1.1.1+13.10.20131002-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]
