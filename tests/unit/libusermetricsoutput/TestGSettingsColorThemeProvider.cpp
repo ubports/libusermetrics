@@ -23,6 +23,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <QDebug>
+
 using namespace std;
 using namespace UserMetricsOutput;
 using namespace testing;
@@ -32,8 +34,7 @@ namespace {
 class TestGSettingsColorThemeProvider: public Test {
 protected:
 	TestGSettingsColorThemeProvider() {
-		qputenv("USERMETRICS_COLOR_SCHEMA_BASEDIR",
-		USERMETRICS_TEST_COLOR_BASEDIR);
+		qputenv("XDG_DATA_DIRS", DATA_DIR);
 		qputenv("USERMETRICS_NO_COLOR_SETTINGS", "1");
 	}
 
@@ -42,8 +43,7 @@ protected:
 };
 
 TEST_F(TestGSettingsColorThemeProvider, ReadsThemes) {
-	qputenv("XDG_DATA_DIRS", USERMETRICS_TEST_COLOR_BASEDIR);
-
+	qDebug() << DATA_DIR;
 	GSettingsColorThemeProvider provider;
 
 	ColorThemePtrPair themeA(provider.getColorTheme("a"));
@@ -106,7 +106,7 @@ TEST_F(TestGSettingsColorThemeProvider, HandlesMissingXml) {
 
 TEST_F(TestGSettingsColorThemeProvider, HandlesInvalidXml) {
 	qputenv("XDG_DATA_DIRS",
-			QDir(TEST_DATADIR).filePath("broken-theme").toUtf8());
+			QString(TEST_DATADIR).append(":").append(DATA_DIR).toUtf8());
 
 	GSettingsColorThemeProvider provider;
 

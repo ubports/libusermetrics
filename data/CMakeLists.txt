@@ -8,9 +8,9 @@ add_schema("com.canonical.UserMetrics.gschema.xml")
 
 install(
 	DIRECTORY
-		themes
+		libusermetrics
 	DESTINATION
-		"${CMAKE_INSTALL_DATADIR}/libusermetrics"
+		${CMAKE_INSTALL_DATADIR}
 )
 
 ###########################
