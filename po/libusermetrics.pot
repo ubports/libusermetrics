@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-02 10:29+0100\n"
+"POT-Creation-Date: 2013-10-22 09:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr ""
 #: src/usermetricsservice/DBusDataSource.cpp:190
 #: src/usermetricsservice/DBusDataSource.cpp:216
 #: src/usermetricsservice/DBusDataSource.cpp:234
-#: src/usermetricsservice/DBusUserMetrics.cpp:188
+#: src/usermetricsservice/DBusUserMetrics.cpp:187
 msgid "Could not save data source"
 msgstr ""
 
@@ -46,25 +46,25 @@ msgstr ""
 msgid "Unable to register user metrics object on DBus"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:142
-#: src/usermetricsservice/DBusUserMetrics.cpp:154
+#: src/usermetricsservice/DBusUserMetrics.cpp:141
+#: src/usermetricsservice/DBusUserMetrics.cpp:153
 msgid "Data source query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:250
+#: src/usermetricsservice/DBusUserMetrics.cpp:249
 msgid "Attempt to create user data owned by another user"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:259
+#: src/usermetricsservice/DBusUserMetrics.cpp:258
 msgid "User data query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:268
+#: src/usermetricsservice/DBusUserMetrics.cpp:267
 msgid "Could not save user data"
 msgstr ""
 
 #: src/usermetricsservice/DBusDataSet.cpp:127
-#: src/usermetricsservice/DBusUserData.cpp:123
+#: src/usermetricsservice/DBusUserData.cpp:125
 msgid "Could not save data set"
 msgstr ""
 
@@ -84,27 +84,27 @@ msgstr ""
 msgid "Attempt to increment data owned by another application"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserData.cpp:49
+#: src/usermetricsservice/DBusUserData.cpp:51
 msgid "Could not register user data object with DBus"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserData.cpp:79
+#: src/usermetricsservice/DBusUserData.cpp:81
 msgid "Unknown data source"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserData.cpp:88
+#: src/usermetricsservice/DBusUserData.cpp:90
 msgid "Attempt to create data set owned by another user"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserData.cpp:99
+#: src/usermetricsservice/DBusUserData.cpp:101
 msgid "Attempt to create data set owned by another application"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserData.cpp:110
+#: src/usermetricsservice/DBusUserData.cpp:112
 msgid "Data set query failed"
 msgstr ""
 
-#: src/usermetricsservice/DBusUserData.cpp:133
+#: src/usermetricsservice/DBusUserData.cpp:135
 msgid "New data set could not be found"
 msgstr ""
 
@@ -141,7 +141,7 @@ msgstr ""
 msgid "No data sources available"
 msgstr ""
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:260
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:255
 msgid "Data source not found"
 msgstr ""
 

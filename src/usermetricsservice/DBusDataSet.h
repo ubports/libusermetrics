@@ -24,6 +24,7 @@
 #include <QtCore/QScopedPointer>
 #include <QtDBus/QDBusContext>
 #include <QtDBus/QDBusConnection>
+#include <QtDBus/QDBusObjectPath>
 
 class DataSetAdaptor;
 
@@ -46,7 +47,7 @@ Q_PROPERTY(QVariantList data READ data)
 
 Q_PROPERTY(uint lastUpdated READ lastUpdated)
 
-Q_PROPERTY(QString dataSource READ dataSource)
+Q_PROPERTY(QDBusObjectPath dataSource READ dataSource)
 
 public:
 	DBusDataSet(int id, const QString &dataSource,
@@ -58,7 +59,7 @@ public:
 
 	QString path() const;
 
-	QString dataSource() const;
+	QDBusObjectPath dataSource() const;
 
 	int id() const;
 

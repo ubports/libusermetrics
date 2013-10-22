@@ -82,7 +82,7 @@ void DBusUserMetrics::syncDatabase() {
 						new DBusDataSource(id, dataSource.name(),
 								m_dbusConnection));
 				m_dataSources.insert(id, dbusDataSource);
-				m_adaptor->dataSourceAdded(dbusDataSource->name(),
+				m_adaptor->dataSourceAdded(
 						QDBusObjectPath(dbusDataSource->path()));
 			}
 		}
@@ -92,8 +92,7 @@ void DBusUserMetrics::syncDatabase() {
 		QSet<int> &toRemove(cachedDataSourceNames.subtract(dataSourceNames));
 		for (int id : toRemove) {
 			DBusDataSourcePtr dataSource(m_dataSources.take(id));
-			m_adaptor->dataSourceRemoved(dataSource->name(),
-					QDBusObjectPath(dataSource->path()));
+			m_adaptor->dataSourceRemoved(QDBusObjectPath(dataSource->path()));
 		}
 	}
 

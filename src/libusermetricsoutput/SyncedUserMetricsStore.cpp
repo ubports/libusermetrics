@@ -47,33 +47,23 @@ void SyncedUserMetricsStore::sync() {
 	}
 
 	connect(&m_interface,
-			SIGNAL(dataSourceAdded(const QString &, const QDBusObjectPath &)),
-			this,
-			SLOT(addDataSource(const QString &, const QDBusObjectPath &)));
+	SIGNAL(dataSourceAdded(const QDBusObjectPath &)), this,
+	SLOT(addDataSource(const QDBusObjectPath &)));
 
 	connect(&m_interface,
-			SIGNAL(dataSourceRemoved(const QString &, const QDBusObjectPath &)),
-			this,
-			SLOT(removeDataSource(const QString &, const QDBusObjectPath &)));
+	SIGNAL(dataSourceRemoved(const QDBusObjectPath &)), this,
+	SLOT(removeDataSource(const QDBusObjectPath &)));
 
 	connect(&m_interface,
-			SIGNAL(userDataAdded(const QString &, const QDBusObjectPath &)),
-			this, SLOT(addUserData(const QString &, const QDBusObjectPath &)));
+	SIGNAL(userDataAdded(const QString &, const QDBusObjectPath &)), this,
+	SLOT(addUserData(const QString &, const QDBusObjectPath &)));
 
 	connect(&m_interface,
-			SIGNAL(userDataRemoved(const QString &, const QDBusObjectPath &)),
-			this,
-			SLOT(removeUserData(const QString &, const QDBusObjectPath &)));
+	SIGNAL(userDataRemoved(const QString &, const QDBusObjectPath &)), this,
+	SLOT(removeUserData(const QString &, const QDBusObjectPath &)));
 
 	for (const QDBusObjectPath &path : m_interface.dataSources()) {
-
-		QSharedPointer<canonical::usermetrics::DataSource> dataSource(
-				new canonical::usermetrics::DataSource(DBusPaths::serviceName(),
-						path.path(), m_interface.connection()));
-
-		QString name(dataSource->name());
-		insert(name,
-				DataSourcePtr(new SyncedDataSource(dataSource, m_localeDir)));
+		addDataSource(path);
 	}
 
 	QSharedPointer<canonical::usermetrics::UserData> systemData;
@@ -137,18 +127,16 @@ void SyncedUserMetricsStore::removeUserData(const QString &username,
 	m_dataSources.remove(username);
 }
 
-void SyncedUserMetricsStore::addDataSource(const QString &name,
-		const QDBusObjectPath &path) {
+void SyncedUserMetricsStore::addDataSource(const QDBusObjectPath &path) {
 
 	QSharedPointer<canonical::usermetrics::DataSource> dataSource(
 			new canonical::usermetrics::DataSource(DBusPaths::serviceName(),
 					path.path(), m_interface.connection()));
 
-	insert(name, DataSourcePtr(new SyncedDataSource(dataSource, m_localeDir)));
+	insert(path.path(),
+			DataSourcePtr(new SyncedDataSource(dataSource, m_localeDir)));
 }
 
-void SyncedUserMetricsStore::removeDataSource(const QString &name,
-		const QDBusObjectPath &path) {
-	Q_UNUSED(path);
-	m_userData.remove(name);
+void SyncedUserMetricsStore::removeDataSource(const QDBusObjectPath &path) {
+	m_userData.remove(path.path());
 }

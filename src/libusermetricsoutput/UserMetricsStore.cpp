@@ -43,8 +43,8 @@ UserMetricsStore::iterator UserMetricsStore::insert(const QString &username,
 	return it;
 }
 
-DataSourcePtr UserMetricsStore::dataSource(const QString &name) {
-	return m_dataSources.value(name);
+DataSourcePtr UserMetricsStore::dataSource(const QString &path) {
+	return m_dataSources.value(path);
 }
 
 void UserMetricsStore::insert(const QString &name, DataSourcePtr dataSource) {

@@ -45,13 +45,14 @@ void SyncedUserData::attachUserData(
 	m_userDatas.insert(interface);
 
 	connect(interface.data(),
-			SIGNAL(dataSetAdded(const QString &, const QDBusObjectPath &)),
-			this, SLOT(addDataSet(const QString &, const QDBusObjectPath &)));
+	SIGNAL(dataSetAdded(const QDBusObjectPath &, const QDBusObjectPath &)),
+			this,
+			SLOT(addDataSet(const QDBusObjectPath &, const QDBusObjectPath &)));
 
 	connect(interface.data(),
-			SIGNAL(dataSetRemoved(const QString &, const QDBusObjectPath &)),
+	SIGNAL(dataSetRemoved(const QDBusObjectPath &, const QDBusObjectPath &)),
 			this,
-			SLOT(removeDataSet(const QString &, const QDBusObjectPath &)));
+			SLOT(removeDataSet(const QDBusObjectPath &, const QDBusObjectPath &)));
 
 	for (const QDBusObjectPath &path : interface->dataSets()) {
 
@@ -59,29 +60,30 @@ void SyncedUserData::attachUserData(
 				new canonical::usermetrics::DataSet(DBusPaths::serviceName(),
 						path.path(), interface->connection()));
 
-		QString dataSourceId(dataSet->dataSource());
-		insert(dataSourceId,
+		QString dataSourcePath(dataSet->dataSource().path());
+		insert(dataSourcePath,
 				DataSetPtr(
 						new SyncedDataSet(dataSet,
-								m_userMetricsStore.dataSource(dataSourceId))));
+								m_userMetricsStore.dataSource(
+										dataSourcePath))));
 	}
 }
 
-void SyncedUserData::addDataSet(const QString &dataSourceName,
+void SyncedUserData::addDataSet(const QDBusObjectPath &dataSourcePath,
 		const QDBusObjectPath &path) {
 	QSharedPointer<canonical::usermetrics::DataSet> dataSet(
 			new canonical::usermetrics::DataSet(DBusPaths::serviceName(),
 					path.path(), (*m_userDatas.begin())->connection()));
 
-	QString dataSourceId(dataSet->dataSource());
-	insert(dataSourceName,
+	insert(dataSourcePath.path(),
 			DataSetPtr(
 					new SyncedDataSet(dataSet,
-							m_userMetricsStore.dataSource(dataSourceId))));
+							m_userMetricsStore.dataSource(
+									dataSourcePath.path()))));
 }
 
-void SyncedUserData::removeDataSet(const QString &dataSetName,
+void SyncedUserData::removeDataSet(const QDBusObjectPath &dataSourcePath,
 		const QDBusObjectPath &path) {
 	Q_UNUSED(path);
-	m_dataSets.remove(dataSetName);
+	m_dataSets.remove(dataSourcePath.path());
 }

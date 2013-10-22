@@ -7,12 +7,12 @@
 		<property name="dataSets" type="ao" access="read"/>
 		
 		<signal name="dataSetAdded">
-			<arg name="dataSourceName" type="s" direction="out"/>
+			<arg name="dataSourcePath" type="o" direction="out"/>
 			<arg name="path" type="o" direction="out"/>
 		</signal>
 		
 		<signal name="dataSetRemoved">
-			<arg name="dataSourceName" type="s" direction="out"/>
+			<arg name="dataSourcePath" type="o" direction="out"/>
 			<arg name="path" type="o" direction="out"/>
 		</signal>
 		

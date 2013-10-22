@@ -50,7 +50,7 @@ public:
 
 	virtual void insert(const QString &name, DataSourcePtr dataSource);
 
-	virtual DataSourcePtr dataSource(const QString &name);
+	virtual DataSourcePtr dataSource(const QString &path);
 
 Q_SIGNALS:
 	void userDataAdded(const QString &username, UserDataPtr userData);

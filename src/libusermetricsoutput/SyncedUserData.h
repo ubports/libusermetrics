@@ -41,9 +41,10 @@ public:
 			QSharedPointer<com::canonical::usermetrics::UserData> interface);
 
 public Q_SLOTS:
-	void addDataSet(const QString &dataSourceName, const QDBusObjectPath &path);
+	void addDataSet(const QDBusObjectPath &dataSourcePath,
+			const QDBusObjectPath &path);
 
-	void removeDataSet(const QString &dataSourceName,
+	void removeDataSet(const QDBusObjectPath &dataSourcePath,
 			const QDBusObjectPath &path);
 
 protected:
