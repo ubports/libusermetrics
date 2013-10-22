@@ -42,9 +42,9 @@ public Q_SLOTS:
 
 	void removeUserData(const QString &username, const QDBusObjectPath &path);
 
-	void addDataSource(const QString &username, const QDBusObjectPath &path);
+	void addDataSource(const QDBusObjectPath &path);
 
-	void removeDataSource(const QString &username, const QDBusObjectPath &path);
+	void removeDataSource(const QDBusObjectPath &path);
 
 	void sync();
 

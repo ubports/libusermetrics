@@ -238,12 +238,7 @@ void UserMetricsImpl::updateCurrentDataSet(const QVariantList *newData) {
 		// the data is out of date
 	}
 
-	const QString &dataSetId(m_dataSetIterator.key());
-	ColorThemePtrPair colorTheme(
-			m_colorThemeProvider->getColorTheme(dataSetId));
-	m_firstColor->setColors(*colorTheme.first);
-	m_secondColor->setColors(*colorTheme.second);
-
+	const QString &dataSourcePath(m_dataSetIterator.key());
 	const QVariantList &data(m_dataSet->data());
 
 	QVariantList::const_iterator dataIndex(data.begin());
@@ -255,17 +250,22 @@ void UserMetricsImpl::updateCurrentDataSet(const QVariantList *newData) {
 	updateMonth(*m_secondMonth, valuesToCopyForSecondMonth,
 			secondMonthDate.daysInMonth(), dataIndex, end);
 
-	DataSourcePtr dataSource(m_userMetricsStore->dataSource(dataSetId));
+	DataSourcePtr dataSource(m_userMetricsStore->dataSource(dataSourcePath));
 	if (dataSource.isNull()) {
-		qWarning() << _("Data source not found") << " [" << dataSetId << "]";
+		qWarning() << _("Data source not found") << " [" << dataSourcePath << "]";
 	} else {
+		ColorThemePtrPair colorTheme(
+				m_colorThemeProvider->getColorTheme(dataSourcePath));
+		m_firstColor->setColors(*colorTheme.first);
+		m_secondColor->setColors(*colorTheme.second);
+
 		if (data.empty() || currentDate != lastUpdated
 				|| m_dataSet->head().isNull()) {
 			const QString &emptyDataString = dataSource->emptyDataString();
 			if (emptyDataString.isEmpty()) {
 				QString empty(_("No data for today"));
 				empty.append(" (");
-				empty.append(dataSetId);
+				empty.append(dataSourcePath);
 				empty.append(")");
 				setLabel(empty);
 			} else {

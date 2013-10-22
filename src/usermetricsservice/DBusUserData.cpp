@@ -19,8 +19,10 @@
 #include <stdexcept>
 
 #include <usermetricsservice/Authentication.h>
+#include <usermetricsservice/DBusUserMetrics.h>
 #include <usermetricsservice/DBusUserData.h>
 #include <usermetricsservice/DBusDataSet.h>
+#include <usermetricsservice/DBusDataSource.h>
 #include <usermetricsservice/UserDataAdaptor.h>
 #include <usermetricsservice/database/DataSet.h>
 #include <usermetricsservice/database/DataSource.h>
@@ -146,11 +148,14 @@ void DBusUserData::syncDatabase() {
 		dataSetIds << id;
 		// if we don't have a local cache
 		if (!m_dataSets.contains(id)) {
+			DBusDataSourcePtr dbusDataSource(
+					m_userMetrics.dataSource(dataSet.dataSource()->name(),
+							dataSet.dataSource()->secret()));
 			DBusDataSetPtr dbusDataSet(
-					new DBusDataSet(id, dataSet.dataSource()->name(),
+					new DBusDataSet(id, dbusDataSource->path(),
 							m_dbusConnection, m_dateFactory, m_authentication));
 			m_dataSets.insert(id, dbusDataSet);
-			m_adaptor->dataSetAdded(dbusDataSet->dataSource(),
+			m_adaptor->dataSetAdded(QDBusObjectPath(dbusDataSet->dataSource()),
 					QDBusObjectPath(dbusDataSet->path()));
 		}
 	}
@@ -159,7 +164,7 @@ void DBusUserData::syncDatabase() {
 	QSet<int> &toRemove(cachedDataSetIds.subtract(dataSetIds));
 	for (int id : toRemove) {
 		DBusDataSetPtr dataSet = m_dataSets.take(id);
-		m_adaptor->dataSetRemoved(dataSet->dataSource(),
+		m_adaptor->dataSetRemoved(QDBusObjectPath(dataSet->dataSource()),
 				QDBusObjectPath(dataSet->path()));
 	}
 }

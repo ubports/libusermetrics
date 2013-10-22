@@ -216,6 +216,6 @@ QString DBusDataSet::path() const {
 	return m_path;
 }
 
-QString DBusDataSet::dataSource() const {
-	return m_dataSource;
+QDBusObjectPath DBusDataSet::dataSource() const {
+	return QDBusObjectPath(m_dataSource);
 }

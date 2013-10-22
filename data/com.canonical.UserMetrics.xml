@@ -5,12 +5,10 @@
 		<property name="dataSources" type="ao" access="read"/>
 		
 		<signal name="dataSourceAdded">
-			<arg name="name" type="s" direction="out"/>
 			<arg name="path" type="o" direction="out"/>
 		</signal>
 		
 		<signal name="dataSourceRemoved">
-			<arg name="name" type="s" direction="out"/>
 			<arg name="path" type="o" direction="out"/>
 		</signal>
 		

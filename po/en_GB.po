@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-02 10:29+0100\n"
+"POT-Creation-Date: 2013-10-22 09:33+0100\n"
 "PO-Revision-Date: 2013-07-05 15:09+0100\n"
 "Last-Translator: Pete Woods <pete.woods@canonical.com>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/usermetricsservice/DBusUserData.cpp:99
+#: src/usermetricsservice/DBusUserData.cpp:101
 msgid "Attempt to create data set owned by another application"
 msgstr "Attempt to create data set owned by another application"
 
-#: src/usermetricsservice/DBusUserData.cpp:88
+#: src/usermetricsservice/DBusUserData.cpp:90
 msgid "Attempt to create data set owned by another user"
 msgstr "Attempt to create data set owned by another user"
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:250
+#: src/usermetricsservice/DBusUserMetrics.cpp:249
 #, fuzzy
 msgid "Attempt to create user data owned by another user"
 msgstr "Attempt to create user data owned by another user"
@@ -55,12 +55,12 @@ msgstr ""
 msgid "Could not open database"
 msgstr "Could not open database"
 
-#: src/usermetricsservice/DBusUserData.cpp:49
+#: src/usermetricsservice/DBusUserData.cpp:51
 msgid "Could not register user data object with DBus"
 msgstr "Could not register user data object with DBus"
 
 #: src/usermetricsservice/DBusDataSet.cpp:127
-#: src/usermetricsservice/DBusUserData.cpp:123
+#: src/usermetricsservice/DBusUserData.cpp:125
 msgid "Could not save data set"
 msgstr "Could not save data set"
 
@@ -73,11 +73,11 @@ msgstr "Could not save data set"
 #: src/usermetricsservice/DBusDataSource.cpp:190
 #: src/usermetricsservice/DBusDataSource.cpp:216
 #: src/usermetricsservice/DBusDataSource.cpp:234
-#: src/usermetricsservice/DBusUserMetrics.cpp:188
+#: src/usermetricsservice/DBusUserMetrics.cpp:187
 msgid "Could not save data source"
 msgstr "Couldn't save data source"
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:268
+#: src/usermetricsservice/DBusUserMetrics.cpp:267
 msgid "Could not save user data"
 msgstr "Couldn't save user data"
 
@@ -90,16 +90,16 @@ msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 
-#: src/usermetricsservice/DBusUserData.cpp:110
+#: src/usermetricsservice/DBusUserData.cpp:112
 msgid "Data set query failed"
 msgstr "Data set query failed"
 
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:260
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:255
 msgid "Data source not found"
 msgstr "Data source not found"
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:142
-#: src/usermetricsservice/DBusUserMetrics.cpp:154
+#: src/usermetricsservice/DBusUserMetrics.cpp:141
+#: src/usermetricsservice/DBusUserMetrics.cpp:153
 msgid "Data source query failed"
 msgstr "Data source query failed"
 
@@ -119,7 +119,7 @@ msgstr "Failed to register user metric:"
 msgid "Failed to update metric:"
 msgstr "Failed to update metric:"
 
-#: src/usermetricsservice/DBusUserData.cpp:133
+#: src/usermetricsservice/DBusUserData.cpp:135
 msgid "New data set could not be found"
 msgstr "New data set couldn't be found"
 
@@ -143,7 +143,7 @@ msgstr "Unable to register user metrics service on DBus"
 msgid "Unable to unregister user metrics service on DBus"
 msgstr "Unable to unregister user metrics service on DBus"
 
-#: src/usermetricsservice/DBusUserData.cpp:79
+#: src/usermetricsservice/DBusUserData.cpp:81
 msgid "Unknown data source"
 msgstr "Unknown data source"
 
@@ -152,7 +152,7 @@ msgstr "Unknown data source"
 msgid "Usage: "
 msgstr "Usage: "
 
-#: src/usermetricsservice/DBusUserMetrics.cpp:259
+#: src/usermetricsservice/DBusUserMetrics.cpp:258
 msgid "User data query failed"
 msgstr "User data query failed"
 

@@ -71,7 +71,8 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 	connectionEstablishedSpy.wait();
 
 	{
-		DataSourcePtr dataSource(store.dataSource("data-source-one"));
+		DataSourcePtr dataSource(store.dataSource(DBusPaths::dataSource(1)));
+		ASSERT_FALSE(dataSource.isNull());
 		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
 		EXPECT_EQ(QString("empty data string one"),
 				dataSource->emptyDataString());
@@ -79,7 +80,8 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 	}
 
 	{
-		DataSourcePtr dataSource(store.dataSource("data-source-two"));
+		DataSourcePtr dataSource(store.dataSource(DBusPaths::dataSource(2)));
+		ASSERT_FALSE(dataSource.isNull());
 		EXPECT_EQ(QString("format string two %1"), dataSource->formatString());
 		EXPECT_EQ(QString("empty data string two"),
 				dataSource->emptyDataString());
@@ -103,7 +105,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	connectionEstablishedSpy.wait();
 
 	{
-		DataSourcePtr dataSource(store.dataSource("data-source-one"));
+		DataSourcePtr dataSource(store.dataSource(DBusPaths::dataSource(1)));
 		ASSERT_FALSE(dataSource.isNull());
 		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
 		EXPECT_EQ(QString("text-domain-one"), dataSource->textDomain());
@@ -115,7 +117,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	}
 
 	QSignalSpy spy(&userMetricsInterface,
-			SIGNAL(dataSourceAdded(const QString &, const QDBusObjectPath &)));
+			SIGNAL(dataSourceAdded(const QDBusObjectPath &)));
 
 	QDBusObjectPath dataSourcePath2(
 			userMetricsInterface.createDataSource("data-source-two",
@@ -126,7 +128,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	spy.wait();
 
 	{
-		DataSourcePtr dataSource(store.dataSource("data-source-one"));
+		DataSourcePtr dataSource(store.dataSource(DBusPaths::dataSource(1)));
 		ASSERT_FALSE(dataSource.isNull());
 		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
 		EXPECT_EQ(QString("no data source ones"),
@@ -135,7 +137,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	}
 
 	{
-		DataSourcePtr dataSource(store.dataSource("data-source-two"));
+		DataSourcePtr dataSource(store.dataSource(DBusPaths::dataSource(2)));
 		ASSERT_FALSE(dataSource.isNull());
 		EXPECT_EQ(QString("format string two %1"), dataSource->formatString());
 		EXPECT_EQ(QString("no data source twos"),
@@ -307,7 +309,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 	{
 		UserData::const_iterator dataSetIterator(userData->constBegin());
 		ASSERT_NE(dataSetIterator, userData->constEnd());
-		EXPECT_EQ(QString("twitter"), dataSetIterator.key());
+		EXPECT_EQ(QString(DBusPaths::dataSource(1)), dataSetIterator.key());
 
 		++dataSetIterator;
 		ASSERT_EQ(dataSetIterator, userData->constEnd());
@@ -327,12 +329,12 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSets) {
 		UserData::const_iterator dataSetIterator(userData->constBegin());
 
 		ASSERT_NE(dataSetIterator, userData->constEnd());
-		EXPECT_EQ(QString("facebook").toStdString(),
+		EXPECT_EQ(DBusPaths::dataSource(1).toStdString(),
 				dataSetIterator.key().toStdString());
 
 		++dataSetIterator;
 		ASSERT_NE(dataSetIterator, userData->constEnd());
-		EXPECT_EQ(QString("twitter"), dataSetIterator.key());
+		EXPECT_EQ(DBusPaths::dataSource(2), dataSetIterator.key());
 
 		++dataSetIterator;
 		ASSERT_EQ(dataSetIterator, userData->constEnd());
@@ -404,19 +406,19 @@ TEST_F(TestSyncedUserMetricsStore, MergesSystemDataAtStartup) {
 
 	UserData::const_iterator dataSetIterator(userData->constBegin());
 	ASSERT_NE(dataSetIterator, userData->constEnd());
-	// battery data set
+	// twitter data set
 	{
 		DataSetPtr dataSet(*dataSetIterator);
-		EXPECT_EQ(batteryExpected, dataSet->data());
+		EXPECT_EQ(twitterExpected, dataSet->data());
 		EXPECT_EQ(QDate::currentDate(), dataSet->lastUpdated());
 	}
 
 	++dataSetIterator;
 	ASSERT_NE(dataSetIterator, userData->constEnd());
-	// twitter data set
+	// battery data set
 	{
 		DataSetPtr dataSet(*dataSetIterator);
-		EXPECT_EQ(twitterExpected, dataSet->data());
+		EXPECT_EQ(batteryExpected, dataSet->data());
 		EXPECT_EQ(QDate::currentDate(), dataSet->lastUpdated());
 	}
 }
