@@ -42,7 +42,7 @@ protected:
 };
 
 TEST_F(TestGSettingsColorThemeProvider, ReadsThemes) {
-	qputenv("USERMETRICS_COLOR_THEME_BASEDIR", USERMETRICS_TEST_COLOR_BASEDIR);
+	qputenv("XDG_DATA_DIRS", USERMETRICS_TEST_COLOR_BASEDIR);
 
 	GSettingsColorThemeProvider provider;
 
@@ -89,7 +89,7 @@ TEST_F(TestGSettingsColorThemeProvider, ReadsThemes) {
 }
 
 TEST_F(TestGSettingsColorThemeProvider, HandlesMissingXml) {
-	qputenv("USERMETRICS_COLOR_THEME_BASEDIR", "/does/not/exist");
+	qputenv("XDG_DATA_DIRS", "/does/not/exist");
 
 	GSettingsColorThemeProvider provider;
 
@@ -105,7 +105,7 @@ TEST_F(TestGSettingsColorThemeProvider, HandlesMissingXml) {
 }
 
 TEST_F(TestGSettingsColorThemeProvider, HandlesInvalidXml) {
-	qputenv("USERMETRICS_COLOR_THEME_BASEDIR",
+	qputenv("XDG_DATA_DIRS",
 			QDir(TEST_DATADIR).filePath("broken-theme").toUtf8());
 
 	GSettingsColorThemeProvider provider;
