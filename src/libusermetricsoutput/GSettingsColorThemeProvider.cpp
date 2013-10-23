@@ -31,26 +31,25 @@
 using namespace std;
 using namespace UserMetricsOutput;
 
-static const QString COLOR_BASEDIR("/usr/share/libusermetrics/themes/");
-static const QString CUSTOM_COLOR_BASEDIR(
-		"/custom/usr/share/libusermetrics/themes/");
+static const QString THEME_PATH("/libusermetrics/themes/");
 
 GSettingsColorThemeProvider::GSettingsColorThemeProvider(QObject *parent) :
-		ColorThemeProvider(parent), m_baseDir(COLOR_BASEDIR) {
-	if (qEnvironmentVariableIsSet("USERMETRICS_COLOR_THEME_BASEDIR")) {
-		m_baseDir = QString::fromUtf8(
-				qgetenv("USERMETRICS_COLOR_THEME_BASEDIR"));
+		ColorThemeProvider(parent) {
+	if (qEnvironmentVariableIsSet("XDG_DATA_DIRS")) {
+		m_baseDirs = QString::fromUtf8(qgetenv("XDG_DATA_DIRS")).split(':');
 	}
 
-	QString schemaBaseDir(COLOR_BASEDIR);
-	if (qEnvironmentVariableIsSet("USERMETRICS_COLOR_SCHEMA_BASEDIR")) {
-		schemaBaseDir = QString::fromUtf8(
-				qgetenv("USERMETRICS_COLOR_SCHEMA_BASEDIR"));
+	for (QString &baseDir : m_baseDirs) {
+		baseDir = baseDir.append(THEME_PATH);
 	}
 
-	m_schema.load(
-			QUrl::fromLocalFile(
-					QDir(schemaBaseDir).filePath("color-theme.xsd")));
+	for (const QString &baseDir : m_baseDirs) {
+		QString schemaFile(QDir(baseDir).filePath("color-theme.xsd"));
+		if (QFile::exists(schemaFile)) {
+			m_schema.load(QUrl::fromLocalFile(schemaFile));
+			break;
+		}
+	}
 
 	if (m_schema.isValid()) {
 		if (qEnvironmentVariableIsSet("USERMETRICS_NO_COLOR_SETTINGS")) {
@@ -89,9 +88,11 @@ void GSettingsColorThemeProvider::loadXmlColors(const QString &theme) {
 
 	QFile file;
 
-	file.setFileName(convertPath(m_baseDir, theme));
-	if (!file.exists()) {
-		file.setFileName(convertPath(CUSTOM_COLOR_BASEDIR, theme));
+	for (const QString &baseDir : m_baseDirs) {
+		file.setFileName(convertPath(baseDir, theme));
+		if (file.exists()) {
+			break;
+		}
 	}
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {

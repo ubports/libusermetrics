@@ -61,7 +61,7 @@ protected:
 
 	QString convertPath(const QString &base, const QString& theme);
 
-	QString m_baseDir;
+	QStringList m_baseDirs;
 
 	QXmlSchema m_schema;
 
