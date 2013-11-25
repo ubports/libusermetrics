@@ -1,3 +1,16 @@
+libusermetrics (1.1.1+14.04.20131125-0ubuntu1) trusty; urgency=low
+
+  [ Pete Woods ]
+  * Data sources are now keyed by their dbus path in
+    libusermetricsoutput This allows them to share the same IDs. (LP:
+    #1243104)
+  * Append the libusermetrics/themes path to each XDG entry
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 144
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 25 Nov 2013 03:56:50 +0000
+
 libusermetrics (1.1.1+13.10.20131003-0ubuntu1) saucy; urgency=low
 
   [ Pete Woods ]
