@@ -61,6 +61,10 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
+	if(qEnvironmentVariableIsSet("USERMETRICS_DATABASE_DEBUG")) {
+		QDjango::setDebugEnabled(true);
+	}
+
 	QDjango::setDatabase(db);
 
 	QDBusConnection connection(QDBusConnection::systemBus());
@@ -68,16 +72,21 @@ int main(int argc, char *argv[]) {
 	QSharedPointer<DateFactory> dateFactory(new DateFactoryImpl());
 	QSharedPointer<Authentication> authentication(new Authentication());
 
+	DBusUserMetrics userMetrics(connection, dateFactory, authentication);
 	if (!connection.registerService(DBusPaths::serviceName())) {
 		qWarning() << _("Unable to register user metrics service on DBus");
 		return 1;
 	}
-	DBusUserMetrics userMetrics(connection, dateFactory, authentication);
 
 	signal(SIGINT, &exitQt);
 	signal(SIGTERM, &exitQt);
 
-	bool result(application.exec());
+	int result(0);
+	try {
+		result = application.exec();
+	} catch (std::logic_error &e) {
+		qWarning() << "User metrics service error:" << e.what();
+	}
 	if (!connection.unregisterService(DBusPaths::serviceName())) {
 		qWarning() << _("Unable to unregister user metrics service on DBus");
 	}
