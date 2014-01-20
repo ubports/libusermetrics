@@ -611,7 +611,10 @@ TEST_F(TestUserMetricsService, CantCreateAnotherAppsDataSet) {
 
 	DBusUserMetrics userMetrics(systemConnection(), dateFactory,
 			authentication);
-	userMetrics.createDataSource("twitter", "foo", "", "", 0, QVariantMap());
+
+	ASSERT_NE(QDBusObjectPath(),
+			userMetrics.createDataSource("twitter", "foo", "", "", 0,
+					QVariantMap()));
 
 	ASSERT_NE(QDBusObjectPath(), userMetrics.createUserData("alice"));
 
@@ -624,7 +627,7 @@ TEST_F(TestUserMetricsService, CantCreateAnotherAppsDataSet) {
 					_)).WillByDefault(Return(QString("/bin/facebook")));
 
 	EXPECT_CALL(*authentication,
-			sendErrorReply(_, QDBusError::AccessDenied, QString("Attempt to create data set owned by another application")));
+			sendErrorReply(_, QDBusError::InternalError, QString("Could not locate user data")));
 
 	EXPECT_EQ(QDBusObjectPath(), alice->createDataSet("twitter"));
 }
