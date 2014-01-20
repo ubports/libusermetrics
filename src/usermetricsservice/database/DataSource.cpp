@@ -30,6 +30,10 @@ DataSource::DataSource(QObject *parent) :
 DataSource::~DataSource() {
 }
 
+bool DataSource::isValid() const {
+	return m_id != 0;
+}
+
 int DataSource::id() const {
 	return m_id;
 }

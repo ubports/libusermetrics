@@ -64,6 +64,8 @@ public:
 
 	static bool exists(const QString &name);
 
+	bool isValid() const;
+
 	int id() const;
 
 	void setId(int id);
