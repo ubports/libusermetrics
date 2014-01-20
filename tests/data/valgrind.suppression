@@ -42,6 +42,23 @@
    obj:/usr/lib/arm-linux-gnueabihf/libQt5XmlPatterns.so.*
 }
 
+{
+   Valgrind doesn't like dlopens
+   Memcheck:Value4
+   fun:memcpy
+   ...
+   fun:dlopen@@GLIBC_*
+   obj:/usr/lib/*/libQt5Core.so.*
+}
+
+{
+   Valgrind doesn't like dlopens
+   Memcheck:Cond
+   ...
+   fun:dlopen@@GLIBC_*
+   obj:/usr/lib/*/libQt5Core.so.*
+}
+
 ###################
 # Qt's use of glib
 ###################
