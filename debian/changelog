@@ -1,3 +1,13 @@
+libusermetrics (1.1.1+14.04.20140120-0ubuntu1) trusty; urgency=low
+
+  [ Pete Woods ]
+  * Avoid crash during AP tests at startup on Maguro.
+
+  [ Ubuntu daily release ]
+  * Automatic snapshot from revision 146
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 20 Jan 2014 18:09:31 +0000
+
 libusermetrics (1.1.1+14.04.20131125-0ubuntu1) trusty; urgency=low
 
   [ Pete Woods ]
