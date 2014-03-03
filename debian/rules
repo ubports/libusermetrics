@@ -13,7 +13,7 @@ endif
 	dh $@ --parallel --fail-missing
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DENABLE_MEMCHECK_OPTION=${ENABLE_MEMCHECK_OPTION}
+	dh_auto_configure -- -DBUILD_DOXYGEN=YES -DENABLE_MEMCHECK_OPTION=${ENABLE_MEMCHECK_OPTION}
 
 override_dh_makeshlibs:
 	dh_makeshlibs -V
