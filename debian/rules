@@ -3,11 +3,17 @@
 
 export DPKG_GENSYMBOLS_CHECK_LEVEL=4
 
+ifeq ($(DEB_HOST_ARCH),armhf)
+        ENABLE_MEMCHECK_OPTION = OFF
+else
+        ENABLE_MEMCHECK_OPTION = ON
+endif
+
 %:
 	dh $@ --parallel --fail-missing
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DBUILD_DOXYGEN=YES -DENABLE_MEMCHECK_OPTION=YES
+	dh_auto_configure -- -DBUILD_DOXYGEN=YES -DENABLE_MEMCHECK_OPTION=${ENABLE_MEMCHECK_OPTION}
 
 override_dh_makeshlibs:
 	dh_makeshlibs -V
