@@ -1,3 +1,13 @@
+libusermetrics (1.1.1+14.04.20140305-0ubuntu1) trusty; urgency=low
+
+  [ Pete Woods ]
+  * Disable Valgrind on ARM (LP: #1287135)
+
+  [ Ubuntu daily release ]
+  * New rebuild forced
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Wed, 05 Mar 2014 09:26:29 +0000
+
 libusermetrics (1.1.1+14.04.20140120-0ubuntu1) trusty; urgency=low
 
   [ Pete Woods ]
