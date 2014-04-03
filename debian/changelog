@@ -1,3 +1,9 @@
+libusermetrics (1.1.1+14.04.20140305-0ubuntu2) trusty; urgency=medium
+
+  * Disable valgrind on arm64, ppc64el.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Sat, 22 Mar 2014 01:56:48 +0000
+
 libusermetrics (1.1.1+14.04.20140305-0ubuntu1) trusty; urgency=low
 
   [ Pete Woods ]

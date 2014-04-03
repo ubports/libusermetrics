@@ -3,7 +3,9 @@
 
 export DPKG_GENSYMBOLS_CHECK_LEVEL=4
 
-ifeq ($(DEB_HOST_ARCH),armhf)
+include /usr/share/dpkg/default.mk
+
+ifneq (,$(filter $(DEB_HOST_ARCH),armhf ppc64el arm64))
         ENABLE_MEMCHECK_OPTION = OFF
 else
         ENABLE_MEMCHECK_OPTION = ON
