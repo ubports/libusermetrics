@@ -24,10 +24,10 @@ Build-Depends: cmake,
 Standards-Version: 3.9.4
 Section: libs
 Homepage: http://launchpad.net/libusermetrics
-# If you aren't a member of ~indicator-applet-developers but need to upload packaging changes,
-# just go ahead.  ~indicator-applet-developers will notice and sync up the code again.
-Vcs-Bzr: http://bazaar.launchpad.net/~indicator-applet-developers/libusermetrics/trunk
-Vcs-Browser: https://code.launchpad.net/~indicator-applet-developers/libusermetrics/trunk
+# If you aren't a member of ~unity-team but need to upload packaging changes,
+# just go ahead.  ~unity-team will notice and sync up the code again.
+Vcs-Bzr: http://bazaar.launchpad.net/~unity-team/libusermetrics/trunk
+Vcs-Browser: https://code.launchpad.net/~unity-team/libusermetrics/trunk
 
 Package: usermetricsservice
 Architecture: any

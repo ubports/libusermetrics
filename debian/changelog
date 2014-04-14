@@ -1,3 +1,9 @@
+libusermetrics (1.1.1+14.04.20140305-0ubuntu3) trusty; urgency=medium
+
+  * debian/control: fixing wrong Vcs entries
+
+ -- Ricardo Salveti de Araujo <ricardo.salveti@canonical.com>  Mon, 14 Apr 2014 11:50:38 -0300
+
 libusermetrics (1.1.1+14.04.20140305-0ubuntu2) trusty; urgency=medium
 
   * Disable valgrind on arm64, ppc64el.
