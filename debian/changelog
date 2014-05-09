@@ -1,4 +1,4 @@
-libusermetrics (1.1.1+14.04.20140305-0ubuntu4) UNRELEASED; urgency=medium
+libusermetrics (1.1.1+14.04.20140305-0ubuntu4) utopic; urgency=medium
 
   * Disable valgrind on powerpc
 
