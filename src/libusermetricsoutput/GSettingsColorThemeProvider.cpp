@@ -97,7 +97,7 @@ void GSettingsColorThemeProvider::loadXmlColors(const QString &theme) {
 
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		qWarning()
-				<< QString(_("Cannot open XML file '%1' for reading")).arg(
+				<< QString(_(GETTEXT_PACKAGE, "Cannot open XML file '%1' for reading")).arg(
 						file.fileName());
 		loadBlankColors();
 		return;

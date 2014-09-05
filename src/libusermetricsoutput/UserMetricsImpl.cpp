@@ -195,7 +195,7 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		updateMonth(*m_secondMonth, 0, secondMonthDate.daysInMonth(), dataIndex,
 				end);
 
-		setLabel(_("No data sources available"));
+		setLabel(_(GETTEXT_PACKAGE, "No data sources available"));
 	} else {
 		updateCurrentDataSet(0);
 		connect(m_dataSet.data(), SIGNAL(dataChanged(const QVariantList *)),
@@ -252,7 +252,7 @@ void UserMetricsImpl::updateCurrentDataSet(const QVariantList *newData) {
 
 	DataSourcePtr dataSource(m_userMetricsStore->dataSource(dataSourcePath));
 	if (dataSource.isNull()) {
-		qWarning() << _("Data source not found") << " [" << dataSourcePath << "]";
+		qWarning() << _(GETTEXT_PACKAGE, "Data source not found") << " [" << dataSourcePath << "]";
 	} else {
 		ColorThemePtrPair colorTheme(
 				m_colorThemeProvider->getColorTheme(dataSourcePath));
@@ -263,7 +263,7 @@ void UserMetricsImpl::updateCurrentDataSet(const QVariantList *newData) {
 				|| m_dataSet->head().isNull()) {
 			const QString &emptyDataString = dataSource->emptyDataString();
 			if (emptyDataString.isEmpty()) {
-				QString empty(_("No data for today"));
+				QString empty(_(GETTEXT_PACKAGE, "No data for today"));
 				empty.append(" (");
 				empty.append(dataSourcePath);
 				empty.append(")");
