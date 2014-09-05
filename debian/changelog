@@ -1,3 +1,14 @@
+libusermetrics (1.1.1+14.10.20140905.3-0ubuntu1) utopic; urgency=low
+
+  [ Pete Woods ]
+  * Move over to the standard translation macros. New build dependency
+    on cmake-extras. (LP: #1357007)
+
+  [ Ubuntu daily release ]
+  * New rebuild forced
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Fri, 05 Sep 2014 13:36:43 +0000
+
 libusermetrics (1.1.1+14.04.20140305-0ubuntu4) utopic; urgency=medium
 
   * Disable valgrind on powerpc
