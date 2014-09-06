@@ -7,29 +7,62 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-10-22 09:33+0100\n"
+"POT-Creation-Date: 2014-09-05 13:33+0100\n"
 "PO-Revision-Date: 2014-08-06 08:04+0000\n"
 "Last-Translator: Richard Somlói <ricsipontaz@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-07 06:27+0000\n"
-"X-Generator: Launchpad (build 17147)\n"
+"X-Launchpad-Export-Date: 2014-09-06 07:31+0000\n"
+"X-Generator: Launchpad (build 17196)\n"
 
 #: src/usermetricsservice/main.cpp:59
 msgid "Could not open database"
 msgstr "Nem sikerült megnyitni az adatbázist"
 
-#: src/usermetricsservice/main.cpp:72
+#: src/usermetricsservice/main.cpp:77
 msgid "Unable to register user metrics service on DBus"
 msgstr ""
 "Nem sikerült a felhasználói statisztikák szolgáltatás regisztrálása a DBus-on"
 
-#: src/usermetricsservice/main.cpp:82
+#: src/usermetricsservice/main.cpp:91
 msgid "Unable to unregister user metrics service on DBus"
 msgstr ""
 "Nem sikerült a felhasználói statisztikák szolgáltatás eltávolítása a DBus-on"
+
+#: src/usermetricsservice/DBusUserData.cpp:51
+msgid "Could not register user data object with DBus"
+msgstr "Felhasználói adatobjektum regisztrálása DBus-on nem sikerült"
+
+#: src/usermetricsservice/DBusUserData.cpp:81
+msgid "Unknown data source"
+msgstr "Ismeretlen adathalmaz"
+
+#: src/usermetricsservice/DBusUserData.cpp:90
+msgid "Attempt to create data set owned by another user"
+msgstr "Kísérlet másik felhasználó adathalmazának létrehozására"
+
+#: src/usermetricsservice/DBusUserData.cpp:100
+msgid "Could not locate user data"
+msgstr ""
+
+#: src/usermetricsservice/DBusUserData.cpp:106
+msgid "Attempt to create data set owned by another application"
+msgstr "Kísérlet másik alkalmazás adathalmazának létrehozására"
+
+#: src/usermetricsservice/DBusUserData.cpp:117
+msgid "Data set query failed"
+msgstr "Adathalmaz lekérés sikertelen"
+
+#: src/usermetricsservice/DBusUserData.cpp:130
+#: src/usermetricsservice/DBusDataSet.cpp:127
+msgid "Could not save data set"
+msgstr "Adathalmaz mentése nem sikerült"
+
+#: src/usermetricsservice/DBusUserData.cpp:140
+msgid "New data set could not be found"
+msgstr "Nem található új adathalmaz"
 
 #: src/usermetricsservice/DBusDataSource.cpp:68
 #: src/usermetricsservice/DBusDataSource.cpp:86
@@ -43,6 +76,22 @@ msgstr ""
 #: src/usermetricsservice/DBusUserMetrics.cpp:187
 msgid "Could not save data source"
 msgstr "Nem sikerült az adatforrás mentése"
+
+#: src/usermetricsservice/DBusDataSet.cpp:143
+msgid "Attempt to update data owned by another user"
+msgstr "Kísérlet másik felhasználó adatinak frissítésére"
+
+#: src/usermetricsservice/DBusDataSet.cpp:151
+msgid "Attempt to update data owned by another application"
+msgstr "Kísérlet másik alkalmazás adataink frissítésére"
+
+#: src/usermetricsservice/DBusDataSet.cpp:170
+msgid "Attempt to increment data owned by another user"
+msgstr "Kísérlet másik felhasználó adatainak inkrementálisára"
+
+#: src/usermetricsservice/DBusDataSet.cpp:178
+msgid "Attempt to increment data owned by another application"
+msgstr "Kísérlet másik alkalmazás adatainak inkrementálisára"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:54
 msgid "Unable to register user metrics object on DBus"
@@ -66,50 +115,18 @@ msgstr "Felhasználói adatlekérési hiba"
 msgid "Could not save user data"
 msgstr "Felhasználói adat mentése nem sikerült"
 
-#: src/usermetricsservice/DBusDataSet.cpp:127
-#: src/usermetricsservice/DBusUserData.cpp:125
-msgid "Could not save data set"
-msgstr "Adathalmaz mentése nem sikerült"
+#: src/libusermetricsinput/main.cpp:35
+#: src/libusermetricsinput/main-increment.cpp:35
+msgid "Usage: "
+msgstr "Használat: "
 
-#: src/usermetricsservice/DBusDataSet.cpp:143
-msgid "Attempt to update data owned by another user"
-msgstr "Kísérlet másik felhasználó adatinak frissítésére"
+#: src/libusermetricsinput/main.cpp:37
+msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
+msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 
-#: src/usermetricsservice/DBusDataSet.cpp:151
-msgid "Attempt to update data owned by another application"
-msgstr "Kísérlet másik alkalmazás adataink frissítésére"
-
-#: src/usermetricsservice/DBusDataSet.cpp:170
-msgid "Attempt to increment data owned by another user"
-msgstr "Kísérlet másik felhasználó adatainak inkrementálisára"
-
-#: src/usermetricsservice/DBusDataSet.cpp:178
-msgid "Attempt to increment data owned by another application"
-msgstr "Kísérlet másik alkalmazás adatainak inkrementálisára"
-
-#: src/usermetricsservice/DBusUserData.cpp:51
-msgid "Could not register user data object with DBus"
-msgstr "Felhasználói adatobjektum regisztrálása DBus-on nem sikerült"
-
-#: src/usermetricsservice/DBusUserData.cpp:81
-msgid "Unknown data source"
-msgstr "Ismeretlen adathalmaz"
-
-#: src/usermetricsservice/DBusUserData.cpp:90
-msgid "Attempt to create data set owned by another user"
-msgstr "Kísérlet másik felhasználó adathalmazának létrehozására"
-
-#: src/usermetricsservice/DBusUserData.cpp:101
-msgid "Attempt to create data set owned by another application"
-msgstr "Kísérlet másik alkalmazás adathalmazának létrehozására"
-
-#: src/usermetricsservice/DBusUserData.cpp:112
-msgid "Data set query failed"
-msgstr "Adathalmaz lekérés sikertelen"
-
-#: src/usermetricsservice/DBusUserData.cpp:135
-msgid "New data set could not be found"
-msgstr "Nem található új adathalmaz"
+#: src/libusermetricsinput/main-increment.cpp:37
+msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
+msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 
 #: src/modules/UserMetrics/Metric.cpp:30
 msgid "Failed to connect to metrics service:"
@@ -126,33 +143,3 @@ msgstr "Hiba a felhasználói statisztikák inkrementálása közben:"
 #: src/modules/UserMetrics/Metric.cpp:166
 msgid "Failed to update metric:"
 msgstr "Hiba a felhasználói statisztikák frissítése közben:"
-
-#: src/libusermetricsinput/main-increment.cpp:35
-#: src/libusermetricsinput/main.cpp:35
-msgid "Usage: "
-msgstr "Használat: "
-
-#: src/libusermetricsinput/main-increment.cpp:37
-msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
-msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
-
-#: src/libusermetricsinput/main.cpp:37
-msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
-msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
-
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:198
-msgid "No data sources available"
-msgstr "Az adatforrás nem érhető el"
-
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:255
-msgid "Data source not found"
-msgstr "Az adatforrás nem található"
-
-#: src/libusermetricsoutput/UserMetricsImpl.cpp:266
-msgid "No data for today"
-msgstr "Nincs adat a mai napról"
-
-#: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:99
-#, qt-format
-msgid "Cannot open XML file '%1' for reading"
-msgstr "Nem sikerült megnyitni a következő XML fájlt olvasásra: „%1”"
