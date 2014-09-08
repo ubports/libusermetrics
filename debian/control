@@ -29,6 +29,7 @@ Homepage: http://launchpad.net/libusermetrics
 # just go ahead.  ~unity-team will notice and sync up the code again.
 Vcs-Bzr: http://bazaar.launchpad.net/~unity-team/libusermetrics/trunk
 Vcs-Browser: https://code.launchpad.net/~unity-team/libusermetrics/trunk
+X-Ubuntu-Use-Langpack: yes
 
 Package: usermetricsservice
 Architecture: any
