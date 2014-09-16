@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-05 13:33+0100\n"
+"POT-Creation-Date: 2014-09-16 09:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -139,4 +139,21 @@ msgstr ""
 
 #: src/modules/UserMetrics/Metric.cpp:166
 msgid "Failed to update metric:"
+msgstr ""
+
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:198
+msgid "No data sources available"
+msgstr ""
+
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:255
+msgid "Data source not found"
+msgstr ""
+
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:266
+msgid "No data for today"
+msgstr ""
+
+#: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:100
+#, qt-format
+msgid "Cannot open XML file '%1' for reading"
 msgstr ""
