@@ -29,14 +29,11 @@ QString gettextExternal(const QString &textDomain, const QString &messageId,
 		gettext.setProcessEnvironment(env);
 	}
 
+	gettext.setProcessChannelMode(QProcess::ForwardedErrorChannel);
 	gettext.start("gettext", QStringList() << textDomain << messageId);
-
-	gettext.waitForStarted();
-	gettext.waitForReadyRead();
-
-	QByteArray ba(gettext.readAll());
-
-	gettext.waitForFinished();
+	gettext.waitForReadyRead(200);
+	QByteArray ba(gettext.readAllStandardOutput());
+	gettext.kill();
 
 	return QString::fromUtf8(ba);
 }
