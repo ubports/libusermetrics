@@ -23,31 +23,21 @@
 #include <QtCore/QString>
 
 inline char * _(const char *__msgid) {
-	return gettext(__msgid);
+	return dgettext(GETTEXT_PACKAGE, __msgid);
 }
 
-inline char * _(const char *__domainname, const char *__msgid) {
-	return dgettext(__domainname, __msgid);
+inline char * _(const char *__msgid, int __category) {
+	return dcgettext(GETTEXT_PACKAGE, __msgid, __category);
 }
 
-inline char * _(const char *__domainname, const char *__msgid, int __category) {
-	return dcgettext(__domainname, __msgid, __category);
-}
-
-inline char * _(const char *__msgid1, const char *__msgid2,
-		unsigned long int __n) {
-	return ngettext(__msgid1, __msgid2, __n);
-
-}
-
-inline char * _(const char *__domainname, const char *__msgid1,
+inline char * _(const char *__msgid1,
 		const char *__msgid2, unsigned long int __n) {
-	return dngettext(__domainname, __msgid1, __msgid2, __n);
+	return dngettext(GETTEXT_PACKAGE, __msgid1, __msgid2, __n);
 }
 
-inline char * _(const char *__domainname, const char *__msgid1,
+inline char * _(const char *__msgid1,
 		const char *__msgid2, unsigned long int __n, int __category) {
-	return dcngettext(__domainname, __msgid1, __msgid2, __n, __category);
+	return dcngettext(GETTEXT_PACKAGE, __msgid1, __msgid2, __n, __category);
 }
 
 QString gettextExternal(const QString &textDomain, const QString &messageId,
