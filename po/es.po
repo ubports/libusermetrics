@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-16 09:15+0100\n"
-"PO-Revision-Date: 2014-09-09 04:56+0000\n"
-"Last-Translator: Adolfo Jayme <fitoschido@gmail.com>\n"
+"PO-Revision-Date: 2014-09-22 19:44+0000\n"
+"Last-Translator: Víctor R. Ruiz <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-09-17 07:20+0000\n"
+"X-Launchpad-Export-Date: 2014-09-23 07:20+0000\n"
 "X-Generator: Launchpad (build 17196)\n"
 "Language: es\n"
 
@@ -144,17 +144,17 @@ msgstr "Falló la actualización de la métrica:"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:198
 msgid "No data sources available"
-msgstr ""
+msgstr "Ninguna fuente de datos disponible"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:255
 msgid "Data source not found"
-msgstr ""
+msgstr "Fuente de datos no encontrada"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:266
 msgid "No data for today"
-msgstr ""
+msgstr "Sin datos de hoy"
 
 #: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:100
 #, qt-format
 msgid "Cannot open XML file '%1' for reading"
-msgstr ""
+msgstr "No se pudo abrir en modo lectura el archivo XML '%1'"
