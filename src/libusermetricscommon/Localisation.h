@@ -58,13 +58,12 @@ Q_SIGNALS:
 };
 
 
-class Q_DECL_EXPORT ExternalGettext: public QObject {
+class ExternalGettext: public QObject {
 Q_OBJECT
 
 public:
 	typedef QSharedPointer<ExternalGettext> Ptr;
 
-	Q_DECL_EXPORT
 	static Ptr singletonInstance();
 
 	ExternalGettext();
