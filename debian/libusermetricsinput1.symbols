@@ -55,3 +55,5 @@ libusermetricsinput.so.1 libusermetricsinput1 #MINVER#
  usermetricsinput_metricupdate_add_data@Base 1.0.1
  usermetricsinput_metricupdate_add_null@Base 1.0.1
  usermetricsinput_metricupdate_delete@Base 1.0.1
+ (optional=gcov)"__gcov_rewrite@Base" 0replaceme
+ (optional=gcov)"__gcov_var@Base" 0replaceme
