@@ -20,7 +20,9 @@
 #define USERMETRICSCOMMON_LOCALISATION_H_
 
 #include <libintl.h>
+#include <QtCore/QSharedPointer>
 #include <QtCore/QString>
+#include <QtCore/QThread>
 
 inline char * _(const char *__msgid) {
 	return dgettext(GETTEXT_PACKAGE, __msgid);
@@ -40,7 +42,50 @@ inline char * _(const char *__msgid1,
 	return dcngettext(GETTEXT_PACKAGE, __msgid1, __msgid2, __n, __category);
 }
 
-QString gettextExternal(const QString &textDomain, const QString &messageId,
-		const QString &localeDir = "");
+class GettextRequest: public QObject {
+Q_OBJECT
+
+public:
+	typedef QSharedPointer<GettextRequest> Ptr;
+
+	QString m_textDomain;
+	QString m_messageId;
+	QString m_localeDir;
+	QString m_requestId;
+
+Q_SIGNALS:
+	void result(const QString &result, const QString &requestId);
+};
+
+
+class Q_DECL_EXPORT ExternalGettext: public QObject {
+Q_OBJECT
+
+public:
+	typedef QSharedPointer<ExternalGettext> Ptr;
+
+	Q_DECL_EXPORT
+	static Ptr singletonInstance();
+
+	ExternalGettext();
+
+	~ExternalGettext();
+
+public Q_SLOTS:
+	void tr(const QString &textDomain, const QString &messageId,
+			const QString &localeDir, const QObject *who,
+			const QString &requestId);
+
+Q_SIGNALS:
+	void newRequest(GettextRequest::Ptr request);
+
+protected:
+	class Priv;
+
+	QThread m_thread;
+	QSharedPointer<Priv> p;
+};
+
+Q_DECLARE_METATYPE(GettextRequest::Ptr)
 
 #endif // USERMETRICSCOMMON_LOCALISATION_H_

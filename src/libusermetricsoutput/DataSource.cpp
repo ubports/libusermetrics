@@ -17,15 +17,13 @@
  */
 
 #include <libusermetricsoutput/DataSource.h>
-#include <libusermetricscommon/Localisation.h>
 
 using namespace UserMetricsOutput;
 
 DataSource::DataSource(const QString &localeDir, QObject *parent) :
 		QObject(parent), m_formatString(""), m_formatStringTr(""), m_emptyDataString(
 				""), m_emptyDataStringTr(""), m_textDomain(""), m_localeDir(
-				localeDir), m_type(USER) {
-
+				localeDir), m_type(USER), m_externalGettext(ExternalGettext::singletonInstance()) {
 }
 
 DataSource::~DataSource() {
@@ -35,13 +33,24 @@ const QString & DataSource::formatString() const {
 	return m_formatStringTr;
 }
 
-void DataSource::updateFormatStringTranslation() {
-	QString newFormatStringTr(
-			gettextExternal(m_textDomain, m_formatString, m_localeDir));
-	if (newFormatStringTr != m_formatStringTr) {
-		m_formatStringTr = newFormatStringTr;
-		formatStringChanged(m_formatStringTr);
+void DataSource::translationResult(const QString &result, const QString &requestId)
+{
+	if (requestId == "format-string") {
+		if (result != m_formatStringTr) {
+			m_formatStringTr = result;
+			formatStringChanged (m_formatStringTr);
+		}
+	} else if (requestId == "empty-data-string") {
+		if (result != m_emptyDataStringTr) {
+			m_emptyDataStringTr = result;
+			emptyDataStringChanged(m_emptyDataStringTr);
+		}
 	}
+}
+
+void DataSource::updateFormatStringTranslation() {
+	m_externalGettext->tr(m_textDomain, m_formatString,
+			m_localeDir, this, "format-string");
 }
 
 void DataSource::setFormatString(const QString &formatString) {
@@ -52,12 +61,8 @@ void DataSource::setFormatString(const QString &formatString) {
 }
 
 void DataSource::updateEmptyDataStringTranslation() {
-	QString newEmptyDataStringTr(
-			gettextExternal(m_textDomain, m_emptyDataString, m_localeDir));
-	if (newEmptyDataStringTr != m_emptyDataStringTr) {
-		m_emptyDataStringTr = newEmptyDataStringTr;
-		emptyDataStringChanged(m_emptyDataStringTr);
-	}
+	m_externalGettext->tr(m_textDomain, m_emptyDataString,
+				m_localeDir, this, "empty-data-string");
 }
 
 const QString & DataSource::emptyDataString() const {

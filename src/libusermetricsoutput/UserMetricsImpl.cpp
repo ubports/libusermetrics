@@ -214,6 +214,10 @@ void UserMetricsImpl::finishLoadingDataSource() {
 	// we emit no signal if the data has stayed empty
 }
 
+void UserMetricsImpl::dataSourceStringsChanged() {
+	updateCurrentDataSet(0);
+}
+
 void UserMetricsImpl::updateCurrentDataSet(const QVariantList *newData) {
 	Q_UNUSED(newData);
 
@@ -251,6 +255,16 @@ void UserMetricsImpl::updateCurrentDataSet(const QVariantList *newData) {
 			secondMonthDate.daysInMonth(), dataIndex, end);
 
 	DataSourcePtr dataSource(m_userMetricsStore->dataSource(dataSourcePath));
+	if (m_dataSourceFormatStringConnection) {
+		disconnect(m_dataSourceFormatStringConnection);
+	}
+	if (m_dataSourceEmptyDataStringConnection) {
+		disconnect(m_dataSourceEmptyDataStringConnection);
+	}
+	m_dataSourceFormatStringConnection = connect(dataSource.data(), SIGNAL(formatStringChanged(const QString &)),
+			this, SLOT(dataSourceStringsChanged()));
+	m_dataSourceEmptyDataStringConnection = connect(dataSource.data(), SIGNAL(emptyDataStringChanged(const QString &)),
+			this, SLOT(dataSourceStringsChanged()));
 	if (dataSource.isNull()) {
 		qWarning() << _("Data source not found") << " [" << dataSourcePath << "]";
 	} else {
@@ -272,9 +286,12 @@ void UserMetricsImpl::updateCurrentDataSet(const QVariantList *newData) {
 				setLabel(emptyDataString);
 			}
 		} else {
-			setLabel(
-					dataSource->formatString().arg(
-							m_dataSet->head().toString()));
+			QString label;
+			if (!dataSource->formatString().isEmpty()) {
+				label = dataSource->formatString().arg(
+						m_dataSet->head().toString());
+			}
+			setLabel(label);
 		}
 	}
 }

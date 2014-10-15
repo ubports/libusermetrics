@@ -17,23 +17,86 @@
  */
 
 #include <libusermetricscommon/Localisation.h>
+#include <QtCore/QDebug>
 #include <QtCore/QProcess>
 
-QString gettextExternal(const QString &textDomain, const QString &messageId,
-		const QString &localeDir) {
-	QProcess gettext;
-
-	if (!localeDir.isEmpty()) {
-		QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
-		env.insert("TEXTDOMAINDIR", localeDir);
-		gettext.setProcessEnvironment(env);
-	}
-
-	gettext.setProcessChannelMode(QProcess::ForwardedErrorChannel);
-	gettext.start("gettext", QStringList() << textDomain << messageId);
-	gettext.waitForReadyRead(200);
-	QByteArray ba(gettext.readAllStandardOutput());
-	gettext.kill();
-
-	return QString::fromUtf8(ba);
+namespace {
+static QWeakPointer<ExternalGettext> instance;
 }
+
+class ExternalGettext::Priv: public QObject {
+Q_OBJECT
+
+public Q_SLOTS:
+	void tr(GettextRequest::Ptr request) {
+		QProcess gettext;
+
+		if (!request->m_localeDir.isEmpty()) {
+			QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
+			env.insert("TEXTDOMAINDIR", request->m_localeDir);
+			gettext.setProcessEnvironment(env);
+		}
+
+		gettext.setProcessChannelMode(QProcess::ForwardedErrorChannel);
+		gettext.start("gettext",
+				QStringList() << request->m_textDomain << request->m_messageId);
+		gettext.waitForReadyRead(200);
+		QByteArray ba(gettext.readAllStandardOutput());
+		gettext.waitForFinished(200);
+
+		Q_EMIT request->result(QString::fromUtf8(ba), request->m_requestId);
+	}
+};
+
+ExternalGettext::Ptr ExternalGettext::singletonInstance() {
+	ExternalGettext::Ptr result(instance);
+
+	if (!result) {
+		qRegisterMetaType<GettextRequest::Ptr>("GettextRequest::Ptr");
+		result.reset(new ExternalGettext);
+		instance = result;
+	}
+	return result;
+}
+
+ExternalGettext::ExternalGettext() {
+	m_thread.start();
+
+	p.reset(new Priv);
+	p->moveToThread(&m_thread);
+
+	connect(this, SIGNAL(newRequest(GettextRequest::Ptr)),
+			p.data(), SLOT(tr(GettextRequest::Ptr)),
+			Qt::QueuedConnection);
+}
+
+ExternalGettext::~ExternalGettext() {
+	if (m_thread.isRunning()) {
+		m_thread.quit();
+		m_thread.wait();
+	}
+}
+
+void ExternalGettext::tr(const QString &textDomain, const QString &messageId,
+		const QString &localeDir, const QObject *who,
+		const QString &requestId) {
+
+	GettextRequest::Ptr r(new GettextRequest);
+
+	r->m_textDomain = textDomain;
+	r->m_messageId = messageId;
+	r->m_localeDir = localeDir;
+	r->m_requestId = requestId;
+
+	r->moveToThread(&m_thread);
+
+	connect(r.data(),
+			SIGNAL(result(const QString &, const QString &)),
+			who,
+			SLOT(translationResult(const QString &, const QString &)),
+			Qt::QueuedConnection);
+
+	Q_EMIT newRequest(r);
+}
+
+#include "Localisation.moc"
