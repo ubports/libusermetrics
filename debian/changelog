@@ -1,10 +1,15 @@
-libusermetrics (1.1.1+14.10.20140917-0ubuntu2) UNRELEASED; urgency=low
+libusermetrics (1.1.1+14.10.20141020-0ubuntu1) utopic; urgency=low
 
+  [ Ubuntu daily release ]
   * debian/libusermetricsoutput1.symbols: auto-update to released
     version
   * debian/libusermetricsinput1.symbols: auto-update to released version
 
- -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 20 Oct 2014 15:19:28 +0000
+  [ Pete Woods ]
+  * Run gettext on a background thread, communicating asynchronously
+    (LP: #1374397)
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 20 Oct 2014 15:19:31 +0000
 
 libusermetrics (1.1.1+14.10.20140917-0ubuntu1) utopic; urgency=low
 
