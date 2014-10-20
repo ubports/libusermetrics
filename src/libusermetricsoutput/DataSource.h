@@ -24,6 +24,8 @@
 #include <QtCore/QSharedPointer>
 #include <QtCore/QVariantMap>
 
+#include <libusermetricscommon/Localisation.h>
+
 namespace UserMetricsOutput {
 
 class DataSource;
@@ -85,6 +87,9 @@ Q_SIGNALS:
 
 	void optionsChanged(const QVariantMap &options);
 
+protected Q_SLOTS:
+	void translationResult(const QString &result, const QString &requestId);
+
 protected:
 	void updateFormatStringTranslation();
 
@@ -105,6 +110,8 @@ protected:
 	MetricType m_type;
 
 	QVariantMap m_options;
+
+	ExternalGettext::Ptr m_externalGettext;
 };
 
 }

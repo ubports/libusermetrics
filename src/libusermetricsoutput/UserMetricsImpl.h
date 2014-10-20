@@ -74,6 +74,8 @@ protected Q_SLOTS:
 
 	virtual void dataSetAdded(const QString &dataSourceName);
 
+	virtual void dataSourceStringsChanged();
+
 protected:
 	virtual void prepareToLoadDataSource();
 
@@ -120,6 +122,10 @@ protected:
 	UserData::const_iterator m_dataSetIterator;
 
 	DataSetPtr m_dataSet;
+
+	QMetaObject::Connection m_dataSourceFormatStringConnection;
+
+	QMetaObject::Connection m_dataSourceEmptyDataStringConnection;
 };
 
 }

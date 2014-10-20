@@ -190,6 +190,8 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUserThenAppearsWhenAdded) 
 	}
 
 	DataSourcePtr dataSource(new DataSource());
+	QSignalSpy formatStringChangedSpy(dataSource.data(),
+			SIGNAL(formatStringChanged(const QString &)));
 	dataSource->setFormatString("test format string %1");
 	userDataStore->insert("data-source-id", dataSource);
 
@@ -215,6 +217,7 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUserThenAppearsWhenAdded) 
 	dataSet->setLastUpdated(QDate(2001, 01, 07));
 	dataSet->setData(data);
 
+	ASSERT_TRUE(formatStringChangedSpy.wait());
 	EXPECT_EQ(QString("test format string 1").toStdString(),
 			model->label().toStdString());
 
@@ -282,6 +285,8 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	data << 70.0 << 65.0;
 
 	DataSourcePtr dataSource(new DataSource());
+	QSignalSpy formatStringChangedSpy(dataSource.data(),
+				SIGNAL(formatStringChanged(const QString &)));
 	dataSource->setFormatString("test format string %1");
 	userDataStore->insert("data-source-id", dataSource);
 
@@ -307,6 +312,7 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
+	ASSERT_TRUE(formatStringChangedSpy.wait());
 	EXPECT_EQ(QString("test format string 100"), model->label());
 
 	// assertions about first month's data
@@ -342,6 +348,8 @@ TEST_F(UserMetricsImplTest, AddDataForToday) {
 
 TEST_F(UserMetricsImplTest, FollowsCurrentDataSource) {
 	DataSourcePtr dataSource(new DataSource());
+	QSignalSpy formatStringChangedSpy(dataSource.data(),
+					SIGNAL(formatStringChanged(const QString &)));
 	dataSource->setFormatString("test format string %1");
 	userDataStore->insert("data-source-id", dataSource);
 
@@ -367,6 +375,7 @@ TEST_F(UserMetricsImplTest, FollowsCurrentDataSource) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
+	ASSERT_TRUE(formatStringChangedSpy.wait());
 	EXPECT_EQ(QString("test format string 100"), model->label());
 
 	// assertions about first month's data
@@ -414,6 +423,8 @@ TEST_F(UserMetricsImplTest, AddTranslatedData) {
 	setLanguage("en_FAKELANG");
 
 	DataSourcePtr dataSource(new DataSource(TEST_LOCALEDIR));
+	QSignalSpy formatStringChangedSpy(dataSource.data(),
+					SIGNAL(formatStringChanged(const QString &)));
 	dataSource->setFormatString("%1 untranslated messages received");
 	dataSource->setTextDomain("foo");
 	userDataStore->insert("data-source-id", dataSource);
@@ -440,6 +451,8 @@ TEST_F(UserMetricsImplTest, AddTranslatedData) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
+	ASSERT_TRUE(formatStringChangedSpy.wait());
+	ASSERT_TRUE(formatStringChangedSpy.wait());
 	EXPECT_EQ(QString("100 translated messages received").toStdString(),
 			model->label().toStdString());
 
@@ -454,6 +467,8 @@ TEST_F(UserMetricsImplTest, AddTranslatedEmptyData) {
 	setLanguage("en_FAKELANG");
 
 	DataSourcePtr dataSource(new DataSource(TEST_LOCALEDIR));
+	QSignalSpy emptyDataStringChangedSpy(dataSource.data(),
+							SIGNAL(emptyDataStringChanged(const QString &)));
 	dataSource->setFormatString("%1 untranslated messages received");
 	dataSource->setEmptyDataString("no untranslated messages today");
 	dataSource->setTextDomain("foo");
@@ -481,6 +496,8 @@ TEST_F(UserMetricsImplTest, AddTranslatedEmptyData) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
+	ASSERT_TRUE(emptyDataStringChangedSpy.wait());
+	ASSERT_TRUE(emptyDataStringChangedSpy.wait());
 	EXPECT_EQ(QString("no translated messages today").toStdString(),
 			model->label().toStdString());
 
@@ -504,6 +521,8 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	data << 70.0 << 65.0;
 
 	DataSourcePtr dataSource(new DataSource());
+	QSignalSpy emptyDataStringChangedSpy(dataSource.data(),
+						SIGNAL(emptyDataStringChanged(const QString &)));
 	dataSource->setFormatString("test other format string %1");
 	dataSource->setEmptyDataString("no data source two");
 	userDataStore->insert("data-source-id2", dataSource);
@@ -530,7 +549,8 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedThisMonth) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
-	EXPECT_EQ(QString("no data source two"), model->label());
+	ASSERT_TRUE(emptyDataStringChangedSpy.wait());
+	EXPECT_EQ(QString("no data source two").toStdString(), model->label().toStdString());
 
 	// assertions about first month's data
 	{
@@ -573,6 +593,8 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	data << 95.0 << 100.0 << 90.0 << 0.0;
 
 	DataSourcePtr dataSource(new DataSource());
+	QSignalSpy emptyDataStringChangedSpy(dataSource.data(),
+								SIGNAL(emptyDataStringChanged(const QString &)));
 	dataSource->setFormatString("this format string won't be used %1");
 	dataSource->setEmptyDataString("there's no data");
 	userDataStore->insert("data-source-id", dataSource);
@@ -599,6 +621,7 @@ TEST_F(UserMetricsImplTest, AddOldDataUpdatedLastMonth) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
+	ASSERT_TRUE(emptyDataStringChangedSpy.wait());
 	EXPECT_EQ(QString("there's no data"), model->label());
 
 	// assertions about first month's data
@@ -638,6 +661,8 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	data << 100.0 << 0.0;
 
 	DataSourcePtr dataSource(new DataSource());
+	QSignalSpy formatStringChangedSpy(dataSource.data(),
+					SIGNAL(formatStringChanged(const QString &)));
 	dataSource->setFormatString("a format string with %1 in it");
 	userDataStore->insert("data-source-id", dataSource);
 
@@ -663,6 +688,7 @@ TEST_F(UserMetricsImplTest, AddDataUpdatedThisMonthButNotEnoughToFillTheMonth) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
+	ASSERT_TRUE(formatStringChangedSpy.wait());
 	EXPECT_EQ(QString("No data for today (data-source-id)"), model->label());
 
 	// assertions about first month's data
@@ -702,6 +728,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 	// first data set
 	{
 		DataSourcePtr dataSource(new DataSource());
+		QSignalSpy emptyDataStringChangedSpy(dataSource.data(),
+				SIGNAL(emptyDataStringChanged(const QString &)));
 		dataSource->setFormatString("data source one %1 value");
 		dataSource->setEmptyDataString("no data source one");
 		userDataStore->insert("data-source-one", dataSource);
@@ -713,11 +741,15 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 		DataSetPtr dataSet(*dataSetIterator);
 		dataSet->setLastUpdated(QDate(2001, 1, 4));
 		dataSet->setData(data);
+
+		ASSERT_TRUE(emptyDataStringChangedSpy.wait());
 	}
 
 	// second data set
 	{
 		DataSourcePtr dataSource(new DataSource());
+		QSignalSpy emptyDataStringChangedSpy(dataSource.data(),
+				SIGNAL(emptyDataStringChanged(const QString &)));
 		dataSource->setFormatString("data source 2 %1 value");
 		dataSource->setEmptyDataString("no data source two");
 		userDataStore->insert("data-source-two", dataSource);
@@ -730,6 +762,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForSingleUser) {
 		DataSetPtr dataSet(*dataSetIterator);
 		dataSet->setLastUpdated(QDate(2001, 1, 7));
 		dataSet->setData(data);
+
+		ASSERT_TRUE(emptyDataStringChangedSpy.wait());
 	}
 
 	QSharedPointer<ColorTheme> blankColorTheme(
@@ -820,6 +854,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		// first data set
 		{
 			DataSourcePtr dataSource(new DataSource());
+			QSignalSpy formatStringChangedSpy(dataSource.data(),
+					SIGNAL(formatStringChanged(const QString &)));
 			dataSource->setFormatString("data source one %1 value");
 			userDataStore->insert("data-source-one", dataSource);
 
@@ -831,11 +867,14 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
 
+			ASSERT_TRUE(formatStringChangedSpy.wait());
 		}
 
 		// second data set
 		{
 			DataSourcePtr dataSource(new DataSource());
+			QSignalSpy formatStringChangedSpy(dataSource.data(),
+					SIGNAL(formatStringChanged(const QString &)));
 			dataSource->setFormatString("data source two %1 value");
 			userDataStore->insert("data-source-two", dataSource);
 
@@ -847,6 +886,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
+
+			ASSERT_TRUE(formatStringChangedSpy.wait());
 		}
 	}
 
@@ -861,6 +902,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 		// fourth data set
 		{
 			DataSourcePtr dataSource(new DataSource());
+			QSignalSpy formatStringChangedSpy(dataSource.data(),
+					SIGNAL(formatStringChanged(const QString &)));
 			dataSource->setFormatString("data source three %1 value");
 			userDataStore->insert("data-source-three", dataSource);
 
@@ -872,12 +915,16 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
+
+			ASSERT_TRUE(formatStringChangedSpy.wait());
 		}
 
 		// fifth data set
 		{
 
 			DataSourcePtr dataSource(new DataSource());
+			QSignalSpy formatStringChangedSpy(dataSource.data(),
+					SIGNAL(formatStringChanged(const QString &)));
 			dataSource->setFormatString("data source four %1 value");
 			userDataStore->insert("data-source-xfour", dataSource);
 
@@ -889,6 +936,8 @@ TEST_F(UserMetricsImplTest, AddDataMultipleDataForMultipleUsers) {
 			DataSetPtr dataSet(*dataSetIterator);
 			dataSet->setLastUpdated(QDate(2001, 1, 7));
 			dataSet->setData(data);
+
+			ASSERT_TRUE(formatStringChangedSpy.wait());
 		}
 	}
 
@@ -1148,6 +1197,8 @@ TEST_F(UserMetricsImplTest, AddSourceWithMinimum) {
 	data << 100.0 << 95.0 << -100.0;
 
 	DataSourcePtr dataSource(new DataSource());
+	QSignalSpy formatStringChangedSpy(dataSource.data(),
+			SIGNAL(formatStringChanged(const QString &)));
 	dataSource->setFormatString("test format string %1");
 	QVariantMap options;
 	options["minimum"] = 0.0;
@@ -1176,6 +1227,7 @@ TEST_F(UserMetricsImplTest, AddSourceWithMinimum) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
+	ASSERT_TRUE(formatStringChangedSpy.wait());
 	EXPECT_EQ(QString("test format string 100"), model->label());
 
 	// assertions about first month's data
@@ -1199,6 +1251,8 @@ TEST_F(UserMetricsImplTest, AddSourceWithMaximum) {
 	data << 0.0 << 5.0 << 200.0;
 
 	DataSourcePtr dataSource(new DataSource());
+	QSignalSpy formatStringChangedSpy(dataSource.data(),
+				SIGNAL(formatStringChanged(const QString &)));
 	dataSource->setFormatString("test format string %1");
 	QVariantMap options;
 	options["maximum"] = 100.0;
@@ -1227,6 +1281,7 @@ TEST_F(UserMetricsImplTest, AddSourceWithMaximum) {
 	model->setUsername("username");
 	model->readyForDataChangeSlot();
 
+	ASSERT_TRUE(formatStringChangedSpy.wait());
 	EXPECT_EQ(QString("test format string 0"), model->label());
 
 	// assertions about first month's data

@@ -42,3 +42,5 @@ libusermetricsoutput.so.1 libusermetricsoutput1 #MINVER#
  (c++)"typeinfo name for UserMetricsOutput::UserMetrics@Base" 1.0.1
  (c++)"vtable for UserMetricsOutput::ColorTheme@Base" 1.0.1
  (c++)"vtable for UserMetricsOutput::UserMetrics@Base" 1.0.1
+ (optional=gcov)"__gcov_rewrite@Base" 0replaceme
+ (optional=gcov)"__gcov_var@Base" 0replaceme

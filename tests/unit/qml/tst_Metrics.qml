@@ -50,20 +50,20 @@ TestCase {
         metric.minimum = 0.0
         metric.maximum = 10.0
         info = dbusQuery.queryMetricInfo(1);
-        compare(info.minimum, 0.0, "Metric minimum was not set properly");
-        compare(info.maximum, 10.0, "Metric maximum was not set properly");
+        fuzzyCompare(info.minimum, 0.0, 0.01, "Metric minimum was not set properly");
+        fuzzyCompare(info.maximum, 10.0, 0.01, "Metric maximum was not set properly");
 
         // Test update and increment with integers and floating point data
         metric.update(0);
-        compare(dbusQuery.queryCurrentValue(1), 0, "Data not updated successfully")
+        fuzzyCompare(dbusQuery.queryCurrentValue(1), 0, 0.01, "Data not updated successfully")
         metric.increment();
-        compare(dbusQuery.queryCurrentValue(1), 1, "Data not incremented successfully")
+        compare(dbusQuery.queryCurrentValue(1), 1, 0.01, "Data not incremented successfully")
         metric.increment(7776);
-        compare(dbusQuery.queryCurrentValue(1), 7777, "Data not incremented successfully")
+        fuzzyCompare(dbusQuery.queryCurrentValue(1), 7777, 0.01, "Data not incremented successfully")
         metric.increment(0.999);
-        compare(dbusQuery.queryCurrentValue(1), 7777.999, "Data not incremented successfully")
+        fuzzyCompare(dbusQuery.queryCurrentValue(1), 7777.999, 0.01, "Data not incremented successfully")
         metric.update(5.5);
-        compare(dbusQuery.queryCurrentValue(1), 5.5, "Data not updated successfully")
+        fuzzyCompare(dbusQuery.queryCurrentValue(1), 5.5, 0.01, "Data not updated successfully")
 
         // Check that when changing the metric format or emptyFormat nothing else changes and
         // no new metrics are created
@@ -93,18 +93,18 @@ TestCase {
         // Check that now the "metric" object points to the newly created metric and changes to it don't
         // affect the old metric
         metric.update(0);
-        compare(dbusQuery.queryCurrentValue(1), 5.5, "Metric 1 data was changed while metric 2 was in use");
-        compare(dbusQuery.queryCurrentValue(2), 0, "Metric 2 data was not updated correctly");
+        fuzzyCompare(dbusQuery.queryCurrentValue(1), 5.5, 0.01, "Metric 1 data was changed while metric 2 was in use");
+        fuzzyCompare(dbusQuery.queryCurrentValue(2), 0, 0.01, "Metric 2 data was not updated correctly");
         metric.increment(1.5);
-        compare(dbusQuery.queryCurrentValue(1), 5.5, "Metric 1 data was changed while metric 2 was in use");
-        compare(dbusQuery.queryCurrentValue(2), 1.5, "Metric 2 data was not incremented correctly");
+        fuzzyCompare(dbusQuery.queryCurrentValue(1), 5.5, 0.01, "Metric 1 data was changed while metric 2 was in use");
+        fuzzyCompare(dbusQuery.queryCurrentValue(2), 1.5, 0.01, "Metric 2 data was not incremented correctly");
 
         // Make sure that making the "metric" object point back to the original metric by restoring the
         // original name works fine and has no side effects.
         metric.name = originalName;
         metric.update(0);
-        compare(dbusQuery.queryCurrentValue(1), 0, "Metric 1 data was not changed when pointing to it");
-        compare(dbusQuery.queryCurrentValue(2), 1.5, "Metric 2 data was changed when pointing to metric 1");
+        fuzzyCompare(dbusQuery.queryCurrentValue(1), 0, 0.01, "Metric 1 data was not changed when pointing to it");
+        fuzzyCompare(dbusQuery.queryCurrentValue(2), 1.5, 0.01, "Metric 2 data was changed when pointing to metric 1");
         info = dbusQuery.queryMetricInfo(3);
         compare(info, null, "A new metric shouldn't have been created when pointing back to metric 1");
     }
