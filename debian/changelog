@@ -1,3 +1,11 @@
+libusermetrics (1.1.1+14.10.20140917-0ubuntu2) UNRELEASED; urgency=low
+
+  * debian/libusermetricsoutput1.symbols: auto-update to released
+    version
+  * debian/libusermetricsinput1.symbols: auto-update to released version
+
+ -- Ubuntu daily release <ps-jenkins@lists.canonical.com>  Mon, 20 Oct 2014 15:19:28 +0000
+
 libusermetrics (1.1.1+14.10.20140917-0ubuntu1) utopic; urgency=low
 
   [ Pete Woods ]
