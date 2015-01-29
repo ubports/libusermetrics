@@ -37,6 +37,9 @@ public Q_SLOTS:
 			gettext.setProcessEnvironment(env);
 		}
 
+		qDebug() << "TEXTDOMAINDIR=" << request->m_localeDir <<  "gettext" <<
+				(QStringList() << request->m_textDomain << request->m_messageId);
+
 		gettext.setProcessChannelMode(QProcess::ForwardedErrorChannel);
 		gettext.start("gettext",
 				QStringList() << request->m_textDomain << request->m_messageId);

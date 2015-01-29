@@ -8,6 +8,7 @@ set(USERMETRICSSERVICE_SOURCES
 	DBusDataSource.cpp
 	DBusUserData.cpp
 	DBusUserMetrics.cpp
+	TranslationLocatorImpl.cpp
 )
 
 qt5_add_dbus_adaptor(
@@ -58,8 +59,11 @@ qt5_use_modules(
 target_link_libraries(
 	usermetricsservice
 	usermetricscommon
-	${QDJANGO_DB_LIBRARIES}
-	${APPARMOR_LIBRARIES}
+	${QDJANGO_DB_LDFLAGS}
+	${APPARMOR_LDFLAGS}
+	${GLIB2_LDFLAGS}
+	${GOBJECT2_LDFLAGS}
+	${CLICK_LDFLAGS}
 )
 
 ############################

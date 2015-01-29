@@ -38,5 +38,7 @@
 			<arg name="options" type="a{sv}" direction="out"/>
 		</signal>
 		
+		<property name="translationPath" type="s" access="read"/>
+		
 	</interface>
 </node>

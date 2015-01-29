@@ -39,10 +39,11 @@ using namespace UserMetricsService;
 
 DBusUserMetrics::DBusUserMetrics(const QDBusConnection &dbusConnection,
 		QSharedPointer<DateFactory> dateFactory,
-		QSharedPointer<Authentication> authentication, QObject *parent) :
+		QSharedPointer<Authentication> authentication,
+		QSharedPointer<TranslationLocator> translationLocator, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new UserMetricsAdaptor(this)), m_dateFactory(dateFactory), m_authentication(
-				authentication) {
+				authentication), m_translationLocator(translationLocator) {
 	// Database setup
 	QDjango::registerModel<DataSource>().createTable();
 	QDjango::registerModel<UserData>().createTable();
@@ -79,8 +80,8 @@ void DBusUserMetrics::syncDatabase() {
 			// if we don't have a local cache
 			if (!m_dataSources.contains(id)) {
 				DBusDataSourcePtr dbusDataSource(
-						new DBusDataSource(id, dataSource.name(),
-								m_dbusConnection));
+						new DBusDataSource(id, dataSource.name(), dataSource.secret(),
+								m_dbusConnection, m_translationLocator));
 				m_dataSources.insert(id, dbusDataSource);
 				m_adaptor->dataSourceAdded(
 						QDBusObjectPath(dbusDataSource->path()));

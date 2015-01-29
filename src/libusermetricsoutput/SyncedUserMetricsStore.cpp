@@ -28,11 +28,9 @@ using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
 
 SyncedUserMetricsStore::SyncedUserMetricsStore(
-		const QDBusConnection &dbusConnection, const QString &localeDir,
-		QObject *parent) :
+		const QDBusConnection &dbusConnection, QObject *parent) :
 		UserMetricsStore(parent), m_interface(DBusPaths::serviceName(),
-				DBusPaths::userMetrics(), dbusConnection), m_localeDir(
-				localeDir) {
+				DBusPaths::userMetrics(), dbusConnection) {
 	QTimer::singleShot(0, this, SLOT(sync()));
 }
 
@@ -134,7 +132,7 @@ void SyncedUserMetricsStore::addDataSource(const QDBusObjectPath &path) {
 					path.path(), m_interface.connection()));
 
 	insert(path.path(),
-			DataSourcePtr(new SyncedDataSource(dataSource, m_localeDir)));
+			DataSourcePtr(new SyncedDataSource(dataSource)));
 }
 
 void SyncedUserMetricsStore::removeDataSource(const QDBusObjectPath &path) {

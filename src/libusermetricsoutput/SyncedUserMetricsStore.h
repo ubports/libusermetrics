@@ -30,7 +30,7 @@ Q_OBJECT
 
 public:
 	explicit SyncedUserMetricsStore(const QDBusConnection &dbusConnection,
-			const QString &localeDir = LOCALEDIR, QObject *parent = 0);
+			QObject *parent = 0);
 
 	virtual ~SyncedUserMetricsStore();
 
@@ -53,8 +53,6 @@ protected:
 			QSharedPointer<com::canonical::usermetrics::UserData> systemData);
 
 	com::canonical::UserMetrics m_interface;
-
-	QString m_localeDir;
 }
 ;
 

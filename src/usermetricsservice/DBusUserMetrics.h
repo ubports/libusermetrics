@@ -38,6 +38,7 @@ namespace UserMetricsService {
 class DBusDataSource;
 class DBusUserData;
 class Authentication;
+class TranslationLocator;
 
 class DBusUserMetrics: public QObject, protected QDBusContext {
 Q_OBJECT
@@ -49,7 +50,8 @@ Q_PROPERTY(QList<QDBusObjectPath> userDatas READ userDatas)
 public:
 	DBusUserMetrics(const QDBusConnection &dbusConnection,
 			QSharedPointer<UserMetricsCommon::DateFactory> dateFactory,
-			QSharedPointer<Authentication> authentication, QObject *parent = 0);
+			QSharedPointer<Authentication> authentication,
+			QSharedPointer<TranslationLocator>, QObject *parent = 0);
 
 	virtual ~DBusUserMetrics();
 
@@ -79,6 +81,8 @@ protected:
 	QSharedPointer<UserMetricsCommon::DateFactory> m_dateFactory;
 
 	QSharedPointer<Authentication> m_authentication;
+
+	QSharedPointer<TranslationLocator> m_translationLocator;
 
 	QMap<int, QSharedPointer<DBusDataSource>> m_dataSources;
 

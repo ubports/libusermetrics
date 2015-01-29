@@ -21,6 +21,7 @@
 #include <usermetricsservice/database/DataSource.h>
 #include <usermetricsservice/DBusDataSource.h>
 #include <usermetricsservice/DataSourceAdaptor.h>
+#include <usermetricsservice/TranslationLocator.h>
 #include <libusermetricscommon/DBusPaths.h>
 #include <libusermetricscommon/Localisation.h>
 
@@ -31,10 +32,12 @@ using namespace UserMetricsCommon;
 using namespace UserMetricsService;
 
 DBusDataSource::DBusDataSource(int id, const QString &name,
-		QDBusConnection &dbusConnection, QObject *parent) :
+		const QString &packageId, QDBusConnection &dbusConnection,
+		QSharedPointer<TranslationLocator> translationLocator, QObject *parent) :
 		QObject(parent), m_dbusConnection(dbusConnection), m_adaptor(
 				new DataSourceAdaptor(this)), m_id(id), m_path(
-				DBusPaths::dataSource(m_id)), m_name(name) {
+				DBusPaths::dataSource(m_id)), m_name(name), m_packageId(
+				packageId), m_translationLocator(translationLocator) {
 
 	// DBus setup
 	m_dbusConnection.registerObject(m_path, this);
@@ -47,6 +50,10 @@ DBusDataSource::~DBusDataSource() {
 
 QString DBusDataSource::path() const {
 	return m_path;
+}
+
+QString DBusDataSource::translationPath() const {
+	return m_translationLocator->locate(m_packageId);
 }
 
 QString DBusDataSource::name() const {
