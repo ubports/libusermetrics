@@ -22,6 +22,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QDate>
 #include <QtCore/QScopedPointer>
+#include <QtCore/QSharedPointer>
 #include <QtDBus/QDBusContext>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusObjectPath>
