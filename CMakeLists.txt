@@ -40,6 +40,15 @@ include_directories(${Qt5Test_INCLUDE_DIRS})
 find_package(Qt5Qml REQUIRED)
 include_directories(${Qt5Qml_INCLUDE_DIRS})
 
+pkg_check_modules(GLIB2 REQUIRED glib-2.0)
+include_directories(${GLIB2_INCLUDE_DIRS})
+
+pkg_check_modules(GOBJECT2 REQUIRED gobject-2.0)
+include_directories(${GOBJECT2_INCLUDE_DIRS})
+
+pkg_check_modules(CLICK REQUIRED click-0.4 REQUIRED)
+include_directories(${CLICK_INCLUDE_DIRS})
+
 pkg_check_modules(QDJANGO_DB REQUIRED qdjango-db REQUIRED)
 include_directories(${QDJANGO_DB_INCLUDE_DIRS})
 

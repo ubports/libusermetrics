@@ -22,8 +22,8 @@ using namespace UserMetricsOutput;
 
 SyncedDataSource::SyncedDataSource(
 		QSharedPointer<com::canonical::usermetrics::DataSource> interface,
-		const QString &localeDir, QObject *parent) :
-		DataSource(localeDir, parent), m_interface(interface) {
+		QObject *parent) :
+		DataSource(interface->translationPath(), parent), m_interface(interface) {
 
 	connect(m_interface.data(), SIGNAL(formatStringChanged(const QString &)),
 			this, SLOT(setFormatString(const QString &)));

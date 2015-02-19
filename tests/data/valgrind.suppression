@@ -36,6 +36,21 @@
 }
 
 {
+   New leak in QNetworkConfiguratioManager
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znw*
+   obj:*
+   fun:_ZN35QNetworkConfigurationManagerPrivate20updateConfigurationsEv
+   fun:_ZN35QNetworkConfigurationManagerPrivate10initializeEv
+   fun:_Z35qNetworkConfigurationManagerPrivatev
+   fun:_ZN28QNetworkConfigurationManagerC1EP7QObject
+   fun:_ZN21QNetworkAccessManagerC1EP7QObject
+   obj:/usr/lib/*/libQt5XmlPatterns.so.*
+   ...
+}
+
+{
    See bug report <https://bugreports.qt-project.org/browse/QTBUG-33677>
    Memcheck:Leak
    fun:_Znwj

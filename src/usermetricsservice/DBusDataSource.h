@@ -21,6 +21,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QScopedPointer>
+#include <QtCore/QSharedPointer>
 #include <QtDBus/QDBusContext>
 #include <QtDBus/QDBusConnection>
 
@@ -30,6 +31,7 @@ namespace UserMetricsService {
 
 class DataSource;
 class DBusDataSource;
+class TranslationLocator;
 
 typedef QSharedPointer<DBusDataSource> DBusDataSourcePtr;
 
@@ -44,17 +46,22 @@ Q_PROPERTY(QString emptyDataString READ emptyDataString WRITE setEmptyDataString
 
 Q_PROPERTY(QString textDomain READ textDomain WRITE setTextDomain)
 
+Q_PROPERTY(QString translationPath READ translationPath)
+
 Q_PROPERTY(unsigned int metricType READ metricType WRITE setMetricType)
 
 Q_PROPERTY(QVariantMap options READ options)
 
 public:
-	DBusDataSource(int id, const QString &name, QDBusConnection &dbusConnection,
+	DBusDataSource(int id, const QString &name, const QString &packageId,
+			QDBusConnection &dbusConnection, QSharedPointer<TranslationLocator>,
 			QObject *parent = 0);
 
 	virtual ~DBusDataSource();
 
 	QString path() const;
+
+	QString translationPath() const;
 
 	QString name() const;
 
@@ -107,7 +114,13 @@ protected:
 
 	QString m_path;
 
+	QString m_translationPath;
+
 	QString m_name;
+
+	QString m_packageId;
+
+	QSharedPointer<TranslationLocator> m_translationLocator;
 };
 
 }

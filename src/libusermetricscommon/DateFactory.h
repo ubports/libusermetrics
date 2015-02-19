@@ -20,6 +20,7 @@
 #define USERMETRICSCOMMON_DATEFACTORY_H_
 
 #include <QtCore/QDate>
+#include <QtCore/QObject>
 
 namespace UserMetricsCommon {
 

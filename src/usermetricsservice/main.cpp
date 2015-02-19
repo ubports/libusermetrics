@@ -18,6 +18,7 @@
 
 #include <usermetricsservice/Authentication.h>
 #include <usermetricsservice/DBusUserMetrics.h>
+#include <usermetricsservice/TranslationLocatorImpl.h>
 #include <libusermetricscommon/DateFactoryImpl.h>
 #include <libusermetricscommon/DBusPaths.h>
 #include <libusermetricscommon/Localisation.h>
@@ -71,8 +72,9 @@ int main(int argc, char *argv[]) {
 
 	QSharedPointer<DateFactory> dateFactory(new DateFactoryImpl());
 	QSharedPointer<Authentication> authentication(new Authentication());
+	QSharedPointer<TranslationLocator> translationLocator(new TranslationLocatorImpl());
 
-	DBusUserMetrics userMetrics(connection, dateFactory, authentication);
+	DBusUserMetrics userMetrics(connection, dateFactory, authentication, translationLocator);
 	if (!connection.registerService(DBusPaths::serviceName())) {
 		qWarning() << _("Unable to register user metrics service on DBus");
 		return 1;

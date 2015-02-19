@@ -16,31 +16,19 @@
  * Author: Pete Woods <pete.woods@canonical.com>
  */
 
-#include <libusermetricsoutput/UserMetrics.h>
+#pragma once
 
-#include <testutils/DBusTest.h>
+#include <usermetricsservice/TranslationLocator.h>
 
-#include <gtest/gtest.h>
+namespace UserMetricsService {
 
-using namespace std;
-using namespace UserMetricsOutput;
-using namespace UserMetricsTestUtils;
+class TranslationLocatorImpl: public TranslationLocator {
+public:
+	TranslationLocatorImpl();
 
-namespace {
+	~TranslationLocatorImpl() = default;
 
-class TestUserMetrics: public DBusTest {
-protected:
-	TestUserMetrics() {
-	}
-
-	virtual ~TestUserMetrics() {
-	}
+	QString locate(const QString& id) override;
 };
 
-TEST_F(TestUserMetrics, MethodBarDoesAbc) {
-//	QScopedPointer<UserMetrics> model(UserMetrics::getInstance());
-//	model->setUsername("guest");
-//	EXPECT_EQ("guest", model->username());
 }
-
-}  // namespace
