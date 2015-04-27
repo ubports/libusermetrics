@@ -49,8 +49,7 @@ DBusDataSet::DBusDataSet(int id, const QString &dataSource,
 }
 
 DBusDataSet::~DBusDataSet() {
-	QDBusConnection connection(QDBusConnection::sessionBus());
-	connection.unregisterObject(m_path);
+	m_dbusConnection.unregisterObject(m_path);
 }
 
 void DBusDataSet::getData(DataSet &dataSet, QVariantList &data) {

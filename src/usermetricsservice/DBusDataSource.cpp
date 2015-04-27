@@ -44,8 +44,7 @@ DBusDataSource::DBusDataSource(int id, const QString &name,
 }
 
 DBusDataSource::~DBusDataSource() {
-	QDBusConnection connection(QDBusConnection::sessionBus());
-	connection.unregisterObject(m_path);
+	m_dbusConnection.unregisterObject(m_path);
 }
 
 QString DBusDataSource::path() const {
