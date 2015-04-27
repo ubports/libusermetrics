@@ -68,7 +68,8 @@ int main(int argc, char *argv[]) {
 
 	QDjango::setDatabase(db);
 
-	QDBusConnection connection(QDBusConnection::systemBus());
+	QDBusConnection connection(QDBusConnection::connectToBus(
+		QDBusConnection::SystemBus, "usermetrics-systembus"));
 
 	QSharedPointer<DateFactory> dateFactory(new DateFactoryImpl());
 	QSharedPointer<Authentication> authentication(new Authentication());
