@@ -33,7 +33,8 @@ UserMetrics::~UserMetrics() {
 }
 
 UserMetrics * UserMetrics::getInstance() {
-	QDBusConnection dbusConnection(QDBusConnection::systemBus());
+	QDBusConnection dbusConnection(QDBusConnection::connectToBus(
+		QDBusConnection::SystemBus, "libusermetricsoutput-systembus"));
 
 	return new UserMetricsImpl(
 			QSharedPointer<DateFactory>(new DateFactoryImpl()),

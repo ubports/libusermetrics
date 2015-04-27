@@ -32,7 +32,8 @@ MetricManager::~MetricManager() {
 }
 
 MetricManager * MetricManager::getInstance() {
-	QDBusConnection dbusConnection(QDBusConnection::systemBus());
+	QDBusConnection dbusConnection(QDBusConnection::connectToBus(
+		QDBusConnection::SystemBus, "libusermetricsinput-systembus"));
 
 	QDBusConnectionInterface* interface = dbusConnection.interface();
 	if (!interface->isServiceRegistered(DBusPaths::serviceName())) {
