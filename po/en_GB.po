@@ -13,8 +13,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-09-30 07:10+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2015-05-05 05:47+0000\n"
+"X-Generator: Launchpad (build 17474)\n"
 "Language: en_GB\n"
 
 #: src/usermetricsservice/main.cpp:59
@@ -43,7 +43,7 @@ msgstr "Attempt to create data set owned by another user"
 
 #: src/usermetricsservice/DBusUserData.cpp:100
 msgid "Could not locate user data"
-msgstr ""
+msgstr "Could not locate user data"
 
 #: src/usermetricsservice/DBusUserData.cpp:106
 msgid "Attempt to create data set owned by another application"
@@ -102,7 +102,7 @@ msgstr "Data source query failed"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:249
 msgid "Attempt to create user data owned by another user"
-msgstr ""
+msgstr "Attempt to create user data owned by another user"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:258
 msgid "User data query failed"
@@ -123,7 +123,7 @@ msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 
 #: src/libusermetricsinput/main-increment.cpp:37
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
-msgstr ""
+msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 
 #: src/modules/UserMetrics/Metric.cpp:30
 msgid "Failed to connect to metrics service:"
@@ -135,7 +135,7 @@ msgstr "Failed to register user metric:"
 
 #: src/modules/UserMetrics/Metric.cpp:154
 msgid "Failed to increment metric:"
-msgstr ""
+msgstr "Failed to increment metric:"
 
 #: src/modules/UserMetrics/Metric.cpp:166
 msgid "Failed to update metric:"
@@ -143,17 +143,17 @@ msgstr "Failed to update metric:"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:198
 msgid "No data sources available"
-msgstr ""
+msgstr "No data sources available"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:255
 msgid "Data source not found"
-msgstr ""
+msgstr "Data source not found"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:266
 msgid "No data for today"
-msgstr ""
+msgstr "No data for today"
 
 #: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:100
 #, qt-format
 msgid "Cannot open XML file '%1' for reading"
-msgstr ""
+msgstr "Cannot open XML file '%1' for reading"

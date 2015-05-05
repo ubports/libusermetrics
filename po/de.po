@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-09-30 07:10+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
+"X-Launchpad-Export-Date: 2015-05-05 05:47+0000\n"
+"X-Generator: Launchpad (build 17474)\n"
 
 #: src/usermetricsservice/main.cpp:59
 msgid "Could not open database"
@@ -23,15 +23,15 @@ msgstr "Konnte Datenbank nicht öffnen"
 
 #: src/usermetricsservice/main.cpp:77
 msgid "Unable to register user metrics service on DBus"
-msgstr ""
+msgstr "Dienst konnte nicht in DBus eingetragen werden"
 
 #: src/usermetricsservice/main.cpp:91
 msgid "Unable to unregister user metrics service on DBus"
-msgstr ""
+msgstr "Dienst konnte nicht aus DBus entfernt werden"
 
 #: src/usermetricsservice/DBusUserData.cpp:51
 msgid "Could not register user data object with DBus"
-msgstr ""
+msgstr "Benutzerdaten konnten nicht in DBus eingetragen werden"
 
 #: src/usermetricsservice/DBusUserData.cpp:81
 msgid "Unknown data source"
@@ -56,11 +56,11 @@ msgstr ""
 #: src/usermetricsservice/DBusUserData.cpp:130
 #: src/usermetricsservice/DBusDataSet.cpp:127
 msgid "Could not save data set"
-msgstr ""
+msgstr "Konnte Datensatz nicht speichern"
 
 #: src/usermetricsservice/DBusUserData.cpp:140
 msgid "New data set could not be found"
-msgstr ""
+msgstr "Neuer Datensatz konnte nicht gefunden werden"
 
 #: src/usermetricsservice/DBusDataSource.cpp:68
 #: src/usermetricsservice/DBusDataSource.cpp:86
@@ -73,7 +73,7 @@ msgstr ""
 #: src/usermetricsservice/DBusDataSource.cpp:234
 #: src/usermetricsservice/DBusUserMetrics.cpp:187
 msgid "Could not save data source"
-msgstr ""
+msgstr "Konnte Datenquelle nicht speichern"
 
 #: src/usermetricsservice/DBusDataSet.cpp:143
 msgid "Attempt to update data owned by another user"
