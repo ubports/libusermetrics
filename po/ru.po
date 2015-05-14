@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-16 09:15+0100\n"
-"PO-Revision-Date: 2015-05-12 05:47+0000\n"
-"Last-Translator: ☠Jay ZDLin☠ <Unknown>\n"
+"PO-Revision-Date: 2015-05-13 05:44+0000\n"
+"Last-Translator: Sergey Alyoshin <alyoshin.s@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-13 05:30+0000\n"
+"X-Launchpad-Export-Date: 2015-05-14 04:59+0000\n"
 "X-Generator: Launchpad (build 17493)\n"
 
 #: src/usermetricsservice/main.cpp:59
@@ -23,15 +23,16 @@ msgstr "Не удалось открыть базу данных"
 
 #: src/usermetricsservice/main.cpp:77
 msgid "Unable to register user metrics service on DBus"
-msgstr ""
+msgstr "Невозможно зарегистрировать службу пользовательской метрики в DBus"
 
 #: src/usermetricsservice/main.cpp:91
 msgid "Unable to unregister user metrics service on DBus"
 msgstr ""
+"Невозможно отменить регистрацию службу пользовательской метрики в DBus"
 
 #: src/usermetricsservice/DBusUserData.cpp:51
 msgid "Could not register user data object with DBus"
-msgstr ""
+msgstr "Не удалось зарегистрировать объект пользовательских данных в DBus"
 
 #: src/usermetricsservice/DBusUserData.cpp:81
 msgid "Unknown data source"
@@ -93,7 +94,7 @@ msgstr "Попытка расширить данные, принадлежащи
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:54
 msgid "Unable to register user metrics object on DBus"
-msgstr ""
+msgstr "Невозможно зарегистрировать объект пользовательской метрики в DBus"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:141
 #: src/usermetricsservice/DBusUserMetrics.cpp:153
@@ -128,19 +129,19 @@ msgstr ""
 
 #: src/modules/UserMetrics/Metric.cpp:30
 msgid "Failed to connect to metrics service:"
-msgstr ""
+msgstr "Ошибка при соединении со службой метрики:"
 
 #: src/modules/UserMetrics/Metric.cpp:141
 msgid "Failed to register user metric:"
-msgstr ""
+msgstr "Ошибка при регистрации пользовательской метрики:"
 
 #: src/modules/UserMetrics/Metric.cpp:154
 msgid "Failed to increment metric:"
-msgstr ""
+msgstr "Ошибка увеличения метрики:"
 
 #: src/modules/UserMetrics/Metric.cpp:166
 msgid "Failed to update metric:"
-msgstr ""
+msgstr "Ошибка при обновлении метрики:"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:198
 msgid "No data sources available"
