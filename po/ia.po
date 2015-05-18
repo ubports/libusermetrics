@@ -1,0 +1,160 @@
+# Interlingua translation for libusermetrics
+# Copyright (c) 2015 Rosetta Contributors and Canonical Ltd 2015
+# This file is distributed under the same license as the libusermetrics package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libusermetrics\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2014-09-16 09:15+0100\n"
+"PO-Revision-Date: 2015-05-17 11:08+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Interlingua <ia@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2015-05-18 05:25+0000\n"
+"X-Generator: Launchpad (build 17493)\n"
+
+#: src/usermetricsservice/main.cpp:59
+msgid "Could not open database"
+msgstr "Non poterea aperir le  base de datos"
+
+#: src/usermetricsservice/main.cpp:77
+msgid "Unable to register user metrics service on DBus"
+msgstr "Incapace a registrar le servicio metric del usator sur le DBus"
+
+#: src/usermetricsservice/main.cpp:91
+msgid "Unable to unregister user metrics service on DBus"
+msgstr "Incapace a de-registrar le servicio metric del usator ex le DBus"
+
+#: src/usermetricsservice/DBusUserData.cpp:51
+msgid "Could not register user data object with DBus"
+msgstr "Non poterea registrar le objecto del datos del usator con le DBus"
+
+#: src/usermetricsservice/DBusUserData.cpp:81
+msgid "Unknown data source"
+msgstr "Fonte del datos incognite"
+
+#: src/usermetricsservice/DBusUserData.cpp:90
+msgid "Attempt to create data set owned by another user"
+msgstr "Tentativa a crear un serie de datos proprie de un altere usator"
+
+#: src/usermetricsservice/DBusUserData.cpp:100
+msgid "Could not locate user data"
+msgstr "Impossibile ubicar le datos del usator"
+
+#: src/usermetricsservice/DBusUserData.cpp:106
+msgid "Attempt to create data set owned by another application"
+msgstr "Tentativa a crear un serie de datos proprie de un altere application"
+
+#: src/usermetricsservice/DBusUserData.cpp:117
+msgid "Data set query failed"
+msgstr "Requesta del serie de datos"
+
+#: src/usermetricsservice/DBusUserData.cpp:130
+#: src/usermetricsservice/DBusDataSet.cpp:127
+msgid "Could not save data set"
+msgstr "Impossibile salvar le serie de datos"
+
+#: src/usermetricsservice/DBusUserData.cpp:140
+msgid "New data set could not be found"
+msgstr "Le nove serie de datos non pote esser trovate"
+
+#: src/usermetricsservice/DBusDataSource.cpp:68
+#: src/usermetricsservice/DBusDataSource.cpp:86
+#: src/usermetricsservice/DBusDataSource.cpp:104
+#: src/usermetricsservice/DBusDataSource.cpp:116
+#: src/usermetricsservice/DBusDataSource.cpp:134
+#: src/usermetricsservice/DBusDataSource.cpp:172
+#: src/usermetricsservice/DBusDataSource.cpp:190
+#: src/usermetricsservice/DBusDataSource.cpp:216
+#: src/usermetricsservice/DBusDataSource.cpp:234
+#: src/usermetricsservice/DBusUserMetrics.cpp:187
+msgid "Could not save data source"
+msgstr "Impossibile salvar le fonte del datos"
+
+#: src/usermetricsservice/DBusDataSet.cpp:143
+msgid "Attempt to update data owned by another user"
+msgstr "Tentativa a ajornar un serie de datos proprie de un altere usator"
+
+#: src/usermetricsservice/DBusDataSet.cpp:151
+msgid "Attempt to update data owned by another application"
+msgstr ""
+"Tentativa a ajornar un serie de datos proprie de un altere application"
+
+#: src/usermetricsservice/DBusDataSet.cpp:170
+msgid "Attempt to increment data owned by another user"
+msgstr "Tentativa a incrementar le datos proprie de un altere usator"
+
+#: src/usermetricsservice/DBusDataSet.cpp:178
+msgid "Attempt to increment data owned by another application"
+msgstr "Tentativa a incrementar le datos proprie de un altere application"
+
+#: src/usermetricsservice/DBusUserMetrics.cpp:54
+msgid "Unable to register user metrics object on DBus"
+msgstr "Incapace a registrar le objecto metric del usator sur le DBus"
+
+#: src/usermetricsservice/DBusUserMetrics.cpp:141
+#: src/usermetricsservice/DBusUserMetrics.cpp:153
+msgid "Data source query failed"
+msgstr "Requesta del fonte del datos fallite"
+
+#: src/usermetricsservice/DBusUserMetrics.cpp:249
+msgid "Attempt to create user data owned by another user"
+msgstr "Tentativa crear datos del usator proprie de un altere usator"
+
+#: src/usermetricsservice/DBusUserMetrics.cpp:258
+msgid "User data query failed"
+msgstr "Requesta del datos del usator fallite"
+
+#: src/usermetricsservice/DBusUserMetrics.cpp:267
+msgid "Could not save user data"
+msgstr "Impossibile salvar le datos del usator"
+
+#: src/libusermetricsinput/main.cpp:35
+#: src/libusermetricsinput/main-increment.cpp:35
+msgid "Usage: "
+msgstr "Uso: "
+
+#: src/libusermetricsinput/main.cpp:37
+msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
+msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
+
+#: src/libusermetricsinput/main-increment.cpp:37
+msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
+msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
+
+#: src/modules/UserMetrics/Metric.cpp:30
+msgid "Failed to connect to metrics service:"
+msgstr "Connexion al servicio metric fallite:"
+
+#: src/modules/UserMetrics/Metric.cpp:141
+msgid "Failed to register user metric:"
+msgstr "Registration del metrica del fallite:"
+
+#: src/modules/UserMetrics/Metric.cpp:154
+msgid "Failed to increment metric:"
+msgstr "Incremento del metrica fallite:"
+
+#: src/modules/UserMetrics/Metric.cpp:166
+msgid "Failed to update metric:"
+msgstr "Ajornamento del metrica fallite"
+
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:198
+msgid "No data sources available"
+msgstr "Nulle fonte del datos disponibile"
+
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:255
+msgid "Data source not found"
+msgstr "Fonte del datos non trovate"
+
+#: src/libusermetricsoutput/UserMetricsImpl.cpp:266
+msgid "No data for today"
+msgstr "Nulle datos pro hodie"
+
+#: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:100
+#, qt-format
+msgid "Cannot open XML file '%1' for reading"
+msgstr "On non pote aperir le file XML '%1' pro le lectura"
