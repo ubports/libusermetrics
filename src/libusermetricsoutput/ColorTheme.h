@@ -19,6 +19,7 @@
 #ifndef USERMETRICSOUTPUT_COLORTHEME_H_
 #define USERMETRICSOUTPUT_COLORTHEME_H_
 
+#include <QtCore/QObject>
 #include <QtGui/QColor>
 
 /**
