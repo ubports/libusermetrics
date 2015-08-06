@@ -8,60 +8,60 @@ msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-16 09:15+0100\n"
-"PO-Revision-Date: 2014-05-28 14:44+0000\n"
-"Last-Translator: Anthony Wong <anthony.wong@ubuntu.com>\n"
+"PO-Revision-Date: 2015-08-05 10:37+0000\n"
+"Last-Translator: Ian Li <Unknown>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-05 05:47+0000\n"
-"X-Generator: Launchpad (build 17474)\n"
+"X-Launchpad-Export-Date: 2015-08-06 05:46+0000\n"
+"X-Generator: Launchpad (build 17656)\n"
 "Language: \n"
 
 #: src/usermetricsservice/main.cpp:59
 msgid "Could not open database"
-msgstr ""
+msgstr "无法打开数据库"
 
 #: src/usermetricsservice/main.cpp:77
 msgid "Unable to register user metrics service on DBus"
-msgstr ""
+msgstr "无法在DBus上注册用户活跃度服务"
 
 #: src/usermetricsservice/main.cpp:91
 msgid "Unable to unregister user metrics service on DBus"
-msgstr ""
+msgstr "无法在DBus上注销用户活跃度服务"
 
 #: src/usermetricsservice/DBusUserData.cpp:51
 msgid "Could not register user data object with DBus"
-msgstr ""
+msgstr "无法注册用户数据对象到DBus"
 
 #: src/usermetricsservice/DBusUserData.cpp:81
 msgid "Unknown data source"
-msgstr ""
+msgstr "未知数据来源"
 
 #: src/usermetricsservice/DBusUserData.cpp:90
 msgid "Attempt to create data set owned by another user"
-msgstr ""
+msgstr "尝试创建另一用户所有的数据集"
 
 #: src/usermetricsservice/DBusUserData.cpp:100
 msgid "Could not locate user data"
-msgstr ""
+msgstr "无法定位用户数据"
 
 #: src/usermetricsservice/DBusUserData.cpp:106
 msgid "Attempt to create data set owned by another application"
-msgstr ""
+msgstr "尝试创建另一应用所有的数据集"
 
 #: src/usermetricsservice/DBusUserData.cpp:117
 msgid "Data set query failed"
-msgstr ""
+msgstr "数据集查询失败"
 
 #: src/usermetricsservice/DBusUserData.cpp:130
 #: src/usermetricsservice/DBusDataSet.cpp:127
 msgid "Could not save data set"
-msgstr ""
+msgstr "无法保存数据集"
 
 #: src/usermetricsservice/DBusUserData.cpp:140
 msgid "New data set could not be found"
-msgstr ""
+msgstr "没找到新的数据集"
 
 #: src/usermetricsservice/DBusDataSource.cpp:68
 #: src/usermetricsservice/DBusDataSource.cpp:86
@@ -74,87 +74,87 @@ msgstr ""
 #: src/usermetricsservice/DBusDataSource.cpp:234
 #: src/usermetricsservice/DBusUserMetrics.cpp:187
 msgid "Could not save data source"
-msgstr ""
+msgstr "无法保存数据源"
 
 #: src/usermetricsservice/DBusDataSet.cpp:143
 msgid "Attempt to update data owned by another user"
-msgstr ""
+msgstr "尝试更新另一个用户的数据"
 
 #: src/usermetricsservice/DBusDataSet.cpp:151
 msgid "Attempt to update data owned by another application"
-msgstr ""
+msgstr "尝试更新另一应用所有的数据"
 
 #: src/usermetricsservice/DBusDataSet.cpp:170
 msgid "Attempt to increment data owned by another user"
-msgstr ""
+msgstr "尝试增加另一个用户的数据"
 
 #: src/usermetricsservice/DBusDataSet.cpp:178
 msgid "Attempt to increment data owned by another application"
-msgstr ""
+msgstr "尝试增加另一应用所有的程序的数据"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:54
 msgid "Unable to register user metrics object on DBus"
-msgstr ""
+msgstr "无法在DBus上注册用户活跃度对象"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:141
 #: src/usermetricsservice/DBusUserMetrics.cpp:153
 msgid "Data source query failed"
-msgstr ""
+msgstr "数据源查询失败"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:249
 msgid "Attempt to create user data owned by another user"
-msgstr ""
+msgstr "尝试创建另一用户所有的用户数据"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:258
 msgid "User data query failed"
-msgstr ""
+msgstr "用户数据查询失败"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:267
 msgid "Could not save user data"
-msgstr ""
+msgstr "无法保存用户数据"
 
 #: src/libusermetricsinput/main.cpp:35
 #: src/libusermetricsinput/main-increment.cpp:35
 msgid "Usage: "
-msgstr ""
+msgstr "已用: "
 
 #: src/libusermetricsinput/main.cpp:37
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
-msgstr ""
+msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 
 #: src/libusermetricsinput/main-increment.cpp:37
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
-msgstr ""
+msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 
 #: src/modules/UserMetrics/Metric.cpp:30
 msgid "Failed to connect to metrics service:"
-msgstr ""
+msgstr "连接活跃度服务失败:"
 
 #: src/modules/UserMetrics/Metric.cpp:141
 msgid "Failed to register user metric:"
-msgstr ""
+msgstr "无法注册用户活跃度:"
 
 #: src/modules/UserMetrics/Metric.cpp:154
 msgid "Failed to increment metric:"
-msgstr ""
+msgstr "增加活跃度失败:"
 
 #: src/modules/UserMetrics/Metric.cpp:166
 msgid "Failed to update metric:"
-msgstr ""
+msgstr "更新活跃度失败:"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:198
 msgid "No data sources available"
-msgstr ""
+msgstr "当前没有可用的数据源"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:255
 msgid "Data source not found"
-msgstr ""
+msgstr "找不到数据源"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:266
 msgid "No data for today"
-msgstr ""
+msgstr "无今日数据"
 
 #: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:100
 #, qt-format
 msgid "Cannot open XML file '%1' for reading"
-msgstr ""
+msgstr "无法打开XML文件 '%1'进行读取"
