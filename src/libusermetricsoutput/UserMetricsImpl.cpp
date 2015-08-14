@@ -195,7 +195,7 @@ void UserMetricsImpl::finishLoadingDataSource() {
 		updateMonth(*m_secondMonth, 0, secondMonthDate.daysInMonth(), dataIndex,
 				end);
 
-		setLabel(_("No data sources available"));
+		setLabel("");
 	} else {
 		updateCurrentDataSet(0);
 		connect(m_dataSet.data(), SIGNAL(dataChanged(const QVariantList *)),
