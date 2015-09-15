@@ -1,3 +1,18 @@
+libusermetrics (1.1.1+15.10.20150915-0ubuntu1) wily; urgency=medium
+
+  [ CI Train Bot ]
+  * New rebuild forced.
+
+  [ Matthew Paul Thomas ]
+  * Fixes bug 1286276 (Lock screen whines that "No data sources
+    available" on first use), simply by changing that string to "".
+    First use is just the most obvious situation where this happens.
+    There is never a situation where it would be appropriate to say "No
+    data sources available" to someone who has bought your phone. (LP:
+    #1286276)
+
+ -- Sebastien Bacher <seb128@ubuntu.com>  Tue, 15 Sep 2015 07:31:50 +0000
+
 libusermetrics (1.1.1+15.10.20150723.1-0ubuntu1) wily; urgency=medium
 
   [ Pete Woods ]
