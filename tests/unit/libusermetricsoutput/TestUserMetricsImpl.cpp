@@ -143,7 +143,7 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUser) {
 	model->readyForDataChangeSlot();
 
 	EXPECT_EQ("non-existing-user", model->username());
-	EXPECT_EQ(QString("No data sources available"), model->label());
+	EXPECT_EQ(QString(""), model->label());
 
 	// the first month should be entirely empty
 	{
@@ -169,7 +169,7 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForNonExistentUserThenAppearsWhenAdded) 
 	model->readyForDataChangeSlot();
 
 	EXPECT_EQ("soon-to-exist-user", model->username());
-	EXPECT_EQ(QString("No data sources available"), model->label());
+	EXPECT_EQ(QString(""), model->label());
 
 	// the first month should be entirely empty
 	{
@@ -243,7 +243,7 @@ TEST_F(UserMetricsImplTest, HasEmptyDataForKnownUserWithNoData) {
 	model->readyForDataChangeSlot();
 
 	EXPECT_EQ("existing-user", model->username());
-	EXPECT_EQ(QString("No data sources available"), model->label());
+	EXPECT_EQ(QString(""), model->label());
 
 	// the first month should be entirely empty
 	{
