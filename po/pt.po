@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-16 09:15+0100\n"
-"PO-Revision-Date: 2014-12-15 14:09+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-09-25 09:07+0000\n"
+"Last-Translator: Ivo Xavier <ivofernandes12@gmail.com>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-05 05:47+0000\n"
-"X-Generator: Launchpad (build 17474)\n"
+"X-Launchpad-Export-Date: 2015-09-26 06:34+0000\n"
+"X-Generator: Launchpad (build 17754)\n"
 
 #: src/usermetricsservice/main.cpp:59
 msgid "Could not open database"
@@ -48,8 +48,7 @@ msgstr "Não foi possível localizar dados do utlizador"
 
 #: src/usermetricsservice/DBusUserData.cpp:106
 msgid "Attempt to create data set owned by another application"
-msgstr ""
-"Tentativa de criar um conjunto de dados de propriedade de outra aplicação"
+msgstr "Tentativa de criar um conjunto de dados de propriedade de outra app"
 
 #: src/usermetricsservice/DBusUserData.cpp:117
 msgid "Data set query failed"
@@ -83,7 +82,7 @@ msgstr "Tentativa para atualizar dados proprietários de outro utilizador"
 
 #: src/usermetricsservice/DBusDataSet.cpp:151
 msgid "Attempt to update data owned by another application"
-msgstr "Tentativa para atualizar dados proprietários de outra aplicação"
+msgstr "Tentativa para atualizar dados proprietários de outra app"
 
 #: src/usermetricsservice/DBusDataSet.cpp:170
 msgid "Attempt to increment data owned by another user"
