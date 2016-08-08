@@ -1,3 +1,9 @@
+libusermetrics (1.1.1+16.10.20160808.3-0ubuntu1) yakkety; urgency=medium
+
+  * Fix build failure on 16.04 / 16.10 (LP: #1608809)
+
+ -- Pete Woods <pete.woods@canonical.com>  Mon, 08 Aug 2016 13:53:01 +0000
+
 libusermetrics (1.1.1+15.10.20150915-0ubuntu1) wily; urgency=medium
 
   [ CI Train Bot ]
