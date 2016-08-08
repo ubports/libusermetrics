@@ -130,10 +130,10 @@ void Metric::registerMetric() {
 		if (!m_domain.isEmpty()) {
 			parameters.textDomain(m_domain);
 		}
-		if (!isnan(m_minimum)) {
+		if (!std::isnan(m_minimum)) {
 			parameters.minimum(m_minimum);
 		}
-		if (!isnan(m_maximum)) {
+		if (!std::isnan(m_maximum)) {
 			parameters.maximum(m_maximum);
 		}
 
