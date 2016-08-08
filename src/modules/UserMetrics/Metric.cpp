@@ -19,6 +19,7 @@
 
 #include <stdexcept>
 #include <cmath>
+#include <cfloat>
 #include <QDebug>
 
 Metric::Metric(QObject *parent) :
