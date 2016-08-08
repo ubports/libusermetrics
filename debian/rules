@@ -3,11 +3,17 @@
 
 export DPKG_GENSYMBOLS_CHECK_LEVEL=4
 
+ifneq (,$(filter $(DEB_HOST_ARCH),s390x powerpc))
+        ENABLE_TESTS = OFF
+else
+        ENABLE_TESTS = ON
+endif
+
 include /usr/share/dpkg/default.mk
 
 %:
 	dh $@ --parallel --fail-missing
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DBUILD_DOXYGEN=YES
+	dh_auto_configure -- -DBUILD_DOXYGEN=YES -DENABLE_TESTS=${ENABLE_TESTS}
 

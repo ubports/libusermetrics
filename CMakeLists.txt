@@ -1,6 +1,8 @@
 project(libusermetrics CXX)
 cmake_minimum_required(VERSION 2.8.9)
 
+option (ENABLE_TESTS "Enable testing" ON)
+
 set(API_VERSION 1)
 set(ABI_VERSION 1)
 
@@ -101,6 +103,8 @@ add_subdirectory("po")
 add_subdirectory("src")
 add_subdirectory("data")
 
+
+if(ENABLE_TESTS)
 enable_testing()
 add_subdirectory(tests)
 
@@ -108,3 +112,4 @@ ADD_CUSTOM_TARGET(
 	check
 	${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure
 )
+endif()
