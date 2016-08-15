@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-16 09:15+0100\n"
-"PO-Revision-Date: 2015-09-25 09:07+0000\n"
-"Last-Translator: Ivo Xavier <ivofernandes12@gmail.com>\n"
+"PO-Revision-Date: 2016-08-14 18:48+0000\n"
+"Last-Translator: Ivo Xavier <ivoxavier.8@gmail.com>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-09-26 06:34+0000\n"
-"X-Generator: Launchpad (build 17754)\n"
+"X-Launchpad-Export-Date: 2016-08-15 05:40+0000\n"
+"X-Generator: Launchpad (build 18169)\n"
 
 #: src/usermetricsservice/main.cpp:59
 msgid "Could not open database"
-msgstr "Não foi possível abrir base de dados"
+msgstr "Impossível abrir base de dados"
 
 #: src/usermetricsservice/main.cpp:77
 msgid "Unable to register user metrics service on DBus"
@@ -31,7 +31,7 @@ msgstr "Remoção de registo do serviço métrico no DBus, sem sucesso"
 
 #: src/usermetricsservice/DBusUserData.cpp:51
 msgid "Could not register user data object with DBus"
-msgstr "Não foi possível registar objeto de dados do utilizador com o DBus"
+msgstr "Impossível registar objeto de dados do utilizador com o DBus"
 
 #: src/usermetricsservice/DBusUserData.cpp:81
 msgid "Unknown data source"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: src/usermetricsservice/DBusUserData.cpp:100
 msgid "Could not locate user data"
-msgstr "Não foi possível localizar dados do utlizador"
+msgstr "Impossível localizar dados do utlizador"
 
 #: src/usermetricsservice/DBusUserData.cpp:106
 msgid "Attempt to create data set owned by another application"
@@ -57,7 +57,7 @@ msgstr "Consulta de conjunto de dados falhou"
 #: src/usermetricsservice/DBusUserData.cpp:130
 #: src/usermetricsservice/DBusDataSet.cpp:127
 msgid "Could not save data set"
-msgstr "Não foi possível guardar conjunto de dados"
+msgstr "Impossível guardar conjunto de dados"
 
 #: src/usermetricsservice/DBusUserData.cpp:140
 msgid "New data set could not be found"
@@ -74,7 +74,7 @@ msgstr "Novo conjunto de dados não pôde ser encontrado"
 #: src/usermetricsservice/DBusDataSource.cpp:234
 #: src/usermetricsservice/DBusUserMetrics.cpp:187
 msgid "Could not save data source"
-msgstr "Não foi possível guardar fonte dos dados"
+msgstr "Impossível guardar fonte dos dados"
 
 #: src/usermetricsservice/DBusDataSet.cpp:143
 msgid "Attempt to update data owned by another user"
@@ -107,7 +107,7 @@ msgstr "A tentar criar dados de utilizador proprietários de outro utilizador"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:258
 msgid "User data query failed"
-msgstr "Consulta de dados de utilizador falhou"
+msgstr "Consulta de dados do utilizador falhou"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:267
 msgid "Could not save user data"
@@ -116,7 +116,7 @@ msgstr "Não foi possível guardar dados do utilizador"
 #: src/libusermetricsinput/main.cpp:35
 #: src/libusermetricsinput/main-increment.cpp:35
 msgid "Usage: "
-msgstr "Usado: "
+msgstr "Utilização: "
 
 #: src/libusermetricsinput/main.cpp:37
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
@@ -148,7 +148,7 @@ msgstr "Sem fontes de dados disponíveis"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:255
 msgid "Data source not found"
-msgstr "Fonte de dados não encontrada"
+msgstr "Sem fonte de dados"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:266
 msgid "No data for today"
