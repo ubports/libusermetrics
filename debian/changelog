@@ -1,3 +1,9 @@
+libusermetrics (1.1.1+16.10.20160909-0ubuntu1) yakkety; urgency=medium
+
+  * Remove debconf from pre and post -inst scripts (LP: #1612259)
+
+ -- Pete Woods <pete.woods@canonical.com>  Fri, 09 Sep 2016 12:52:40 +0000
+
 libusermetrics (1.1.1+16.10.20160808.3-0ubuntu1) yakkety; urgency=medium
 
   * Fix build failure on 16.04 / 16.10 (LP: #1608809)
