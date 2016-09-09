@@ -2,8 +2,6 @@
 
 set -e
 
-. /usr/share/debconf/confmodule
-
 THIS_PACKAGE=usermetricsservice
 
 # creating usermetrics group if he isn't already there
