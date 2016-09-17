@@ -14,53 +14,53 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-05 05:47+0000\n"
-"X-Generator: Launchpad (build 17474)\n"
+"X-Launchpad-Export-Date: 2016-09-17 07:14+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 
 #: src/usermetricsservice/main.cpp:59
 msgid "Could not open database"
-msgstr ""
+msgstr "Nepodařilo se otevřít databázi"
 
 #: src/usermetricsservice/main.cpp:77
 msgid "Unable to register user metrics service on DBus"
-msgstr ""
+msgstr "Nelze zaregistrovat službu uživatelských metrik v  DBus"
 
 #: src/usermetricsservice/main.cpp:91
 msgid "Unable to unregister user metrics service on DBus"
-msgstr ""
+msgstr "Nelze odhlásit službu uživatelských metrik v DBus"
 
 #: src/usermetricsservice/DBusUserData.cpp:51
 msgid "Could not register user data object with DBus"
-msgstr ""
+msgstr "Nelze registrovat data v DBus"
 
 #: src/usermetricsservice/DBusUserData.cpp:81
 msgid "Unknown data source"
-msgstr ""
+msgstr "Neznámý zdroj dat"
 
 #: src/usermetricsservice/DBusUserData.cpp:90
 msgid "Attempt to create data set owned by another user"
-msgstr ""
+msgstr "Pokus o vytvoření dat patřících jinému uživateli"
 
 #: src/usermetricsservice/DBusUserData.cpp:100
 msgid "Could not locate user data"
-msgstr ""
+msgstr "Nepodařilo se najít data uživatele"
 
 #: src/usermetricsservice/DBusUserData.cpp:106
 msgid "Attempt to create data set owned by another application"
-msgstr ""
+msgstr "Pokus o vytvoření dat patřících jiné aplikaci"
 
 #: src/usermetricsservice/DBusUserData.cpp:117
 msgid "Data set query failed"
-msgstr ""
+msgstr "Manipulace s daty selhala"
 
 #: src/usermetricsservice/DBusUserData.cpp:130
 #: src/usermetricsservice/DBusDataSet.cpp:127
 msgid "Could not save data set"
-msgstr ""
+msgstr "Data nelze uložit"
 
 #: src/usermetricsservice/DBusUserData.cpp:140
 msgid "New data set could not be found"
-msgstr ""
+msgstr "Nepodařilo se najít nová data"
 
 #: src/usermetricsservice/DBusDataSource.cpp:68
 #: src/usermetricsservice/DBusDataSource.cpp:86
@@ -73,87 +73,87 @@ msgstr ""
 #: src/usermetricsservice/DBusDataSource.cpp:234
 #: src/usermetricsservice/DBusUserMetrics.cpp:187
 msgid "Could not save data source"
-msgstr ""
+msgstr "Nelze uložit zdroj dat"
 
 #: src/usermetricsservice/DBusDataSet.cpp:143
 msgid "Attempt to update data owned by another user"
-msgstr ""
+msgstr "Pokus o úpravu dat patřících jinému uživateli"
 
 #: src/usermetricsservice/DBusDataSet.cpp:151
 msgid "Attempt to update data owned by another application"
-msgstr ""
+msgstr "Pokus o úpravu dat patřících jiné aplikaci"
 
 #: src/usermetricsservice/DBusDataSet.cpp:170
 msgid "Attempt to increment data owned by another user"
-msgstr ""
+msgstr "Pokus o rozšíření dat patřících jinému uživateli"
 
 #: src/usermetricsservice/DBusDataSet.cpp:178
 msgid "Attempt to increment data owned by another application"
-msgstr ""
+msgstr "Pokus o rozšíření dat patřících jiné aplikaci"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:54
 msgid "Unable to register user metrics object on DBus"
-msgstr ""
+msgstr "Nelze registrovat metriku v DBus"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:141
 #: src/usermetricsservice/DBusUserMetrics.cpp:153
 msgid "Data source query failed"
-msgstr ""
+msgstr "Manipulace se zdrojem dat selhala"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:249
 msgid "Attempt to create user data owned by another user"
-msgstr ""
+msgstr "Pokus o vytvoření dat patřících jinému uživateli"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:258
 msgid "User data query failed"
-msgstr ""
+msgstr "Manipulace s daty uživatele selhala"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:267
 msgid "Could not save user data"
-msgstr ""
+msgstr "Nelze uložit data uživatele"
 
 #: src/libusermetricsinput/main.cpp:35
 #: src/libusermetricsinput/main-increment.cpp:35
 msgid "Usage: "
-msgstr ""
+msgstr "Použití: "
 
 #: src/libusermetricsinput/main.cpp:37
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
-msgstr ""
+msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 
 #: src/libusermetricsinput/main-increment.cpp:37
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
-msgstr ""
+msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 
 #: src/modules/UserMetrics/Metric.cpp:30
 msgid "Failed to connect to metrics service:"
-msgstr ""
+msgstr "Nelze se připojit ke službě:"
 
 #: src/modules/UserMetrics/Metric.cpp:141
 msgid "Failed to register user metric:"
-msgstr ""
+msgstr "Nelze registrovat metriku:"
 
 #: src/modules/UserMetrics/Metric.cpp:154
 msgid "Failed to increment metric:"
-msgstr ""
+msgstr "Nelze rozšířit metriku:"
 
 #: src/modules/UserMetrics/Metric.cpp:166
 msgid "Failed to update metric:"
-msgstr ""
+msgstr "Nelze upravit metriku:"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:198
 msgid "No data sources available"
-msgstr ""
+msgstr "Žádné zdroje dat nejsou dostupné"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:255
 msgid "Data source not found"
-msgstr ""
+msgstr "Zdroj dat nebyl nalezen"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:266
 msgid "No data for today"
-msgstr ""
+msgstr "Za dnešek nejsou žádná data"
 
 #: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:100
 #, qt-format
 msgid "Cannot open XML file '%1' for reading"
-msgstr ""
+msgstr "Nepodařilo se přečíst XML soubor '%1'"

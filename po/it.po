@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-05-05 05:47+0000\n"
-"X-Generator: Launchpad (build 17474)\n"
+"X-Launchpad-Export-Date: 2016-09-17 07:14+0000\n"
+"X-Generator: Launchpad (build 18186)\n"
 "Language: it\n"
 
 #: src/usermetricsservice/main.cpp:59
@@ -44,20 +44,20 @@ msgstr ""
 
 #: src/usermetricsservice/DBusUserData.cpp:100
 msgid "Could not locate user data"
-msgstr ""
+msgstr "Impossibile trovare i dati utente"
 
 #: src/usermetricsservice/DBusUserData.cpp:106
 msgid "Attempt to create data set owned by another application"
-msgstr ""
+msgstr "Tentativo di creare dati di un'altra applicazione"
 
 #: src/usermetricsservice/DBusUserData.cpp:117
 msgid "Data set query failed"
-msgstr ""
+msgstr "Interrogazione dati non riuscita"
 
 #: src/usermetricsservice/DBusUserData.cpp:130
 #: src/usermetricsservice/DBusDataSet.cpp:127
 msgid "Could not save data set"
-msgstr ""
+msgstr "Impossibile salvare i dati"
 
 #: src/usermetricsservice/DBusUserData.cpp:140
 msgid "New data set could not be found"
@@ -74,87 +74,89 @@ msgstr ""
 #: src/usermetricsservice/DBusDataSource.cpp:234
 #: src/usermetricsservice/DBusUserMetrics.cpp:187
 msgid "Could not save data source"
-msgstr ""
+msgstr "Impossibile salvare la sorgente dati"
 
 #: src/usermetricsservice/DBusDataSet.cpp:143
 msgid "Attempt to update data owned by another user"
-msgstr ""
+msgstr "Tentativo di aggiornare dati di un altro utente"
 
 #: src/usermetricsservice/DBusDataSet.cpp:151
 msgid "Attempt to update data owned by another application"
-msgstr ""
+msgstr "Tentativo di aggiornare dati di un'altra applicazione"
 
 #: src/usermetricsservice/DBusDataSet.cpp:170
 msgid "Attempt to increment data owned by another user"
-msgstr ""
+msgstr "Tentativo di incrementare dati di un altro utente"
 
 #: src/usermetricsservice/DBusDataSet.cpp:178
 msgid "Attempt to increment data owned by another application"
-msgstr ""
+msgstr "Tentativo di incrementare dati di un'altra applicazione"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:54
 msgid "Unable to register user metrics object on DBus"
-msgstr ""
+msgstr "Impossibile registrare l'oggetto delle metriche utente su DBus"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:141
 #: src/usermetricsservice/DBusUserMetrics.cpp:153
 msgid "Data source query failed"
-msgstr ""
+msgstr "Interrogazione sorgente dati non riuscita"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:249
 msgid "Attempt to create user data owned by another user"
-msgstr ""
+msgstr "Tentativo di creare dati utente di un altro utente"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:258
 msgid "User data query failed"
-msgstr ""
+msgstr "Interrogazione dei dati utente non riuscita"
 
 #: src/usermetricsservice/DBusUserMetrics.cpp:267
 msgid "Could not save user data"
-msgstr ""
+msgstr "Impossibile salvare i dati utente"
 
 #: src/libusermetricsinput/main.cpp:35
 #: src/libusermetricsinput/main-increment.cpp:35
 msgid "Usage: "
-msgstr ""
+msgstr "Uso: "
 
 #: src/libusermetricsinput/main.cpp:37
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME <DATA>"
 msgstr ""
+"ID_SORGENTE_DATI FORMATO_STRINGA STRINGA_DATI_VUOTA NOMEUTENTE <DATI>"
 
 #: src/libusermetricsinput/main-increment.cpp:37
 msgid "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 msgstr ""
+"ID_SORGENTE_DATI FORMATO_STRINGA STRINGA_DATI_VUOTA NOMEUTENTE [QUANTITÀ]"
 
 #: src/modules/UserMetrics/Metric.cpp:30
 msgid "Failed to connect to metrics service:"
-msgstr ""
+msgstr "Impossibile connettersi al servizio di metriche:"
 
 #: src/modules/UserMetrics/Metric.cpp:141
 msgid "Failed to register user metric:"
-msgstr ""
+msgstr "Registrazione metrica utente non riuscita:"
 
 #: src/modules/UserMetrics/Metric.cpp:154
 msgid "Failed to increment metric:"
-msgstr ""
+msgstr "Incremento della metrica non riuscito:"
 
 #: src/modules/UserMetrics/Metric.cpp:166
 msgid "Failed to update metric:"
-msgstr ""
+msgstr "Aggiornamento metrica non riuscito:"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:198
 msgid "No data sources available"
-msgstr ""
+msgstr "Nessuna sorgente dati disponibile"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:255
 msgid "Data source not found"
-msgstr ""
+msgstr "Sorgente dati non trovata"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:266
 msgid "No data for today"
-msgstr ""
+msgstr "Nessun dato per oggi"
 
 #: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:100
 #, qt-format
 msgid "Cannot open XML file '%1' for reading"
-msgstr ""
+msgstr "Impossibile leggere il file XML \"%1\""
