@@ -15,5 +15,5 @@ include /usr/share/dpkg/default.mk
 	dh $@ --parallel --fail-missing
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DBUILD_DOXYGEN=YES -DENABLE_TESTS=${ENABLE_TESTS}
+	dh_auto_configure -- -DENABLE_TESTS=${ENABLE_TESTS}
 
