@@ -2,7 +2,7 @@ Source: libusermetrics
 Priority: optional
 Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Build-Depends: cmake,
-               cmake-extras (>= 0.2),
+               cmake-extras (>= 0.10),
                dbus,
                debhelper (>= 9),
                doxygen,
@@ -19,7 +19,6 @@ Build-Depends: cmake,
                pkg-config,
                qtbase5-dev,
                sqlite3,
-               valgrind [!arm64 !powerpc !ppc64el],
                qtdeclarative5-dev,
                qtdeclarative5-qtquick2-plugin,
                qtdeclarative5-test-plugin,

@@ -1,8 +1,6 @@
 set(CMAKE_AUTOMOC OFF)
-include(FindGMock)
+find_package(GMock)
 set(CMAKE_AUTOMOC ON)
-
-find_package("Valgrind" REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${GMOCK_INCLUDE_DIRS})
