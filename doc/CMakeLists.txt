@@ -24,13 +24,3 @@ add_doxygen(
     ALL
 )
 
-#set(DOXYFILE_SOURCE_DIR "include")
-#set(DOXYFILE_EXTRA_SOURCES "doc")
-#include(UseDoxygen)
-#if(DOXYGEN_FOUND AND BUILD_DOXYGEN)
-#>-------install(
-#>------->-------DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html
-#>------->-------DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/libusermetrics-doc/
-#>-------)
-#endif()
-
