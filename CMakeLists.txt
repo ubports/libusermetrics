@@ -72,7 +72,6 @@ set(SOURCE_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/src")
 
 
 include(GNUInstallDirs)
-find_package(CoverageReport)
 
 # Workaround for libexecdir on debian
 if (EXISTS "/etc/debian_version") 
@@ -104,4 +103,31 @@ ADD_CUSTOM_TARGET(
 	check
 	${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure
 )
+
+find_package(CoverageReport)
+enable_coverage_report(
+  TARGETS
+    usermetrics-test-utils
+    usermetricsinput
+    usermetricsinput-static
+    usermetricsinput-integration-tests
+    usermetricsinput-unit-tests
+    usermetricsoutput
+    usermetricsoutput-integration-tests
+    usermetricsoutput-static
+    usermetricsoutput-unit-tests
+    usermetricsservice
+    usermetricsservice-unit-tests
+  FILTER
+    ${CMAKE_SOURCE_DIR}/tests/*
+    ${CMAKE_BINARY_DIR}/*
+  TESTS
+    usermetrics-test-utils
+    usermetricsinput-integration-tests
+    usermetricsinput-unit-tests
+    usermetricsoutput-integration-tests
+    usermetricsoutput-unit-tests
+    usermetricsservice-unit-tests
+)
+
 endif()
