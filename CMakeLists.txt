@@ -108,6 +108,7 @@ find_package(CoverageReport)
 enable_coverage_report(
   TARGETS
     usermetrics-test-utils
+    usermetricscommon
     usermetricsinput
     usermetricsinput-static
     usermetricsinput-integration-tests
@@ -117,6 +118,7 @@ enable_coverage_report(
     usermetricsoutput-static
     usermetricsoutput-unit-tests
     usermetricsservice
+    usermetricsservice-bin
     usermetricsservice-unit-tests
   FILTER
     ${CMAKE_SOURCE_DIR}/tests/*
