@@ -1,3 +1,9 @@
+libusermetrics (1.1.1+17.04.20161208.1-0ubuntu1) zesty; urgency=medium
+
+  * Compatibility with unversioned cmake-extras modules
+
+ -- Pete Woods <pete.woods@canonical.com>  Thu, 08 Dec 2016 10:51:18 +0000
+
 libusermetrics (1.1.1+16.10.20160909-0ubuntu1) yakkety; urgency=medium
 
   * Remove debconf from pre and post -inst scripts (LP: #1612259)
