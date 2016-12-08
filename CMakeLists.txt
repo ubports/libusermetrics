@@ -72,7 +72,6 @@ set(SOURCE_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/src")
 
 
 include(GNUInstallDirs)
-include(Coverage)
 
 # Workaround for libexecdir on debian
 if (EXISTS "/etc/debian_version") 
@@ -89,16 +88,8 @@ add_definitions(
 	-DLOCALEDIR="${CMAKE_INSTALL_FULL_DATADIR}/locale"
 )
 
-set(DOXYFILE_SOURCE_DIR "include")
-set(DOXYFILE_EXTRA_SOURCES "doc")
-include(UseDoxygen)
-if(DOXYGEN_FOUND AND BUILD_DOXYGEN)
-	install(
-		DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/libusermetrics-doc/
-	)
-endif()
 
+add_subdirectory("doc")
 add_subdirectory("po")
 add_subdirectory("src")
 add_subdirectory("data")
@@ -112,4 +103,33 @@ ADD_CUSTOM_TARGET(
 	check
 	${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure
 )
+
+find_package(CoverageReport)
+enable_coverage_report(
+  TARGETS
+    usermetrics-test-utils
+    usermetricscommon
+    usermetricsinput
+    usermetricsinput-static
+    usermetricsinput-integration-tests
+    usermetricsinput-unit-tests
+    usermetricsoutput
+    usermetricsoutput-integration-tests
+    usermetricsoutput-static
+    usermetricsoutput-unit-tests
+    usermetricsservice
+    usermetricsservice-bin
+    usermetricsservice-unit-tests
+  FILTER
+    ${CMAKE_SOURCE_DIR}/tests/*
+    ${CMAKE_BINARY_DIR}/*
+  TESTS
+    usermetrics-test-utils
+    usermetricsinput-integration-tests
+    usermetricsinput-unit-tests
+    usermetricsoutput-integration-tests
+    usermetricsoutput-unit-tests
+    usermetricsservice-unit-tests
+)
+
 endif()

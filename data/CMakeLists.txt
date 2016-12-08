@@ -1,4 +1,4 @@
-include("UseGSettings")
+find_package(GSettings)
 
 ###########################
 # Settings

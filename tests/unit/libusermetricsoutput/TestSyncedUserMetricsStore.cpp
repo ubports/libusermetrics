@@ -38,6 +38,21 @@ using namespace UserMetricsCommon;
 using namespace UserMetricsOutput;
 using namespace UserMetricsTestUtils;
 
+#define WAIT_FOR_STRINGS_TO_CHANGE() {\
+if (dataSource->formatString().isEmpty()) { \
+	QSignalSpy formatStringChangedSpy(dataSource.data(), SIGNAL(formatStringChanged(const QString &))); \
+	ASSERT_TRUE(formatStringChangedSpy.wait()); \
+} \
+if (dataSource->emptyDataString().isEmpty()) { \
+	QSignalSpy emptyDataStringChangedSpy(dataSource.data(), SIGNAL(emptyDataStringChanged(const QString &))); \
+	ASSERT_TRUE(emptyDataStringChangedSpy.wait()); \
+} \
+if (dataSource->textDomain().isEmpty()) { \
+	QSignalSpy textDomainChangedSpy(dataSource.data(), SIGNAL(textDomainChanged(const QString &))); \
+	ASSERT_TRUE(textDomainChangedSpy.wait()); \
+} \
+}
+
 namespace {
 
 class TestSyncedUserMetricsStore: public DBusTest {
@@ -73,9 +88,7 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 	{
 		DataSourcePtr dataSource(store.dataSource(DBusPaths::dataSource(1)));
 		ASSERT_FALSE(dataSource.isNull());
-		QSignalSpy emptyDataStringChangedSpy(dataSource.data(),
-				SIGNAL(emptyDataStringChanged(const QString &)));
-		ASSERT_TRUE(emptyDataStringChangedSpy.wait());
+		WAIT_FOR_STRINGS_TO_CHANGE();
 		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
 		EXPECT_EQ(QString("empty data string one"),
 				dataSource->emptyDataString());
@@ -85,9 +98,7 @@ TEST_F(TestSyncedUserMetricsStore, LoadsDataSourcesAtStartup) {
 	{
 		DataSourcePtr dataSource(store.dataSource(DBusPaths::dataSource(2)));
 		ASSERT_FALSE(dataSource.isNull());
-		QSignalSpy emptyDataStringChangedSpy(dataSource.data(),
-				SIGNAL(emptyDataStringChanged(const QString &)));
-		ASSERT_TRUE(emptyDataStringChangedSpy.wait());
+		WAIT_FOR_STRINGS_TO_CHANGE();
 		EXPECT_EQ(QString("format string two %1"), dataSource->formatString());
 		EXPECT_EQ(QString("empty data string two"),
 				dataSource->emptyDataString());
@@ -113,9 +124,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	{
 		DataSourcePtr dataSource(store.dataSource(DBusPaths::dataSource(1)));
 		ASSERT_FALSE(dataSource.isNull());
-		QSignalSpy formatStringChangedSpy(dataSource.data(),
-				SIGNAL(formatStringChanged(const QString &)));
-		ASSERT_TRUE(formatStringChangedSpy.wait());
+		WAIT_FOR_STRINGS_TO_CHANGE();
 		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
 		EXPECT_EQ(QString("text-domain-one"), dataSource->textDomain());
 	}
@@ -139,11 +148,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	{
 		DataSourcePtr dataSource(store.dataSource(DBusPaths::dataSource(1)));
 		ASSERT_FALSE(dataSource.isNull());
-		if (dataSource->emptyDataString().isEmpty()) {
-			QSignalSpy emptyDataStringChangedSpy(dataSource.data(),
-					SIGNAL(emptyDataStringChanged(const QString &)));
-			ASSERT_TRUE(emptyDataStringChangedSpy.wait());
-		}
+		WAIT_FOR_STRINGS_TO_CHANGE();
 		EXPECT_EQ(QString("format string one %1"), dataSource->formatString());
 		EXPECT_EQ(QString("no data source ones"),
 				dataSource->emptyDataString());
@@ -153,9 +158,7 @@ TEST_F(TestSyncedUserMetricsStore, SyncsNewDataSources) {
 	{
 		DataSourcePtr dataSource(store.dataSource(DBusPaths::dataSource(2)));
 		ASSERT_FALSE(dataSource.isNull());
-		QSignalSpy emptyDataStringChangedSpy(dataSource.data(),
-				SIGNAL(emptyDataStringChanged(const QString &)));
-		ASSERT_TRUE(emptyDataStringChangedSpy.wait());
+		WAIT_FOR_STRINGS_TO_CHANGE();
 		EXPECT_EQ(QString("format string two %1"), dataSource->formatString());
 		EXPECT_EQ(QString("no data source twos"),
 				dataSource->emptyDataString());
