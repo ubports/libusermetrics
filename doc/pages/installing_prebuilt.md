@@ -1,4 +1,4 @@
-Installing pre-built packages {#installing_prebuilt}
+Installing pre-built packages
 =============================
 
 1. Install saucy if you haven' t done so already.
@@ -7,11 +7,11 @@ Installing pre-built packages {#installing_prebuilt}
 
        sudo apt-get update
 
-3. Install libusermetrics output dev package (if you are planning to write a 
+3. Install libusermetrics output dev package (if you are planning to write a
    presentation application):
 
        sudo apt-get install libusermetricsoutput1-dev
-       
+
 4. Install libusermetrics input dev package, (if you are planning to write a
    user metrics input source):
 
