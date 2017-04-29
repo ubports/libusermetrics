@@ -1,5 +1,5 @@
-Building the source {#building_source}
-======================================
+Building the source
+===================
 
 Getting libusermetrics
 ----------------------
@@ -27,7 +27,7 @@ Libusermetrics is built using cmake. To make life simpler, you can use the
 included wrapper script:
 
     $ ./build
-    
+
 This will run cmake in the directory
 
     ../${BRANCH_NAME}-build

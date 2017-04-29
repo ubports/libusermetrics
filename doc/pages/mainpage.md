@@ -1,9 +1,8 @@
-Welcome to Libusermetrics {#mainpage}
-=========================
+# Welcome to Libusermetrics
 
 Libusermetrics enables apps to locally store interesting numerical data
 for later presentation.  For example in the Ubuntu Greeter "flower"
-infographic. 
+infographic.
 
  - All data is stored locally in /var/usermetrics/.
  - No data is centrally collected via a web-serivice or otherwise, and
@@ -17,28 +16,23 @@ information is stored using this library.
 first party applications at present. It may change or be removed at any
 time.
 
-Getting and installing libusermetrics
--------------------------------------
+## Getting and installing libusermetrics
 
 ### Using pre-built packages
 
 If you just want to try out libusermetrics, or write user metrics sources,
-then the easiest way is to use the pre-built packages:
-
- - \ref installing_prebuilt
+then the easiest way is to use the [pre-built packages](doc/pages/installing_prebuilt.md).
 
 ### Building and installing from source
 
 If you are curious about libusermetrics's internals or intend to contribute to
-it, you should get the source and build it:
-
- - \ref building_source
+it, you should [get the source and build it](doc/pages/building_source.md).
 
 Getting involved
 ----------------
 
 The best place to ask questions and discuss about libusermetrics is the \#ubuntu-touch
-IRC channel on freenode. 
+IRC channel on freenode.
 
 The libusermetrics project is hosted on Launchpad: https://launchpad.net/libusermetrics
 
@@ -48,12 +42,12 @@ Writing metric data sources
 ---------------------------
 
  - \ref UserMetricsInput "Libusermetrics Input API Documentation"
- 
+
 For simple metrics which only want to increment a counter, see the following examples:
- 
+
  - \subpage MetricManagerIncrementToday.cpp "MetricManagerIncrementToday.cpp: A simple Qt-based metric"
  - \subpage MetricManagerIncrementTodayCAPI.c "MetricManagerIncrementTodayCAPI.c: A simple C-based metric"
- 
+
 For simple metrics which only want to update today's value, but cannot simply increment it,
 see the following examples:
 
