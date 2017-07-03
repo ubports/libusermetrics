@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-16 09:15+0100\n"
-"PO-Revision-Date: 2016-08-14 18:48+0000\n"
+"PO-Revision-Date: 2017-07-02 20:32+0000\n"
 "Last-Translator: Ivo Xavier <ivoxavier.8@gmail.com>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-09-17 07:14+0000\n"
-"X-Generator: Launchpad (build 18186)\n"
+"X-Launchpad-Export-Date: 2017-07-03 05:29+0000\n"
+"X-Generator: Launchpad (build 18419)\n"
 
 #: src/usermetricsservice/main.cpp:59
 msgid "Could not open database"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: src/usermetricsservice/DBusUserData.cpp:100
 msgid "Could not locate user data"
-msgstr "Impossível localizar dados do utlizador"
+msgstr "Impossível localizar dados do utilizador"
 
 #: src/usermetricsservice/DBusUserData.cpp:106
 msgid "Attempt to create data set owned by another application"
