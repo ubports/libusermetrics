@@ -1,3 +1,9 @@
+libusermetrics (1.1.2+ubports) xenial; urgency=medium
+
+  * Imported to UBports
+
+ -- UBports auto importer <infra@ubports.com>  Mon, 08 Jan 2018 10:54:54 +0000
+
 libusermetrics (1.1.1+17.04.20161208.1-0ubuntu1) zesty; urgency=medium
 
   * Compatibility with unversioned cmake-extras modules
