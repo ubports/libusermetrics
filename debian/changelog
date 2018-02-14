@@ -1,3 +1,9 @@
+libusermetrics (1.1.2) bionic; urgency=medium
+
+  * Build for bionic
+
+ -- Marius Gripsgard <marius@ubports.com>  Wed, 14 Feb 2018 04:17:16 +0100
+
 libusermetrics (1.1.1+17.04.20161208.1-0ubuntu1) zesty; urgency=medium
 
   * Compatibility with unversioned cmake-extras modules
