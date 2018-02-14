@@ -8,23 +8,23 @@ msgstr ""
 "Project-Id-Version: libusermetrics\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-09-16 09:15+0100\n"
-"PO-Revision-Date: 2015-10-18 15:05+0000\n"
-"Last-Translator: Jean-Marc <Unknown>\n"
+"PO-Revision-Date: 2017-07-13 16:27+0000\n"
+"Last-Translator: Yuri <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-09-17 07:14+0000\n"
-"X-Generator: Launchpad (build 18186)\n"
+"X-Launchpad-Export-Date: 2017-07-14 05:35+0000\n"
+"X-Generator: Launchpad (build 18419)\n"
 
 #: src/usermetricsservice/main.cpp:59
 msgid "Could not open database"
-msgstr "Impossible d'ouvrir la base de données."
+msgstr ""
 
 #: src/usermetricsservice/main.cpp:77
 msgid "Unable to register user metrics service on DBus"
 msgstr ""
-"Impossible d'inscrire le service de métriques de l'utilisateur dans DBus."
+"Impossible d'inscrire le service de métriques de l'utilisateur dans DBus"
 
 #: src/usermetricsservice/main.cpp:91
 msgid "Unable to unregister user metrics service on DBus"
@@ -34,7 +34,7 @@ msgstr ""
 #: src/usermetricsservice/DBusUserData.cpp:51
 msgid "Could not register user data object with DBus"
 msgstr ""
-"Impossible d'enregistrer l'objet des données de l'utilisateur dans DBus"
+"Impossible d'enregistrer l'objet de données de l'utilisateur dans DBus"
 
 #: src/usermetricsservice/DBusUserData.cpp:81
 msgid "Unknown data source"
@@ -43,7 +43,7 @@ msgstr "Source de données inconnue"
 #: src/usermetricsservice/DBusUserData.cpp:90
 msgid "Attempt to create data set owned by another user"
 msgstr ""
-"Tenter de créer une série de données détenue par un autre utilisateur"
+"Tentative de création d'une série de données détenue par un autre utilisateur"
 
 #: src/usermetricsservice/DBusUserData.cpp:100
 msgid "Could not locate user data"
@@ -52,7 +52,8 @@ msgstr "Impossible de localiser les données de l'utilisateur"
 #: src/usermetricsservice/DBusUserData.cpp:106
 msgid "Attempt to create data set owned by another application"
 msgstr ""
-"Tenter de créer une série de données détenue par une autre application"
+"Tentative de création d'une série de données détenue par une autre "
+"application"
 
 #: src/usermetricsservice/DBusUserData.cpp:117
 msgid "Data set query failed"
@@ -61,7 +62,7 @@ msgstr "Échec de la requête sur la série de données"
 #: src/usermetricsservice/DBusUserData.cpp:130
 #: src/usermetricsservice/DBusDataSet.cpp:127
 msgid "Could not save data set"
-msgstr "Impossible de sauvegarder l'ensemble des données."
+msgstr "Impossible de sauvegarder la série de données"
 
 #: src/usermetricsservice/DBusUserData.cpp:140
 msgid "New data set could not be found"
@@ -136,7 +137,7 @@ msgstr "DATA_SOURCE_ID FORMAT_STRING EMPTY_DATA_STRING USERNAME [AMOUNT]"
 
 #: src/modules/UserMetrics/Metric.cpp:30
 msgid "Failed to connect to metrics service:"
-msgstr "Échec de la connexion au service des métriques :"
+msgstr "Échec de la connexion au service de métriques :"
 
 #: src/modules/UserMetrics/Metric.cpp:141
 msgid "Failed to register user metric:"
@@ -152,7 +153,7 @@ msgstr "Échec de la mise à jour de la métrique :"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:198
 msgid "No data sources available"
-msgstr "Pas de source de données disponible"
+msgstr "Aucune source de données disponible"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:255
 msgid "Data source not found"
@@ -160,7 +161,7 @@ msgstr "Source de données introuvable"
 
 #: src/libusermetricsoutput/UserMetricsImpl.cpp:266
 msgid "No data for today"
-msgstr "Pas de donnée du jour"
+msgstr "Aucune donnée pour aujourd'hui"
 
 #: src/libusermetricsoutput/GSettingsColorThemeProvider.cpp:100
 #, qt-format

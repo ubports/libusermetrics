@@ -1,8 +1,8 @@
-libusermetrics (1.1.2) bionic; urgency=medium
+libusermetrics (1.1.2+ubports) xenial; urgency=medium
 
-  * Build for bionic
+  * Imported to UBports
 
- -- Marius Gripsgard <marius@ubports.com>  Wed, 14 Feb 2018 04:17:16 +0100
+ -- UBports auto importer <infra@ubports.com>  Mon, 08 Jan 2018 10:54:54 +0000
 
 libusermetrics (1.1.1+17.04.20161208.1-0ubuntu1) zesty; urgency=medium
 
