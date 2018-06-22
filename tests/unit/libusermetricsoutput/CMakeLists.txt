@@ -17,6 +17,7 @@ add_executable(
 
 target_link_libraries(
 	usermetricsoutput-unit-tests
+	-pthread
 	usermetricsoutput-static
 	usermetrics-test-utils
 	${GSETTINGS_QT_LIBRARIES}
