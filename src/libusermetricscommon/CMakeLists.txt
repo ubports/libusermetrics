@@ -7,7 +7,7 @@ set(USERMETRICS_COMMON_SOURCES
 )
 
 set(USERMETRICS_COMMON_DEPENDENCIES
-	Qt5:Core
+	Qt5::Core
 )
 
 qt5_add_dbus_interface(
