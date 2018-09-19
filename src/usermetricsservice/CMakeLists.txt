@@ -49,15 +49,11 @@ add_library(
 	${USERMETRICSSERVICE_SOURCES}
 )
 
-qt5_use_modules(
-	usermetricsservice
-	Core
-	DBus
-	Sql
-)
-
 target_link_libraries(
 	usermetricsservice
+	Qt5::Core
+	Qt5::DBus
+	Qt5::Sql
 	usermetricscommon
 	${QDJANGO_DB_LDFLAGS}
 	${APPARMOR_LDFLAGS}
@@ -81,13 +77,9 @@ set_target_properties(
 	OUTPUT_NAME "usermetricsservice"
 )
 
-qt5_use_modules(
-	usermetricsservice-bin
-	Core
-)
-
 target_link_libraries(
 	usermetricsservice-bin
+	Qt5::Core
 	usermetricsservice
 )
 
