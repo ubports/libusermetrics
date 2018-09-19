@@ -11,10 +11,11 @@ set(testplugin_HDRS
     )
 
 add_library(usermetrics-qml-test SHARED ${testplugin_SRCS} ${testplugin_HDRS})
-qt5_use_modules(usermetrics-qml-test Core Qml Quick Test DBus QuickTest)
 
 target_link_libraries(
         usermetrics-qml-test
+        Qt5::Core Qt5::Qml Qt5::Quick
+        Qt5::Test Qt5::DBus Qt5::QuickTest
         usermetricsinput-static
         usermetrics-test-utils
         ${GTEST_LIBRARIES}

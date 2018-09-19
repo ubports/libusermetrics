@@ -42,6 +42,12 @@ include_directories(${Qt5Test_INCLUDE_DIRS})
 find_package(Qt5Qml REQUIRED)
 include_directories(${Qt5Qml_INCLUDE_DIRS})
 
+find_package(Qt5Quick REQUIRED)
+include_directories(${Qt5Quick_INCLUDE_DIRS})
+
+find_package(Qt5QuickTest REQUIRED)
+include_directories(${Qt5QuickTest_INCLUDE_DIRS})
+
 pkg_check_modules(GLIB2 REQUIRED glib-2.0)
 include_directories(${GLIB2_INCLUDE_DIRS})
 
@@ -77,6 +83,11 @@ include(GNUInstallDirs)
 if (EXISTS "/etc/debian_version") 
   set(CMAKE_INSTALL_LIBEXECDIR ${CMAKE_INSTALL_LIBDIR})
   set(CMAKE_INSTALL_FULL_LIBEXECDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}")
+endif()
+
+# FIX: Qt was built with -reduce-relocations
+if (Qt5_POSITION_INDEPENDENT_CODE)
+  SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
 add_definitions(

@@ -24,8 +24,8 @@ set(USERMETRICSINPUT_SOURCES
 )
 
 set(USERMETRICS_INPUT_DEPENDENCIES
-	Core
-	DBus
+	Qt5::Core
+	Qt5::DBus
 )
 
 # Static library version of libusermetricsinput
@@ -36,13 +36,9 @@ add_library(
 	${USERMETRICSINPUT_SOURCES}
 )
 
-qt5_use_modules(
-	usermetricsinput-static
-	${USERMETRICS_INPUT_DEPENDENCIES}
-)
-
 target_link_libraries(
 	usermetricsinput-static
+	${USERMETRICS_INPUT_DEPENDENCIES}
 	usermetricscommon
 	${Gettext_LIBRARIES}
 )
@@ -71,13 +67,9 @@ configure_file(
 	"${INCLUDE_BINARY_DIR}/libusermetricsinput/${EXPORT_FILE_NAME}"
 )
 
-qt5_use_modules(
-	usermetricsinput
-	${USERMETRICS_INPUT_DEPENDENCIES}
-)
-
 target_link_libraries(
 	usermetricsinput
+	${USERMETRICS_INPUT_DEPENDENCIES}
 	usermetricscommon
 )
 
@@ -125,13 +117,9 @@ install(
   RUNTIME DESTINATION bin
 )
 
-qt5_use_modules(
-	usermetricsinput-bin
-	Core
-)
-
 target_link_libraries(
 	usermetricsinput-bin
+	Qt5::Core
 	usermetricsinput
 )
 
@@ -149,13 +137,9 @@ install(
   RUNTIME DESTINATION bin
 )
 
-qt5_use_modules(
-	usermetricsinput-increment
-	Core
-)
-
 target_link_libraries(
 	usermetricsinput-increment
+	Qt5::Core
 	usermetricsinput
 )
 

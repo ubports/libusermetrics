@@ -7,7 +7,7 @@ set(USERMETRICS_COMMON_SOURCES
 )
 
 set(USERMETRICS_COMMON_DEPENDENCIES
-	Core
+	Qt5::Core
 )
 
 qt5_add_dbus_interface(
@@ -40,7 +40,7 @@ add_library(
 	${USERMETRICS_COMMON_SOURCES}
 )
 
-qt5_use_modules(
+target_link_libraries(
 	usermetricscommon
 	${USERMETRICS_COMMON_DEPENDENCIES}
 )
