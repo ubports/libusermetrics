@@ -85,6 +85,11 @@ if (EXISTS "/etc/debian_version")
   set(CMAKE_INSTALL_FULL_LIBEXECDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}")
 endif()
 
+# FIX: Qt was built with -reduce-relocations
+if (Qt5_POSITION_INDEPENDENT_CODE)
+  SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
 add_definitions(
 	-std=c++11
 	-fno-permissive
