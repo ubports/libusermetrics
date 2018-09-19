@@ -24,10 +24,10 @@ set(USERMETRICSOUTPUT_SOURCES
 )
 
 set(USERMETRICS_OUTPUT_DEPENDENCIES
-	Core
-	Gui
-	DBus
-	XmlPatterns
+	Qt5::Core
+	Qt5::Gui
+	Qt5::DBus
+	Qt5::XmlPatterns
 )
 
 # Static library version of libusermetricsoutput
@@ -38,13 +38,9 @@ add_library(
 	${USERMETRICSOUTPUT_SOURCES}
 )
 
-qt5_use_modules(
-	usermetricsoutput-static
-	${USERMETRICS_OUTPUT_DEPENDENCIES}
-)
-
 target_link_libraries(
 	usermetricsoutput-static
+	${USERMETRICS_OUTPUT_DEPENDENCIES}
 	usermetricscommon
 )
 
@@ -62,13 +58,9 @@ add_library(
 	${USERMETRICSOUTPUT_SOURCES}
 )
 
-qt5_use_modules(
-	usermetricsoutput
-	${USERMETRICS_OUTPUT_DEPENDENCIES}
-)
-
 target_link_libraries(
 	usermetricsoutput
+	${USERMETRICS_OUTPUT_DEPENDENCIES}
 	usermetricscommon
 	${GSETTINGS_QT_LIBRARIES}
 	${Gettext_LIBRARIES}
