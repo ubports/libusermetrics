@@ -23,6 +23,7 @@ target_link_libraries(
 	${GSETTINGS_QT_LIBRARIES}
 	${GTEST_LIBRARIES}
 	${GMOCK_LIBRARIES}
+	${Intl_LIBRARIES}
 )
 
 add_test(
