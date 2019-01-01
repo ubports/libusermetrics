@@ -19,6 +19,7 @@
 #include <QtCore/QCoreApplication>
 #include <cstdlib>
 #include <gtest/gtest.h>
+#include <libintl.h>
 
 int main(int argc, char **argv) {
 	setenv("LANG", "C.UTF-8", true);

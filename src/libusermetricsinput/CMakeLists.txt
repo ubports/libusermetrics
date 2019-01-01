@@ -71,6 +71,7 @@ target_link_libraries(
 	usermetricsinput
 	${USERMETRICS_INPUT_DEPENDENCIES}
 	usermetricscommon
+	${Intl_LIBRARIES}
 )
 
 set_target_properties(
@@ -141,5 +142,6 @@ target_link_libraries(
 	usermetricsinput-increment
 	Qt5::Core
 	usermetricsinput
+	${Intl_LIBRARIES}
 )
 
