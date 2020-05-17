@@ -12,6 +12,7 @@ add_executable(
 
 target_link_libraries(
 	usermetricsservice-unit-tests
+	-pthread
 	usermetricsservice
 	usermetrics-test-utils
 	${QTDBUSTEST_LIBRARIES}

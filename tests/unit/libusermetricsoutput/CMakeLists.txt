@@ -17,11 +17,13 @@ add_executable(
 
 target_link_libraries(
 	usermetricsoutput-unit-tests
+	-pthread
 	usermetricsoutput-static
 	usermetrics-test-utils
 	${GSETTINGS_QT_LIBRARIES}
 	${GTEST_LIBRARIES}
 	${GMOCK_LIBRARIES}
+	${Intl_LIBRARIES}
 )
 
 add_test(

@@ -15,15 +15,11 @@ add_library(
 	${USERMETRICS_TEST_UTILS_SRC}
 )
 
-qt5_use_modules(
-	usermetrics-test-utils
-	Core
-	Gui
-	DBus
-	Test
-)
-
 target_link_libraries(
 	usermetrics-test-utils
+	Qt5::Core
+	Qt5::Gui
+	Qt5::DBus
+	Qt5::Test
 	${QTDBUSTEST_LIBRARIES}
 )
