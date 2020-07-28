@@ -19,11 +19,11 @@ Build-Depends: cmake,
                libqt5xmlpatterns5-dev,
                libqtdbustest1-dev,
                pkg-config,
+               qml-module-qtquick2,
+               qml-module-qttest,
                qtbase5-dev,
-               sqlite3,
                qtdeclarative5-dev,
-               qtdeclarative5-qtquick2-plugin,
-               qtdeclarative5-test-plugin,
+               sqlite3,
 Standards-Version: 3.9.4
 Section: libs
 Homepage: http://launchpad.net/libusermetrics
@@ -105,7 +105,7 @@ Package: qtdeclarative5-usermetrics0.1
 Architecture: any
 Depends: ${misc:Depends},
          ${shlibs:Depends},
-         qtdeclarative5-qtquick2-plugin,
+         qml-module-qtquick2,
          libusermetricsinput1 (= ${binary:Version}),
 Description: QML bindings for libusermetrics
  A set of bindings allowing the use of libusermetrics from QML applications.
